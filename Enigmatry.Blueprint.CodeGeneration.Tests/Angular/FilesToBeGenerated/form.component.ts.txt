@@ -1,0 +1,68 @@
+import { Location } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { map, switchMap } from 'rxjs/operators';
+import { FormMock, FormMockCommand, TestClient } from 'src/app/core/api/api';
+import { FormLookupService } from '../services/form-lookup.service';
+
+@Component({
+    templateUrl: './form.component.html',
+    styleUrls: ['./form.component.scss']
+})
+export class FormComponent implements OnInit {
+
+    response: FormMock;
+
+    form = new FormGroup({
+		id: new FormControl(''),
+		name: new FormControl(''),
+		description: new FormControl(''),
+		date: new FormControl(''),
+		money: new FormControl(''),
+		status: new FormControl(''),
+		categoryId: new FormControl(''),
+		typeId: new FormControl(''),
+		subTypeId: new FormControl(''),
+    });
+
+    constructor(
+        private location: Location,
+        protected route: ActivatedRoute,
+        private client: TestClient,
+		public lookupService: FormLookupService
+    ) { }
+
+    ngOnInit(): void {
+        this.route.params
+            .pipe(
+                map(params => params.id),
+                switchMap(id => this.client.get(id))
+            )
+            .subscribe(response => {
+                this.response = response;
+                this.form.patchValue(response);
+		        this.lookupService.initLookups(this.response);
+            });
+    }
+
+    save() {
+        if (this.form.valid) {
+            this.client.post(this.createCommand())
+                .subscribe(() => this.navigateBack());
+        }
+    }
+
+    private createCommand(): FormMockCommand {
+        const { id, name, description, date, money, status, categoryId, typeId, subTypeId } = this.form.value;
+        return new FormMockCommand({ id, name, description, date, money, status, categoryId, typeId, subTypeId });
+    }
+
+    cancel() {
+        this.navigateBack();
+    }
+
+    private navigateBack() {
+        this.location.back();
+    }
+}

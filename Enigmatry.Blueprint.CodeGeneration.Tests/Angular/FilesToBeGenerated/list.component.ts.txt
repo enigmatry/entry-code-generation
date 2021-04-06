@@ -1,0 +1,37 @@
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { mergeMap, tap } from 'rxjs/operators';
+
+import { ListMockItem, TestClient } from 'src/app/core/api/api';
+
+import { PagedResponse, PagedQueryParams } from 'src/app/shared/pagination/paged-data.model';
+import { MatPagedTableComponent } from 'src/app/shared/pagination/mat-paged-table.component';
+
+@Component({
+    templateUrl: './list.component.html',
+    styleUrls: ['./list.component.scss']
+})
+export class ListComponent extends MatPagedTableComponent<ListMockItem> implements OnInit {
+
+  displayedColumns = ['name', 'date'];
+
+  constructor(private client: TestClient, router: Router, activatedRoute: ActivatedRoute) {
+    super(router, activatedRoute);
+}
+
+ngOnInit() {
+    this.activatedRoute.queryParams
+      .pipe(
+        tap(queryParams => this.queryParams.update(queryParams)),
+        mergeMap(() => this.getPage(this.queryParams))
+      )
+      .subscribe(response => {
+        this.dataSource.pagedResponse = response;
+      });
+  }
+
+getPage(query: PagedQueryParams): Observable<PagedResponse<ListMockItem>> {
+    return this.client.search(query.keyword, query.pageNumber, query.pageSize, query.sortBy, query.sortDirection);
+   }
+}

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Enigmatry.Blueprint.CodeGeneration.Console": {
+      "commandName": "Project",
+      "commandLineArgs": "Enigmatry.Blueprint.CodeGeneration.Console --source-assembly D:\\Enigmatry\\enigmatry-blueprint-reference\\Enigmatry.Blueprint.Reference.Api\\bin\\Debug\\netcoreapp3.1\\Enigmatry.Blueprint.Reference.Api.dll --destination-directory D:\\Enigmatry\\enigmatry-blueprint-reference\\enigmatry-blueprint-reference-app\\src\\app\\features"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+﻿@model Enigmatry.Blueprint.CodeGeneration.Configuration.IFeatureModule;
+@using Enigmatry.Blueprint.CodeGeneration.Angular
+@using Enigmatry.Blueprint.CodeGeneration.Templates.HtmlHelperExtensions
+@using Enigmatry.Blueprint.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
+@using Humanizer
+import { NgModule } from '@@angular/core';
+import { CommonModule } from '@@angular/common';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { MatAutocompleteModule } from '@@angular/material/autocomplete';
+
+@Html.ImportComponentsFrom(Model)
+import { @(Model.Name)RoutingModule } from './@(Model.Name.Kebaberize())-routing.module';
+
+
+@@NgModule({
+    declarations: @Html.ArrayFor(Model.Components, component => component.AngularComponentName()),
+    imports: [ CommonModule, SharedModule, @(Model.Name)RoutingModule, MatAutocompleteModule ]
+})
+export class @(Model.Name)Module { }

@@ -1,0 +1,16 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+
+import { FormComponent } from './form/form.component';
+import { ListComponent } from './list/list.component';
+
+import { TestRoutingModule } from './test-routing.module';
+
+
+@NgModule({
+    declarations: [FormComponent, ListComponent],
+    imports: [ CommonModule, SharedModule, TestRoutingModule, MatAutocompleteModule ]
+})
+export class TestModule { }

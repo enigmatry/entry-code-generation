@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C1018A9E-9611-4FFA-8D47-1C4E5601DB86}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Enigmatry.Blueprint.CodeGeneration.sln.DotSettings = Enigmatry.Blueprint.CodeGeneration.sln.DotSettings
+		nuget.config = nuget.config
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enigmatry.Blueprint.CodeGeneration.Configuration", "Enigmatry.Blueprint.CodeGeneration.Configuration\Enigmatry.Blueprint.CodeGeneration.Configuration.csproj", "{34226C10-052A-4391-9F17-5220A1BC4F1A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enigmatry.Blueprint.CodeGeneration.Configuration.Tests", "Enigmatry.Blueprint.CodeGeneration.Configuration.Tests\Enigmatry.Blueprint.CodeGeneration.Configuration.Tests.csproj", "{41ACEB4B-7A01-42DE-83F0-FF83FBFCBE2D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enigmatry.Blueprint.CodeGeneration", "Enigmatry.Blueprint.CodeGeneration\Enigmatry.Blueprint.CodeGeneration.csproj", "{8AF96177-FBC2-4D95-B6D3-73B72A6A66C1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enigmatry.Blueprint.CodeGeneration.Console", "Enigmatry.Blueprint.CodeGeneration.Console\Enigmatry.Blueprint.CodeGeneration.Console.csproj", "{7F28AB36-EADC-48E8-86E3-D33E1B7C95F8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enigmatry.Blueprint.CodeGeneration.Tests", "Enigmatry.Blueprint.CodeGeneration.Tests\Enigmatry.Blueprint.CodeGeneration.Tests.csproj", "{6B06C3AF-992E-4DC7-ADA9-2F49A796B6BE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{34226C10-052A-4391-9F17-5220A1BC4F1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34226C10-052A-4391-9F17-5220A1BC4F1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34226C10-052A-4391-9F17-5220A1BC4F1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34226C10-052A-4391-9F17-5220A1BC4F1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41ACEB4B-7A01-42DE-83F0-FF83FBFCBE2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41ACEB4B-7A01-42DE-83F0-FF83FBFCBE2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41ACEB4B-7A01-42DE-83F0-FF83FBFCBE2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41ACEB4B-7A01-42DE-83F0-FF83FBFCBE2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AF96177-FBC2-4D95-B6D3-73B72A6A66C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AF96177-FBC2-4D95-B6D3-73B72A6A66C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AF96177-FBC2-4D95-B6D3-73B72A6A66C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AF96177-FBC2-4D95-B6D3-73B72A6A66C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F28AB36-EADC-48E8-86E3-D33E1B7C95F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F28AB36-EADC-48E8-86E3-D33E1B7C95F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F28AB36-EADC-48E8-86E3-D33E1B7C95F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F28AB36-EADC-48E8-86E3-D33E1B7C95F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B06C3AF-992E-4DC7-ADA9-2F49A796B6BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B06C3AF-992E-4DC7-ADA9-2F49A796B6BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B06C3AF-992E-4DC7-ADA9-2F49A796B6BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B06C3AF-992E-4DC7-ADA9-2F49A796B6BE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3A4984E8-85A3-4F86-9B64-B95313AEDD15}
+	EndGlobalSection
+EndGlobal
