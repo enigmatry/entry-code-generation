@@ -1,8 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFrameworks>netstandard2.1;net5.0</TargetFrameworks>
     <Nullable>enable</Nullable>
+    <Authors>msl@enigmatry.com, mmr@enigmatry.com</Authors>
+    <Company>enigmatry.com</Company>
+    <Product>Enigmatry.Blueprint.CodeGeneration.Configuration</Product>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
