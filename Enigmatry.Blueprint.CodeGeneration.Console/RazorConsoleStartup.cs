@@ -6,8 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.IO;
-using System.Reflection;
 
 namespace Enigmatry.Blueprint.CodeGeneration.Console
 {
@@ -28,7 +28,7 @@ namespace Enigmatry.Blueprint.CodeGeneration.Console
                 .AddRazorRuntimeCompilation(options =>
                 {
                     options.FileProviders.Clear();
-                    options.FileProviders.Add(new PhysicalFileProvider(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) /*_environment.ContentRootPath*/));
+                    options.FileProviders.Add(new PhysicalFileProvider(Path.GetDirectoryName(AppContext.BaseDirectory) /*_environment.ContentRootPath*/));
                 });
 
             services.AddSingleton<RazorTemplatingEngine>();

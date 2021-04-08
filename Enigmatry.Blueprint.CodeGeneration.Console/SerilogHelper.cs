@@ -2,8 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using System;
 using System.IO;
-using System.Reflection;
 
 namespace Enigmatry.Blueprint.CodeGeneration.Console
 {
@@ -12,7 +12,7 @@ namespace Enigmatry.Blueprint.CodeGeneration.Console
         public static void ConfigureSerilog()
         {
             var configuration = new ConfigurationBuilder()
-                .SetBasePath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))
+                .SetBasePath(Path.GetDirectoryName(AppContext.BaseDirectory))
                 .AddJsonFile("appsettings.json", false, true)
                 .Build();
 
