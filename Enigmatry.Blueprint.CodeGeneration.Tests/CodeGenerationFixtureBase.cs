@@ -63,7 +63,7 @@ namespace Enigmatry.Blueprint.CodeGeneration.Tests
             return scopeFactory.CreateScope();
         }
 
-        protected T GetService<T>()
+        protected T GetService<T>() where T : notnull
         {
             return _testScope.ServiceProvider.GetRequiredService<T>();
         }

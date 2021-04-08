@@ -18,7 +18,8 @@ namespace Enigmatry.Blueprint.CodeGeneration.Rendering
         public Task WriteToFileAsync(string path, string contents)
         {
             var directoryPath = Path.GetDirectoryName(path);
-            Directory.CreateDirectory(directoryPath);
+            if (directoryPath != null) 
+                Directory.CreateDirectory(directoryPath);
 
             return File.WriteAllTextAsync(path, contents);
         }
