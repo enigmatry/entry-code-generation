@@ -1,5 +1,4 @@
 ﻿using Enigmatry.Blueprint.CodeGeneration.Configuration.Form.Model;
-using Enigmatry.Blueprint.CodeGeneration.Configuration.Form.Model.Select;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -13,7 +12,6 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration
             {
                 throw new ArgumentNullException(parameterName);
             }
-
             return value;
         }
 
@@ -23,13 +21,12 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration
             {
                 throw new ArgumentNullException(parameterName);
             }
-
             return value;
         }
 
-        public static FormControlBuilder IsAsyncSelectFormControl(FormControlBuilder value)
+        public static FormControlBuilder IsSelectFormControl(FormControlBuilder value)
         {
-            if (value.FormControlType != FormControlType.DropDownList || value.IsDropDownListControl().SelectType != SelectFormControlType.AsyncSelect)
+            if (value.FormControlType != FormControlType.DropDownList && value.FormControlType != FormControlType.Autocomplete)
             {
                 throw new ArgumentException(value.PropertyInfo.Name);
             }

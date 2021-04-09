@@ -26,14 +26,14 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Tests.Form.Model.Sele
                 .WithFixedValues<TestEnum>()
                 .Build();
 
-            selectFormControlModel.LookupMedhod.GetType().Should().Be(typeof(FixedLookupMethod));
+            selectFormControlModel.LookupMedhod.GetType().Should().Be(typeof(FixedValuesLookupMethod));
 
-            var fixedLookupMethod = (FixedLookupMethod)selectFormControlModel.LookupMedhod;
+            var fixedLookupMethod = (FixedValuesLookupMethod)selectFormControlModel.LookupMedhod;
 
+            fixedLookupMethod.Name.Should().Be($"get{formControlBuilder.PropertyInfo.Name}");
             fixedLookupMethod
                 .FixedValues.Select(x => x.Value)
                 .Should().BeEquivalentTo(Enum.GetValues(typeof(TestEnum)));
-
             fixedLookupMethod
                 .FixedValues.Select(x => x.DisplayName)
                 .Should().BeEquivalentTo(Enum.GetNames(typeof(TestEnum)));
@@ -59,14 +59,14 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Tests.Form.Model.Sele
                 .WithFixedValues(customOptions)
                 .Build();
 
-            selectFormControlModel.LookupMedhod.GetType().Should().Be(typeof(FixedLookupMethod));
+            selectFormControlModel.LookupMedhod.GetType().Should().Be(typeof(FixedValuesLookupMethod));
 
-            var fixedLookupMethod = (FixedLookupMethod)selectFormControlModel.LookupMedhod;
+            var fixedLookupMethod = (FixedValuesLookupMethod)selectFormControlModel.LookupMedhod;
 
+            fixedLookupMethod.Name.Should().Be($"get{formControlBuilder.PropertyInfo.Name}");
             fixedLookupMethod
                 .FixedValues.Select(x => x.Value)
                 .Should().BeEquivalentTo(customOptions.Select(x => x.Value));
-
             fixedLookupMethod
                 .FixedValues.Select(x => x.DisplayName)
                 .Should().BeEquivalentTo(customOptions.Select(x => x.DisplayName));

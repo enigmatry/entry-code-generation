@@ -7,7 +7,7 @@ import { Location } from '@@angular/common';
 import { Component, OnInit } from '@@angular/core';
 import { FormControl, FormGroup } from '@@angular/forms';
 import { ActivatedRoute, Router } from '@@angular/router';
-import { map, switchMap } from 'rxjs/operators';
+import { debounceTime, filter, map, switchMap } from 'rxjs/operators';
 import { @Model.ComponentInfo.ModelTypeName, @Model.CreateOrUpdateCommandTypeName, @Model.AngularComponentApiClient() } from 'src/app/core/api/api';
 @Html.LookupServiceImportStatement(Model.LookupService)
 
@@ -51,8 +51,9 @@ export class @Model.AngularComponentName() implements OnInit {
                     @foreach(var autocompleteControl in Model.AutocompleteFormControls)
                     {
                         @Html.Raw("\t\t\t\t")
-                        @Html.Raw($"this.form.controls['{autocompleteControl.Property}'].valueChanges" +
-                            $".subscribe(x => this.lookupService.get{autocompleteControl.Property.Pascalize()}(x));")
+                        @Html.Raw($"this.form.controls['{autocompleteControl.Property}'].valueChanges\n" +
+                            $"\t\t\t\t\t.pipe(debounceTime(200), filter(value => typeof value === 'string'))\n" +
+                            $"\t\t\t\t\t.subscribe(x => this.lookupService.get{autocompleteControl.Property.Pascalize()}(x));")
                         @Html.Raw("\n")
                     }
                 }

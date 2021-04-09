@@ -8,18 +8,20 @@ import { BehaviorSubject, Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class @(Model.Name)LookupService {
-    @foreach(var method in Model.FixedLookupMethods)
+    @foreach(var method in Model.FixedValuesLookupMethods)
     {
         @Html.Raw("\t")
         @Html.FixedValuesProperty(method)
         @Html.Raw("\n")
     }
+
     @foreach(var method in Model.LookupMethods)
     {
         @Html.Raw("\t")
         @Html.MethodSubjectStatement(method)
         @Html.Raw("\n")
     }
+
     @foreach(var method in Model.LookupMethods)
     {
         @Html.Raw("\t")
@@ -38,16 +40,24 @@ export class @(Model.Name)LookupService {
         }
     }
 
+	displayOption(option): string { return option ? option.displayName : ''; }
+
     @foreach(var method in Model.AsyncLookupMethods)
     {
         @Html.Raw("\t")
         @Html.AsyncMethod(method)
         @Html.Raw("\n")
     }
-    @foreach(var method in Model.FixedLookupMethods)
+    @foreach(var method in Model.FixedValuesLookupMethods)
     {
         @Html.Raw("\t")
-        @Html.FixedMethod(method)
+        @Html.FixedValuesFilterMethod(method)
+        @Html.Raw("\n")
+    }
+    @foreach(var method in Model.FixedValuesLookupMethods)
+    {
+        @Html.Raw("\t")
+        @Html.FixedValuesDisplayOptionMethod(method)
         @Html.Raw("\n")
     }
 }

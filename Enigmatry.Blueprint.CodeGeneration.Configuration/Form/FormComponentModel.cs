@@ -27,7 +27,7 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Form
                     Name = componentInfo.Name,
                     Methods = SelectFormControls
                         .Select(x => (SelectFormControlModel)x)
-                        .Select(x => (LookupMethodBase)x.LookupMedhod)
+                        .Select(x => x.LookupMedhod)
                 };
             }
         }

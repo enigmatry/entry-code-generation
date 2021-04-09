@@ -45,28 +45,38 @@ namespace Enigmatry.Blueprint.CodeGeneration.Templates.HtmlHelperExtensions.Angu
         public static IHtmlContent AsyncMethod(this IHtmlHelper html, AsyncLookupMethod method)
         {
             var arguments = String.Join(", ", method.ArgumentNames.Select(x => x.Camelize()));
-            var lookupMethod = 
+            var methodBody = 
                 $"{method.Name}({arguments}) {{\n" +
                 $"\t\tthis.{method.ApiClientName.Camelize()}.{method.Name}({arguments})\n" +
                 $"\t\t\t.subscribe(x => this.{method.AsSubjectStatement()}.next(x.items));\n" +
                 "\t}\n";
-            return html.Raw(lookupMethod);
+            return html.Raw(methodBody);
         }
 
-        public static IHtmlContent FixedValuesProperty(this IHtmlHelper html, FixedLookupMethod method)
+        public static IHtmlContent FixedValuesProperty(this IHtmlHelper html, FixedValuesLookupMethod method)
         {
             var fixedValues = String.Join("\n", method.FixedValues.Select(x => $"\t\t{{ value: {x.Value}, displayName: \"{x.DisplayName}\" }},"));
             return html.Raw($"private {method.AsFixedValuesProperty()} = [\n{fixedValues}\n\t];");
         }
 
-        public static IHtmlContent FixedMethod(this IHtmlHelper html, FixedLookupMethod method)
+        public static IHtmlContent FixedValuesFilterMethod(this IHtmlHelper html, FixedValuesLookupMethod method)
         {
-            var lookupMethod =
+            var methodBody =
                 $"{method.Name}(keyword: string) {{\n" +
                 $"\t\tthis.{method.AsSubjectStatement()}.next(this.{method.AsFixedValuesProperty()}\n" +
                 $"\t\t\t.filter(x => x.displayName.toLowerCase().includes(keyword.toLowerCase())));\n" +
                 "\t}\n";
-            return html.Raw(lookupMethod);
+            return html.Raw(methodBody);
+        }
+
+        public static IHtmlContent FixedValuesDisplayOptionMethod(this IHtmlHelper html, FixedValuesLookupMethod method)
+        {
+            var methodBody =
+                $"{method.Name}DisplayOption(value) {{\n" +
+                $"\t\treturn value !== undefined ? this.{method.AsFixedValuesProperty()}\n" +
+                $"\t\t\t.find(x => x.value === value)?.displayName : '';\n" +
+                "\t}\n";
+            return html.Raw(methodBody);
         }
 
         public static IHtmlContent LookupServiceChangeEventTrigger(this IHtmlHelper html, LookupMethodBase method)

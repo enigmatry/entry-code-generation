@@ -16,7 +16,10 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Services
         public IEnumerable<AsyncLookupMethod> AsyncLookupMethods =>
             LookupMethods.Where(method => method is AsyncLookupMethod).Select(method => (AsyncLookupMethod)method);
 
-        public IEnumerable<FixedLookupMethod> FixedLookupMethods =>
-            LookupMethods.Where(method => method is FixedLookupMethod).Select(method => (FixedLookupMethod)method);
+        public IEnumerable<FixedValuesLookupMethod> FixedValuesLookupMethods =>
+            LookupMethods.Where(method => method is FixedValuesLookupMethod).Select(method => (FixedValuesLookupMethod)method);
+
+        public IEnumerable<CustomLookupMethod> CustomLookupMethods =>
+            LookupMethods.Where(method => method is CustomLookupMethod).Select(method => (CustomLookupMethod)method);
     }
 }

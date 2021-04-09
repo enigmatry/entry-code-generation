@@ -11,29 +11,27 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Form.Model.Select
     public class SelectFormControlBuilder
     {
         private PropertyInfo _propertyInfo;
-        public SelectFormControlType SelectType { get; private set; }
         public LookupMethodBase LookupMethod { get; private set; } = null!;
 
         public SelectFormControlBuilder(PropertyInfo propertyInfo)
         {
             _propertyInfo = propertyInfo;
+            LookupMethod = new CustomLookupMethod($"get{_propertyInfo.Name.Pascalize()}");
         }
 
         public SelectFormControlBuilder WithFixedValues(IEnumerable<SelectOption> fixedValues)
         {
-            SelectType = SelectFormControlType.FixedSelect;
-            LookupMethod = new FixedLookupMethod($"get{_propertyInfo.Name.Pascalize()}", fixedValues);
+            LookupMethod = new FixedValuesLookupMethod($"get{_propertyInfo.Name.Pascalize()}", fixedValues);
             return this;
         }
 
         public SelectFormControlBuilder WithFixedValues<T>() where T : Enum
         {
-            SelectType = SelectFormControlType.FixedSelect;
             var fixedValues = Enum
                 .GetValues(typeof(T))
                 .Cast<T>()
                 .Select(x => new SelectOption(Convert.ToInt32(x), GetDisplayName<T>(x.ToString())));
-            LookupMethod = new FixedLookupMethod($"get{_propertyInfo.Name.Pascalize()}", fixedValues);
+            LookupMethod = new FixedValuesLookupMethod($"get{_propertyInfo.Name.Pascalize()}", fixedValues);
             return this;
         }
 
@@ -43,20 +41,19 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Form.Model.Select
             {
                 throw new InvalidEnumArgumentException("Missing async select callback method information.");
             }
-            SelectType = SelectFormControlType.AsyncSelect;
             LookupMethod = new AsyncLookupMethod(lookupMethodInfo);
             return this;
         }
 
-        public SelectFormControlBuilder DependsOn(FormControlBuilder leadingControlBuilder)
+        public SelectFormControlBuilder DependsOn(FormControlBuilder leadingFormControl)
         {
-            Check.IsAsyncSelectFormControl(leadingControlBuilder);
+            Check.IsSelectFormControl(leadingFormControl);
 
             LookupMethod
-                .ArgumentNames.Add(leadingControlBuilder.PropertyInfo.Name);
+                .ArgumentNames.Add(leadingFormControl.PropertyInfo.Name);
 
-            leadingControlBuilder
-                .SelectControlBilder
+            leadingFormControl
+                .Select
                 .LookupMethod
                 .DependantMethods.Add(LookupMethod);
 
@@ -67,7 +64,6 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Form.Model.Select
         {
             return new SelectFormControlModel
             {
-                SelectType = SelectType,
                 LookupMedhod = LookupMethod
             };
         }

@@ -32,14 +32,22 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Services
         }
     }
 
-    public class FixedLookupMethod : LookupMethodBase
+    public class FixedValuesLookupMethod : LookupMethodBase
     {
         public IList<SelectOption> FixedValues { get; set; } = new List<SelectOption>();
 
-        public FixedLookupMethod(string methodName, IEnumerable<SelectOption> fixedValues)
+        public FixedValuesLookupMethod(string methodName, IEnumerable<SelectOption> fixedValues)
         {
             Name = methodName.Camelize();
             FixedValues = fixedValues.ToList();
+        }
+    }
+
+    public class CustomLookupMethod : LookupMethodBase
+    {
+        public CustomLookupMethod(string methodName)
+        {
+            Name = methodName;
         }
     }
 }

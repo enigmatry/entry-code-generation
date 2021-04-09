@@ -28,6 +28,8 @@ export class FormLookupService {
         this.getSubTypeLookups(response.typeId);
     }
 
+    displayOption(option): string { return option ? option.displayName : ''; }
+
 	getCategoryLookups() {
 		this.lookupApiMockClient.getCategoryLookups()
             .subscribe(x => this._getCategoryLookups.next(x.items));
@@ -46,6 +48,11 @@ export class FormLookupService {
     getStatus(keyword: string) {
 		this._getStatus.next(this._getStatusFixedValues
 			.filter(x => x.displayName.toLowerCase().includes(keyword.toLowerCase())));
+	}
+
+	getStatusDisplayOption(value) {
+		return value !== undefined ? this._getStatusFixedValues
+			.find(x => x.value === value)?.displayName : '';
 	}
 
 }

@@ -1,21 +1,19 @@
-﻿@using Enigmatry.Blueprint.CodeGeneration.Configuration.Form.Model.Select;
-@using Enigmatry.Blueprint.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
-@model Enigmatry.Blueprint.CodeGeneration.Configuration.Form.Model.Select.SelectFormControlModel;
+﻿@model Enigmatry.Blueprint.CodeGeneration.Configuration.Form.Model.Select.SelectFormControlModel;
 <mat-form-field appearance="fill">
     <mat-label>@Model.DisplayName</mat-label>
-    @if (Model.SelectType == SelectFormControlType.FixedSelect || Model.SelectType == SelectFormControlType.AsyncSelect)
+    @if (Model.UsesCustomLookupMethod)
+    {
+
+    }
+    else
     {
     <input type="text"
         placeholder="@Model.Placeholder"
         matInput
         formControlName="@Model.Property"
         [matAutocomplete]="auto">
-    <mat-autocomplete #auto="matAutocomplete">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="lookupService.@(Model.LookupMedhod.Name)DisplayOption.bind(lookupService)">
         <mat-option *ngFor="let option of lookupService.@(Model.LookupMedhod.Name)$ | async" [value]="option.value">{{option.displayName}}</mat-option>
     </mat-autocomplete>
-    }
-    else if (Model.SelectType == SelectFormControlType.AsyncCustomSelect)
-    {
-
     }
 </mat-form-field>

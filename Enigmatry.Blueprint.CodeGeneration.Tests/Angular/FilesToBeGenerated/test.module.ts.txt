@@ -11,6 +11,6 @@ import { TestRoutingModule } from './test-routing.module';
 
 @NgModule({
     declarations: [FormComponent, ListComponent],
-    imports: [ CommonModule, SharedModule, TestRoutingModule, MatAutocompleteModule ]
+    imports: [ CommonModule, SharedModule, TestRoutingM odule, MatAutocompleteModule ]
 })
 export class TestModule { }

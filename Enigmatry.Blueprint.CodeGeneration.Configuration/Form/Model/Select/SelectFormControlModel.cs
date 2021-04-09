@@ -4,7 +4,8 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Form.Model.Select
 {
     public class SelectFormControlModel : FormControlModel
     {
-        public SelectFormControlType SelectType { get; set; }
         public LookupMethodBase LookupMedhod { get; set; } = null!;
+
+        public bool UsesCustomLookupMethod => LookupMedhod is CustomLookupMethod;
     }
 }

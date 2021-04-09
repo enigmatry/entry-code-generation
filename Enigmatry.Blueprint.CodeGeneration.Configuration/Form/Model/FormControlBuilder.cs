@@ -12,12 +12,10 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Form.Model
         private bool _isVisible;
         private bool _isReadonly;
         private string _placeholder;
-        private SelectFormControlBuilder _select = null!;
 
         public PropertyInfo PropertyInfo { get; }
         public FormControlType FormControlType { get; private set; }
-
-        public SelectFormControlBuilder SelectControlBilder => _select;
+        public SelectFormControlBuilder Select { get; private set; } = null!;
 
 
         public FormControlBuilder(PropertyInfo propertyInfo)
@@ -61,8 +59,7 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Form.Model
                     IsReadonly = _isReadonly,
                     Placeholder = _placeholder,
                     Type = FormControlType,
-                    SelectType = _select.Build().SelectType,
-                    LookupMedhod = _select.Build().LookupMedhod
+                    LookupMedhod = Select.Build().LookupMedhod
                 },
                 _ => new FormControlModel
                 {
@@ -101,22 +98,22 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Form.Model
 
         public SelectFormControlBuilder IsDropDownListControl()
         {
-            if (_select == null)
+            if (Select == null)
             {
-                _select = new SelectFormControlBuilder(PropertyInfo);
+                Select = new SelectFormControlBuilder(PropertyInfo);
             }
             FormControlType = FormControlType.DropDownList;
-            return _select;
+            return Select;
         }
 
         public SelectFormControlBuilder IsAutocompleteControl()
         {
-            if (_select == null)
+            if (Select == null)
             {
-                _select = new SelectFormControlBuilder(PropertyInfo);
+                Select = new SelectFormControlBuilder(PropertyInfo);
             }
             FormControlType = FormControlType.Autocomplete;
-            return _select;
+            return Select;
         }
     }
 }
