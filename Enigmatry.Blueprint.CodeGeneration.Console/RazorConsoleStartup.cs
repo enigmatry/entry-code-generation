@@ -28,7 +28,7 @@ namespace Enigmatry.Blueprint.CodeGeneration.Console
                 .AddRazorRuntimeCompilation(options =>
                 {
                     options.FileProviders.Clear();
-                    options.FileProviders.Add(new PhysicalFileProvider(Path.GetDirectoryName(AppContext.BaseDirectory) /*_environment.ContentRootPath*/));
+                    options.FileProviders.Add(new PhysicalFileProvider(Path.GetDirectoryName(AppContext.BaseDirectory)));
                 });
 
             services.AddSingleton<RazorTemplatingEngine>();
