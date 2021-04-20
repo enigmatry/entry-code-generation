@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Enigmatry.Blueprint.CodeGeneration.Configuration
+﻿namespace Enigmatry.Blueprint.CodeGeneration.Configuration
 {
     public interface IComponentModel
     {

@@ -3,7 +3,7 @@ using Humanizer;
 
 namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Builder
 {
-    public class ComponentInfoBuilder
+    public class ComponentInfoBuilder : IBuilder<ComponentInfo>
     {
         protected string _componentName;
         protected string _featureName;
@@ -30,12 +30,7 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Builder
 
         public ComponentInfo Build()
         {
-            return new ComponentInfo
-            {
-                Name = _componentName,
-                FeatureName = _featureName,
-                ModelTypeName = _modelTypeName
-            };
+            return new ComponentInfo {Name = _componentName, FeatureName = _featureName, ModelTypeName = _modelTypeName};
         }
     }
 }

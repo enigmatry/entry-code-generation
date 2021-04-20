@@ -17,13 +17,13 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Services
     {
         public string Name { get; set; } = String.Empty;
         public IList<string> ArgumentNames { get; set; } = new List<string>();
-        public IList<LookupMethodBase> DependantMethods { get; set; } = new List<LookupMethodBase>();
-        public bool TriggersOnCahngeEvent => DependantMethods.Any();
+        public IList<LookupMethodBase> DependentMethods { get; set; } = new List<LookupMethodBase>();
+        public bool TriggersOnChangeEvent => DependentMethods.Any();
     }
 
     public class AsyncLookupMethod : LookupMethodBase
     {
-        public string ApiClientName { get; set; } = String.Empty;
+        public string ApiClientName { get; set; }
 
         public AsyncLookupMethod(MethodInfo methodInfo)
         {
@@ -34,7 +34,7 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Services
 
     public class FixedValuesLookupMethod : LookupMethodBase
     {
-        public IList<SelectOption> FixedValues { get; set; } = new List<SelectOption>();
+        public IList<SelectOption> FixedValues { get; set; }
 
         public FixedValuesLookupMethod(string methodName, IEnumerable<SelectOption> fixedValues)
         {

@@ -9,17 +9,9 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Services
         public string Name { get; set; } = String.Empty;
         public IEnumerable<IServiceMethod> Methods { get; set; } = new List<LookupMethodBase>();
 
-
-        public IEnumerable<LookupMethodBase> LookupMethods =>
-            Methods.Where(method => method is LookupMethodBase).Select(method => (LookupMethodBase)method);
-
-        public IEnumerable<AsyncLookupMethod> AsyncLookupMethods =>
-            LookupMethods.Where(method => method is AsyncLookupMethod).Select(method => (AsyncLookupMethod)method);
-
-        public IEnumerable<FixedValuesLookupMethod> FixedValuesLookupMethods =>
-            LookupMethods.Where(method => method is FixedValuesLookupMethod).Select(method => (FixedValuesLookupMethod)method);
-
-        public IEnumerable<CustomLookupMethod> CustomLookupMethods =>
-            LookupMethods.Where(method => method is CustomLookupMethod).Select(method => (CustomLookupMethod)method);
+        public IEnumerable<LookupMethodBase> LookupMethods => Methods.OfType<LookupMethodBase>();
+        public IEnumerable<AsyncLookupMethod> AsyncLookupMethods => LookupMethods.OfType<AsyncLookupMethod>();
+        public IEnumerable<FixedValuesLookupMethod> FixedValuesLookupMethods => LookupMethods.OfType<FixedValuesLookupMethod>();
+        public IEnumerable<CustomLookupMethod> CustomLookupMethods => LookupMethods.OfType<CustomLookupMethod>();
     }
 }

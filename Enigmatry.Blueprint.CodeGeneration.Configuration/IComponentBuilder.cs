@@ -1,8 +1,6 @@
-﻿
-namespace Enigmatry.Blueprint.CodeGeneration.Configuration
+﻿namespace Enigmatry.Blueprint.CodeGeneration.Configuration
 {
-    public interface IComponentBuilder<out T> where T : IComponentModel
+    public interface IComponentBuilder<out T> : IBuilder<T> where T : IComponentModel
     {
-        T Build();
     }
 }

@@ -55,7 +55,7 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Form.Model.Select
             leadingFormControl
                 .Select
                 .LookupMethod
-                .DependantMethods.Add(LookupMethod);
+                .DependentMethods.Add(LookupMethod);
 
             return this;
         }

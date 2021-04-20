@@ -81,8 +81,8 @@ namespace Enigmatry.Blueprint.CodeGeneration.Templates.HtmlHelperExtensions.Angu
 
         public static IHtmlContent LookupServiceChangeEventTrigger(this IHtmlHelper html, LookupMethodBase method)
         {
-            var onCheangeEventTrigger = method.TriggersOnCahngeEvent
-                ? $" (selectionChange) =\"{String.Join("", method.DependantMethods.Select(method => $"lookupService.{method.Name}($event.value);"))}\"" 
+            var onCheangeEventTrigger = method.TriggersOnChangeEvent
+                ? $" (selectionChange) =\"{String.Join("", method.DependentMethods.Select(method => $"lookupService.{method.Name}($event.value);"))}\"" 
                 : String.Empty;
             return html.Raw(onCheangeEventTrigger);
         }
