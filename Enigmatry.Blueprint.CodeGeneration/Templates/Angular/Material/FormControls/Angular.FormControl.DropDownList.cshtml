@@ -1,0 +1,14 @@
+﻿@using Enigmatry.Blueprint.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
+@model Enigmatry.Blueprint.CodeGeneration.Configuration.Form.Model.Select.SelectFormControlModel;
+<mat-form-field appearance="fill">
+    <mat-label>@Model.DisplayName</mat-label>
+    @if (Model.UsesCustomLookupMethod)
+    {
+    }
+    else
+    {
+    <mat-select formControlName="@Model.Property"@Html.LookupServiceChangeEventTrigger(Model.LookupMedhod)>
+        <mat-option *ngFor="let option of lookupService.@(Model.LookupMedhod.Name)$ | async" [value]="option.value">{{option.displayName}}</mat-option>
+    </mat-select>
+    }
+</mat-form-field>

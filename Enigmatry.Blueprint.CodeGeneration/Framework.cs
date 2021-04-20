@@ -4,4 +4,10 @@
     {
         Angular
     }
+
+    public enum UiLibrary
+    {
+        Material,
+        Bootstrap
+    }
 }

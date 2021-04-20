@@ -116,7 +116,7 @@ namespace Enigmatry.Blueprint.CodeGeneration.Console
                     services.AddSingleton<IModuleGenerator, AngularModuleGenerator>();
                     services.AddSingleton<ITemplateRenderer, TemplateRenderer>();
                     services.AddSingleton<ITemplateWriter, TemplateWriter>();
-                    services.AddSingleton(new AngularSettings());
+                    services.AddSingleton(new AngularSettings(UiLibrary.Material));
                     services.AddSingleton<CodeGenerator>();
                 })
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<TStartup>(); })

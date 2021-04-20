@@ -41,7 +41,7 @@ namespace Enigmatry.Blueprint.CodeGeneration.Tests
                     services.AddSingleton<ITemplateRenderer, TemplateRenderer>();
                     services.AddSingleton<ITemplateWriter, InMemoryTemplateWriter>();
                     services.AddSingleton<CodeGenerator>();
-                    services.AddSingleton(new AngularSettings());
+                    services.AddSingleton(new AngularSettings(UiLibrary.Material));
                 });
 
             _host = hostBuilder.Build();

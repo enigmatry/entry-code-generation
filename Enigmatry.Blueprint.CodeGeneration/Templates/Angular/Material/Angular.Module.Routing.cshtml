@@ -1,0 +1,25 @@
+﻿@model Enigmatry.Blueprint.CodeGeneration.Configuration.IFeatureModule;
+@using Enigmatry.Blueprint.CodeGeneration.Angular
+@using Enigmatry.Blueprint.CodeGeneration.Templates.HtmlHelperExtensions
+import { NgModule } from '@@angular/core';
+import { Routes, RouterModule } from '@@angular/router';
+
+@Html.ImportComponentsFrom(Model)
+@{
+    var componentsWithRouting = Model.Components.Where(c => c.ComponentInfo.Routing.IsRoutingEnabled);
+}
+const routes: Routes = [
+@foreach (var component in componentsWithRouting)
+{
+    @:{
+        @:path: '@(component.ComponentInfo.Routing.Path)', component: @(component.AngularComponentName())
+    @:},
+}
+];
+
+@@NgModule({
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
+})
+export class @(Model.Name)RoutingModule { }
+

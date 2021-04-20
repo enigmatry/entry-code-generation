@@ -12,14 +12,14 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.List.Model
         private string _displayName;
         private bool _isVisible;
         private bool _isSortable;
-        private IPropertyFromatter _formatter = new NoFormattingPropertyFormatter();
+        private IPropertyFromatter _formatter;
 
         public ColumnPropertyBuilder(PropertyInfo propertyInfo)
         {
             PropertyInfo = propertyInfo;
             _property = propertyInfo.Name.Camelize();
             _displayName = propertyInfo.Name;
-            _isVisible = true;
+            _isVisible = !propertyInfo.Name.Equals("id", StringComparison.InvariantCultureIgnoreCase);
             _isSortable = true;
             _formatter = GetDefaultPropertyFormatter(PropertyInfo);
         }

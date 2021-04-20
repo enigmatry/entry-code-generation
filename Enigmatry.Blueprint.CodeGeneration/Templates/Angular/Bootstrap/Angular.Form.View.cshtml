@@ -1,0 +1,40 @@
+﻿@using Enigmatry.Blueprint.CodeGeneration.Configuration.Form.Model
+@model Enigmatry.Blueprint.CodeGeneration.Configuration.Form.FormComponentModel;
+<form [formGroup]="form">
+    <mat-card>
+        <mat-card-content>
+            @foreach (var formControl in Model.VisibleFormControls)
+            {
+                switch (formControl.Type)
+                {
+                    case FormControlType.Input:
+                        @Html.Partial("~/Templates/Angular/Bootstrap/FormControls/Angular.FormControl.Input.cshtml", formControl)
+                        <br/>
+                        break;
+                    case FormControlType.DropDownList:
+                        @Html.Partial("~/Templates/Angular/Bootstrap/FormControls/Angular.FormControl.DropDownList.cshtml", formControl)
+                        <br/>
+                        break;
+                    case FormControlType.Autocomplete:
+                        @Html.Partial("~/Templates/Angular/Bootstrap/FormControls/Angular.FormControl.Autocomplete.cshtml", formControl)
+                        <br/>
+                        break;
+                    case FormControlType.DateTime:
+                        @Html.Partial("~/Templates/Angular/Bootstrap/FormControls/Angular.FormControl.DateTime.cshtml", formControl)
+                        <br/>
+                        break;
+                    case FormControlType.CheckBox:
+                        @Html.Partial("~/Templates/Angular/Bootstrap/FormControls/Angular.FormControl.CheckBox.cshtml", formControl)
+                        <br/>
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="secondary" (click)="cancel()">Cancel</button>
+            <button mat-raised-button color="primary" type="submit" (click)="save()">Save</button>
+        </mat-card-actions>
+    </mat-card>
+</form>

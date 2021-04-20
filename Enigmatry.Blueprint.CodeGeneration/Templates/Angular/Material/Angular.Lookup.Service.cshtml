@@ -1,0 +1,63 @@
+﻿@using Enigmatry.Blueprint.CodeGeneration.Templates.HtmlHelperExtensions.Angular; 
+@model Enigmatry.Blueprint.CodeGeneration.Configuration.Services.LookupServiceModel;
+import { Injectable } from '@@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
+@Html.AsyncMethodDependencies(Model.AsyncLookupMethods, "src/app/core/api/api")
+
+@@Injectable({
+  providedIn: 'root'
+})
+export class @(Model.Name)LookupService {
+    @foreach(var method in Model.FixedValuesLookupMethods)
+    {
+        @Html.Raw("\t")
+        @Html.FixedValuesProperty(method)
+        @Html.Raw("\n")
+    }
+
+    @foreach(var method in Model.LookupMethods)
+    {
+        @Html.Raw("\t")
+        @Html.MethodSubjectStatement(method)
+        @Html.Raw("\n")
+    }
+
+    @foreach(var method in Model.LookupMethods)
+    {
+        @Html.Raw("\t")
+        @Html.MethodResponseProperty(method)
+        @Html.Raw("\n")
+    }
+
+    constructor(@Html.AsyncMethodDependencyInjections(Model.AsyncLookupMethods)) { }
+
+    initLookups(response: any) {
+        @foreach(var method in Model.AsyncLookupMethods)
+        {
+            @Html.Raw("\t\t")
+            @Html.AsyncMethodInit(method)
+            @Html.Raw("\n")
+        }
+    }
+
+	displayOption(option): string { return option ? option.displayName : ''; }
+
+    @foreach(var method in Model.AsyncLookupMethods)
+    {
+        @Html.Raw("\t")
+        @Html.AsyncMethod(method)
+        @Html.Raw("\n")
+    }
+    @foreach(var method in Model.FixedValuesLookupMethods)
+    {
+        @Html.Raw("\t")
+        @Html.FixedValuesFilterMethod(method)
+        @Html.Raw("\n")
+    }
+    @foreach(var method in Model.FixedValuesLookupMethods)
+    {
+        @Html.Raw("\t")
+        @Html.FixedValuesDisplayOptionMethod(method)
+        @Html.Raw("\n")
+    }
+}

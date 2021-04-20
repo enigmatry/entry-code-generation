@@ -31,7 +31,7 @@ namespace Enigmatry.Blueprint.CodeGeneration.Tests
         {
             var componentModel = new ListComponentModel(new ComponentInfo(), new List<ColumnPropertyModel>());
 
-            string contents = await _templatingEngine.RenderFromFileAsync("~/Templates/Angular.List.Component.cshtml", componentModel);
+            string contents = await _templatingEngine.RenderFromFileAsync("~/Templates/Angular/Material/Angular.List.Component.cshtml", componentModel);
 
             contents.Should().NotBeEmpty();
         }

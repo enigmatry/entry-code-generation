@@ -1,0 +1,8 @@
+﻿@model Enigmatry.Blueprint.CodeGeneration.Configuration.Form.Model.FormControlModel;
+<mat-form-field appearance="fill">
+    <mat-label>@Model.DisplayName</mat-label>
+    <input matInput [matDatepicker]="@Model.Property" formControlName="@Model.Property" name="@Model.Property"
+           placeholder="@Model.Placeholder" @(Model.IsReadonly ? "readonly" : "")>
+    <mat-datepicker-toggle matSuffix [for]="@Model.Property"></mat-datepicker-toggle>
+    <mat-datepicker @($"#{Model.Property}") ></mat-datepicker>
+</mat-form-field>
