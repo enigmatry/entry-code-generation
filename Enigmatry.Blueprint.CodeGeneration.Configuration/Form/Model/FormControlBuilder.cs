@@ -24,7 +24,7 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Form.Model
             _property = propertyInfo.Name.Camelize();
             _displayName = propertyInfo.Name;
             _placeholder = _displayName;
-            _isVisible = true;
+            _isVisible = !propertyInfo.Name.Equals("id", StringComparison.InvariantCultureIgnoreCase);
             _isReadonly = false;
 
             SetDefaultFormControlType();
