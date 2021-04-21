@@ -40,7 +40,13 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Form
 
         public FormComponentBuilder<T> HasCreateOrUpdateCommandOfType<TCreateOrUpdateCommand>()
         {
-            _createOrUpdateCommandTypeName = typeof(TCreateOrUpdateCommand).GetDeclaringName();
+            _createOrUpdateCommandTypeName = typeof(TCreateOrUpdateCommand).Name;
+            return this;
+        }
+
+        public FormComponentBuilder<T> HasCreateOrUpdateCommandWithName(string createOrUpdateCommandTypeName)
+        {
+            _createOrUpdateCommandTypeName = createOrUpdateCommandTypeName;
             return this;
         }
     }
