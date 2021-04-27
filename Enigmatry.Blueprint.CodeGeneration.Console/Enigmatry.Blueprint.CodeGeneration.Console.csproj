@@ -3,11 +3,6 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
-    <PublishSingleFile>true</PublishSingleFile>
-    <SelfContained>false</SelfContained>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <PublishReadyToRun>true</PublishReadyToRun>
-    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
     <Authors>msl@enigmatry.com, mmr@enigmatry.com</Authors>
     <Company>enigmatry.com</Company>
     <Product>Enigmatry.Blueprint.CodeGeneration.Console</Product>
@@ -17,7 +12,6 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>enigmatry-codegen</ToolCommandName>
-    <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
