@@ -6,13 +6,13 @@ import { Routes, RouterModule } from '@@angular/router';
 
 @Html.ImportComponentsFrom(Model)
 @{
-    var componentsWithRouting = Model.Components.Where(c => c.ComponentInfo.Routing.IsRoutingEnabled);
+    var componentsWithRouting = Model.Components.Where(c => c.RoutingInfo.IsRoutingEnabled);
 }
 const routes: Routes = [
 @foreach (var component in componentsWithRouting)
 {
     @:{
-        @:path: '@(component.ComponentInfo.Routing.Path)', component: @(component.AngularComponentName())
+        @:path: '@(component.RoutingInfo.Path)', component: @(component.AngularComponentName())
     @:},
 }
 ];

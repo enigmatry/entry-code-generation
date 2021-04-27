@@ -29,7 +29,7 @@ namespace Enigmatry.Blueprint.CodeGeneration.Tests
         [Test]
         public async Task TestRenderFromFile()
         {
-            var componentModel = new ListComponentModel(new ComponentInfo(), new List<ColumnPropertyModel>());
+            var componentModel = new TestComponent();
 
             string contents = await _templatingEngine.RenderFromFileAsync("~/Templates/Angular/Material/Angular.List.Component.cshtml", componentModel);
 
@@ -40,6 +40,14 @@ namespace Enigmatry.Blueprint.CodeGeneration.Tests
         {
             return Host.CreateDefaultBuilder()
                 .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<RazorTestStartup>()).Build();
+        }
+
+        internal class TestComponent : ListComponentModel
+        {
+            public TestComponent() 
+                : base(new ComponentInfo(), new RoutingInfo(""), new ApiClientInfo(""), new List<ColumnPropertyModel>())
+            {
+            }
         }
     }
 }

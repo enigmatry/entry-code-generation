@@ -4,14 +4,14 @@ using Enigmatry.Blueprint.CodeGeneration.Configuration.List.Model;
 
 namespace Enigmatry.Blueprint.CodeGeneration.Configuration.List
 {
-    public class ListComponentModel : IComponentModel
+    public class ListComponentModel : ComponentModel
     {
-        public ComponentInfo ComponentInfo { get; set; }
         public IList<ColumnPropertyModel> Columns { get; set; }
 
-        public ListComponentModel(ComponentInfo componentInfo, IList<ColumnPropertyModel> columns)
+        public ListComponentModel(ComponentInfo componentInfo, RoutingInfo routingInfo, ApiClientInfo apiClientInfo,
+            IList<ColumnPropertyModel> columns)
+        : base(componentInfo, routingInfo, apiClientInfo)
         {
-            ComponentInfo = componentInfo;
             Columns = columns;
         }
 

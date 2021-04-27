@@ -32,6 +32,8 @@ namespace Enigmatry.Blueprint.CodeGeneration.Tests.HtmlHelperExtensions.Angular
         internal class TestComponent : IComponentModel
         {
             public ComponentInfo ComponentInfo { get; set; }
+            public RoutingInfo RoutingInfo { get; } = RoutingInfo.NoRouting();
+            public ApiClientInfo ApiClientInfo { get; } = ApiClientInfo.NoApiClient();
 
             public TestComponent(ComponentInfo componentInfo)
             {

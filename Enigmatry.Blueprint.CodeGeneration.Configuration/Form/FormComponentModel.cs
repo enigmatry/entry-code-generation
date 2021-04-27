@@ -6,15 +6,18 @@ using System.Linq;
 
 namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Form
 {
-    public class FormComponentModel : IComponentModel, IWithLookupService
+    public class FormComponentModel : ComponentModel, IWithLookupService
     {
-        public ComponentInfo ComponentInfo { get; set; }
         public IList<FormControlModel> FormControls { get; set; }
         public string CreateOrUpdateCommandTypeName { get; set; }
         public LookupServiceModel LookupService { get; set; } = null!;
 
-
-        public FormComponentModel(ComponentInfo componentInfo, IEnumerable<FormControlModel> formControls, string createOrUpdateCommandTypeName)
+        public FormComponentModel(ComponentInfo componentInfo,
+            RoutingInfo routingInfo,
+            ApiClientInfo apiClientInfo,
+            IEnumerable<FormControlModel> formControls,
+            string createOrUpdateCommandTypeName)
+            : base(componentInfo, routingInfo, apiClientInfo)
         {
             ComponentInfo = componentInfo;
             CreateOrUpdateCommandTypeName = createOrUpdateCommandTypeName;
@@ -35,8 +38,6 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Form
         public IEnumerable<FormControlModel> VisibleFormControls => FormControls.Where(control => control.IsVisible);
         public IEnumerable<FormControlModel> EditableFormControls => FormControls.Where(control => !control.IsReadonly);
         public IEnumerable<FormControlModel> AutocompleteFormControls => SelectFormControls.Where(x => x.Type == FormControlType.Autocomplete);
-
-
         private IEnumerable<FormControlModel> SelectFormControls => FormControls.Where(x => x is SelectFormControlModel);
     }
 }
