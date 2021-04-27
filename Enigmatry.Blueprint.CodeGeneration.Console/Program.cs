@@ -71,7 +71,6 @@ namespace Enigmatry.Blueprint.CodeGeneration.Console
             try
             {
                 PrintIntro();
-                Log.Information("Starting service host ...");
 
                 var host = CreateHostBuilder().Build();
 
@@ -79,16 +78,10 @@ namespace Enigmatry.Blueprint.CodeGeneration.Console
                 var codeGenerator = scope.ServiceProvider.GetRequiredService<CodeGenerator>();
 
                 await codeGenerator.Generate();
-
-                //await host.RunAsync();
             }
             catch (Exception ex)
             {
-                Log.Fatal("Service host terminated unexpectedly!. Error: {@ex}", ex);
-            }
-            finally
-            {
-                Log.Information("Stopping service host.");
+                Log.Error($"Service host terminated unexpectedly!. Error: {ex}");
             }
         }
 
@@ -118,6 +111,7 @@ namespace Enigmatry.Blueprint.CodeGeneration.Console
                     services.AddSingleton<ITemplateWriter, TemplateWriter>();
                     services.AddSingleton(new AngularSettings(UiLibrary.Material));
                     services.AddSingleton<CodeGenerator>();
+                    services.AppSerilog();
                 })
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<TStartup>(); })
                 .ConfigureContainer(configureContainer)

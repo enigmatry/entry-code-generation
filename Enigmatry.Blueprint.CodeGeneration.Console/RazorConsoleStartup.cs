@@ -32,8 +32,6 @@ namespace Enigmatry.Blueprint.CodeGeneration.Console
                 });
 
             services.AddSingleton<RazorTemplatingEngine>();
-
-            services.AppSerilog();
         }
 
         [UsedImplicitly]
