@@ -13,6 +13,7 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.List.Model
         private bool _isVisible;
         private bool _isSortable;
         private IPropertyFromatter _formatter;
+        private string? _customComponentName;
 
         public ColumnPropertyBuilder(PropertyInfo propertyInfo)
         {
@@ -32,7 +33,8 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.List.Model
                 DisplayName = _displayName,
                 IsSortable = _isSortable,
                 IsVisible = _isVisible,
-                Formatter = _formatter
+                Formatter = _formatter,
+                CustomComponentName = _customComponentName
             };
         }
 
@@ -60,6 +62,12 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.List.Model
             {
                 _formatter = formatter;
             }
+            return this;
+        }
+
+        public ColumnPropertyBuilder WithCustomComponent(string componentName)
+        {
+            _customComponentName = componentName;
             return this;
         }
 

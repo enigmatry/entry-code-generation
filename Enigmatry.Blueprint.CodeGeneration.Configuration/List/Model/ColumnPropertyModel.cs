@@ -10,5 +10,8 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.List.Model
         public bool IsVisible { get; set; }
         public bool IsSortable { get; set; }
         public IPropertyFromatter Formatter { get; set; } = new NoFormattingPropertyFormatter();
+
+        public string? CustomComponentName { get; set; }
+        public bool UseCustomComponent => CustomComponentName.HasContent();
     }
 }
