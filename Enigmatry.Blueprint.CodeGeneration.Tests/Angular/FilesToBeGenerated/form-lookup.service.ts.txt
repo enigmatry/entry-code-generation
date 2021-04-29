@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { LookupApiMockClient } from 'src/app/core/api/api';
+import { LookupApiMockClient } from 'src/app/api/api-reference';
 
 @Injectable({
   providedIn: 'root'

@@ -10,7 +10,7 @@ import { Component, OnInit } from '@@angular/core';
 import { FormControl, FormGroup } from '@@angular/forms';
 import { ActivatedRoute, Router } from '@@angular/router';
 import { debounceTime, filter, map, switchMap } from 'rxjs/operators';
-import { @Model.ComponentInfo.ModelTypeName, @Model.CreateOrUpdateCommandTypeName, @Model.AngularComponentApiClient() } from 'src/app/core/api/api';
+import { @Model.ComponentInfo.ModelTypeName, @Model.CreateOrUpdateCommandTypeName, @Model.AngularComponentApiClient() } from 'src/app/api/api-reference';
 @Html.LookupServiceImportStatement(Model.LookupService)
 
 @@Component({
