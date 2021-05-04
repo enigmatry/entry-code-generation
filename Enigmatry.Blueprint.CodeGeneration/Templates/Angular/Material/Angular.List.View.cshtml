@@ -6,7 +6,7 @@
         @foreach (var column in Model.Columns)
         {
             <ng-container matColumnDef="@column.Property">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>@column.DisplayName</th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="@(column.IsSortable ? "false" : "true")">@column.DisplayName</th>
                 <td mat-cell *matCellDef="let row">
                     @if (column.UseCustomComponent)
                     {

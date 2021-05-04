@@ -17,6 +17,10 @@ namespace Enigmatry.Blueprint.CodeGeneration.Tests.Mocks
                 .IsVisible(false);
 
             builder
+                .Column(x => x.Name)
+                .IsSortable(false);
+
+            builder
                 .Column(x => x.Date)
                 .WithFormat(
                     new DatePropertyFormatter()
