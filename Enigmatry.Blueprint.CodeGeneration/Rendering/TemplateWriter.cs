@@ -2,27 +2,26 @@
 using System.IO;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using Microsoft.Extensions.Logging;
 
 namespace Enigmatry.Blueprint.CodeGeneration.Rendering
 {
     [UsedImplicitly]
     public class TemplateWriter : ITemplateWriter
     {
-        private readonly ILogger<TemplateWriter> _logger;
+        private readonly ITemplateWriterAppender _appender;
 
-        public TemplateWriter(ILogger<TemplateWriter> logger)
+        public TemplateWriter(ITemplateWriterAppender appender)
         {
-            _logger = logger;
+            _appender = appender;
         }
 
         public Task WriteToFileAsync(string path, string contents)
         {
             var directoryPath = Path.GetDirectoryName(path);
-            if (!String.IsNullOrEmpty(directoryPath))
-            {
-                Directory.CreateDirectory(directoryPath);
-            }
+            if (!String.IsNullOrEmpty(directoryPath)) Directory.CreateDirectory(directoryPath);
+
+            if (_appender.AppendAtStart(path)) contents = _appender.TextToAppendAtStart() + contents;
+            if (_appender.AppendAtEnd(path)) contents += _appender.TextToAppendAtEnd();
 
             return File.WriteAllTextAsync(path, contents);
         }

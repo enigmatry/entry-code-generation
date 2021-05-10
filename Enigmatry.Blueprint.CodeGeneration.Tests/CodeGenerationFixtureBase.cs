@@ -40,6 +40,7 @@ namespace Enigmatry.Blueprint.CodeGeneration.Tests
                     services.AddSingleton<IModuleGenerator, AngularModuleGenerator>();
                     services.AddSingleton<ITemplateRenderer, TemplateRenderer>();
                     services.AddSingleton<ITemplateWriter, InMemoryTemplateWriter>();
+                    services.AddSingleton<ITemplateWriterAppender, DisclaimerTemplateAppender>();
                     services.AddSingleton<CodeGenerator>();
                     services.AddSingleton(new AngularSettings(UiLibrary.Material));
                 });

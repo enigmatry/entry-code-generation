@@ -109,6 +109,7 @@ namespace Enigmatry.Blueprint.CodeGeneration.Console
                     services.AddSingleton<IModuleGenerator, AngularModuleGenerator>();
                     services.AddSingleton<ITemplateRenderer, TemplateRenderer>();
                     services.AddSingleton<ITemplateWriter, TemplateWriter>();
+                    services.AddSingleton<ITemplateWriterAppender, DisclaimerTemplateAppender>();
                     services.AddSingleton(new AngularSettings(UiLibrary.Material));
                     services.AddSingleton<CodeGenerator>();
                     services.AppSerilog();
