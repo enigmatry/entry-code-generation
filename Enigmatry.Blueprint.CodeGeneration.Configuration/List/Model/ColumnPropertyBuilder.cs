@@ -10,6 +10,7 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.List.Model
         public PropertyInfo PropertyInfo { get; }
         private readonly string _property;
         private string _displayName;
+        private string? _translationId;
         private bool _isVisible;
         private bool _isSortable;
         private IPropertyFromatter _formatter;
@@ -31,6 +32,7 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.List.Model
             {
                 Property = _property,
                 DisplayName = _displayName,
+                TranslationId = _translationId,
                 IsSortable = _isSortable,
                 IsVisible = _isVisible,
                 Formatter = _formatter,
@@ -41,6 +43,12 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.List.Model
         public ColumnPropertyBuilder WithDisplayName(string displayName)
         {
             _displayName = displayName;
+            return this;
+        }
+
+        public ColumnPropertyBuilder WithTranslationId(string translationId)
+        {
+            _translationId = translationId;
             return this;
         }
 

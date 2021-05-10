@@ -6,7 +6,7 @@
                 <td mat-cell *matCellDef="let row">{{row.id}}</td>
             </ng-container>
             <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true">Name</th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true" i18n="@@name">Name</th>
                 <td mat-cell *matCellDef="let row">{{row.name}}</td>
             </ng-container>
             <ng-container matColumnDef="date">

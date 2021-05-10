@@ -37,13 +37,17 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Tests.List
 
             builder.Column(p => p.Title)
                 .IsVisible(true)
-                .WithDisplayName("Test Title");
+                .IsSortable(false)
+                .WithDisplayName("Test Title")
+                .WithTranslationId("title");
 
             var componentModel = builder.Build();
 
             var column = componentModel.Columns.FirstOrDefault(c => c.DisplayName == "Test Title");
             column.Should().NotBeNull();
             column!.IsVisible.Should().BeTrue();
+            column.IsSortable.Should().BeFalse();
+            column.TranslationId.Should().Be("title");
         }
 
         internal class Project1

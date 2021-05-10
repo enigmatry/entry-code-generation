@@ -18,7 +18,8 @@ namespace Enigmatry.Blueprint.CodeGeneration.Tests.Mocks
 
             builder
                 .Column(x => x.Name)
-                .IsSortable(false);
+                .IsSortable(false)
+                .WithTranslationId("name");
 
             builder
                 .Column(x => x.Date)

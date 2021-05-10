@@ -7,6 +7,7 @@ namespace Enigmatry.Blueprint.CodeGeneration.Configuration.List.Model
     {
         public string Property { get; set; } = String.Empty;
         public string DisplayName { get; set; } = String.Empty;
+        public string? TranslationId { get; set; }
         public bool IsVisible { get; set; }
         public bool IsSortable { get; set; }
         public IPropertyFromatter Formatter { get; set; } = new NoFormattingPropertyFormatter();
