@@ -1,9 +1,10 @@
 ﻿using System.Linq;
+using Enigmatry.Blueprint.CodeGeneration.Configuration;
 using Enigmatry.Blueprint.CodeGeneration.Configuration.List;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Tests
+namespace Enigmatry.Blueprint.CodeGeneration.Tests.Configuration
 {
     [Category("unit")]
     public class ConfigurationScannerFixture

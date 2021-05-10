@@ -1,9 +1,9 @@
-﻿using Enigmatry.Blueprint.CodeGeneration.Configuration.Form;
+﻿using System;
+using Enigmatry.Blueprint.CodeGeneration.Configuration.Form;
 using FluentAssertions;
 using NUnit.Framework;
-using System;
 
-namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Tests.Form
+namespace Enigmatry.Blueprint.CodeGeneration.Tests.Configuration.Form
 {
     [Category("unit")]
     public class FormComponentConfigurationFixture

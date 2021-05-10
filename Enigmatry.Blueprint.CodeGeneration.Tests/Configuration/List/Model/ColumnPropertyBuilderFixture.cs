@@ -1,11 +1,11 @@
-﻿using Enigmatry.Blueprint.CodeGeneration.Configuration.Formatters;
+﻿using System;
+using System.Linq;
+using Enigmatry.Blueprint.CodeGeneration.Configuration.Formatters;
 using Enigmatry.Blueprint.CodeGeneration.Configuration.List.Model;
 using FluentAssertions;
 using NUnit.Framework;
-using System;
-using System.Linq;
 
-namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Tests.List.Model
+namespace Enigmatry.Blueprint.CodeGeneration.Tests.Configuration.List.Model
 {
     [Category("unit")]
     public class ColumnPropertyBuilderFixture

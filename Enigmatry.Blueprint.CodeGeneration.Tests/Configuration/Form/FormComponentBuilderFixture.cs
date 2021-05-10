@@ -3,7 +3,7 @@ using Enigmatry.Blueprint.CodeGeneration.Configuration.Form;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Tests.Form
+namespace Enigmatry.Blueprint.CodeGeneration.Tests.Configuration.Form
 {
     [Category("unit")]
     public class FormComponentBuilderFixture

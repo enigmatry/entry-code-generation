@@ -1,13 +1,13 @@
-﻿using Enigmatry.Blueprint.CodeGeneration.Configuration.Form.Model;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Enigmatry.Blueprint.CodeGeneration.Configuration.Form.Model;
 using Enigmatry.Blueprint.CodeGeneration.Configuration.Form.Model.Select;
 using Enigmatry.Blueprint.CodeGeneration.Configuration.Services;
 using FluentAssertions;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace Enigmatry.Blueprint.CodeGeneration.Configuration.Tests.Form.Model.Select
+namespace Enigmatry.Blueprint.CodeGeneration.Tests.Configuration.Form.Model.Select
 {
     [Category("unit")]
     public class SelectFormControlBuilderFixture
