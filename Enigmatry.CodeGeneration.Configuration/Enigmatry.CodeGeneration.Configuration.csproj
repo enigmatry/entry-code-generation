@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.1;net5.0</TargetFrameworks>
+        <Nullable>enable</Nullable>
+        <Authors>msl@enigmatry.com, mmr@enigmatry.com</Authors>
+        <Company>enigmatry.com</Company>
+        <Product>Enigmatry.CodeGeneration.Configuration</Product>
+        <Description>Package for generating frontend code</Description>
+        <RepositoryUrl>https://git.enigmatry.com/Enigmatry/enigmatry-blueprint-code-generation.git</RepositoryUrl>
+        <PackageIcon>icon-192x192.png</PackageIcon>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <IsPackable>true</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\icon-192x192.png">
+            <Pack>True</Pack>
+            <PackagePath></PackagePath>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Humanizer.Core" Version="2.10.1" />
+    </ItemGroup>
+
+</Project>

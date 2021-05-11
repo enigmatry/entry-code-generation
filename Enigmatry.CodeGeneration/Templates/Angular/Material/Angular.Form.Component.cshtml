@@ -1,0 +1,85 @@
+﻿@using System.Linq;
+@using Enigmatry.CodeGeneration.Angular
+@using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
+@using Humanizer;
+@model Enigmatry.CodeGeneration.Configuration.Form.FormComponentModel;
+import { Location } from '@@angular/common';
+import { Component, OnInit } from '@@angular/core';
+import { FormControl, FormGroup } from '@@angular/forms';
+import { ActivatedRoute, Router } from '@@angular/router';
+import { debounceTime, filter, map, switchMap } from 'rxjs/operators';
+import { @Model.ComponentInfo.ModelTypeName, @Model.CreateOrUpdateCommandTypeName, @Model.AngularComponentApiClient() } from 'src/app/api/api-reference';
+@Html.LookupServiceImportStatement(Model.LookupService)
+
+@@Component({
+    templateUrl: './@(Model.AngularComponentFileName()).html',
+    styleUrls: ['./@(Model.AngularComponentFileName()).scss']
+})
+export class @Model.AngularComponentName() implements OnInit {
+
+    response: @Model.ComponentInfo.ModelTypeName;
+
+    form = new FormGroup({
+    @foreach (var formControl in Model.FormControls)
+    {
+        @Html.Raw("\t\t")
+        @(formControl.Property)@:: new FormControl(''),
+    }
+    });
+
+    constructor(
+        private location: Location,
+        protected route: ActivatedRoute,
+        private client: @Model.AngularComponentApiClient()@Html.LookupsServiceDependencyInjection(Model.LookupService)
+    ) { }
+
+    ngOnInit(): void {
+        this.route.params
+            .pipe(
+                map(params => params.id),
+                switchMap(id => this.client.get(id))
+            )
+            .subscribe(response => {
+                this.response = response;
+                this.form.patchValue(response);
+                @if (Model.LookupService != null)
+                {
+                    @Html.Raw("\t\t\t\t")
+                    @Html.Raw("this.lookupService.initLookups(this.response);")
+                    @Html.Raw("\n")
+
+                    @foreach(var autocompleteControl in Model.AutocompleteFormControls)
+                    {
+                        @Html.Raw("\t\t\t\t")
+                        @Html.Raw($"this.form.controls['{autocompleteControl.Property}'].valueChanges\n" +
+                            $"\t\t\t\t\t.pipe(debounceTime(200), filter(value => typeof value === 'string'))\n" +
+                            $"\t\t\t\t\t.subscribe(x => this.lookupService.get{autocompleteControl.Property.Pascalize()}(x));")
+                        @Html.Raw("\n")
+                    }
+                }
+            });
+    }
+
+    save() {
+        if (this.form.valid) {
+            this.client.post(this.createCommand())
+                .subscribe(() => this.navigateBack());
+        }
+    }
+
+    private createCommand(): @Model.CreateOrUpdateCommandTypeName {
+        @{
+            var properties = String.Join(", ", Model.EditableFormControls.Select(x => x.Property));
+        }
+        const { @properties } = this.form.value;
+        return new @(Model.CreateOrUpdateCommandTypeName)({ @properties });
+    }
+
+    cancel() {
+        this.navigateBack();
+    }
+
+    private navigateBack() {
+        this.location.back();
+    }
+}

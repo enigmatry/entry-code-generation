@@ -1,0 +1,25 @@
+﻿@model Enigmatry.CodeGeneration.Configuration.IFeatureModule;
+@using Enigmatry.CodeGeneration.Angular
+@using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions
+import { NgModule } from '@@angular/core';
+import { Routes, RouterModule } from '@@angular/router';
+
+@Html.ImportComponentsFrom(Model)
+@{
+    var componentsWithRouting = Model.Components.Where(c => c.RoutingInfo.IsRoutingEnabled);
+}
+const routes: Routes = [
+@foreach (var component in componentsWithRouting)
+{
+    @:{
+        @:path: '@(component.RoutingInfo.Path)', component: @(component.AngularComponentName())
+    @:},
+}
+];
+
+@@NgModule({
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
+})
+export class @(Model.Name)RoutingModule { }
+
