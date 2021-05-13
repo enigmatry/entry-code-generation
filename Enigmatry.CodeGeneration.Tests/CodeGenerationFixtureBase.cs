@@ -17,14 +17,14 @@ namespace Enigmatry.CodeGeneration.Tests
         private IServiceScope _testScope = null!;
         protected ITemplatingEngine _templatingEngine = null!;
         protected ITemplateWriter _templateWriter = null!;
-        protected CodeGenerationOptions _options = null!;
+        protected CodeGeneratorOptions _options = null!;
         protected IHtmlHelper _htmlHelper = null!;
         protected CodeGenerator _codeGenerator = null!;
 
         [SetUp]
         public void Setup()
         {
-            _options = new CodeGenerationOptions(TestContext.CurrentContext.TestDirectory, Assembly.GetExecutingAssembly()) 
+            _options = new CodeGeneratorOptions(TestContext.CurrentContext.TestDirectory, Assembly.GetExecutingAssembly()) 
             {
                 ComponentName = String.Empty, 
                 Framework = Framework.Angular

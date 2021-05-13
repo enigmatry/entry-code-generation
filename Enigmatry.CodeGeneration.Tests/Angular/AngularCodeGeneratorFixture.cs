@@ -15,7 +15,7 @@ namespace Enigmatry.CodeGeneration.Tests.Angular
         public async Task Generate()
         {
             _options.Framework.Should().Be(Framework.Angular);
-            _options.GenerateFromAssembly.Should().Equals(Assembly.GetExecutingAssembly());
+            _options.SourceAssembly.Should().Equals(Assembly.GetExecutingAssembly());
 
             await _codeGenerator.Generate();
 

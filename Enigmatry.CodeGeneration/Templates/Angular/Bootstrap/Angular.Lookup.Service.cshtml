@@ -1,8 +1,10 @@
-﻿@using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular 
+﻿@using Enigmatry.CodeGeneration
+@using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular 
 @model Enigmatry.CodeGeneration.Configuration.Services.LookupServiceModel;
+@inject CodeGeneratorOptions _options;
 import { Injectable } from '@@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-@Html.AsyncMethodDependencies(Model.AsyncLookupMethods, "src/app/api/api-reference")
+@Html.AsyncMethodDependencies(Model.AsyncLookupMethods, _options.ApiClientTsImportPath)
 
 @@Injectable({
   providedIn: 'root'

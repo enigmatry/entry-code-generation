@@ -94,7 +94,7 @@ namespace Enigmatry.CodeGeneration.Console
         private static IHostBuilder BuildHost<TStartup>(IHostBuilder builder, Action<ContainerBuilder> configureContainer) where TStartup : class
         {
             var assembly = Assembly.LoadFrom(_sourceAssembly);
-            var options = new CodeGenerationOptions(_destinationDirectory, assembly)
+            var options = new CodeGeneratorOptions(_destinationDirectory, assembly)
             {
                 ComponentName = _componentName
             };

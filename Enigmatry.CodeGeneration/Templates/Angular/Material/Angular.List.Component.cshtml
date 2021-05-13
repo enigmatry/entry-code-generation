@@ -1,12 +1,14 @@
-﻿@using Enigmatry.CodeGeneration.Angular
+﻿@using Enigmatry.CodeGeneration
+@using Enigmatry.CodeGeneration.Angular
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
 @model Enigmatry.CodeGeneration.Configuration.List.ListComponentModel;
+@inject CodeGeneratorOptions _options;
 import { Component, OnInit } from '@@angular/core';
 import { ActivatedRoute, Router } from '@@angular/router';
 import { Observable } from 'rxjs';
 import { mergeMap, tap } from 'rxjs/operators';
 
-import { @(Model.ComponentInfo.ModelTypeName), @(Model.AngularComponentApiClient()) } from 'src/app/api/api-reference';
+import { @(Model.ComponentInfo.ModelTypeName), @(Model.AngularComponentApiClient()) } from '@_options.ApiClientTsImportPath';
 
 import { PagedResponse, PagedQueryParams } from 'src/app/shared/pagination/paged-data.model';
 import { MatPagedTableComponent } from 'src/app/shared/pagination/mat-paged-table.component';

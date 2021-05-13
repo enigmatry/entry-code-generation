@@ -1,14 +1,17 @@
 ﻿@using System.Linq;
+@using Enigmatry.CodeGeneration
 @using Enigmatry.CodeGeneration.Angular
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 @using Humanizer;
 @model Enigmatry.CodeGeneration.Configuration.Form.FormComponentModel;
+@inject CodeGeneratorOptions _options;
+
 import { Location } from '@@angular/common';
 import { Component, OnInit } from '@@angular/core';
 import { FormControl, FormGroup } from '@@angular/forms';
 import { ActivatedRoute, Router } from '@@angular/router';
 import { debounceTime, filter, map, switchMap } from 'rxjs/operators';
-import { @Model.ComponentInfo.ModelTypeName, @Model.CreateOrUpdateCommandTypeName, @Model.AngularComponentApiClient() } from 'src/app/api/api-reference';
+import { @Model.ComponentInfo.ModelTypeName, @Model.CreateOrUpdateCommandTypeName, @Model.AngularComponentApiClient() } from '@_options.ApiClientTsImportPath';
 @Html.LookupServiceImportStatement(Model.LookupService)
 
 @@Component({

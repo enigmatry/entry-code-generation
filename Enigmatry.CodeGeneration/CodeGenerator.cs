@@ -10,13 +10,13 @@ namespace Enigmatry.CodeGeneration
     public class CodeGenerator
     {
         private readonly IModuleGenerator _moduleGenerator;
-        private readonly CodeGenerationOptions _options;
+        private readonly CodeGeneratorOptions _options;
         private readonly ILogger<CodeGenerator> _logger;
         private IList<IFeatureModule> _featureModules;
 
         public CodeGenerator(
             IModuleGenerator moduleGenerator,
-            CodeGenerationOptions options,
+            CodeGeneratorOptions options,
             ILogger<CodeGenerator> logger)
         {
             _moduleGenerator = moduleGenerator;
@@ -35,7 +35,7 @@ namespace Enigmatry.CodeGeneration
 
         private void BuildAllDefinitions()
         {
-            var sourceAssembly = _options.GenerateFromAssembly;
+            var sourceAssembly = _options.SourceAssembly;
 
             _featureModules = _options.HasComponentName
                 ? ConfigurationScanner
@@ -52,7 +52,7 @@ namespace Enigmatry.CodeGeneration
         {
             foreach (var feature in _featureModules)
             {
-                await _moduleGenerator.GenerateAsync(_options.OutputDir, feature);
+                await _moduleGenerator.GenerateAsync(_options.OutputDirectory, feature);
             }
         }
     }
