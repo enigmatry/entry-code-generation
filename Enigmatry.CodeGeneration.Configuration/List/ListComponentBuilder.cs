@@ -9,22 +9,31 @@ namespace Enigmatry.CodeGeneration.Configuration.List
 {
     public class ListComponentBuilder<T> : BaseComponentBuilder<ListComponentModel>
     {
-        private readonly IList<ColumnPropertyBuilder> _columns;
+        private readonly IList<ColumnDefinitionBuilder> _columns;
 
         public ListComponentBuilder() : base(typeof(T))
         {
             _routingInfoBuilder.WithEmptyRoute();
-
-            _columns = _modelType
-                .GetProperties().Select(propertyInfo => new ColumnPropertyBuilder(propertyInfo)).ToList();
+            _columns = _modelType.GetProperties().Select(propertyInfo => new ColumnDefinitionBuilder(propertyInfo)).ToList();
         }
 
-        public ColumnPropertyBuilder Column<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+        public ColumnDefinitionBuilder Column<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
         {
             Check.NotNull(propertyExpression, nameof(propertyExpression));
+            return _columns.First(builder => builder.Has(propertyExpression));
+        }
 
-            var propertyInfo = propertyExpression.GetPropertyAccess();
-            return _columns.First(builder => builder.PropertyInfo == propertyInfo);
+        public ColumnDefinitionBuilder Column(string propertyName)
+        {
+            Check.NotEmpty(propertyName, nameof(propertyName));
+
+            var columnDefinitionBuilder = _columns.FirstOrDefault(builder => builder.Has(propertyName));
+            if (columnDefinitionBuilder != null) return columnDefinitionBuilder;
+
+            columnDefinitionBuilder = new ColumnDefinitionBuilder(propertyName);
+            _columns.Add(columnDefinitionBuilder);
+
+            return columnDefinitionBuilder;
         }
 
         public override ListComponentModel Build()

@@ -6,15 +6,15 @@ namespace Enigmatry.CodeGeneration.Configuration.List
 {
     public class ListComponentModel : ComponentModel
     {
-        public IList<ColumnPropertyModel> Columns { get; set; }
+        public IList<ColumnDefinitionModel> Columns { get; set; }
 
         public ListComponentModel(ComponentInfo componentInfo, RoutingInfo routingInfo, ApiClientInfo apiClientInfo,
-            IList<ColumnPropertyModel> columns)
+            IList<ColumnDefinitionModel> columns)
         : base(componentInfo, routingInfo, apiClientInfo)
         {
             Columns = columns;
         }
 
-        public IEnumerable<ColumnPropertyModel> VisibleColumns => Columns.Where(column => column.IsVisible);
+        public IEnumerable<ColumnDefinitionModel> VisibleColumns => Columns.Where(column => column.IsVisible);
     }
 }

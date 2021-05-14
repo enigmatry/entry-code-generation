@@ -1,6 +1,6 @@
 ﻿namespace Enigmatry.CodeGeneration.Configuration.List
 {
-    public interface IListComponentConfiguration<TSource> : IComponentConfiguration<ListComponentBuilder<TSource>> where TSource : class
+    public interface IListComponentConfiguration<T> : IComponentConfiguration<ListComponentBuilder<T>> where T : class
     {
     }
 }

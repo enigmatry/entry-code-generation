@@ -26,7 +26,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
         {
             Check.NotNull(propertyExpression, nameof(propertyExpression));
 
-            var propertyInfo = propertyExpression.GetPropertyAccess();
+            var propertyInfo = propertyExpression.GetPropertyInfo();
             return _formControls.First(builder => builder.PropertyInfo == propertyInfo);
         }
 

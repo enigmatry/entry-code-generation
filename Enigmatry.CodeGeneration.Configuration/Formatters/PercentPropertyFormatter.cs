@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Enigmatry.CodeGeneration.Configuration.Formatters
 {
-    public class PercentPropertyFormatter : IPropertyFromatter
+    public class PercentPropertyFormatter : IPropertyFormatter
     {
         public string DigitsInfo { get; private set; } = String.Empty;
         public string Locale { get; private set; } = String.Empty;

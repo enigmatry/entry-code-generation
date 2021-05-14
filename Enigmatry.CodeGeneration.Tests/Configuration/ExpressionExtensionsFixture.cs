@@ -14,7 +14,7 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration
         {
             Expression<Func<Model1, string>> propertyExpression = model => model.Title;
 
-            var propertyInfo = propertyExpression.GetPropertyAccess();
+            var propertyInfo = propertyExpression.GetPropertyInfo();
 
             propertyInfo.Should().NotBeNull();
             propertyInfo.Name.Should().Be(nameof(Model1.Title));

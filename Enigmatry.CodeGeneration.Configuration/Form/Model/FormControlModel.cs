@@ -2,7 +2,7 @@
 
 namespace Enigmatry.CodeGeneration.Configuration.Form.Model
 {
-    public class FormControlModel : IPropertyModel
+    public class FormControlModel
     {
         public string Property { get; set; } = String.Empty;
         public string DisplayName { get; set; } = String.Empty;

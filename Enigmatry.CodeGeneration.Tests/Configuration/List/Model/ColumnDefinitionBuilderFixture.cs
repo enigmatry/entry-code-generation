@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace Enigmatry.CodeGeneration.Tests.Configuration.List.Model
 {
     [Category("unit")]
-    public class ColumnPropertyBuilderFixture
+    public class ColumnDefinitionBuilderFixture
     {
         [TestCase("DateTime", "DateTimeOffset")]
         public void WithFormat_Date(params string[] propertyNames)
@@ -21,7 +21,7 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.List.Model
         }
 
         [TestCase("Short", "Int", "Long", "Float", "Double", "Decimal", "String")]
-        public void WithFormat_Date_InvalidPtopertyType(params string[] propertyNames)
+        public void WithFormat_Date_InvalidPropertyType(params string[] propertyNames)
         {
             foreach (var propertyName in propertyNames)
             {
@@ -42,7 +42,7 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.List.Model
         }
 
         [TestCase("DateTime", "DateTimeOffset", "String")]
-        public void WithFormat_Currency_InvalidPtopertyType(params string[] propertyNames)
+        public void WithFormat_Currency_InvalidPropertyType(params string[] propertyNames)
         {
             foreach (var propertyName in propertyNames)
             {
@@ -62,7 +62,7 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.List.Model
         }
 
         [TestCase("DateTime", "DateTimeOffset")]
-        public void WithFormat_Decimal_InvalidPtopertyType(params string[] propertyNames)
+        public void WithFormat_Decimal_InvalidPropertyType(params string[] propertyNames)
         {
             foreach (var propertyName in propertyNames)
             {
@@ -82,7 +82,7 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.List.Model
         }
 
         [TestCase("DateTime", "DateTimeOffset", "String")]
-        public void WithFormat_Percent_InvalidPtopertyType(params string[] propertyNames)
+        public void WithFormat_Percent_InvalidPropertyType(params string[] propertyNames)
         {
             foreach (var propertyName in propertyNames)
             {
@@ -102,11 +102,11 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.List.Model
         }
 
 
-        private static ColumnPropertyBuilder CreatePropertyBuilder(string propertyName) =>
+        private static ColumnDefinitionBuilder CreatePropertyBuilder(string propertyName) =>
             typeof(TestModel)
                 .GetProperties()
                 .Where(prop => prop.Name == propertyName)
-                .Select(propertyInfo => new ColumnPropertyBuilder(propertyInfo))
+                .Select(propertyInfo => new ColumnDefinitionBuilder(propertyInfo))
                 .Single();
 
         internal class TestModel

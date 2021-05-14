@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Enigmatry.CodeGeneration.Configuration.Formatters
 {
-    public class CurrencyPropertyFormatter : IPropertyFromatter
+    public class CurrencyPropertyFormatter : IPropertyFormatter
     {
         public string CurrencyCode { get; private set; } = String.Empty;
         public string Display { get; private set; } = String.Empty;

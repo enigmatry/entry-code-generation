@@ -3,7 +3,7 @@ using Humanizer;
 
 namespace Enigmatry.CodeGeneration.Angular
 {
-    public static class IComponentModelExtensions
+    public static class ComponentModelExtensions
     {
         public static string AngularComponentName(this IComponentModel component)
         {

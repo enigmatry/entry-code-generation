@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Enigmatry.CodeGeneration.Configuration.Formatters
 {
-    public interface IPropertyFromatter
+    public interface IPropertyFormatter
     {
         public bool ValidateInputType(Type inputType) => SupportedInputTypes().Any(x => x.Name == inputType.Name)
             ? true

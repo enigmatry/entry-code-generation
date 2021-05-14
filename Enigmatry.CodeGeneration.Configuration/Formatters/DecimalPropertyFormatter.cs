@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Enigmatry.CodeGeneration.Configuration.Formatters
 {
-    public class DecimalPropertyFormatter : IPropertyFromatter
+    public class DecimalPropertyFormatter : IPropertyFormatter
     {
         public string DigitsInfo { get; private set; } = String.Empty;
         public string Locale { get; private set; } = String.Empty;

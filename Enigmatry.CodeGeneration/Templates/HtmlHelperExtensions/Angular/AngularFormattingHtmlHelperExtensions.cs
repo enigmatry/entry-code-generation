@@ -10,7 +10,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 {
     public static class AngularFormattingHtmlHelperExtensions
     {
-        public static IHtmlContent Pipe(this IHtmlHelper html, IPropertyFromatter formatter) =>
+        public static IHtmlContent Pipe(this IHtmlHelper html, IPropertyFormatter formatter) =>
             formatter switch
             {
                 { } when formatter is DatePropertyFormatter => DatePipe(html, formatter),
@@ -21,7 +21,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
                 _ => throw new NotImplementedException("Formatter type not supported")
             };
 
-        private static IHtmlContent DatePipe(IHtmlHelper html, IPropertyFromatter formatter)
+        private static IHtmlContent DatePipe(IHtmlHelper html, IPropertyFormatter formatter)
         {
             var dateFormatter = (DatePropertyFormatter)formatter;
             var arguments = new List<string>
@@ -35,7 +35,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
             return html.Raw(CreatePipeAsString("date", arguments));
         }
 
-        private static IHtmlContent CurrencyPipe(IHtmlHelper html, IPropertyFromatter formatter)
+        private static IHtmlContent CurrencyPipe(IHtmlHelper html, IPropertyFormatter formatter)
         {
             var currencyFormatter = (CurrencyPropertyFormatter)formatter;
             var arguments = new List<string>
@@ -50,7 +50,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
             return html.Raw(CreatePipeAsString("currency", arguments));
         }
 
-        private static IHtmlContent DecimalPipe(IHtmlHelper html, IPropertyFromatter formatter)
+        private static IHtmlContent DecimalPipe(IHtmlHelper html, IPropertyFormatter formatter)
         {
             var decimalFormatter = (DecimalPropertyFormatter)formatter;
             var arguments = new List<string>
@@ -63,7 +63,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
             return html.Raw(CreatePipeAsString("number", arguments));
         }
 
-        private static IHtmlContent PercentPipe(IHtmlHelper html, IPropertyFromatter formatter)
+        private static IHtmlContent PercentPipe(IHtmlHelper html, IPropertyFormatter formatter)
         {
             var percentFormatter = (PercentPropertyFormatter)formatter;
             var arguments = new List<string>

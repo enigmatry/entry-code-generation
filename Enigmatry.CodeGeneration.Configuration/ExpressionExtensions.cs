@@ -8,7 +8,7 @@ namespace Enigmatry.CodeGeneration.Configuration
 {
     public static class ExpressionExtensions
     {
-        public static PropertyInfo GetPropertyAccess([NotNull] this LambdaExpression propertyAccessExpression)
+        public static PropertyInfo GetPropertyInfo([NotNull] this LambdaExpression propertyAccessExpression)
         {
             return GetInternalMemberAccess<PropertyInfo>(propertyAccessExpression);
         }

@@ -8,20 +8,12 @@ namespace Enigmatry.CodeGeneration.Configuration
     {
         public static T NotNull<T>(T value, [NotNull] string parameterName)
         {
-            if (value is null)
-            {
-                throw new ArgumentNullException(parameterName);
-            }
-            return value;
+            return value is null ? throw new ArgumentNullException(parameterName) : value;
         }
 
         public static string NotEmpty(string? value, [NotNull] string parameterName)
         {
-            if (String.IsNullOrEmpty(value))
-            {
-                throw new ArgumentNullException(parameterName);
-            }
-            return value;
+            return String.IsNullOrEmpty(value) ? throw new ArgumentNullException(parameterName) : value;
         }
 
         public static FormControlBuilder IsSelectFormControl(FormControlBuilder value)

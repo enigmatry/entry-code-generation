@@ -8,9 +8,9 @@
             <ng-container matColumnDef="@column.Property">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="@(column.IsSortable ? "false" : "true")"@if(column.TranslationId != null){<text> i18n="@@@@@column.TranslationId"</text>}>@column.DisplayName</th>
                 <td mat-cell *matCellDef="let row">
-                    @if (column.UseCustomComponent)
+                    @if (column.UseCustomCellComponent)
                     {
-                        @:<@column.CustomComponentName [item]="row" [propertyName]="'@column.Property'"></@column.CustomComponentName>
+                        @:<@column.CustomCellComponent [item]="row" [propertyName]="'@column.Property'"></@column.CustomCellComponent>
                     }
                     else
                     {

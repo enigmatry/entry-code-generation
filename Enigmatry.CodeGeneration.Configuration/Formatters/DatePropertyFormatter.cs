@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Enigmatry.CodeGeneration.Configuration.Formatters
 {
-    public class DatePropertyFormatter : IPropertyFromatter
+    public class DatePropertyFormatter : IPropertyFormatter
     {
         public string Format { get; private set; } = String.Empty;
         public string TimeZone { get; private set; } = String.Empty;
