@@ -16,7 +16,5 @@ namespace Enigmatry.CodeGeneration
         public string ComponentName { get; set; } = String.Empty;
         public Framework Framework { get; set; } = Framework.Angular;
         public string ApiClientTsImportPath { get; set; } = "src/app/api/api-reference";
-
-        public bool HasComponentName => !String.IsNullOrWhiteSpace(ComponentName);
     }
 }

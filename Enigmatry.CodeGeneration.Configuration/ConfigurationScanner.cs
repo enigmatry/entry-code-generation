@@ -19,9 +19,9 @@ namespace Enigmatry.CodeGeneration.Configuration
             return new ConfigurationScanner(assembly.GetExportedTypes()).GetComponents();
         }
 
-        public static IEnumerable<IComponentModel> FindComponentsInAssemblyByName(Assembly assembly, string componentName)
+        public static IEnumerable<IComponentModel> FindComponentsInAssembly(Assembly assembly, string componentName)
         {
-            return FindComponentsInAssembly(assembly).Where(x => x.ComponentInfo.Name == componentName);
+            return FindComponentsInAssembly(assembly).Where(x => x.ComponentInfo.Name.Equals(componentName, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public static IEnumerable<IComponentModel> FindComponentsInAssemblies(IEnumerable<Assembly> assemblies)
