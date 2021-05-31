@@ -12,12 +12,14 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
         public string CreateOrUpdateCommandTypeName { get; set; }
         public LookupServiceModel LookupService { get; set; } = null!;
 
-        public FormComponentModel(ComponentInfo componentInfo,
+        public FormComponentModel(
+            ComponentInfo componentInfo,
             RoutingInfo routingInfo,
             ApiClientInfo apiClientInfo,
+            FeatureInfo featureInfo,
             IEnumerable<FormControlModel> formControls,
             string createOrUpdateCommandTypeName)
-            : base(componentInfo, routingInfo, apiClientInfo)
+            : base(componentInfo, routingInfo, apiClientInfo, featureInfo)
         {
             ComponentInfo = componentInfo;
             CreateOrUpdateCommandTypeName = createOrUpdateCommandTypeName;

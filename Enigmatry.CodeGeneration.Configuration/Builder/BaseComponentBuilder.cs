@@ -8,6 +8,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Builder
         protected readonly ComponentInfoBuilder _componentInfoBuilder;
         protected readonly RoutingInfoBuilder _routingInfoBuilder;
         protected readonly ApiClientInfoBuilder _apiClientInfoBuilder;
+        protected readonly FeatureInfoBuilder _featureInfoBuilder;
 
         protected BaseComponentBuilder(Type modelType)
         {
@@ -15,6 +16,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Builder
             _componentInfoBuilder = new ComponentInfoBuilder(modelType);
             _routingInfoBuilder = new RoutingInfoBuilder();
             _apiClientInfoBuilder = new ApiClientInfoBuilder();
+            _featureInfoBuilder = new FeatureInfoBuilder();
         }
 
         public ComponentInfoBuilder Component() => _componentInfoBuilder;
@@ -22,6 +24,8 @@ namespace Enigmatry.CodeGeneration.Configuration.Builder
         public RoutingInfoBuilder Routing() => _routingInfoBuilder;
 
         public ApiClientInfoBuilder ApiClient() => _apiClientInfoBuilder;
+
+        public FeatureInfoBuilder Feature() => _featureInfoBuilder;
 
         public abstract T Build();
     }

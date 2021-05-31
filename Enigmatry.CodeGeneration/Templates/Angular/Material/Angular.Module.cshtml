@@ -8,12 +8,17 @@ import { CommonModule } from '@@angular/common';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { MatAutocompleteModule } from '@@angular/material/autocomplete';
 
+@foreach (var import in Model.Imports)
+{
+@Html.ImportStatement(import.Name, import.Path)
+}
+
 @Html.ImportComponentsFrom(Model)
 import { @(Model.Name)RoutingModule } from './@(Model.Name.Kebaberize())-routing.module';
 
 
 @@NgModule({
     declarations: @Html.ArrayFor(Model.Components, component => component.AngularComponentName()),
-    imports: [ CommonModule, SharedModule, @(Model.Name)RoutingModule, MatAutocompleteModule ]
+    imports: [ CommonModule, SharedModule, @(Model.Name)RoutingModule, MatAutocompleteModule, @String.Join(',', Model.Imports.Select(m => m.Name)) ]
 })
 export class @(Model.Name)Module { }

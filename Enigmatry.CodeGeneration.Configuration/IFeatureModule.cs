@@ -7,5 +7,6 @@ namespace Enigmatry.CodeGeneration.Configuration
     {
         public string Name { get; }
         public IEnumerable<IComponentModel> Components { get; }
+        public IEnumerable<ModuleImport> Imports { get; }
     }
 }

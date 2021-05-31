@@ -8,19 +8,25 @@ namespace Enigmatry.CodeGeneration.Configuration
     {
         public string Name { get; set; }
         public IEnumerable<IComponentModel> Components { get; set; }
+        public IEnumerable<ModuleImport> Imports { get; set; }
         public IEnumerable<IServiceModel> Services { get; set; }
 
         public FeatureModule(string name, IEnumerable<IComponentModel> components)
         {
             Name = name;
             Components = components.ToList();
-            Services = components
+
+            Imports = Components.SelectMany(c => c.FeatureInfo.Imports).ToList();
+
+            Services = Components
                 .Where(component => component is IWithLookupService)
                 .Select(component => ((IWithLookupService)component).LookupService)
                 .Where(service => service != null);
         }
 
-        public FeatureModule(IGrouping<string, IComponentModel> components) : this(components.Key, components) { }
-            
+        public FeatureModule(IGrouping<string, IComponentModel> components)
+            : this(components.Key, components)
+        {
+        }
     }
 }

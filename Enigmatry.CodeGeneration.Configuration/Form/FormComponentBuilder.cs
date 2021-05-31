@@ -35,10 +35,11 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
             var componentInfo = _componentInfoBuilder.Build();
             var routingInfo = _routingInfoBuilder.Build();
             var apiClientInfo = _apiClientInfoBuilder.Build();
+            var featureInfo = _featureInfoBuilder.Build();
 
             var formControls = _formControls.Select(_ => _.Build());
 
-            return new FormComponentModel(componentInfo, routingInfo, apiClientInfo, formControls, _createOrUpdateCommandTypeName);
+            return new FormComponentModel(componentInfo, routingInfo, apiClientInfo, featureInfo, formControls, _createOrUpdateCommandTypeName);
         }
 
         public FormComponentBuilder<T> HasCreateOrUpdateCommandOfType<TCreateOrUpdateCommand>()

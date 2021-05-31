@@ -8,9 +8,13 @@ namespace Enigmatry.CodeGeneration.Configuration.List
     {
         public IList<ColumnDefinitionModel> Columns { get; set; }
 
-        public ListComponentModel(ComponentInfo componentInfo, RoutingInfo routingInfo, ApiClientInfo apiClientInfo,
+        public ListComponentModel(
+            ComponentInfo componentInfo,
+            RoutingInfo routingInfo,
+            ApiClientInfo apiClientInfo,
+            FeatureInfo featureInfo,
             IList<ColumnDefinitionModel> columns)
-        : base(componentInfo, routingInfo, apiClientInfo)
+        : base(componentInfo, routingInfo, apiClientInfo, featureInfo)
         {
             Columns = columns;
         }

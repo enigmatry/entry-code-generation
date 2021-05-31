@@ -5,5 +5,6 @@
         ComponentInfo ComponentInfo { get; }
         RoutingInfo RoutingInfo { get; }
         ApiClientInfo ApiClientInfo { get; }
+        FeatureInfo FeatureInfo { get; }
     }
 }

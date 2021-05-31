@@ -41,10 +41,11 @@ namespace Enigmatry.CodeGeneration.Configuration.List
             var componentInfo = _componentInfoBuilder.Build();
             var routingInfo = _routingInfoBuilder.Build();
             var apiClientInfo = _apiClientInfoBuilder.Build();
+            var featureInfo = _featureInfoBuilder.Build();
 
             var columns = _columns.Select(_ => _.Build()).ToList();
 
-            return new ListComponentModel(componentInfo, routingInfo, apiClientInfo, columns);
+            return new ListComponentModel(componentInfo, routingInfo, apiClientInfo, featureInfo, columns);
         }
     }
 }

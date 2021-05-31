@@ -34,6 +34,7 @@ namespace Enigmatry.CodeGeneration.Tests.HtmlHelperExtensions.Angular
             public ComponentInfo ComponentInfo { get; set; }
             public RoutingInfo RoutingInfo { get; } = RoutingInfo.NoRouting();
             public ApiClientInfo ApiClientInfo { get; } = ApiClientInfo.NoApiClient();
+            public FeatureInfo FeatureInfo { get; } = new FeatureInfo();
 
             public TestComponent(ComponentInfo componentInfo)
             {
