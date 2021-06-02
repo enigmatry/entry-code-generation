@@ -10,7 +10,7 @@ import { Component, OnInit } from '@@angular/core';
 import { FormControl, FormGroup } from '@@angular/forms';
 import { ActivatedRoute, Router } from '@@angular/router';
 import { debounceTime, filter, map, switchMap } from 'rxjs/operators';
-import { @Model.ComponentInfo.ModelTypeName, @Model.CreateOrUpdateCommandTypeName, @Model.AngularComponentApiClient() } from '@_options.ApiClientTsImportPath';
+import { @Model.ComponentInfo.ModelType, @Model.CreateOrUpdateCommandTypeName, @Model.AngularComponentApiClient() } from '@_options.ApiClientTsImportPath';
 @Html.LookupServiceImportStatement(Model.LookupService)
 
 @@Component({
@@ -19,7 +19,7 @@ import { @Model.ComponentInfo.ModelTypeName, @Model.CreateOrUpdateCommandTypeNam
 })
 export class @Model.AngularComponentName() implements OnInit {
 
-    response: @Model.ComponentInfo.ModelTypeName;
+    response: @Model.ComponentInfo.ModelType;
 
     form = new FormGroup({
     @foreach (var formControl in Model.FormControls)

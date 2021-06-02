@@ -22,7 +22,7 @@ namespace Enigmatry.CodeGeneration.Angular
 
         public static string AngularComponentApiClient(this IComponentModel component)
         {
-            return $"{component.ComponentInfo.FeatureName.Pascalize()}Client";
+            return $"{component.ComponentInfo.Feature.Name.Pascalize()}Client";
         }
     }
 }

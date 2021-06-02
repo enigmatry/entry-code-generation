@@ -7,7 +7,7 @@ namespace Enigmatry.CodeGeneration.Configuration
     {
         public static IEnumerable<IFeatureModule> GroupByFeature(this IEnumerable<IComponentModel> components)
         {
-            return components.GroupBy(component => component.ComponentInfo.FeatureName)
+            return components.GroupBy(component => component.ComponentInfo.Feature.Name)
                 .Select(grouping => new FeatureModule(grouping));
         }
     }

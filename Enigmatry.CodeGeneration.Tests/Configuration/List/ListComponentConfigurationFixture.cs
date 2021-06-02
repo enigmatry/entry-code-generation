@@ -21,7 +21,7 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.List
 
             componentModel.Should().NotBeNull();
             componentModel.ComponentInfo.Name.Should().Be("ProjectList");
-            componentModel.ComponentInfo.FeatureName.Should().Be("Projects");
+            componentModel.ComponentInfo.Feature.Name.Should().Be("Projects");
             componentModel.Columns.Count.Should().Be(5);
             componentModel.VisibleColumns.Count().Should().Be(4);
 

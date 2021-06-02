@@ -14,12 +14,12 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
 
         public FormComponentBuilder() : base(typeof(T))
         {
-            _routingInfoBuilder.WithIdRoute();
-
             _formControls = _modelType
                 .GetProperties()
                 .Select(propertyInfo => new FormControlBuilder(propertyInfo))
                 .ToList();
+
+            _componentInfoBuilder.Routing().WithIdRoute();
         }
 
         public FormControlBuilder FormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
@@ -33,13 +33,9 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
         public override FormComponentModel Build()
         {
             var componentInfo = _componentInfoBuilder.Build();
-            var routingInfo = _routingInfoBuilder.Build();
-            var apiClientInfo = _apiClientInfoBuilder.Build();
-            var featureInfo = _featureInfoBuilder.Build();
-
             var formControls = _formControls.Select(_ => _.Build());
 
-            return new FormComponentModel(componentInfo, routingInfo, apiClientInfo, featureInfo, formControls, _createOrUpdateCommandTypeName);
+            return new FormComponentModel(componentInfo, formControls, _createOrUpdateCommandTypeName);
         }
 
         public FormComponentBuilder<T> HasCreateOrUpdateCommandOfType<TCreateOrUpdateCommand>()

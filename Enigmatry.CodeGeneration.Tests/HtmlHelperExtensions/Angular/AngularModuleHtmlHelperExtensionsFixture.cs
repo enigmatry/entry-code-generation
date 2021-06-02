@@ -10,36 +10,30 @@ namespace Enigmatry.CodeGeneration.Tests.HtmlHelperExtensions.Angular
 {
     public class AngularModuleHtmlHelperExtensionsFixture : CodeGenerationFixtureBase
     {
-        private static readonly IComponentModel UserListComponent = new TestComponent(new ComponentInfo {Name = "UserList", FeatureName = "Users"});
-        private static readonly IComponentModel UserDetailsComponent = new TestComponent(new ComponentInfo {Name = "UserDetails", FeatureName = "Users"});
-        private static readonly IFeatureModule FeatureModule = new FeatureModule("Users", new[] {UserListComponent, UserDetailsComponent});
-
         [Test]
         public void TestImportComponentsFromModule()
         {
+            var featureModule = new FeatureModule("Users", new[] { new TestComponent("UserList"), new TestComponent("UserDetails") });
+
             var stringWriter = new StringWriter();
 
-            var htmlContent = _htmlHelper.ImportComponentsFrom(FeatureModule);
+            var htmlContent = _htmlHelper.ImportComponentsFrom(featureModule);
             htmlContent.WriteTo(stringWriter, HtmlEncoder.Default);
 
-            var importStatements = stringWriter.ToString().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+            var imports = stringWriter.ToString().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
 
-            var expectedResults = new[] {"import { UserListComponent } from './user-list/user-list.component';", "import { UserDetailsComponent } from './user-details/user-details.component';"};
+            var expected = new[] {
+                "import { UserListComponent } from './user-list/user-list.component';",
+                "import { UserDetailsComponent } from './user-details/user-details.component';"
+            };
 
-            importStatements.Should().BeEquivalentTo(expectedResults);
+            imports.Should().BeEquivalentTo(expected);
         }
 
-        internal class TestComponent : IComponentModel
+        private class TestComponent : IComponentModel
         {
-            public ComponentInfo ComponentInfo { get; set; }
-            public RoutingInfo RoutingInfo { get; } = RoutingInfo.NoRouting();
-            public ApiClientInfo ApiClientInfo { get; } = ApiClientInfo.NoApiClient();
-            public FeatureInfo FeatureInfo { get; } = new FeatureInfo();
-
-            public TestComponent(ComponentInfo componentInfo)
-            {
-                ComponentInfo = componentInfo;
-            }
+            public ComponentInfo ComponentInfo { get; }
+            public TestComponent(string name) => ComponentInfo = new ComponentInfo(name);
         }
     }
 }

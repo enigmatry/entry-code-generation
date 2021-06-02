@@ -19,7 +19,7 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.List
             var componentModel = builder.Build();
 
             componentModel.ComponentInfo.Name.Should().Be("ProjectList");
-            componentModel.ComponentInfo.FeatureName.Should().Be("Projects");
+            componentModel.ComponentInfo.Feature.Name.Should().Be("Projects");
         }
 
         [Test]

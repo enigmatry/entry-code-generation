@@ -19,7 +19,7 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.Form
 
             componentModel.Should().NotBeNull();
             componentModel.ComponentInfo.Name.Should().Be("ProjectDetails");
-            componentModel.ComponentInfo.FeatureName.Should().Be("Projects");
+            componentModel.ComponentInfo.Feature.Name.Should().Be("Projects");
 
             componentModel.FormControls.Count.Should().Be(5);
         }

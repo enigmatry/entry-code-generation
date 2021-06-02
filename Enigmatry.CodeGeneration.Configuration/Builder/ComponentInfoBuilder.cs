@@ -5,15 +5,20 @@ namespace Enigmatry.CodeGeneration.Configuration.Builder
 {
     public class ComponentInfoBuilder : IBuilder<ComponentInfo>
     {
-        protected string _componentName;
-        protected string _featureName;
-        protected readonly string _modelTypeName;
+        private string _componentName;
+        private readonly string _modelType;
+        private readonly RoutingInfoBuilder _routingInfoBuilder;
+        private readonly ApiClientInfoBuilder _apiClientInfoBuilder;
+        private readonly FeatureInfoBuilder _featureInfoBuilder;
 
         public ComponentInfoBuilder(Type modelType)
         {
             _componentName = modelType.Name;
-            _featureName = modelType.Name;
-            _modelTypeName = modelType.GetDeclaringName();
+            _modelType = modelType.GetDeclaringName();
+
+            _routingInfoBuilder = new RoutingInfoBuilder();
+            _apiClientInfoBuilder = new ApiClientInfoBuilder();
+            _featureInfoBuilder = new FeatureInfoBuilder();
         }
 
         public ComponentInfoBuilder HasName(string name)
@@ -24,13 +29,20 @@ namespace Enigmatry.CodeGeneration.Configuration.Builder
 
         public ComponentInfoBuilder BelongsToFeature(string featureName)
         {
-            _featureName = featureName.Pascalize();
+            _featureInfoBuilder.WithName(featureName.Pascalize());
             return this;
         }
 
+        public RoutingInfoBuilder Routing() => _routingInfoBuilder;
+
+        public ApiClientInfoBuilder ApiClient() => _apiClientInfoBuilder;
+
+        public FeatureInfoBuilder Feature() => _featureInfoBuilder;
+
         public ComponentInfo Build()
         {
-            return new ComponentInfo {Name = _componentName, FeatureName = _featureName, ModelTypeName = _modelTypeName};
+            return new ComponentInfo(_componentName, _modelType, 
+                _routingInfoBuilder.Build(), _apiClientInfoBuilder.Build(), _featureInfoBuilder.Build());
         }
     }
 }

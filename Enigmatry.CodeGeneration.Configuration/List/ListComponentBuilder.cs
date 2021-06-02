@@ -13,8 +13,8 @@ namespace Enigmatry.CodeGeneration.Configuration.List
 
         public ListComponentBuilder() : base(typeof(T))
         {
-            _routingInfoBuilder.WithEmptyRoute();
             _columns = _modelType.GetProperties().Select(propertyInfo => new ColumnDefinitionBuilder(propertyInfo)).ToList();
+            _componentInfoBuilder.Routing().WithEmptyRoute();
         }
 
         public ColumnDefinitionBuilder Column<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
@@ -39,13 +39,10 @@ namespace Enigmatry.CodeGeneration.Configuration.List
         public override ListComponentModel Build()
         {
             var componentInfo = _componentInfoBuilder.Build();
-            var routingInfo = _routingInfoBuilder.Build();
-            var apiClientInfo = _apiClientInfoBuilder.Build();
-            var featureInfo = _featureInfoBuilder.Build();
 
             var columns = _columns.Select(_ => _.Build()).ToList();
 
-            return new ListComponentModel(componentInfo, routingInfo, apiClientInfo, featureInfo, columns);
+            return new ListComponentModel(componentInfo, columns);
         }
     }
 }

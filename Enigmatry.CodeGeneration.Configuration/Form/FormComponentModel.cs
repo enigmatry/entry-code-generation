@@ -6,20 +6,16 @@ using Enigmatry.CodeGeneration.Configuration.Services;
 
 namespace Enigmatry.CodeGeneration.Configuration.Form
 {
-    public class FormComponentModel : ComponentModel, IWithLookupService
+    public class FormComponentModel : IComponentModel, IWithLookupService
     {
+        public ComponentInfo ComponentInfo { get; }
         public IList<FormControlModel> FormControls { get; set; }
         public string CreateOrUpdateCommandTypeName { get; set; }
         public LookupServiceModel LookupService { get; set; } = null!;
 
-        public FormComponentModel(
-            ComponentInfo componentInfo,
-            RoutingInfo routingInfo,
-            ApiClientInfo apiClientInfo,
-            FeatureInfo featureInfo,
+        public FormComponentModel(ComponentInfo componentInfo,
             IEnumerable<FormControlModel> formControls,
             string createOrUpdateCommandTypeName)
-            : base(componentInfo, routingInfo, apiClientInfo, featureInfo)
         {
             ComponentInfo = componentInfo;
             CreateOrUpdateCommandTypeName = createOrUpdateCommandTypeName;

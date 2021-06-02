@@ -4,19 +4,15 @@ using Enigmatry.CodeGeneration.Configuration.List.Model;
 
 namespace Enigmatry.CodeGeneration.Configuration.List
 {
-    public class ListComponentModel : ComponentModel
+    public class ListComponentModel : IComponentModel
     {
-        public IList<ColumnDefinitionModel> Columns { get; set; }
+        public ComponentInfo ComponentInfo { get; }
+        public IList<ColumnDefinitionModel> Columns { get; }
 
-        public ListComponentModel(
-            ComponentInfo componentInfo,
-            RoutingInfo routingInfo,
-            ApiClientInfo apiClientInfo,
-            FeatureInfo featureInfo,
-            IList<ColumnDefinitionModel> columns)
-        : base(componentInfo, routingInfo, apiClientInfo, featureInfo)
+        public ListComponentModel(ComponentInfo componentInfo, IEnumerable<ColumnDefinitionModel> columns)
         {
-            Columns = columns;
+            ComponentInfo = componentInfo;
+            Columns = columns.ToList();
         }
 
         public IEnumerable<ColumnDefinitionModel> VisibleColumns => Columns.Where(column => column.IsVisible);

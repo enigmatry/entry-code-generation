@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@@angular/router';
 import { Observable } from 'rxjs';
 import { mergeMap, tap } from 'rxjs/operators';
 
-import { @(Model.ComponentInfo.ModelTypeName), @(Model.AngularComponentApiClient()) } from '@_options.ApiClientTsImportPath';
+import { @(Model.ComponentInfo.ModelType), @(Model.AngularComponentApiClient()) } from '@_options.ApiClientTsImportPath';
 
 import { PagedResponse, PagedQueryParams } from 'src/app/shared/pagination/paged-data.model';
 import { MatPagedTableComponent } from 'src/app/shared/pagination/mat-paged-table.component';
@@ -17,7 +17,7 @@ import { MatPagedTableComponent } from 'src/app/shared/pagination/mat-paged-tabl
     templateUrl: './@(Model.AngularComponentFileName()).html',
     styleUrls: ['./@(Model.AngularComponentFileName()).scss']
 })
-@Html.Raw($"export class {Model.AngularComponentName()} extends MatPagedTableComponent<{Model.ComponentInfo.ModelTypeName}> implements OnInit {{")
+@Html.Raw($"export class {Model.AngularComponentName()} extends MatPagedTableComponent<{Model.ComponentInfo.ModelType}> implements OnInit {{")
 
   displayedColumns = @Html.StringArrayFor(Model.VisibleColumns, column => column.Property);
 
@@ -36,7 +36,7 @@ ngOnInit() {
       });
   }
 
-@Html.Raw($"getPage(query: PagedQueryParams): Observable<PagedResponse<{Model.ComponentInfo.ModelTypeName}>> {{")
+@Html.Raw($"getPage(query: PagedQueryParams): Observable<PagedResponse<{Model.ComponentInfo.ModelType}>> {{")
     return this.client.search(query.keyword, query.pageNumber, query.pageSize, query.sortBy, query.sortDirection);
    }
 }

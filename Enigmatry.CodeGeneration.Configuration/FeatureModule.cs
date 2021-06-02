@@ -16,7 +16,7 @@ namespace Enigmatry.CodeGeneration.Configuration
             Name = name;
             Components = components.ToList();
 
-            Imports = Components.SelectMany(c => c.FeatureInfo.Imports).ToList();
+            Imports = Components.SelectMany(c => c.ComponentInfo.Feature.Imports).ToList();
 
             Services = Components
                 .Where(component => component is IWithLookupService)
