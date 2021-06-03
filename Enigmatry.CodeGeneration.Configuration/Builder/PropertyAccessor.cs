@@ -36,6 +36,8 @@ namespace Enigmatry.CodeGeneration.Configuration.Builder
                 case { } when propertyType == typeof(double):
                 case { } when propertyType == typeof(decimal):
                     return new DecimalPropertyFormatter();
+                case { } when propertyType == typeof(bool):
+                    return new CheckMarkPropertyFormatter();
                 default:
                     return new NoFormattingPropertyFormatter();
             }
