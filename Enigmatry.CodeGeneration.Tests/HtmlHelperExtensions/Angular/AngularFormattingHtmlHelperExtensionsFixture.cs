@@ -96,6 +96,17 @@ namespace Enigmatry.CodeGeneration.Tests.HtmlHelperExtensions.Angular
             return stringWriter.ToString();
         }
 
+        [TestCase(ExpectedResult = " | checkMark")]
+        public string Pipe_CheckMarkPropertyFormatter()
+        {
+            var stringWriter = new StringWriter();
+
+            var htmlContent = _htmlHelper.Pipe(new CheckMarkPropertyFormatter());
+
+            htmlContent.WriteTo(stringWriter, HtmlEncoder.Default);
+            return stringWriter.ToString();
+        }
+
         [TestCase(ExpectedResult = "")]
         public string Pipe_NoFormattingPropertyFormatter()
         {
