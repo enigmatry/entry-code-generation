@@ -79,7 +79,6 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 
         private static IHtmlContent CheckMarkPipe(IHtmlHelper html, IPropertyFormatter formatter)
         {
-            var percentFormatter = (CheckMarkPropertyFormatter)formatter;
             return html.Raw(CreatePipeAsString("checkMark", Enumerable.Empty<string>()));
         }
 
