@@ -33,7 +33,7 @@ export class @Model.AngularComponentName() implements OnInit {
     constructor(
         private location: Location,
         protected route: ActivatedRoute,
-        private client: @Model.AngularComponentApiClient()@Html.LookupsServiceDependencyInjection(Model.LookupService)
+        private client: @Model.AngularComponentApiClient()@(Model.LookupService != null ? $" ,{Html.LookupsServiceDependencyInjection(Model.LookupService)}" : "")
     ) { }
 
     ngOnInit(): void {

@@ -37,8 +37,7 @@ export class FormComponent implements OnInit {
     constructor(
         private location: Location,
         protected route: ActivatedRoute,
-        private client: TestClient,
-		public lookupService: FormLookupService
+        private client: TestClient, public lookupService: FormLookupService
     ) { }
 
     ngOnInit(): void {
