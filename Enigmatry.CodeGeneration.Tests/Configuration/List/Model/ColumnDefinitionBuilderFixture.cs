@@ -101,7 +101,25 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.List.Model
             }
         }
 
+        [TestCase("Boolean")]
+        public void WithFormat_CheckMark(params string[] propertyNames)
+        {
+            foreach (var propertyName in propertyNames)
+            {
+                Action action = () => CreatePropertyBuilder(propertyName).WithFormat(new CheckMarkPropertyFormatter());
+                action.Should().NotThrow();
+            }
+        }
 
+        [TestCase("Short", "Int", "Long", "Float", "Double", "Decimal", "DateTime", "DateTimeOffset", "String")]
+        public void WithFormat_CheckMark_InvalidPropertyType(params string[] propertyNames)
+        {
+            foreach (var propertyName in propertyNames)
+            {
+                Action action = () => CreatePropertyBuilder(propertyName).WithFormat(new CheckMarkPropertyFormatter());
+                action.Should().ThrowExactly<ArgumentOutOfRangeException>();
+            }
+        }
         private static ColumnDefinitionBuilder CreatePropertyBuilder(string propertyName) =>
             typeof(TestModel)
                 .GetProperties()
@@ -120,6 +138,7 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.List.Model
             public double Double { get; set; }
             public decimal Decimal { get; set; }
             public string String { get; set; } = String.Empty;
+            public bool Boolean { get; set; }
         }
     }
 }

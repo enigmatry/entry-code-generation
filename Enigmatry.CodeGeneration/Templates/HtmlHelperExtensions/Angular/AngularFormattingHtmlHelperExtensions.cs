@@ -17,6 +17,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
                 { } when formatter is CurrencyPropertyFormatter => CurrencyPipe(html, formatter),
                 { } when formatter is DecimalPropertyFormatter => DecimalPipe(html, formatter),
                 { } when formatter is PercentPropertyFormatter => PercentPipe(html, formatter),
+                { } when formatter is CheckMarkPropertyFormatter => CheckMarkPipe(html, formatter),
                 { } when formatter is NoFormattingPropertyFormatter => html.NoPipe(),
                 _ => throw new NotImplementedException("Formatter type not supported")
             };
@@ -74,6 +75,11 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
                 .TakeWhile(arg => !String.IsNullOrWhiteSpace(arg))
                 .ToList();
             return html.Raw(CreatePipeAsString("percent", arguments));
+        }
+
+        private static IHtmlContent CheckMarkPipe(IHtmlHelper html, IPropertyFormatter formatter)
+        {
+            return html.Raw(CreatePipeAsString("checkMark", Enumerable.Empty<string>()));
         }
 
         private static IHtmlContent NoPipe(this IHtmlHelper html) => html.Raw(String.Empty);
