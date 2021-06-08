@@ -19,9 +19,9 @@ namespace Enigmatry.CodeGeneration.Configuration
             Imports = Components.SelectMany(c => c.ComponentInfo.Feature.Imports).ToList();
 
             Services = Components
-                .Where(component => component is IWithLookupService)
-                .Select(component => ((IWithLookupService)component).LookupService)
-                .Where(service => service != null);
+                .Select(component => component as IWithLookupService)
+                .Select(component => component?.LookupService)
+                .Where(service => service != null)!;
         }
 
         public FeatureModule(IGrouping<string, IComponentModel> components)

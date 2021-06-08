@@ -2,6 +2,6 @@
 {
     public interface IWithLookupService
     {
-        LookupServiceModel LookupService { get; }
+        LookupServiceModel? LookupService { get; }
     }
 }
