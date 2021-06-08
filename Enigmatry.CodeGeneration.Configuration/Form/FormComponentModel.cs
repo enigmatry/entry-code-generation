@@ -11,7 +11,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
         public ComponentInfo ComponentInfo { get; }
         public IList<FormControlModel> FormControls { get; set; }
         public string CreateOrUpdateCommandTypeName { get; set; }
-        public LookupServiceModel LookupService { get; set; } = null!;
+        public LookupServiceModel? LookupService { get; set; }
 
         public FormComponentModel(ComponentInfo componentInfo,
             IEnumerable<FormControlModel> formControls,
