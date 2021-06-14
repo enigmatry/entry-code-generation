@@ -38,12 +38,12 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.List
             builder.Column(p => p.Title)
                 .IsVisible(true)
                 .IsSortable(false)
-                .WithDisplayName("Test Title")
+                .WithHeaderName("Test Title")
                 .WithTranslationId("title");
 
             var componentModel = builder.Build();
 
-            var column = componentModel.Columns.FirstOrDefault(c => c.DisplayName == "Test Title");
+            var column = componentModel.Columns.FirstOrDefault(c => c.HeaderName == "Test Title");
             column.Should().NotBeNull();
             column!.IsVisible.Should().BeTrue();
             column.IsSortable.Should().BeFalse();

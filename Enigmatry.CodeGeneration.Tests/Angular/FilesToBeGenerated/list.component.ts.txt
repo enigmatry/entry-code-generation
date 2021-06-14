@@ -6,40 +6,41 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------;
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { mergeMap, tap } from 'rxjs/operators';
+/* eslint-disable @typescript-eslint/member-ordering */
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ColumnDef } from 'src/@enigmatry/enigmatry-grid';
+import { PagedData, PageEvent, SortEvent } from 'src/@enigmatry/pagination';
 
-import { ListMockItem, TestClient } from 'src/app/api/api-reference';
-
-import { PagedResponse, PagedQueryParams } from 'src/app/shared/pagination/paged-data.model';
-import { MatPagedTableComponent } from 'src/app/shared/pagination/mat-paged-table.component';
+import { ListMockItem } from 'src/app/api/api-reference';
 
 @Component({
-    templateUrl: './list.component.html',
-    styleUrls: ['./list.component.scss']
+  selector: 'app-list',
+  templateUrl: './list.component.html',
+  styleUrls: ['./list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ListComponent extends MatPagedTableComponent<ListMockItem> implements OnInit {
+export class ListComponent {
 
-  displayedColumns = ['name', 'date'];
+  @Input() data: PagedData<ListMockItem> | null;
+  @Input() loading: boolean;
 
-  constructor(private client: TestClient, router: Router, activatedRoute: ActivatedRoute) {
-    super(router, activatedRoute);
-}
+  @Input() showPaginator = true;
+  @Input() showFirstLastButtons = false;
+  @Input() pageSizeOptions = [10, 50, 100];
+  @Input() hidePageSize = false;
 
-ngOnInit() {
-    this.activatedRoute.queryParams
-      .pipe(
-        tap(queryParams => this.queryParams.update(queryParams)),
-        mergeMap(() => this.getPage(this.queryParams))
-      )
-      .subscribe(response => {
-        this.dataSource.pagedResponse = response;
-      });
-  }
+  @Input() rowSelectable = false;
+  @Input() multiSelectable = false;
 
-getPage(query: PagedQueryParams): Observable<PagedResponse<ListMockItem>> {
-    return this.client.search(query.keyword, query.pageNumber, query.pageSize, query.sortBy, query.sortDirection);
-   }
+  @Input() columns: ColumnDef[] = [
+{ field: 'id', header: 'Id', hide: true, sortable: true, type: '' },
+{ field: 'name', header: 'Name', hide: false, sortable: false, type: '' },
+{ field: 'date', header: 'Date', hide: false, sortable: true, type: 'date' }
+];
+
+  @Output() pageChange = new EventEmitter<PageEvent>();
+  @Output() sortChange = new EventEmitter<SortEvent>();
+  @Output() selectionChange = new EventEmitter<ListMockItem[]>();
+
+  constructor() {}
 }

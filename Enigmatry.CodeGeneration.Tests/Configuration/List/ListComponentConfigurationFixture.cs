@@ -25,12 +25,12 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.List
             componentModel.Columns.Count.Should().Be(5);
             componentModel.VisibleColumns.Count().Should().Be(4);
 
-            componentModel.VisibleColumns
+            componentModel.Columns
                 .Where(x => x.Property == "startDate" || x.Property == "endDate")
                 .All(x => x.Formatter.GetType() == typeof(DatePropertyFormatter))
                 .Should().BeTrue();
 
-            componentModel.VisibleColumns
+            componentModel.Columns
                 .Where(x => x.Property == "budget")
                 .All(x => x.Formatter.GetType() == typeof(DecimalPropertyFormatter))
                 .Should().BeTrue();

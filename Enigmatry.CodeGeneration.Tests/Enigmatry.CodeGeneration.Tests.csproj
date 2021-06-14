@@ -18,8 +18,7 @@
     <None Remove="Angular\FilesToBeGenerated\list.component.html.txt" />
     <None Remove="Angular\FilesToBeGenerated\list.component.scss.txt" />
     <None Remove="Angular\FilesToBeGenerated\list.component.ts.txt" />
-    <None Remove="Angular\FilesToBeGenerated\test-routing.module.ts.txt" />
-    <None Remove="Angular\FilesToBeGenerated\test.module.ts.txt" />
+    <None Remove="Angular\FilesToBeGenerated\test-generated.module.ts.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,10 +43,7 @@
     <EmbeddedResource Include="Angular\FilesToBeGenerated\list.component.ts.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Angular\FilesToBeGenerated\test-routing.module.ts.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Angular\FilesToBeGenerated\test.module.ts.txt">
+    <EmbeddedResource Include="Angular\FilesToBeGenerated\test-generated.module.ts.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

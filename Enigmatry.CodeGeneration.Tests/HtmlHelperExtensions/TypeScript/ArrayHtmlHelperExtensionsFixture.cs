@@ -13,7 +13,7 @@ namespace Enigmatry.CodeGeneration.Tests.HtmlHelperExtensions.TypeScript
         {
             var stringWriter = new StringWriter();
 
-            var htmlContent = _htmlHelper.ArrayFor(collection);
+            var htmlContent = _htmlHelper.JsArray(collection);
             htmlContent.WriteTo(stringWriter, HtmlEncoder.Default);
 
             return stringWriter.ToString();
@@ -24,7 +24,7 @@ namespace Enigmatry.CodeGeneration.Tests.HtmlHelperExtensions.TypeScript
         {
             var stringWriter = new StringWriter();
 
-            var htmlContent = _htmlHelper.StringArrayFor(collection);
+            var htmlContent = _htmlHelper.JsStringArray(collection);
             htmlContent.WriteTo(stringWriter, HtmlEncoder.Default);
 
             return stringWriter.ToString();

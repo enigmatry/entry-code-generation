@@ -101,7 +101,7 @@ namespace Enigmatry.CodeGeneration.Tests.HtmlHelperExtensions.Angular
         {
             var stringWriter = new StringWriter();
 
-            var htmlContent = _htmlHelper.Pipe(new CheckMarkPropertyFormatter());
+            var htmlContent = _htmlHelper.Pipe(new BooleanPropertyFormatter());
 
             htmlContent.WriteTo(stringWriter, HtmlEncoder.Default);
             return stringWriter.ToString();

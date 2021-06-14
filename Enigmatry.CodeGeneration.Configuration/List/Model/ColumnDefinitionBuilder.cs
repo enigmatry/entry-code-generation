@@ -11,7 +11,7 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
     {
         private readonly PropertyAccessor? _propertyAccessor;
         private readonly string _propertyName;
-        private string _displayName;
+        private string _headerName;
         private string? _translationId;
         private bool _isVisible;
         private bool _isSortable;
@@ -22,7 +22,7 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
         {
             _propertyAccessor = new PropertyAccessor(propertyInfo);
             _propertyName = _propertyAccessor.Name.Camelize();
-            _displayName = _propertyAccessor.DisplayName;
+            _headerName = _propertyAccessor.DisplayName;
             _isVisible = !_propertyAccessor.Name.Equals("id", StringComparison.InvariantCultureIgnoreCase);
             _isSortable = true;
             _formatter = _propertyAccessor.GetDefaultPropertyFormatter();
@@ -31,7 +31,7 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
         public ColumnDefinitionBuilder(string propertyName)
         {
             _propertyName = propertyName.Camelize();
-            _displayName = propertyName.Humanize();
+            _headerName = propertyName.Humanize();
             _isVisible = true;
             _isSortable = true;
             _formatter = new NoFormattingPropertyFormatter();
@@ -42,7 +42,7 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
             return new ColumnDefinitionModel
             {
                 Property = _propertyName,
-                DisplayName = _displayName,
+                HeaderName = _headerName,
                 TranslationId = _translationId,
                 IsSortable = _isSortable,
                 IsVisible = _isVisible,
@@ -51,24 +51,9 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
             };
         }
 
-        public bool Has(PropertyInfo propertyInfo)
+        public ColumnDefinitionBuilder WithHeaderName(string headerName)
         {
-            return _propertyAccessor != null && _propertyAccessor.PropertyInfo == propertyInfo;
-        }
-
-        public bool Has(LambdaExpression propertyAccessExpression)
-        {
-            return _propertyAccessor != null && _propertyAccessor.PropertyInfo == propertyAccessExpression.GetPropertyInfo();
-        }
-
-        public bool Has(string propertyName)
-        {
-            return _propertyName == propertyName;
-        }
-
-        public ColumnDefinitionBuilder WithDisplayName(string displayName)
-        {
-            _displayName = displayName;
+            _headerName = headerName;
             return this;
         }
 
@@ -104,6 +89,21 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
         {
             _customCellComponent = componentName;
             return this;
+        }
+
+        private bool HasProperty(PropertyInfo propertyInfo)
+        {
+            return _propertyAccessor != null && _propertyAccessor.PropertyInfo == propertyInfo;
+        }
+
+        public bool HasProperty(LambdaExpression propertyAccessExpression)
+        {
+            return HasProperty(propertyAccessExpression.GetPropertyInfo());
+        }
+
+        public bool HasProperty(string propertyName)
+        {
+            return _propertyName == propertyName;
         }
     }
 }

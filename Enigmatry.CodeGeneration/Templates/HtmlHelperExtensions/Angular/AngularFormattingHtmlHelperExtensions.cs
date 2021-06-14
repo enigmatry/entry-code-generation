@@ -17,7 +17,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
                 { } when formatter is CurrencyPropertyFormatter => CurrencyPipe(html, formatter),
                 { } when formatter is DecimalPropertyFormatter => DecimalPipe(html, formatter),
                 { } when formatter is PercentPropertyFormatter => PercentPipe(html, formatter),
-                { } when formatter is CheckMarkPropertyFormatter => CheckMarkPipe(html, formatter),
+                { } when formatter is BooleanPropertyFormatter => CheckMarkPipe(html, formatter),
                 { } when formatter is NoFormattingPropertyFormatter => html.NoPipe(),
                 _ => throw new NotImplementedException("Formatter type not supported")
             };

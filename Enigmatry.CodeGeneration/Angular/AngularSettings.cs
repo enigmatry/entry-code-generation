@@ -42,8 +42,7 @@ namespace Enigmatry.CodeGeneration.Angular
         {
             Templates = new List<TemplateInfo>
             {
-                new($"{templatePath}/Angular.Module.cshtml", "{0}.module.ts"),
-                new($"{templatePath}/Angular.Module.Routing.cshtml", "{0}-routing.module.ts")
+                new($"{templatePath}/Angular.Module.cshtml", "{0}-generated.module.ts")
             };
         }
         public IList<TemplateInfo> Templates { get; }

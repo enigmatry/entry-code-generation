@@ -10,29 +10,26 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
     {
         private static readonly string _elementSeparator = ", ";
 
-        public static IHtmlContent ArrayFor<TSource>(this IHtmlHelper html, IEnumerable<TSource> collection)
+        public static IHtmlContent JsArray<TSource>(this IHtmlHelper html, IEnumerable<TSource> collection)
         {
             return html.Raw($"[{String.Join(_elementSeparator, collection)}]");
         }
 
-        public static IHtmlContent ArrayFor<TSource, TResult>(this IHtmlHelper html, IEnumerable<TSource> collection, Func<TSource, TResult> selector)
+        public static IHtmlContent JsArray<TSource, TResult>(this IHtmlHelper html, IEnumerable<TSource> collection, Func<TSource, TResult> selector)
         {
-            return ArrayFor(html, collection.Select(selector));
+            return JsArray(html, collection.Select(selector));
         }
 
-        public static IHtmlContent StringArrayFor<TSource>(this IHtmlHelper html, IEnumerable<TSource> collection)
+        public static IHtmlContent JsStringArray<TSource>(this IHtmlHelper html, IEnumerable<TSource> collection)
         {
-            return ArrayFor(html, collection.Select(AsString));
+            return JsArray(html, collection.Select(AsString));
         }
 
-        public static IHtmlContent StringArrayFor<TSource, TResult>(this IHtmlHelper html, IEnumerable<TSource> collection, Func<TSource, TResult> selector)
+        public static IHtmlContent JsStringArray<TSource, TResult>(this IHtmlHelper html, IEnumerable<TSource> collection, Func<TSource, TResult> selector)
         {
-            return ArrayFor(html, collection.Select(selector).Select(AsString));
+            return JsArray(html, collection.Select(selector).Select(AsString));
         }
 
-        private static string AsString<TSource>(TSource source)
-        {
-            return $"'{source}'";
-        }
+        private static string AsString<TSource>(TSource source) => $"'{source}'";
     }
 }

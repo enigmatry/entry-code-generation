@@ -1,42 +1,40 @@
 ﻿@using Enigmatry.CodeGeneration
 @using Enigmatry.CodeGeneration.Angular
+@using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
 @model Enigmatry.CodeGeneration.Configuration.List.ListComponentModel;
 @inject CodeGeneratorOptions _options;
-import { Component, OnInit } from '@@angular/core';
-import { ActivatedRoute, Router } from '@@angular/router';
-import { Observable } from 'rxjs';
-import { mergeMap, tap } from 'rxjs/operators';
+/* eslint-disable @@typescript-eslint/member-ordering */
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@@angular/core';
+import { ColumnDef } from 'src/@@enigmatry/enigmatry-grid';
+import { PagedData, PageEvent, SortEvent } from 'src/@@enigmatry/pagination';
 
-import { @(Model.ComponentInfo.ModelType), @(Model.AngularComponentApiClient()) } from '@_options.ApiClientTsImportPath';
-
-import { PagedResponse, PagedQueryParams } from 'src/app/shared/pagination/paged-data.model';
-import { MatPagedTableComponent } from 'src/app/shared/pagination/mat-paged-table.component';
+import { @(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPath';
 
 @@Component({
-    templateUrl: './@(Model.AngularComponentFileName()).html',
-    styleUrls: ['./@(Model.AngularComponentFileName()).scss']
+  selector: '@Model.AngularComponentSelector(_options.ComponentPrefix)',
+  templateUrl: './@(Model.AngularComponentFileName()).html',
+  styleUrls: ['./@(Model.AngularComponentFileName()).scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-@Html.Raw($"export class {Model.AngularComponentName()} extends MatPagedTableComponent<{Model.ComponentInfo.ModelType}> implements OnInit {{")
+export class @Model.AngularComponentName() {
 
-  displayedColumns = @Html.StringArrayFor(Model.VisibleColumns, column => column.Property);
+  @@Input() data: PagedData@(Html.Raw($"<{Model.ComponentInfo.ModelType}>")) | null;
+  @@Input() loading: boolean;
 
-  constructor(private client: @(Model.AngularComponentApiClient()), router: Router, activatedRoute: ActivatedRoute) {
-    super(router, activatedRoute);
-}
+  @@Input() showPaginator = @Model.ShowPaginator.ToString().ToLower();
+  @@Input() showFirstLastButtons = @Model.ShowFirstLastPageButtons.ToString().ToLower();
+  @@Input() pageSizeOptions = @Html.JsArray(Model.PageSizeOptions);
+  @@Input() hidePageSize = @Model.HidePageSize.ToString().ToLower();
 
-ngOnInit() {
-    this.activatedRoute.queryParams
-      .pipe(
-        tap(queryParams => this.queryParams.update(queryParams)),
-        mergeMap(() => this.getPage(this.queryParams))
-      )
-      .subscribe(response => {
-        this.dataSource.pagedResponse = response;
-      });
-  }
+  @@Input() rowSelectable = @Model.IsRowSelectable.ToString().ToLower();
+  @@Input() multiSelectable = @Model.EnableMultiSelection.ToString().ToLower();
 
-@Html.Raw($"getPage(query: PagedQueryParams): Observable<PagedResponse<{Model.ComponentInfo.ModelType}>> {{")
-    return this.client.search(query.keyword, query.pageNumber, query.pageSize, query.sortBy, query.sortDirection);
-   }
+  @@Input() columns: ColumnDef[] = @Html.CreateColumnDefs(Model.Columns);
+
+  @@Output() pageChange = new EventEmitter@(Html.Raw("<PageEvent>"))();
+  @@Output() sortChange = new EventEmitter@(Html.Raw("<SortEvent>"))();
+  @@Output() selectionChange = new EventEmitter@(Html.Raw($"<{Model.ComponentInfo.ModelType}[]>"))();
+
+  constructor() {}
 }

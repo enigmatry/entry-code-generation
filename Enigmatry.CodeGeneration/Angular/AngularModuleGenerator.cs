@@ -35,7 +35,7 @@ namespace Enigmatry.CodeGeneration.Angular
 
         public async Task GenerateAsync(string outputDir, IFeatureModule module)
         {
-            var directory = Path.Combine(outputDir, module.Name.Kebaberize());
+            var directory = Path.Combine(outputDir, module.Name.Kebaberize(), "generated");
 
             _logger.LogInformation($"Generating {module.Name} module components");
 

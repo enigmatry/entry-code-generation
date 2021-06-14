@@ -106,7 +106,7 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.List.Model
         {
             foreach (var propertyName in propertyNames)
             {
-                Action action = () => CreatePropertyBuilder(propertyName).WithFormat(new CheckMarkPropertyFormatter());
+                Action action = () => CreatePropertyBuilder(propertyName).WithFormat(new BooleanPropertyFormatter());
                 action.Should().NotThrow();
             }
         }
@@ -116,7 +116,7 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.List.Model
         {
             foreach (var propertyName in propertyNames)
             {
-                Action action = () => CreatePropertyBuilder(propertyName).WithFormat(new CheckMarkPropertyFormatter());
+                Action action = () => CreatePropertyBuilder(propertyName).WithFormat(new BooleanPropertyFormatter());
                 action.Should().ThrowExactly<ArgumentOutOfRangeException>();
             }
         }
