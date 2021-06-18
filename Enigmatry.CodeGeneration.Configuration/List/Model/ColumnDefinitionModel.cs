@@ -12,6 +12,6 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
         public IPropertyFormatter Formatter { get; set; } = new NoFormattingPropertyFormatter();
         public string? TranslationId { get; set; }
         public string? CustomCellComponent { get; set; }
-        public bool UseCustomCellComponent => CustomCellComponent.HasContent();
+        public bool HasCustomCellComponent => CustomCellComponent.HasContent();
     }
 }

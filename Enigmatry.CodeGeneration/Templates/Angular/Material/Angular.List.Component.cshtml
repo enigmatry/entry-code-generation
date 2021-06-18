@@ -5,8 +5,10 @@
 @model Enigmatry.CodeGeneration.Configuration.List.ListComponentModel;
 @inject CodeGeneratorOptions _options;
 /* eslint-disable @@typescript-eslint/member-ordering */
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@@angular/core';
-import { ColumnDef } from 'src/@@enigmatry/enigmatry-grid';
+/* eslint-disable max-len */
+/* eslint-disable no-trailing-spaces */
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@@angular/core';
+import { CellTemplate, ColumnDef } from 'src/@@enigmatry/enigmatry-grid';
 import { PagedData, PageEvent, SortEvent } from 'src/@@enigmatry/pagination';
 
 import { @(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPath';
@@ -17,7 +19,7 @@ import { @(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPat
   styleUrls: ['./@(Model.AngularComponentFileName()).scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class @Model.AngularComponentName() {
+export class @Model.AngularComponentName() implements OnInit {
 
   @@Input() data: PagedData@(Html.Raw($"<{Model.ComponentInfo.ModelType}>")) | null;
   @@Input() loading: boolean;
@@ -30,11 +32,19 @@ export class @Model.AngularComponentName() {
   @@Input() rowSelectable = @Model.IsRowSelectable.ToString().ToLower();
   @@Input() multiSelectable = @Model.EnableMultiSelection.ToString().ToLower();
 
-  @@Input() columns: ColumnDef[] = @Html.CreateColumnDefs(Model.Columns);
+  @@Input() headerTemplate: TemplateRef@(Html.Raw("<any>")) | CellTemplate;
+  @@Input() cellTemplate: TemplateRef@(Html.Raw("<any>")) | CellTemplate;
+
+  @@Input() columns: ColumnDef[] = [];
 
   @@Output() pageChange = new EventEmitter@(Html.Raw("<PageEvent>"))();
   @@Output() sortChange = new EventEmitter@(Html.Raw("<SortEvent>"))();
   @@Output() selectionChange = new EventEmitter@(Html.Raw($"<{Model.ComponentInfo.ModelType}[]>"))();
 
+  @Html.AllCustomCellTemplateViewChildRefs(Model.Columns)
   constructor() {}
+
+  ngOnInit(): void {
+    this.columns = @Html.CreateColumnDefs(Model.Columns);
+  }
 }

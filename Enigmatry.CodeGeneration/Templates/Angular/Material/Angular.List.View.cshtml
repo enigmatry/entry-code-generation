@@ -1,4 +1,4 @@
-﻿@using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
+﻿@using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 @model Enigmatry.CodeGeneration.Configuration.List.ListComponentModel;
 
 <enigmatry-grid [columns]="columns" 
@@ -10,7 +10,16 @@
                 [multiSelectable]="multiSelectable" 
                 [rowSelectable]="rowSelectable"
                 [loading]="loading"
+                [headerTemplate]="headerTemplate"
+                [cellTemplate]="cellTemplate"
                 (pageChange)="pageChange.emit($event)"
                 (sortChange)="sortChange.emit($event)"
                 (rowSelectionChange)="selectionChange.emit($event)">
 </enigmatry-grid>
+
+@foreach (var column in Model.Columns.Where(column => column.HasCustomCellComponent))
+{
+<ng-template @Html.Raw($"#{Html.CustomCellTemplateRefId(column)}") let-row let-index="index" let-col="colDef">
+    @Html.Raw($"<{column.CustomCellComponent} [rowData]=\"row\" [colDef]=\"col\"></{column.CustomCellComponent}>")
+</ng-template>
+}

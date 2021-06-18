@@ -7,6 +7,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Formatters
     {
         public string DigitsInfo { get; private set; } = String.Empty;
         public string Locale { get; private set; } = String.Empty;
+        public string JsFormatterName => "percent";
 
         public IList<Type> SupportedInputTypes() =>
             new List<Type>
@@ -29,6 +30,11 @@ namespace Enigmatry.CodeGeneration.Configuration.Formatters
         {
             Locale = value;
             return this;
+        }
+
+        public string ToJsObject()
+        {
+            return DigitsInfo.HasContent() ? $"{{ digitsInfo: \'{DigitsInfo}\', locale: \'{Locale}\' }}" : "undefined";
         }
     }
 }

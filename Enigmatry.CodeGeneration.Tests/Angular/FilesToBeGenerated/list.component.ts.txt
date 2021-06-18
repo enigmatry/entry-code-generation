@@ -7,8 +7,10 @@
 // </auto-generated>
 // ------------------------------------------------------------------------------;
 /* eslint-disable @typescript-eslint/member-ordering */
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ColumnDef } from 'src/@enigmatry/enigmatry-grid';
+/* eslint-disable max-len */
+/* eslint-disable no-trailing-spaces */
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { CellTemplate, ColumnDef } from 'src/@enigmatry/enigmatry-grid';
 import { PagedData, PageEvent, SortEvent } from 'src/@enigmatry/pagination';
 
 import { ListMockItem } from 'src/app/api/api-reference';
@@ -19,7 +21,7 @@ import { ListMockItem } from 'src/app/api/api-reference';
   styleUrls: ['./list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ListComponent {
+export class ListComponent implements OnInit {
 
   @Input() data: PagedData<ListMockItem> | null;
   @Input() loading: boolean;
@@ -32,15 +34,23 @@ export class ListComponent {
   @Input() rowSelectable = false;
   @Input() multiSelectable = false;
 
-  @Input() columns: ColumnDef[] = [
-{ field: 'id', header: 'Id', hide: true, sortable: true, type: '' },
-{ field: 'name', header: 'Name', hide: false, sortable: false, type: '' },
-{ field: 'date', header: 'Date', hide: false, sortable: true, type: 'date' }
-];
+  @Input() headerTemplate: TemplateRef<any> | CellTemplate;
+  @Input() cellTemplate: TemplateRef<any> | CellTemplate;
+
+  @Input() columns: ColumnDef[] = [];
 
   @Output() pageChange = new EventEmitter<PageEvent>();
   @Output() sortChange = new EventEmitter<SortEvent>();
   @Output() selectionChange = new EventEmitter<ListMockItem[]>();
 
+  
   constructor() {}
+
+  ngOnInit(): void {
+    this.columns = [
+{ field: 'id', header: 'Id', hide: true, sortable: true },
+{ field: 'name', header: 'Name', hide: false, sortable: false },
+{ field: 'date', header: 'Date', hide: false, sortable: true, type: 'date', typeParameter: { format: 'mediumDate', timezone: 'UTC', locale: 'en' } }
+];
+  }
 }

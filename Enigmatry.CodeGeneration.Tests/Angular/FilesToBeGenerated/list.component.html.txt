@@ -8,7 +8,10 @@
                 [multiSelectable]="multiSelectable" 
                 [rowSelectable]="rowSelectable"
                 [loading]="loading"
+                [headerTemplate]="headerTemplate"
+                [cellTemplate]="cellTemplate"
                 (pageChange)="pageChange.emit($event)"
                 (sortChange)="sortChange.emit($event)"
                 (rowSelectionChange)="selectionChange.emit($event)">
 </enigmatry-grid>
+

@@ -11,5 +11,9 @@ namespace Enigmatry.CodeGeneration.Configuration.Formatters
             : throw new ArgumentOutOfRangeException($"Property of type {inputType} is not compatible with property formatter.");
 
         IList<Type> SupportedInputTypes();
+
+        public string JsFormatterName { get; }
+
+        public string ToJsObject();
     }
 }

@@ -9,6 +9,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Formatters
         public string Display { get; private set; } = String.Empty;
         public string DigitsInfo { get; private set; } = String.Empty;
         public string Locale { get; private set; } = String.Empty;
+        public string JsFormatterName => "currency";
 
         public IList<Type> SupportedInputTypes() =>
             new List<Type>
@@ -43,6 +44,13 @@ namespace Enigmatry.CodeGeneration.Configuration.Formatters
         {
             Locale = value;
             return this;
+        }
+
+        public string ToJsObject()
+        {
+            return CurrencyCode.HasContent()
+                ? $"{{ currencyCode: \'{CurrencyCode}\', display: \'{Display}\', digitsInfo: \'{DigitsInfo}\', locale: \'{Locale}\' }}"
+                : "undefined";
         }
     }
 }
