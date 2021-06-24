@@ -10,7 +10,7 @@
 /* eslint-disable max-len */
 /* eslint-disable no-trailing-spaces */
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { CellTemplate, ColumnDef } from 'src/@enigmatry/enigmatry-grid';
+import { CellTemplate, ColumnDef, ContextMenuItem } from 'src/@enigmatry/enigmatry-grid';
 import { PagedData, PageEvent, SortEvent } from 'src/@enigmatry/pagination';
 
 import { ListMockItem } from 'src/app/api/api-reference';
@@ -27,9 +27,9 @@ export class ListComponent implements OnInit {
   @Input() loading: boolean;
 
   @Input() showPaginator = true;
-  @Input() showFirstLastButtons = false;
+  @Input() showFirstLastButtons = true;
   @Input() pageSizeOptions = [10, 50, 100];
-  @Input() hidePageSize = false;
+  @Input() hidePageSize = !true;
 
   @Input() rowSelectable = false;
   @Input() multiSelectable = false;
@@ -37,20 +37,27 @@ export class ListComponent implements OnInit {
   @Input() headerTemplate: TemplateRef<any> | CellTemplate;
   @Input() cellTemplate: TemplateRef<any> | CellTemplate;
 
+  @Input() showContextMenu = false;
+  @Input() contextMenuItems: ContextMenuItem[] = [];
+
   @Input() columns: ColumnDef[] = [];
 
   @Output() pageChange = new EventEmitter<PageEvent>();
   @Output() sortChange = new EventEmitter<SortEvent>();
   @Output() selectionChange = new EventEmitter<ListMockItem[]>();
+  @Output() contextMenuItemSelected = new EventEmitter<{ itemId: string; rowData: GetUsersResponseItem }>();
 
   
-  constructor() {}
 
-  ngOnInit(): void {
+  constructor() {
     this.columns = [
 { field: 'id', header: 'Id', hide: true, sortable: true },
 { field: 'name', header: 'Name', hide: false, sortable: false },
 { field: 'date', header: 'Date', hide: false, sortable: true, type: 'date', typeParameter: { format: 'mediumDate', timezone: 'UTC', locale: 'en' } }
 ];
+    this.contextMenuItems = [];
+  }
+
+  ngOnInit(): void {
   }
 }

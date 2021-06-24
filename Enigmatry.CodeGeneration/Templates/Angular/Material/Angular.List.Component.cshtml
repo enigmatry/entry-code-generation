@@ -1,5 +1,6 @@
 ﻿@using Enigmatry.CodeGeneration
 @using Enigmatry.CodeGeneration.Angular
+@using Enigmatry.CodeGeneration.Configuration.List.Model
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
 @model Enigmatry.CodeGeneration.Configuration.List.ListComponentModel;
@@ -8,7 +9,7 @@
 /* eslint-disable max-len */
 /* eslint-disable no-trailing-spaces */
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@@angular/core';
-import { CellTemplate, ColumnDef } from 'src/@@enigmatry/enigmatry-grid';
+import { CellTemplate, ColumnDef, ContextMenuItem } from 'src/@@enigmatry/enigmatry-grid';
 import { PagedData, PageEvent, SortEvent } from 'src/@@enigmatry/pagination';
 
 import { @(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPath';
@@ -24,27 +25,34 @@ export class @Model.AngularComponentName() implements OnInit {
   @@Input() data: PagedData@(Html.Raw($"<{Model.ComponentInfo.ModelType}>")) | null;
   @@Input() loading: boolean;
 
-  @@Input() showPaginator = @Model.ShowPaginator.ToString().ToLower();
-  @@Input() showFirstLastButtons = @Model.ShowFirstLastPageButtons.ToString().ToLower();
-  @@Input() pageSizeOptions = @Html.JsArray(Model.PageSizeOptions);
-  @@Input() hidePageSize = @Model.HidePageSize.ToString().ToLower();
+  @@Input() showPaginator = @Model.Pagination.ShowPaginator.ToString().ToLower();
+  @@Input() showFirstLastButtons = @Model.Pagination.ShowFirstLastPageButtons.ToString().ToLower();
+  @@Input() pageSizeOptions = @Html.JsArray(Model.Pagination.PageSizeOptions);
+  @@Input() hidePageSize = !@Model.Pagination.ShowPageSize.ToString().ToLower();
 
-  @@Input() rowSelectable = @Model.IsRowSelectable.ToString().ToLower();
-  @@Input() multiSelectable = @Model.EnableMultiSelection.ToString().ToLower();
+  @@Input() rowSelectable = @Model.Row.IsSelectable.ToString().ToLower();
+  @@Input() multiSelectable = @((Model.Row.Selection == RowSelectionType.Multiple).ToString().ToLower());
 
   @@Input() headerTemplate: TemplateRef@(Html.Raw("<any>")) | CellTemplate;
   @@Input() cellTemplate: TemplateRef@(Html.Raw("<any>")) | CellTemplate;
+
+  @@Input() showContextMenu = @Model.Row.ShowContextMenu.ToString().ToLower();
+  @@Input() contextMenuItems: ContextMenuItem[] = [];
 
   @@Input() columns: ColumnDef[] = [];
 
   @@Output() pageChange = new EventEmitter@(Html.Raw("<PageEvent>"))();
   @@Output() sortChange = new EventEmitter@(Html.Raw("<SortEvent>"))();
   @@Output() selectionChange = new EventEmitter@(Html.Raw($"<{Model.ComponentInfo.ModelType}[]>"))();
+  @@Output() contextMenuItemSelected = new EventEmitter<@("{") itemId: string; rowData: GetUsersResponseItem @("}")>();
 
   @Html.AllCustomCellTemplateViewChildRefs(Model.Columns)
-  constructor() {}
+
+  constructor() {
+    this.columns = @Html.CreateColumnDefs(Model.Columns);
+    this.contextMenuItems = @Html.CreateContextMenuItems(Model.Row.ContextMenuItems);
+  }
 
   ngOnInit(): void {
-    this.columns = @Html.CreateColumnDefs(Model.Columns);
   }
 }

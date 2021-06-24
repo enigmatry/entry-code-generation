@@ -12,12 +12,8 @@ namespace Enigmatry.CodeGeneration.Configuration.List
     public class ListComponentBuilder<T> : BaseComponentBuilder<ListComponentModel>
     {
         private readonly IList<ColumnDefinitionBuilder> _columns;
-        private bool _showPaginator = true;
-        private bool _showFirstLastPageButtons = false;
-        private bool _hidePageSize = false;
-        private IEnumerable<int> _pageSizeOptions = new[] { 10, 50, 100 };
-        private bool _enableSingleSelection = false;
-        private bool _enableMultiSelection = false;
+        private readonly PaginationInfoBuilder _paginationInfoBuilder = new PaginationInfoBuilder();
+        private readonly RowInfoBuilder _rowInfoBuilder = new RowInfoBuilder();
 
         public ListComponentBuilder() : base(typeof(T))
         {
@@ -44,13 +40,9 @@ namespace Enigmatry.CodeGeneration.Configuration.List
             return columnDefinitionBuilder;
         }
 
-        public ListComponentBuilder<T> ShowPaginator(bool show) { _showPaginator = show; return this; }
-        public ListComponentBuilder<T> ShowFirstLastPageButtons(bool show) { _showFirstLastPageButtons = show; return this; }
-        public ListComponentBuilder<T> PageSizeOptions(IEnumerable<int> pageSizeOptions) { _pageSizeOptions = pageSizeOptions; return this; }
-        public ListComponentBuilder<T> HidePageSize(bool hidePageSize) { _hidePageSize = hidePageSize; return this; }
-        public ListComponentBuilder<T> EnableSingleSelection(bool enable) { _enableSingleSelection = enable; return this; }
-        public ListComponentBuilder<T> EnableMultiSelection(bool enable) { _enableMultiSelection = enable; return this; }
+        public PaginationInfoBuilder Pagination() { return _paginationInfoBuilder; }
 
+        public RowInfoBuilder Row() { return _rowInfoBuilder; }
 
         public override ListComponentModel Build()
         {
@@ -58,15 +50,7 @@ namespace Enigmatry.CodeGeneration.Configuration.List
 
             var columns = _columns.Select(_ => _.Build()).ToList();
 
-            return new ListComponentModel(componentInfo, columns)
-            {
-                ShowPaginator = _showPaginator,
-                ShowFirstLastPageButtons = _showFirstLastPageButtons,
-                PageSizeOptions = _pageSizeOptions,
-                HidePageSize = _hidePageSize,
-                EnableSingleSelection = _enableSingleSelection,
-                EnableMultiSelection = _enableMultiSelection
-            };
+            return new ListComponentModel(componentInfo, columns) {Row = _rowInfoBuilder.Build(), Pagination = _paginationInfoBuilder.Build()};
         }
     }
 }

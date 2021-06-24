@@ -7,7 +7,7 @@ using Humanizer;
 
 namespace Enigmatry.CodeGeneration.Configuration.List.Model
 {
-    public class ColumnDefinitionBuilder : IBuilder<ColumnDefinitionModel>
+    public class ColumnDefinitionBuilder : IBuilder<ColumnDefinition>
     {
         private readonly PropertyAccessor? _propertyAccessor;
         private readonly string _propertyName;
@@ -37,9 +37,9 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
             _formatter = new NoFormattingPropertyFormatter();
         }
 
-        public ColumnDefinitionModel Build()
+        public ColumnDefinition Build()
         {
-            return new ColumnDefinitionModel
+            return new ColumnDefinition
             {
                 Property = _propertyName,
                 HeaderName = _headerName,

@@ -11,13 +11,13 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 {
     public static class EnigmatryGridHtmlHelperExtensions
     {
-        public static IHtmlContent CustomCellTemplateRefId(this IHtmlHelper html, ColumnDefinitionModel column) 
+        public static IHtmlContent CustomCellTemplateRefId(this IHtmlHelper html, ColumnDefinition column) 
             => html.Raw(CustomCellTemplateRefId(column));
 
-        public static IHtmlContent CustomCellTemplateViewChildRef(this IHtmlHelper html, ColumnDefinitionModel column) 
+        public static IHtmlContent CustomCellTemplateViewChildRef(this IHtmlHelper html, ColumnDefinition column) 
             => html.Raw(CustomCellTemplateViewChildRef(column));
 
-        public static IHtmlContent AllCustomCellTemplateViewChildRefs(this IHtmlHelper html, IEnumerable<ColumnDefinitionModel> columns)
+        public static IHtmlContent AllCustomCellTemplateViewChildRefs(this IHtmlHelper html, IEnumerable<ColumnDefinition> columns)
         {
             var customComponents = columns.Where(c => c.HasCustomCellComponent);
             var viewChildTemplateRefs = customComponents.Select(c => CustomCellTemplateViewChildRef(c));
@@ -26,17 +26,25 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
             return html.Raw(htmlContent);
         }
 
-        public static IHtmlContent CreateColumnDefs(this IHtmlHelper html, IEnumerable<ColumnDefinitionModel> columns)
+        public static IHtmlContent CreateColumnDefs(this IHtmlHelper html, IEnumerable<ColumnDefinition> columns)
         {
-            var columnDefinitions = columns.Select(CreateColumnDef);
-            var htmlContent = $"[\n{String.Join(",\n", columnDefinitions)}\n]";
+            var columnDefs = columns.Select(CreateColumnDef).ToList();
+            var htmlContent = columnDefs.Any() ? $"[\n{String.Join(",\n", columnDefs)}\n]" : "[]";
+
+            return html.Raw(htmlContent);
+        }
+
+        public static IHtmlContent CreateContextMenuItems(this IHtmlHelper html, IEnumerable<RowContextMenuItem> items)
+        {
+            var contextMenuItems = items.Select(item => item.ToJsObject()).ToList();
+            var htmlContent = contextMenuItems.Any() ? $"[\n{String.Join(",\n", contextMenuItems)}\n]" : "[]";
 
             return html.Raw(htmlContent);
         }
 
         #region [private]
 
-        private static string CreateColumnDef(ColumnDefinitionModel column)
+        private static string CreateColumnDef(ColumnDefinition column)
         {
             var columnType = column.Formatter.JsFormatterName;
             var columnTypeParams = column.Formatter.ToJsObject();
@@ -53,13 +61,13 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
             );
         }
 
-        private static string CustomCellTemplateViewChildRef(ColumnDefinitionModel column)
+        private static string CustomCellTemplateViewChildRef(ColumnDefinition column)
         {
             var templateRefId = CustomCellTemplateRefId(column);
             return $"@ViewChild('{templateRefId}', {{ static: true }}) {templateRefId}: TemplateRef<any>;";
         }
 
-        private static string CustomCellTemplateRefId(ColumnDefinitionModel column)
+        private static string CustomCellTemplateRefId(ColumnDefinition column)
         {
             var templateRefId = column.Property.Replace(".", "_").Camelize();
             return $"{templateRefId}Tpl";

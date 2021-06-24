@@ -12,9 +12,12 @@
                 [loading]="loading"
                 [headerTemplate]="headerTemplate"
                 [cellTemplate]="cellTemplate"
+                [showContextMenu]="showContextMenu"
+                [contextMenuItems]="contextMenuItems"
                 (pageChange)="pageChange.emit($event)"
                 (sortChange)="sortChange.emit($event)"
-                (rowSelectionChange)="selectionChange.emit($event)">
+                (rowSelectionChange)="selectionChange.emit($event)"
+                (contextMenuItemSelected)="contextMenuItemSelected.emit($event)">
 </enigmatry-grid>
 
 @foreach (var column in Model.Columns.Where(column => column.HasCustomCellComponent))
