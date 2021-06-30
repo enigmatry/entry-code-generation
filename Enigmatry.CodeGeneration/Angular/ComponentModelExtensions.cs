@@ -7,7 +7,7 @@ namespace Enigmatry.CodeGeneration.Angular
     {
         public static string AngularComponentName(this IComponentModel component)
         {
-            return $"{component.ComponentInfo.Name.Pascalize()}Component";
+            return $"{component.ComponentInfo.Name.Pascalize()}GeneratedComponent";
         }
 
         public static string AngularComponentDirectory(this IComponentModel component)
@@ -17,7 +17,7 @@ namespace Enigmatry.CodeGeneration.Angular
 
         public static string AngularComponentFileName(this IComponentModel component)
         {
-            return $"{component.ComponentInfo.Name.Kebaberize()}.component";
+            return $"{component.ComponentInfo.Name.Kebaberize()}-generated.component";
         }
 
         public static string AngularComponentSelector(this IComponentModel component, string prefix)

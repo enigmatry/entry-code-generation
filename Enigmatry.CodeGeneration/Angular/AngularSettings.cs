@@ -28,9 +28,9 @@ namespace Enigmatry.CodeGeneration.Angular
         {
             Templates = new List<TemplateInfo>
             {
-                new($"{templatePath}/Angular.{{0}}.Component.cshtml", "{0}.component.ts"),
-                new($"{templatePath}/Angular.{{0}}.View.cshtml", "{0}.component.html"),
-                new($"{templatePath}/Angular.{{0}}.Style.cshtml", "{0}.component.scss")
+                new($"{templatePath}/Angular.{{0}}.Component.cshtml", "{0}-generated.component.ts"),
+                new($"{templatePath}/Angular.{{0}}.View.cshtml", "{0}-generated.component.html"),
+                new($"{templatePath}/Angular.{{0}}.Style.cshtml", "{0}-generated.component.scss")
             };
         }
         public IList<TemplateInfo> Templates { get; }

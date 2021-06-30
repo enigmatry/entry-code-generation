@@ -15,7 +15,7 @@ namespace Enigmatry.CodeGeneration
         public Assembly SourceAssembly { get; set; }
         public Framework Framework { get; set; } = Framework.Angular;
         public string ComponentName { get; set; } = String.Empty;
-        public string ComponentPrefix { get; set; } = "app";
+        public string ComponentPrefix { get; set; } = "app-g";
         public string ApiClientTsImportPath { get; set; } = "src/app/api/api-reference";
     }
 }
