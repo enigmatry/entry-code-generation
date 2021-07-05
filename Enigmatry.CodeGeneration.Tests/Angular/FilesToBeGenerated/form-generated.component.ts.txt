@@ -6,6 +6,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------;
+
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -15,10 +16,10 @@ import { FormMock, FormMockCommand, TestClient } from 'src/app/api/api-reference
 import { FormLookupService } from '../services/form-lookup.service';
 
 @Component({
-    templateUrl: './form.component.html',
-    styleUrls: ['./form.component.scss']
+    templateUrl: './form-generated.component.html',
+    styleUrls: ['./form-generated.component.scss']
 })
-export class FormComponent implements OnInit {
+export class FormGeneratedComponent implements OnInit {
 
     response: FormMock;
 
@@ -37,7 +38,7 @@ export class FormComponent implements OnInit {
     constructor(
         private location: Location,
         protected route: ActivatedRoute,
-        private client: TestClient, public lookupService: FormLookupService
+        private client: TestClient ,public lookupService: FormLookupService
     ) { }
 
     ngOnInit(): void {
@@ -49,7 +50,7 @@ export class FormComponent implements OnInit {
             .subscribe(response => {
                 this.response = response;
                 this.form.patchValue(response);
-		        this.lookupService.initLookups(this.response);
+				this.lookupService.initLookups(this.response);
             });
     }
 

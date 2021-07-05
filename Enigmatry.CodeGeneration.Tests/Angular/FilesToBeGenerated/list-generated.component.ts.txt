@@ -6,9 +6,6 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------;
-/* eslint-disable @typescript-eslint/member-ordering */
-/* eslint-disable max-len */
-/* eslint-disable no-trailing-spaces */
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { CellTemplate, ColumnDef, ContextMenuItem } from 'src/@enigmatry/enigmatry-grid';
 import { PagedData, PageEvent, SortEvent } from 'src/@enigmatry/pagination';
@@ -16,12 +13,12 @@ import { PagedData, PageEvent, SortEvent } from 'src/@enigmatry/pagination';
 import { ListMockItem } from 'src/app/api/api-reference';
 
 @Component({
-  selector: 'app-list',
-  templateUrl: './list.component.html',
-  styleUrls: ['./list.component.scss'],
+  selector: 'app-g-list',
+  templateUrl: './list-generated.component.html',
+  styleUrls: ['./list-generated.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ListComponent implements OnInit {
+export class ListGeneratedComponent implements OnInit {
 
   @Input() data: PagedData<ListMockItem> | null;
   @Input() loading: boolean;
