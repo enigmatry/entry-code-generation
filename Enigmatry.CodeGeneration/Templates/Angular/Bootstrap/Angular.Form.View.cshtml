@@ -1,4 +1,5 @@
 ﻿@using Enigmatry.CodeGeneration.Configuration.Form.Model
+@using Enigmatry.CodeGeneration.Configuration.Form.Model.Select
 @model Enigmatry.CodeGeneration.Configuration.Form.FormComponentModel;
 <form [formGroup]="form">
     <mat-card>
@@ -12,11 +13,11 @@
                         <br/>
                         break;
                     case FormControlType.DropDownList:
-                        @Html.Partial("~/Templates/Angular/Bootstrap/FormControls/Angular.FormControl.DropDownList.cshtml", formControl)
+                        @Html.Partial("~/Templates/Angular/Bootstrap/FormControls/Angular.FormControl.DropDownList.cshtml", formControl as SelectFormControlModel)
                         <br/>
                         break;
                     case FormControlType.Autocomplete:
-                        @Html.Partial("~/Templates/Angular/Bootstrap/FormControls/Angular.FormControl.Autocomplete.cshtml", formControl)
+                        @Html.Partial("~/Templates/Angular/Bootstrap/FormControls/Angular.FormControl.Autocomplete.cshtml", formControl as SelectFormControlModel)
                         <br/>
                         break;
                     case FormControlType.DateTime:
