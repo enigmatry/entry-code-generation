@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -8,12 +7,12 @@ namespace Enigmatry.CodeGeneration.Configuration
 {
     public static class ExpressionExtensions
     {
-        public static PropertyInfo GetPropertyInfo([NotNull] this LambdaExpression propertyAccessExpression)
+        public static PropertyInfo GetPropertyInfo(this LambdaExpression propertyAccessExpression)
         {
             return GetInternalMemberAccess<PropertyInfo>(propertyAccessExpression);
         }
 
-        private static TMemberInfo GetInternalMemberAccess<TMemberInfo>([NotNull] this LambdaExpression memberAccessExpression)
+        private static TMemberInfo GetInternalMemberAccess<TMemberInfo>(this LambdaExpression memberAccessExpression)
             where TMemberInfo : MemberInfo
         {
             var parameterExpression = memberAccessExpression.Parameters[0];
@@ -50,8 +49,8 @@ namespace Enigmatry.CodeGeneration.Configuration
         }
 
         public static TMemberInfo? MatchSimpleMemberAccess<TMemberInfo>(
-            [NotNull] this Expression parameterExpression,
-            [NotNull] Expression memberAccessExpression)
+            this Expression parameterExpression,
+            Expression memberAccessExpression)
             where TMemberInfo : MemberInfo
         {
             var memberInfos = MatchMemberAccess<TMemberInfo>(parameterExpression, memberAccessExpression);

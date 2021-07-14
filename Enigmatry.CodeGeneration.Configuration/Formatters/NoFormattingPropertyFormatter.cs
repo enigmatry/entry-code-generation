@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace Enigmatry.CodeGeneration.Configuration.Formatters
 {
-    public class NoFormattingPropertyFormatter : IPropertyFormatter
+    public class NoFormattingPropertyFormatter : BasePropertyFormatter
     {
-        public IList<Type> SupportedInputTypes() => new List<Type>();
+        public override IList<Type> SupportedInputTypes() => new List<Type>();
 
-        public string ToJsObject() => "undefined";
+        public override string ToJsObject() => "undefined";
 
-        public string JsFormatterName => String.Empty;
+        public override string JsFormatterName => String.Empty;
 
-        public bool ValidateInputType(Type inputType) => true;
+        public new bool ValidateInputType(Type inputType) => true;
     }
 }

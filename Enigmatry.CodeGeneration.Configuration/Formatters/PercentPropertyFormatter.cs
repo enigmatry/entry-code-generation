@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace Enigmatry.CodeGeneration.Configuration.Formatters
 {
-    public class PercentPropertyFormatter : IPropertyFormatter
+    public class PercentPropertyFormatter : BasePropertyFormatter
     {
         public string DigitsInfo { get; private set; } = String.Empty;
         public string Locale { get; private set; } = String.Empty;
-        public string JsFormatterName => "percent";
+        public override string JsFormatterName => "percent";
 
-        public IList<Type> SupportedInputTypes() =>
+        public override IList<Type> SupportedInputTypes() =>
             new List<Type>
             {
                 typeof(short),
@@ -32,7 +32,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Formatters
             return this;
         }
 
-        public string ToJsObject()
+        public override string ToJsObject()
         {
             return DigitsInfo.HasContent() ? $"{{ digitsInfo: \'{DigitsInfo}\', locale: \'{Locale}\' }}" : "undefined";
         }

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Enigmatry.CodeGeneration.Configuration.Formatters
 {
-    public class BooleanPropertyFormatter : IPropertyFormatter
+    public class BooleanPropertyFormatter : BasePropertyFormatter
     {
-        public IList<Type> SupportedInputTypes() => new List<Type> {typeof(bool)};
+        public override IList<Type> SupportedInputTypes() => new List<Type> {typeof(bool)};
 
-        public string JsFormatterName => "boolean";
+        public override string JsFormatterName => "boolean";
 
-        public string ToJsObject() => "undefined";
+        public override string ToJsObject() => "undefined";
     }
 }

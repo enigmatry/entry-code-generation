@@ -1,19 +1,20 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using Enigmatry.CodeGeneration.Configuration.Form.Model;
 
 namespace Enigmatry.CodeGeneration.Configuration
 {
     public static class Check
     {
-        public static T NotNull<T>(T value, [NotNull] string parameterName)
+        public static T NotNull<T>(T value, string parameterName)
         {
             return value is null ? throw new ArgumentNullException(parameterName) : value;
         }
 
-        public static string NotEmpty(string? value, [NotNull] string parameterName)
+        public static string NotEmpty(string? value, string parameterName)
         {
-            return String.IsNullOrEmpty(value) ? throw new ArgumentNullException(parameterName) : value;
+            return (value == null || String.IsNullOrEmpty(value))
+                ? throw new ArgumentNullException(parameterName)
+                : value;
         }
 
         public static FormControlBuilder IsSelectFormControl(FormControlBuilder value)

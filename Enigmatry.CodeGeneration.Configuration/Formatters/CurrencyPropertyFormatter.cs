@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace Enigmatry.CodeGeneration.Configuration.Formatters
 {
-    public class CurrencyPropertyFormatter : IPropertyFormatter
+    public class CurrencyPropertyFormatter : BasePropertyFormatter
     {
         public string CurrencyCode { get; private set; } = String.Empty;
         public string Display { get; private set; } = String.Empty;
         public string DigitsInfo { get; private set; } = String.Empty;
         public string Locale { get; private set; } = String.Empty;
-        public string JsFormatterName => "currency";
+        public override string JsFormatterName => "currency";
 
-        public IList<Type> SupportedInputTypes() =>
+        public override IList<Type> SupportedInputTypes() =>
             new List<Type>
             {
                 typeof(short),
@@ -46,7 +46,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Formatters
             return this;
         }
 
-        public string ToJsObject()
+        public override string ToJsObject()
         {
             return CurrencyCode.HasContent()
                 ? $"{{ currencyCode: \'{CurrencyCode}\', display: \'{Display}\', digitsInfo: \'{DigitsInfo}\', locale: \'{Locale}\' }}"

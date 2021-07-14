@@ -128,13 +128,13 @@ namespace Enigmatry.CodeGeneration.Tests.HtmlHelperExtensions.Angular
 
 
 
-        internal class NotSupportedPropertyFormatter : IPropertyFormatter
+        internal class NotSupportedPropertyFormatter : BasePropertyFormatter
         {
-            public IList<Type> SupportedInputTypes() => throw new NotImplementedException();
+            public override IList<Type> SupportedInputTypes() => throw new NotImplementedException();
 
-            public string JsFormatterName { get; } = String.Empty;
+            public override string JsFormatterName { get; } = String.Empty;
 
-            public string ToJsObject() => throw new NotImplementedException();
+            public override string ToJsObject() => throw new NotImplementedException();
         }
     }
 }
