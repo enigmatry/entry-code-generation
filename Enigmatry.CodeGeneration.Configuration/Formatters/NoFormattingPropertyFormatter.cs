@@ -11,6 +11,6 @@ namespace Enigmatry.CodeGeneration.Configuration.Formatters
 
         public override string JsFormatterName => String.Empty;
 
-        public new bool ValidateInputType(Type inputType) => true;
+        public override bool ValidateInputType(Type inputType) => true;
     }
 }

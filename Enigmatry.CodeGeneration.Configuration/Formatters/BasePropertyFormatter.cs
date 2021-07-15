@@ -12,7 +12,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Formatters
 
         public abstract string ToJsObject();
 
-        public bool ValidateInputType(Type inputType) => SupportedInputTypes().Any(x => x.Name == inputType.Name)
+        public virtual bool ValidateInputType(Type inputType) => SupportedInputTypes().Any(x => x.Name == inputType.Name)
             ? true
             : throw new ArgumentOutOfRangeException($"Property of type {inputType} is not compatible with property formatter.");
     }
