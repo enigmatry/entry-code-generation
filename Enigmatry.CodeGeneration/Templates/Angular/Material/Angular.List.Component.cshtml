@@ -41,7 +41,7 @@ export class @Model.AngularComponentName() implements OnInit {
   @@Output() pageChange = new EventEmitter@(Html.Raw("<PageEvent>"))();
   @@Output() sortChange = new EventEmitter@(Html.Raw("<SortEvent>"))();
   @@Output() selectionChange = new EventEmitter@(Html.Raw($"<{Model.ComponentInfo.ModelType}[]>"))();
-  @@Output() contextMenuItemSelected = new EventEmitter<@("{") itemId: string; rowData: GetUsersResponseItem @("}")>();
+  @@Output() contextMenuItemSelected = new EventEmitter<@(Html.Raw($"{{ itemId: string; rowData: {Model.ComponentInfo.ModelType} }}"))>();
 
   @Html.AllCustomCellTemplateViewChildRefs(Model.Columns)
 
