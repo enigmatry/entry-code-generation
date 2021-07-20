@@ -19,7 +19,8 @@ namespace Enigmatry.CodeGeneration.Console
     {
         private static string _sourceAssembly = String.Empty;
         private static string _destinationDirectory = String.Empty;
-        private static string _componentName = String.Empty;
+        private static string _component = String.Empty;
+        private static string _feature = String.Empty;
 
         private static async Task<int> Main(string[] args)
         {
@@ -53,20 +54,23 @@ namespace Enigmatry.CodeGeneration.Console
                 {
                     IsRequired = true
                 },
-                new Option<string>(new[] { "--component-name", "-c" }, "Single component name to be generated")
+                new Option<string>(new[] { "--component", "-c" }, "Single component to be generated"),
+                new Option<string>(new[] { "--feature", "-f" }, "Single feature to be generated")
             };
-            rootCommand.Handler = CommandHandler.Create<string, string, string>(RootCommandHandler);
+            rootCommand.Handler = CommandHandler.Create<string, string, string, string>(RootCommandHandler);
             return rootCommand;
         }
 
         private static async Task RootCommandHandler(
             string sourceAssembly,
             string destinationDirectory,
-            string componentName)
+            string component = "",
+            string feature = "")
         {
             _sourceAssembly = sourceAssembly;
             _destinationDirectory = destinationDirectory;
-            _componentName = componentName;
+            _component = component;
+            _feature = feature;
 
             try
             {
@@ -96,7 +100,8 @@ namespace Enigmatry.CodeGeneration.Console
             var assembly = Assembly.LoadFrom(_sourceAssembly);
             var options = new CodeGeneratorOptions(_destinationDirectory, assembly)
             {
-                ComponentName = _componentName
+                Component = _component,
+                Feature = _feature
             };
 
             return builder

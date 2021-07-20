@@ -8,5 +8,10 @@ namespace Enigmatry.CodeGeneration.Configuration
         {
             return !String.IsNullOrEmpty(value);
         }
+
+        public static bool EqualsIgnoringCase(this string value, string other)
+        {
+            return value.Equals(other, StringComparison.InvariantCultureIgnoreCase);
+        }
     }
 }

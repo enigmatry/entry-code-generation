@@ -42,7 +42,7 @@ export class ListGeneratedComponent implements OnInit {
   @Output() pageChange = new EventEmitter<PageEvent>();
   @Output() sortChange = new EventEmitter<SortEvent>();
   @Output() selectionChange = new EventEmitter<ListMockItem[]>();
-  @Output() contextMenuItemSelected = new EventEmitter<{ itemId: string; rowData: GetUsersResponseItem }>();
+  @Output() contextMenuItemSelected = new EventEmitter<{ itemId: string; rowData: ListMockItem }>();
 
   
 
