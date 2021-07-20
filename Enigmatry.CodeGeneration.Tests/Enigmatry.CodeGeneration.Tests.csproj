@@ -14,7 +14,6 @@
     <None Remove="Angular\FilesToBeGenerated\form-generated.component.html.txt" />
     <None Remove="Angular\FilesToBeGenerated\form-generated.component.scss.txt" />
     <None Remove="Angular\FilesToBeGenerated\form-generated.component.ts.txt" />
-    <None Remove="Angular\FilesToBeGenerated\form-lookup.service.ts.txt" />
     <None Remove="Angular\FilesToBeGenerated\list-generated.component.html.txt" />
     <None Remove="Angular\FilesToBeGenerated\list-generated.component.scss.txt" />
     <None Remove="Angular\FilesToBeGenerated\list-generated.component.ts.txt" />
@@ -22,9 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Angular\FilesToBeGenerated\form-lookup.service.ts.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
     <EmbeddedResource Include="Angular\FilesToBeGenerated\form-generated.component.html.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>

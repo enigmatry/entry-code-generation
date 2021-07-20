@@ -11,9 +11,6 @@ namespace Enigmatry.CodeGeneration.Tests.Mocks
                 .HasName("Form")
                 .BelongsToFeature("Test");
 
-            builder
-                .HasCreateOrUpdateCommandOfType<FormMockCommand>();
-
             builder.FormControl(x => x.Id)
                 .IsVisible(false);
 
@@ -41,25 +38,9 @@ namespace Enigmatry.CodeGeneration.Tests.Mocks
                 .IsDropDownListControl()
                 .WithFixedValues<EnumMock>();
 
-            builder
-                .FormControl(x => x.CategoryId)
-                .WithLabel("Category")
-                .IsDropDownListControl()
-                .WithCallbackMethod(typeof(LookupApiControllerMock).GetMethod(nameof(LookupApiControllerMock.GetCategoryLookups)));
-
-            builder
-                .FormControl(x => x.TypeId)
-                .WithLabel("Type")
-                .IsDropDownListControl()
-                .WithCallbackMethod(typeof(LookupApiControllerMock).GetMethod(nameof(LookupApiControllerMock.GetTypeLookups)))
-                .DependsOn(builder.FormControl(x => x.CategoryId));
-
-            builder
-                .FormControl(x => x.SubTypeId)
-                .WithLabel("SubType")
-                .IsDropDownListControl()
-                .WithCallbackMethod(typeof(LookupApiControllerMock).GetMethod(nameof(LookupApiControllerMock.GetSubTypeLookups)))
-                .DependsOn(builder.FormControl(x => x.TypeId));
+            builder.FormControl(x => x.CategoryId).IsVisible(false);
+            builder.FormControl(x => x.TypeId).IsVisible(false);
+            builder.FormControl(x => x.SubTypeId).IsVisible(false);
         }
     }
 }

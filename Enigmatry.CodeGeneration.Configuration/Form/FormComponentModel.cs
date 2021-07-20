@@ -10,15 +10,12 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
     {
         public ComponentInfo ComponentInfo { get; }
         public IList<FormControlModel> FormControls { get; set; }
-        public string CreateOrUpdateCommandTypeName { get; set; }
         public LookupServiceModel? LookupService { get; set; }
 
         public FormComponentModel(ComponentInfo componentInfo,
-            IEnumerable<FormControlModel> formControls,
-            string createOrUpdateCommandTypeName)
+            IEnumerable<FormControlModel> formControls)
         {
             ComponentInfo = componentInfo;
-            CreateOrUpdateCommandTypeName = createOrUpdateCommandTypeName;
             FormControls = formControls.ToList();
 
             if (SelectFormControls.Any())

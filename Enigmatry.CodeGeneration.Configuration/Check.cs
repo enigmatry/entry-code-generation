@@ -19,7 +19,7 @@ namespace Enigmatry.CodeGeneration.Configuration
 
         public static FormControlBuilder IsSelectFormControl(FormControlBuilder value)
         {
-            if (value.FormControlType != FormControlType.DropDownList && value.FormControlType != FormControlType.Autocomplete)
+            if (value.FormControlType != FormControlType.Select && value.FormControlType != FormControlType.Autocomplete)
             {
                 throw new ArgumentException(value.PropertyInfo.Name);
             }

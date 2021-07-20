@@ -1,88 +1,49 @@
-﻿@using System.Linq;
-@using Enigmatry.CodeGeneration
+﻿@using Enigmatry.CodeGeneration
 @using Enigmatry.CodeGeneration.Angular
-@using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
-@using Humanizer;
 @model Enigmatry.CodeGeneration.Configuration.Form.FormComponentModel;
 @inject CodeGeneratorOptions _options;
-
-import { Location } from '@@angular/common';
-import { Component, OnInit } from '@@angular/core';
-import { FormControl, FormGroup } from '@@angular/forms';
-import { ActivatedRoute, Router } from '@@angular/router';
-import { debounceTime, filter, map, switchMap } from 'rxjs/operators';
-import { @Model.ComponentInfo.ModelType, @Model.CreateOrUpdateCommandTypeName, @Model.AngularComponentApiClient() } from '@_options.ApiClientTsImportPath';
-@Html.LookupServiceImportStatement(Model.LookupService)
+import { Component, EventEmitter, Input, OnInit, Output } from '@@angular/core';
+import { FormGroup } from '@@angular/forms';
+import { FormlyFieldConfig } from '@@ngx-formly/core';
+import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPath';
 
 @@Component({
-    templateUrl: './@(Model.AngularComponentFileName()).html',
-    styleUrls: ['./@(Model.AngularComponentFileName()).scss']
+  selector: '@Model.AngularComponentSelector(_options.ComponentPrefix)',
+  templateUrl: './@(Model.AngularComponentFileName()).html',
+  styleUrls: ['./@(Model.AngularComponentFileName()).scss']
 })
 export class @Model.AngularComponentName() implements OnInit {
 
-    response: @Model.ComponentInfo.ModelType;
+  @@Input() model: I@(Model.ComponentInfo.ModelType) = {};
 
-    form = new FormGroup({
-    @foreach (var formControl in Model.FormControls)
-    {
-        @Html.Raw("\t\t")
-        @(formControl.Property)@:: new FormControl(''),
+  @@Output() save = new EventEmitter@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>"))();
+  @@Output() cancel = new EventEmitter@(Html.Raw("<void>"))();
+
+  form = new FormGroup({});
+  fields: FormlyFieldConfig[] = [];
+
+  constructor() {
+    this.fields = [@foreach (var control in Model.VisibleFormControls)
+   {
+     @:{
+        @:key: '@control.PropertyName',
+        @:type: '@control.GetFormlyFieldType()',
+        @:templateOptions: {
+          @:label: '@control.Label',
+          @:placeholder: '@control.Placeholder',
+          @:readonly: @control.IsReadonly.ToString().ToLower(),
+          @:hidden: !@control.IsVisible.ToString().ToLower()
+        @:}
+      @:},
+   }];
+ }
+
+  ngOnInit(): void {
+  }
+
+  onSubmit() {
+    if (this.form.valid) {
+      this.save.emit(this.model);
     }
-    });
-
-    constructor(
-        private location: Location,
-        protected route: ActivatedRoute,
-        private client: @Model.AngularComponentApiClient()@(Model.LookupService != null ? $" ,{Html.LookupsServiceDependencyInjection(Model.LookupService)}" : "")
-    ) { }
-
-    ngOnInit(): void {
-        this.route.params
-            .pipe(
-                map(params => params.id),
-                switchMap(id => this.client.get(id))
-            )
-            .subscribe(response => {
-                this.response = response;
-                this.form.patchValue(response);
-                @if (Model.LookupService != null)
-                {
-                    @Html.Raw("\t\t\t\t")
-                    @Html.Raw("this.lookupService.initLookups(this.response);")
-                    @Html.Raw("\n")
-
-                    @foreach(var autocompleteControl in Model.AutocompleteFormControls)
-                    {
-                        @Html.Raw("\t\t\t\t")
-                        @Html.Raw($"this.form.controls['{autocompleteControl.Property}'].valueChanges\n" +
-                            $"\t\t\t\t\t.pipe(debounceTime(200), filter(value => typeof value === 'string'))\n" +
-                            $"\t\t\t\t\t.subscribe(x => this.lookupService.get{autocompleteControl.Property.Pascalize()}(x));")
-                        @Html.Raw("\n")
-                    }
-                }
-            });
-    }
-
-    save() {
-        if (this.form.valid) {
-            this.client.post(this.createCommand())
-                .subscribe(() => this.navigateBack());
-        }
-    }
-
-    private createCommand(): @Model.CreateOrUpdateCommandTypeName {
-        @{
-            var properties = String.Join(", ", Model.EditableFormControls.Select(x => x.Property));
-        }
-        const { @properties } = this.form.value;
-        return new @(Model.CreateOrUpdateCommandTypeName)({ @properties });
-    }
-
-    cancel() {
-        this.navigateBack();
-    }
-
-    private navigateBack() {
-        this.location.back();
-    }
+  }
 }

@@ -3,9 +3,11 @@
     public enum FormControlType
     {
         Input,
-        DropDownList,
-        DateTime,
+        Textarea,
         CheckBox,
+        Select,
+        MultiSelect,
+        Datepicker,
         Autocomplete
     }
 }

@@ -4,18 +4,18 @@ using System.Linq;
 using System.Linq.Expressions;
 using Enigmatry.CodeGeneration.Configuration.Builder;
 using Enigmatry.CodeGeneration.Configuration.Form.Model;
+using JetBrains.Annotations;
 
 namespace Enigmatry.CodeGeneration.Configuration.Form
 {
+    [UsedImplicitly]
     public class FormComponentBuilder<T> : BaseComponentBuilder<FormComponentModel>
     {
         private readonly IList<FormControlBuilder> _formControls;
-        private string _createOrUpdateCommandTypeName = String.Empty;
 
         public FormComponentBuilder() : base(typeof(T))
         {
-            _formControls = _modelType
-                .GetProperties()
+            _formControls = _modelType.GetProperties()
                 .Select(propertyInfo => new FormControlBuilder(propertyInfo))
                 .ToList();
 
@@ -25,9 +25,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
         public FormControlBuilder FormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
         {
             Check.NotNull(propertyExpression, nameof(propertyExpression));
-
-            var propertyInfo = propertyExpression.GetPropertyInfo();
-            return _formControls.First(builder => builder.PropertyInfo == propertyInfo);
+            return FormControlBuilder(propertyExpression);
         }
 
         public override FormComponentModel Build()
@@ -35,19 +33,24 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
             var componentInfo = _componentInfoBuilder.Build();
             var formControls = _formControls.Select(_ => _.Build());
 
-            return new FormComponentModel(componentInfo, formControls, _createOrUpdateCommandTypeName);
+            return new FormComponentModel(componentInfo, formControls);
         }
 
-        public FormComponentBuilder<T> HasCreateOrUpdateCommandOfType<TCreateOrUpdateCommand>()
+        private FormControlBuilder FormControlBuilder<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
         {
-            _createOrUpdateCommandTypeName = typeof(TCreateOrUpdateCommand).GetDeclaringName();
-            return this;
+            var propertyInfo = propertyExpression.GetPropertyInfo();
+            var formControlBuilder = _formControls.FirstOrDefault(builder => builder.PropertyInfo == propertyInfo);
+            return GetOrAddBuilder(formControlBuilder, () => new FormControlBuilder(propertyInfo));
         }
 
-        public FormComponentBuilder<T> HasCreateOrUpdateCommandWithName(string createOrUpdateCommandTypeName)
+        private FormControlBuilder GetOrAddBuilder(FormControlBuilder? builder, Func<FormControlBuilder> creator)
         {
-            _createOrUpdateCommandTypeName = createOrUpdateCommandTypeName;
-            return this;
+            if (builder != null) return builder;
+
+            var formControlBuilder = creator();
+            _formControls.Add(formControlBuilder);
+
+            return formControlBuilder;
         }
     }
 }
