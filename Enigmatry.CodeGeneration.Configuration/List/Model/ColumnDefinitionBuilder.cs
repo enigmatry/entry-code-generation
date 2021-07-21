@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq.Expressions;
 using System.Reflection;
 using Enigmatry.CodeGeneration.Configuration.Builder;
 using Enigmatry.CodeGeneration.Configuration.Formatters;
@@ -91,14 +90,9 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
             return this;
         }
 
-        private bool HasProperty(PropertyInfo propertyInfo)
+        public bool HasProperty(PropertyInfo propertyInfo)
         {
             return _propertyAccessor != null && _propertyAccessor.PropertyInfo == propertyInfo;
-        }
-
-        public bool HasProperty(LambdaExpression propertyAccessExpression)
-        {
-            return HasProperty(propertyAccessExpression.GetPropertyInfo());
         }
 
         public bool HasProperty(string propertyName)

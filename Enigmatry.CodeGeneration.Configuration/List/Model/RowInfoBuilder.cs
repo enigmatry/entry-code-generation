@@ -30,8 +30,10 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
             return this;
         }
 
-        public RowInfoBuilder ContextMenuItems(IEnumerable<RowContextMenuItem> items)
+        public RowInfoBuilder ContextMenuItems(params RowContextMenuItem[] items)
         {
+            Check.NotNull(items, nameof(items));
+
             _contextMenuItems = items.ToList();
             return this;
         }

@@ -24,7 +24,10 @@ namespace Enigmatry.CodeGeneration.Configuration.List
         public ColumnDefinitionBuilder Column<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
         {
             Check.NotNull(propertyExpression, nameof(propertyExpression));
-            return _columns.First(builder => builder.HasProperty(propertyExpression));
+
+            var propertyInfo = propertyExpression.GetPropertyInfo();
+            var columnDefinitionBuilder = _columns.FirstOrDefault(builder => builder.HasProperty(propertyInfo));
+            return GetOrAddBuilder(columnDefinitionBuilder, () => new ColumnDefinitionBuilder(propertyInfo));
         }
 
         public ColumnDefinitionBuilder Column(string propertyName)
@@ -32,12 +35,7 @@ namespace Enigmatry.CodeGeneration.Configuration.List
             Check.NotEmpty(propertyName, nameof(propertyName));
 
             var columnDefinitionBuilder = _columns.FirstOrDefault(builder => builder.HasProperty(propertyName));
-            if (columnDefinitionBuilder != null) return columnDefinitionBuilder;
-
-            columnDefinitionBuilder = new ColumnDefinitionBuilder(propertyName);
-            _columns.Add(columnDefinitionBuilder);
-
-            return columnDefinitionBuilder;
+            return GetOrAddBuilder(columnDefinitionBuilder, () => new ColumnDefinitionBuilder(propertyName));
         }
 
         public PaginationInfoBuilder Pagination() { return _paginationInfoBuilder; }
@@ -47,10 +45,19 @@ namespace Enigmatry.CodeGeneration.Configuration.List
         public override ListComponentModel Build()
         {
             var componentInfo = _componentInfoBuilder.Build();
-
             var columns = _columns.Select(_ => _.Build()).ToList();
 
             return new ListComponentModel(componentInfo, columns) {Row = _rowInfoBuilder.Build(), Pagination = _paginationInfoBuilder.Build()};
+        }
+
+        private ColumnDefinitionBuilder GetOrAddBuilder(ColumnDefinitionBuilder? builder, Func<ColumnDefinitionBuilder> creator)
+        {
+            if (builder != null) return builder;
+
+            var columnDefinitionBuilder = creator();
+            _columns.Add(columnDefinitionBuilder);
+
+            return columnDefinitionBuilder;
         }
     }
 }

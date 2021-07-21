@@ -6,6 +6,7 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
     {
         private bool _showPaginator = true;
         private bool _showFirstLastPageButtons = true;
+        private int _pageSize = 10;
         private IEnumerable<int> _pageSizeOptions = new[] {10, 50, 100};
         private bool _showPageSize = true;
 
@@ -18,6 +19,12 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
         public PaginationInfoBuilder ShowFirstLastPageButtons(bool value)
         {
             _showFirstLastPageButtons = value;
+            return this;
+        }
+
+        public PaginationInfoBuilder PageSize(int value)
+        {
+            _pageSize = value;
             return this;
         }
 
@@ -37,6 +44,7 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
         {
             return new PaginationInfo
             {
+                PageSize = _pageSize,
                 ShowPageSize = _showPageSize,
                 ShowFirstLastPageButtons = _showFirstLastPageButtons,
                 PageSizeOptions = _pageSizeOptions,

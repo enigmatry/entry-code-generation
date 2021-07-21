@@ -1,53 +1,5 @@
-<form [formGroup]="form">
-    <mat-card>
-        <mat-card-content>
-<mat-form-field appearance="fill">
-    <mat-label>Name</mat-label>
-    <input formControlName="name" matInput type="text" name="name" placeholder="Name" autocomplete="off" >
-</mat-form-field>                        <br/>
-<mat-form-field appearance="fill">
-    <mat-label>Description</mat-label>
-    <input formControlName="description" matInput type="text" name="description" placeholder="Description" autocomplete="off" >
-</mat-form-field>                        <br/>
-<mat-form-field appearance="fill">
-    <mat-label>Date</mat-label>
-    <input matInput [matDatepicker]="date" formControlName="date" name="date"
-           placeholder="Date" >
-    <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
-    <mat-datepicker #date ></mat-datepicker>
-</mat-form-field>                        <br/>
-<mat-form-field appearance="fill">
-    <mat-label>Money</mat-label>
-    <input formControlName="money" matInput type="text" name="money" placeholder="Money" autocomplete="off" >
-</mat-form-field>                        <br/>
-<mat-form-field appearance="fill">
-    <mat-label>Status</mat-label>
-    <mat-select formControlName="status">
-        <mat-option *ngFor="let option of lookupService.getStatus$ | async" [value]="option.value">{{option.displayName}}</mat-option>
-    </mat-select>
-</mat-form-field>                        <br/>
-<mat-form-field appearance="fill">
-    <mat-label>Category</mat-label>
-    <mat-select formControlName="categoryId" (selectionChange) ="lookupService.getTypeLookups($event.value);">
-        <mat-option *ngFor="let option of lookupService.getCategoryLookups$ | async" [value]="option.value">{{option.displayName}}</mat-option>
-    </mat-select>
-</mat-form-field>                        <br/>
-<mat-form-field appearance="fill">
-    <mat-label>Type</mat-label>
-    <mat-select formControlName="typeId" (selectionChange) ="lookupService.getSubTypeLookups($event.value);">
-        <mat-option *ngFor="let option of lookupService.getTypeLookups$ | async" [value]="option.value">{{option.displayName}}</mat-option>
-    </mat-select>
-</mat-form-field>                        <br/>
-<mat-form-field appearance="fill">
-    <mat-label>SubType</mat-label>
-    <mat-select formControlName="subTypeId">
-        <mat-option *ngFor="let option of lookupService.getSubTypeLookups$ | async" [value]="option.value">{{option.displayName}}</mat-option>
-    </mat-select>
-</mat-form-field>                        <br/>
-        </mat-card-content>
-        <mat-card-actions>
-            <button mat-raised-button color="secondary" (click)="cancel()">Cancel</button>
-            <button mat-raised-button color="primary" type="submit" (click)="save()">Save</button>
-        </mat-card-actions>
-    </mat-card>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
+    <button type="button" mat-raised-button (click)="cancel.emit()">Cancel</button>
+    <button type="submit" mat-raised-button color="primary">Save</button>
 </form>

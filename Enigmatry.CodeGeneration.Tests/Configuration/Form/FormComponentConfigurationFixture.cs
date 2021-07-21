@@ -1,6 +1,7 @@
 ﻿using System;
 using Enigmatry.CodeGeneration.Configuration.Form;
 using FluentAssertions;
+using JetBrains.Annotations;
 using NUnit.Framework;
 
 namespace Enigmatry.CodeGeneration.Tests.Configuration.Form
@@ -24,7 +25,8 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.Form
             componentModel.FormControls.Count.Should().Be(5);
         }
 
-        internal class ProjectDetails
+        [UsedImplicitly]
+        private class ProjectDetails
         {
             public Guid Id { get; set; }
             public string Title { get; set; } = String.Empty;
@@ -33,23 +35,13 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.Form
             public DateTimeOffset EndDate { get; set; }
         }
 
-        internal class CreateOrUpdateProjectCommand
-        {
-            public Guid? Id { get; set; }
-            public string Title { get; set; } = "";
-            public DateTimeOffset StartDate { get; set; }
-            public DateTimeOffset EndDate { get; set; }
-        }
-
-        internal class Configuration : IFormComponentConfiguration<ProjectDetails>
+        private class Configuration : IFormComponentConfiguration<ProjectDetails>
         {
             public void Configure(FormComponentBuilder<ProjectDetails> builder)
             {
                 builder.Component()
                     .HasName("ProjectDetails")
                     .BelongsToFeature("Projects");
-
-                builder.HasCreateOrUpdateCommandOfType<CreateOrUpdateProjectCommand>();
 
                 builder.FormControl(x => x.Id).IsVisible(false);
 

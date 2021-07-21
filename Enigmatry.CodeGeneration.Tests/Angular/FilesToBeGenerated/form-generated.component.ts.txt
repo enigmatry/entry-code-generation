@@ -6,71 +6,86 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------;
-
-import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { debounceTime, filter, map, switchMap } from 'rxjs/operators';
-import { FormMock, FormMockCommand, TestClient } from 'src/app/api/api-reference';
-import { FormLookupService } from '../services/form-lookup.service';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { FormlyFieldConfig } from '@ngx-formly/core';
+import { IFormMock } from 'src/app/api/api-reference';
 
 @Component({
-    templateUrl: './form-generated.component.html',
-    styleUrls: ['./form-generated.component.scss']
+  selector: 'app-g-form',
+  templateUrl: './form-generated.component.html',
+  styleUrls: ['./form-generated.component.scss']
 })
 export class FormGeneratedComponent implements OnInit {
 
-    response: FormMock;
+  @Input() model: IFormMock = {};
 
-    form = new FormGroup({
-		id: new FormControl(''),
-		name: new FormControl(''),
-		description: new FormControl(''),
-		date: new FormControl(''),
-		money: new FormControl(''),
-		status: new FormControl(''),
-		categoryId: new FormControl(''),
-		typeId: new FormControl(''),
-		subTypeId: new FormControl(''),
-    });
+  @Output() save = new EventEmitter<IFormMock>();
+  @Output() cancel = new EventEmitter<void>();
 
-    constructor(
-        private location: Location,
-        protected route: ActivatedRoute,
-        private client: TestClient ,public lookupService: FormLookupService
-    ) { }
+  form = new FormGroup({});
+  fields: FormlyFieldConfig[] = [];
 
-    ngOnInit(): void {
-        this.route.params
-            .pipe(
-                map(params => params.id),
-                switchMap(id => this.client.get(id))
-            )
-            .subscribe(response => {
-                this.response = response;
-                this.form.patchValue(response);
-				this.lookupService.initLookups(this.response);
-            });
-    }
-
-    save() {
-        if (this.form.valid) {
-            this.client.post(this.createCommand())
-                .subscribe(() => this.navigateBack());
+  constructor() {
+    this.fields = [     {
+        key: 'name',
+        type: 'input',
+        templateOptions: {
+          label: 'Name',
+          placeholder: 'Name',
+          readonly: false,
+          hidden: !true
         }
-    }
+      },
+     {
+        key: 'description',
+        type: 'input',
+        templateOptions: {
+          label: 'Description',
+          placeholder: 'Description',
+          readonly: false,
+          hidden: !true
+        }
+      },
+     {
+        key: 'date',
+        type: 'datepicker',
+        templateOptions: {
+          label: 'Date',
+          placeholder: 'Date',
+          readonly: false,
+          hidden: !true
+        }
+      },
+     {
+        key: 'money',
+        type: 'input',
+        templateOptions: {
+          label: 'Money',
+          placeholder: 'Money',
+          readonly: false,
+          hidden: !true
+        }
+      },
+     {
+        key: 'status',
+        type: 'select',
+        templateOptions: {
+          label: 'Status',
+          placeholder: 'Status',
+          readonly: false,
+          hidden: !true
+        }
+      },
+];
+ }
 
-    private createCommand(): FormMockCommand {
-        const { id, name, description, date, money, status, categoryId, typeId, subTypeId } = this.form.value;
-        return new FormMockCommand({ id, name, description, date, money, status, categoryId, typeId, subTypeId });
-    }
+  ngOnInit(): void {
+  }
 
-    cancel() {
-        this.navigateBack();
+  onSubmit() {
+    if (this.form.valid) {
+      this.save.emit(this.model);
     }
-
-    private navigateBack() {
-        this.location.back();
-    }
+  }
 }
