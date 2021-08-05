@@ -42,9 +42,13 @@ export class @Model.AngularComponentName() implements OnInit {
   @@Output() sortChange = new EventEmitter@(Html.Raw("<SortEvent>"))();
   @@Output() selectionChange = new EventEmitter@(Html.Raw($"<{Model.ComponentInfo.ModelType}[]>"))();
   @@Output() contextMenuItemSelected = new EventEmitter<@(Html.Raw($"{{ itemId: string; rowData: {Model.ComponentInfo.ModelType} }}"))>();
+  @@Output() rowClick = new EventEmitter@(Html.Raw($"<{Model.ComponentInfo.ModelType}>"))();
 
+  @if (Model.HasColumns)
+  {
   @Html.AllCustomCellTemplateViewChildRefs(Model.Columns)
 
+  }
   constructor() {
     this.columns = @Html.CreateColumnDefs(Model.Columns);
     this.contextMenuItems = @Html.CreateContextMenuItems(Model.Row.ContextMenuItems);

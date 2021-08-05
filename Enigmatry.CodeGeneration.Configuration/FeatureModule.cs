@@ -15,6 +15,7 @@ namespace Enigmatry.CodeGeneration.Configuration
 
         public bool HasTableComponents => Components.OfType<ListComponentModel>().Any();
         public bool HasFormComponents => Components.OfType<FormComponentModel>().Any();
+        public bool HasModuleImports => Imports.Any();
 
         public FeatureModule(string name, IEnumerable<IComponentModel> components)
         {

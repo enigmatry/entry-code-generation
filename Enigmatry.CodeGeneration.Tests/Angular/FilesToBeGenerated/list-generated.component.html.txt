@@ -15,6 +15,7 @@
                 (pageChange)="pageChange.emit($event)"
                 (sortChange)="sortChange.emit($event)"
                 (rowSelectionChange)="selectionChange.emit($event)"
-                (contextMenuItemSelected)="contextMenuItemSelected.emit($event)">
+                (contextMenuItemSelected)="contextMenuItemSelected.emit($event)"
+                (rowClick)="rowClick.emit($event)">
 </enigmatry-grid>
 

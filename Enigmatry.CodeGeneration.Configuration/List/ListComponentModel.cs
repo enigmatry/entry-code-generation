@@ -18,5 +18,7 @@ namespace Enigmatry.CodeGeneration.Configuration.List
         }
 
         public IEnumerable<ColumnDefinition> VisibleColumns => Columns.Where(column => column.IsVisible);
+
+        public bool HasColumns => Columns.Any();
     }
 }

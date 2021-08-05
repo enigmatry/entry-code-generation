@@ -31,7 +31,10 @@ import { EnigmatryGridModule } from 'src/@@enigmatry/enigmatry-grid';
         @:FormlyMaterialModule,
         @:FormlyMatDatepickerModule,
         }
+        @if (Model.HasModuleImports)
+        {
         @String.Join(',', Model.Imports.Select(m => m.Name))
+        }
     ],
     exports: @Html.JsArray(Model.Components, component => component.AngularComponentName())
 })

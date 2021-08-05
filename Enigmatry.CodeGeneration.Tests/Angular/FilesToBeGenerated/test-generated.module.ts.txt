@@ -31,7 +31,6 @@ import { ListGeneratedComponent } from './list/list-generated.component';
         FormlyModule.forChild(),
         FormlyMaterialModule,
         FormlyMatDatepickerModule,
-        
     ],
     exports: [FormGeneratedComponent, ListGeneratedComponent]
 })
