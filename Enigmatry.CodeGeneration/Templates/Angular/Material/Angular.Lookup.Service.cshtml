@@ -1,4 +1,5 @@
-﻿@using Enigmatry.CodeGeneration
+﻿/* eslint-disable */
+@using Enigmatry.CodeGeneration
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 @model Enigmatry.CodeGeneration.Configuration.Services.LookupServiceModel;
 @inject CodeGeneratorOptions _options;
@@ -42,7 +43,7 @@ export class @(Model.Name)LookupService {
         }
     }
 
-	displayOption(option): string { return option ? option.displayName : ''; }
+	displayOption(option: any): string { return option ? option.displayName : ''; }
 
     @foreach(var method in Model.AsyncLookupMethods)
     {

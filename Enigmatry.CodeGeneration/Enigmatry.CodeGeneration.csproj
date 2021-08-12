@@ -130,4 +130,10 @@
     <ProjectReference Include="..\Enigmatry.CodeGeneration.Configuration\Enigmatry.CodeGeneration.Configuration.csproj" />
   </ItemGroup>
 
+    <ItemGroup>
+      <None Update="Templates\Angular\Material\Angular.Lookup.Service.cshtml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

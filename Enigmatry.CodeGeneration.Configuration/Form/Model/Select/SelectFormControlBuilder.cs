@@ -64,7 +64,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model.Select
         {
             return new SelectFormControlModel
             {
-                LookupMedhod = LookupMethod
+                LookupMethod = LookupMethod
             };
         }
 

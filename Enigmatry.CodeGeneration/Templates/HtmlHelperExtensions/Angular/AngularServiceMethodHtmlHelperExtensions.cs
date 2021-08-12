@@ -55,7 +55,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 
         public static IHtmlContent FixedValuesProperty(this IHtmlHelper html, FixedValuesLookupMethod method)
         {
-            var fixedValues = String.Join("\n", method.FixedValues.Select(x => $"\t\t{{ value: {x.Value}, displayName: \"{x.DisplayName}\" }},"));
+            var fixedValues = String.Join("\n", method.FixedValues.Select(x => $"\t\t{{ value: {x.Value}, displayName: '{x.DisplayName}' }},"));
             return html.Raw($"private {method.AsFixedValuesProperty()} = [\n{fixedValues}\n\t];");
         }
 
@@ -72,7 +72,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
         public static IHtmlContent FixedValuesDisplayOptionMethod(this IHtmlHelper html, FixedValuesLookupMethod method)
         {
             var methodBody =
-                $"{method.Name}DisplayOption(value) {{\n" +
+                $"{method.Name}DisplayOption(value: any) {{\n" +
                 $"\t\treturn value !== undefined ? this.{method.AsFixedValuesProperty()}\n" +
                 $"\t\t\t.find(x => x.value === value)?.displayName : '';\n" +
                 "\t}\n";

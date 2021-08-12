@@ -52,7 +52,7 @@ namespace Enigmatry.CodeGeneration.Angular
     {
         public ServiceSettings([NotNull] string templatePath)
         {
-            LookupServiceTemplate = new TemplateInfo($"{templatePath}/Angular.Lookup.Service.cshtml", "{0}-lookup.service.ts");
+            LookupServiceTemplate = new TemplateInfo($"{templatePath}/Angular.Lookup.Service.cshtml", "{0}-generated-lookup.service.ts");
         }
 
         public TemplateInfo LookupServiceTemplate { get; }

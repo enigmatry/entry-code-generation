@@ -62,4 +62,10 @@
     <ProjectReference Include="..\Enigmatry.CodeGeneration\Enigmatry.CodeGeneration.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Angular\FilesToBeGenerated\form-generated-lookup.service.ts.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

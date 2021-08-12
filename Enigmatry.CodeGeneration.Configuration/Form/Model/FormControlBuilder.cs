@@ -52,16 +52,34 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
 
         public FormControlModel Build()
         {
-            return new FormControlModel
+            switch (FormControlType)
             {
-                PropertyName = _propertyName,
-                Label = _label.Humanize(),
-                Placeholder = _placeholder.Humanize(),
-                Description = _description,
-                IsVisible = _isVisible,
-                IsReadonly = _isReadonly,
-                Type = FormControlType
-            };
+                case FormControlType.Select:
+                case FormControlType.MultiSelect:
+                case FormControlType.Autocomplete:
+                    return new SelectFormControlModel
+                    {
+                        PropertyName = _propertyName,
+                        Label = _label.Humanize(),
+                        Placeholder = _placeholder.Humanize(),
+                        Description = _description,
+                        IsVisible = _isVisible,
+                        IsReadonly = _isReadonly,
+                        Type = FormControlType,
+                        LookupMethod = Select?.Build().LookupMethod!
+                    };
+                default:
+                    return new FormControlModel
+                    {
+                        PropertyName = _propertyName,
+                        Label = _label.Humanize(),
+                        Placeholder = _placeholder.Humanize(),
+                        Description = _description,
+                        IsVisible = _isVisible,
+                        IsReadonly = _isReadonly,
+                        Type = FormControlType
+                    };
+            }
         }
 
         public FormControlBuilder WithLabel(string label)

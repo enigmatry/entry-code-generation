@@ -10,6 +10,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { IFormMock } from 'src/app/api/api-reference';
+import { map } from 'rxjs/operators';
+import { FormLookupService } from '../services/form-generated-lookup.service';
 
 @Component({
   selector: 'app-g-form',
@@ -26,7 +28,9 @@ export class FormGeneratedComponent implements OnInit {
   form = new FormGroup({});
   fields: FormlyFieldConfig[] = [];
 
-  constructor() {
+  constructor(
+    private lookupService : FormLookupService
+  ) {
     this.fields = [     {
         key: 'name',
         type: 'input',
@@ -74,6 +78,10 @@ export class FormGeneratedComponent implements OnInit {
           label: 'Status',
           placeholder: 'Status',
           readonly: false,
+          options: lookupService.getStatus$.pipe(
+            map((arr) =>
+              arr.map(el => el = {value: el.value, label: el.displayName}))
+            ),
           hidden: !true
         }
       },
