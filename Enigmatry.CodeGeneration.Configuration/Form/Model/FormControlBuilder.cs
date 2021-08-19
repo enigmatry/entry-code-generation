@@ -12,7 +12,10 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         private bool _isVisible;
         private bool _isReadonly;
         private string _placeholder;
-        private string _description;
+        private string _hint;
+        private string? _labelTranslationId;
+        private string? _placeholderTranslationId;
+        private string? _hintTranslationId;
 
         public PropertyInfo PropertyInfo { get; }
         public FormControlType FormControlType { get; private set; }
@@ -27,7 +30,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
             _placeholder = _label;
             _isVisible = !propertyInfo.Name.Equals("id", StringComparison.InvariantCultureIgnoreCase);
             _isReadonly = false;
-            _description = String.Empty;
+            _hint = String.Empty;
 
             SetDefaultFormControlType();
         }
@@ -50,8 +53,13 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
             }
         }
 
-        public FormControlModel Build()
+        public FormControlModel Build(ComponentInfo componentInfo)
         {
+            var translationId = $"{componentInfo.TranslationId}.{_propertyName.Kebaberize()}.";
+            var labelTranslationId = _labelTranslationId ?? $"{translationId}label";
+            var placeholderTranslationId = _placeholderTranslationId ?? $"{translationId}placeholder";
+            var hintTranslationId = _hintTranslationId ?? $"{translationId}hint";
+
             switch (FormControlType)
             {
                 case FormControlType.Select:
@@ -59,25 +67,33 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
                 case FormControlType.Autocomplete:
                     return new SelectFormControlModel
                     {
+                        ComponentInfo = componentInfo,
                         PropertyName = _propertyName,
                         Label = _label.Humanize(),
                         Placeholder = _placeholder.Humanize(),
-                        Description = _description,
+                        Hint = _hint,
                         IsVisible = _isVisible,
                         IsReadonly = _isReadonly,
                         Type = FormControlType,
-                        LookupMethod = Select?.Build().LookupMethod!
+                        LookupMethod = Select?.Build().LookupMethod!,
+                        LabelTranslationId = labelTranslationId,
+                        PlaceholderTranslationId = placeholderTranslationId,
+                        HintTranslationId = hintTranslationId
                     };
                 default:
                     return new FormControlModel
                     {
+                        ComponentInfo = componentInfo,
                         PropertyName = _propertyName,
                         Label = _label.Humanize(),
                         Placeholder = _placeholder.Humanize(),
-                        Description = _description,
+                        Hint = _hint,
                         IsVisible = _isVisible,
                         IsReadonly = _isReadonly,
-                        Type = FormControlType
+                        Type = FormControlType,
+                        LabelTranslationId = labelTranslationId,
+                        PlaceholderTranslationId = placeholderTranslationId,
+                        HintTranslationId = hintTranslationId
                     };
             }
         }
@@ -106,9 +122,27 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
             return this;
         }
 
-        public FormControlBuilder WithDescription(string description)
+        public FormControlBuilder WithHint(string hint)
         {
-            _description = description;
+            _hint = hint;
+            return this;
+        }
+
+        public FormControlBuilder WithLabelTranslationId(string translationId)
+        {
+            _labelTranslationId = translationId;
+            return this;
+        }
+
+        public FormControlBuilder WithPlaceholderTranslationId(string translationId)
+        {
+            _placeholderTranslationId = translationId;
+            return this;
+        }
+
+        public FormControlBuilder WithHintTranslationId(string translationId)
+        {
+            _hintTranslationId = translationId;
             return this;
         }
 

@@ -4,14 +4,17 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
 {
     public class FormControlModel
     {
+        public ComponentInfo ComponentInfo { get; set; } = null!;
         public string PropertyName { get; set; } = String.Empty;
         public string Label { get; set; } = String.Empty;
         public string Placeholder { get; set; } = String.Empty;
-        public string Description { get; set; } = String.Empty;
+        public string Hint { get; set; } = String.Empty;
         public bool IsVisible { get; set; }
         public bool IsReadonly { get; set; }
         public FormControlType Type { get; set; }
-
+        public string LabelTranslationId { get; set; } = String.Empty;
+        public string PlaceholderTranslationId { get; set; } = String.Empty;
+        public string HintTranslationId { get; set; } = String.Empty;
 
         public string GetFormlyFieldType()
         {

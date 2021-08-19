@@ -28,9 +28,7 @@ export class FormGeneratedComponent implements OnInit {
   form = new FormGroup({});
   fields: FormlyFieldConfig[] = [];
 
-  constructor(
-    private lookupService : FormLookupService
-  ) {
+  constructor(private lookupService: FormLookupService) {
     this.fields = [     {
         key: 'name',
         type: 'input',
@@ -38,6 +36,7 @@ export class FormGeneratedComponent implements OnInit {
           label: 'Name',
           placeholder: 'Name',
           readonly: false,
+          description: '',
           hidden: !true
         }
       },
@@ -48,6 +47,7 @@ export class FormGeneratedComponent implements OnInit {
           label: 'Description',
           placeholder: 'Description',
           readonly: false,
+          description: '',
           hidden: !true
         }
       },
@@ -58,6 +58,7 @@ export class FormGeneratedComponent implements OnInit {
           label: 'Date',
           placeholder: 'Date',
           readonly: false,
+          description: '',
           hidden: !true
         }
       },
@@ -68,6 +69,7 @@ export class FormGeneratedComponent implements OnInit {
           label: 'Money',
           placeholder: 'Money',
           readonly: false,
+          description: '',
           hidden: !true
         }
       },
@@ -78,6 +80,7 @@ export class FormGeneratedComponent implements OnInit {
           label: 'Status',
           placeholder: 'Status',
           readonly: false,
+          description: '',
           options: lookupService.getStatus$.pipe(
             map((arr) =>
               arr.map(el => el = {value: el.value, label: el.displayName}))

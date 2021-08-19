@@ -6,7 +6,7 @@ using Humanizer;
 
 namespace Enigmatry.CodeGeneration.Configuration.List.Model
 {
-    public class ColumnDefinitionBuilder : IBuilder<ColumnDefinition>
+    public class ColumnDefinitionBuilder
     {
         private readonly PropertyAccessor? _propertyAccessor;
         private readonly string _propertyName;
@@ -36,13 +36,16 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
             _formatter = new NoFormattingPropertyFormatter();
         }
 
-        public ColumnDefinition Build()
+        public ColumnDefinition Build(ComponentInfo componentInfo)
         {
+            var translationId = _translationId ?? $"{componentInfo.TranslationId}.{_propertyName.Kebaberize()}";
+
             return new ColumnDefinition
             {
+                ComponentInfo = componentInfo,
                 Property = _propertyName,
                 HeaderName = _headerName,
-                TranslationId = _translationId,
+                TranslationId = translationId,
                 IsSortable = _isSortable,
                 IsVisible = _isVisible,
                 Formatter = _formatter,

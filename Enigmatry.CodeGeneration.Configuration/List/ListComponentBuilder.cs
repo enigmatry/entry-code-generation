@@ -45,9 +45,9 @@ namespace Enigmatry.CodeGeneration.Configuration.List
         public override ListComponentModel Build()
         {
             var componentInfo = _componentInfoBuilder.Build();
-            var columns = _columns.Select(_ => _.Build()).ToList();
+            var columns = _columns.Select(_ => _.Build(componentInfo)).ToList();
 
-            return new ListComponentModel(componentInfo, columns) {Row = _rowInfoBuilder.Build(), Pagination = _paginationInfoBuilder.Build()};
+            return new ListComponentModel(componentInfo, columns) {Row = _rowInfoBuilder.Build(componentInfo), Pagination = _paginationInfoBuilder.Build()};
         }
 
         private ColumnDefinitionBuilder GetOrAddBuilder(ColumnDefinitionBuilder? builder, Func<ColumnDefinitionBuilder> creator)

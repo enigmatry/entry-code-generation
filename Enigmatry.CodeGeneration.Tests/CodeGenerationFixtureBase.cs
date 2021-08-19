@@ -24,7 +24,7 @@ namespace Enigmatry.CodeGeneration.Tests
         [SetUp]
         public void Setup()
         {
-            _options = new CodeGeneratorOptions(TestContext.CurrentContext.TestDirectory, Assembly.GetExecutingAssembly()) 
+            _options = new CodeGeneratorOptions(TestContext.CurrentContext.TestDirectory, Assembly.GetExecutingAssembly(), false) 
             {
                 Component = String.Empty, 
                 Framework = Framework.Angular

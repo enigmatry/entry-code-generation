@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Enigmatry.CodeGeneration.Configuration.List.Model;
 using Humanizer;
+using Microsoft.AspNetCore.Http;
 
 namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 {
@@ -20,39 +21,52 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
         public static IHtmlContent AllCustomCellTemplateViewChildRefs(this IHtmlHelper html, IEnumerable<ColumnDefinition> columns)
         {
             var customComponents = columns.Where(c => c.HasCustomCellComponent);
-            var viewChildTemplateRefs = customComponents.Select(c => CustomCellTemplateViewChildRef(c));
+            var viewChildTemplateRefs = customComponents.Select(CustomCellTemplateViewChildRef);
             var htmlContent = String.Join("\n", viewChildTemplateRefs);
 
             return html.Raw(htmlContent);
         }
 
-        public static IHtmlContent CreateColumnDefs(this IHtmlHelper html, IEnumerable<ColumnDefinition> columns)
+        public static IHtmlContent CreateColumnDefs(this IHtmlHelper html, IEnumerable<ColumnDefinition> columns, bool enableI18N)
         {
-            var columnDefs = columns.Select(CreateColumnDef).ToList();
+            var columnDefs = columns.Select(definition => CreateColumnDef(definition, enableI18N)).ToList();
             var htmlContent = columnDefs.Any() ? $"[\n{String.Join(",\n", columnDefs)}\n]" : "[]";
 
             return html.Raw(htmlContent);
         }
 
-        public static IHtmlContent CreateContextMenuItems(this IHtmlHelper html, IEnumerable<RowContextMenuItem> items)
+        public static IHtmlContent CreateContextMenuItems(this IHtmlHelper html, IEnumerable<RowContextMenuItem> items, bool enableI18N)
         {
-            var contextMenuItems = items.Select(item => item.ToJsObject()).ToList();
+            var contextMenuItems = items.Select(item => ContextMenuItemToJs(item, enableI18N)).ToList();
             var htmlContent = contextMenuItems.Any() ? $"[\n{String.Join(",\n", contextMenuItems)}\n]" : "[]";
 
             return html.Raw(htmlContent);
         }
 
+        private static string ContextMenuItemToJs(RowContextMenuItem item, bool enableI18N)
+        {
+            var name = enableI18N ? AngularLocalization.Localize(item.TranslationId!, item.Name) : item.Name;
+
+            return JsObject(
+                JsProperty("id", item.Id),
+                JsProperty("name", name, false, enableI18N),
+                JsProperty("icon", item.Icon ?? String.Empty, !item.Icon.HasContent()));
+        }
+
         #region [private]
 
-        private static string CreateColumnDef(ColumnDefinition column)
+        private static string CreateColumnDef(ColumnDefinition column, bool enableI18N)
         {
             var columnType = column.Formatter.JsFormatterName;
             var columnTypeParams = column.Formatter.ToJsObject();
             var cellTemplate = $"this.{CustomCellTemplateRefId(column)}";
+            var propertyName = column.Property.Camelize();
+
+            var header = enableI18N ? AngularLocalization.Localize(column.TranslationId, column.HeaderName) : column.HeaderName;
 
             return JsObject(
-                JsProperty("field", column.Property.Camelize()),
-                JsProperty("header", column.HeaderName),
+                JsProperty("field", propertyName),
+                JsProperty("header", header, false, enableI18N),
                 JsProperty("hide", !column.IsVisible),
                 JsProperty("sortable", column.IsSortable),
                 JsProperty("type", columnType, !columnType.HasContent()),

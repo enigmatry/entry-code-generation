@@ -4,7 +4,7 @@ using Humanizer;
 
 namespace Enigmatry.CodeGeneration.Configuration.List.Model
 {
-    public class RowInfoBuilder : IBuilder<RowInfo>
+    public class RowInfoBuilder
     {
         private RowSelectionType _selectionType = RowSelectionType.None;
         private bool _showContextMenu = false;
@@ -38,9 +38,13 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
             return this;
         }
 
-        public RowInfo Build()
+        public RowInfo Build(ComponentInfo componentInfo)
         {
-            return new RowInfo {Selection = _selectionType, ShowContextMenu = _showContextMenu, ContextMenuItems = _contextMenuItems};
+            foreach (var contextMenuItem in _contextMenuItems)
+            {
+                contextMenuItem.TranslationId ??= $"{componentInfo.TranslationId}.context.{contextMenuItem.Id.Kebaberize()}";
+            }
+            return new RowInfo {Selection = _selectionType, ShowContextMenu = _showContextMenu, ContextMenuItems = _contextMenuItems, ComponentInfo = componentInfo};
         }
     }
 }

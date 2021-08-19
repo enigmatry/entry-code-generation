@@ -31,7 +31,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
         public override FormComponentModel Build()
         {
             var componentInfo = _componentInfoBuilder.Build();
-            var formControls = _formControls.Select(_ => _.Build());
+            var formControls = _formControls.Select(_ => _.Build(componentInfo));
 
             return new FormComponentModel(componentInfo, formControls);
         }
