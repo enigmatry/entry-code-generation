@@ -19,7 +19,8 @@ namespace Enigmatry.CodeGeneration.Tests.Mocks
             builder
                 .Column(x => x.Name)
                 .IsSortable(false)
-                .WithTranslationId("name");
+                .WithTranslationId("name")
+                .WithCustomComponent("custom-cell");
 
             builder
                 .Column(x => x.Date)

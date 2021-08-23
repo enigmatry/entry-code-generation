@@ -47,13 +47,12 @@ export class @Model.AngularComponentName() implements OnInit {
   @if (Model.HasColumns)
   {
   @Html.AllCustomCellTemplateViewChildRefs(Model.Columns)
+  }
 
-  }
-  constructor() {
-    this.columns = @Html.CreateColumnDefs(Model.Columns, _options.EnableI18N);
-    this.contextMenuItems = @Html.CreateContextMenuItems(Model.Row.ContextMenuItems, _options.EnableI18N);
-  }
+  constructor() { }
 
   ngOnInit(): void {
+    this.columns = @Html.CreateColumnDefs(Model.Columns, _options.EnableI18N);
+    this.contextMenuItems = @Html.CreateContextMenuItems(Model.Row.ContextMenuItems, _options.EnableI18N);
   }
 }

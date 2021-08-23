@@ -22,7 +22,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
         {
             var customComponents = columns.Where(c => c.HasCustomCellComponent);
             var viewChildTemplateRefs = customComponents.Select(CustomCellTemplateViewChildRef);
-            var htmlContent = String.Join("\n", viewChildTemplateRefs);
+            var htmlContent = $"{String.Join("\n", viewChildTemplateRefs)}\n";
 
             return html.Raw(htmlContent);
         }

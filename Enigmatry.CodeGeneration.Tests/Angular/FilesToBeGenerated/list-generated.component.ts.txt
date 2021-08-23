@@ -45,15 +45,16 @@ export class ListGeneratedComponent implements OnInit {
   @Output() contextMenuItemSelected = new EventEmitter<{ itemId: string; rowData: ListMockItem }>();
   @Output() rowClick = new EventEmitter<ListMockItem>();
 
-  constructor() {
+  @ViewChild('nameTpl', { static: true }) nameTpl: TemplateRef<any>;
+
+  constructor() {}
+
+  ngOnInit(): void {
     this.columns = [
 { field: 'id', header: 'Id', hide: true, sortable: true },
-{ field: 'name', header: 'Name', hide: false, sortable: false },
+{ field: 'name', header: 'Name', hide: false, sortable: false, cellTemplate: this.nameTpl },
 { field: 'date', header: 'Date', hide: false, sortable: true, type: 'date', typeParameter: { format: 'mediumDate', timezone: 'UTC', locale: 'en' } }
 ];
     this.contextMenuItems = [];
-  }
-
-  ngOnInit(): void {
   }
 }
