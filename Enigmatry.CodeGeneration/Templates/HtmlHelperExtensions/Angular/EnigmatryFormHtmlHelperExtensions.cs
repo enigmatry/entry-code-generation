@@ -1,4 +1,4 @@
-﻿using Enigmatry.BuildingBlocks.Validation.ValidationRules;
+﻿
 using Enigmatry.CodeGeneration.Configuration;
 using Enigmatry.CodeGeneration.Configuration.Form.Model;
 using Microsoft.AspNetCore.Html;
@@ -15,7 +15,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
         {
             var htmlContent = new List<string>();
 
-            if (Check.IsNumber(control.ValueType))
+            if (control.ValueType != null && Check.IsNumber(control.ValueType))
             {
                 htmlContent.Add($"type: 'number'");
             };
