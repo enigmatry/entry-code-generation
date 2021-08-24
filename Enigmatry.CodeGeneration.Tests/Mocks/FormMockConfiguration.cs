@@ -33,6 +33,11 @@ namespace Enigmatry.CodeGeneration.Tests.Mocks
                 .WithPlaceholder("Money");
 
             builder
+                .FormControl(x => x.Amount)
+                .WithLabel("Amount")
+                .WithPlaceholder("Amount");
+
+            builder
                 .FormControl(x => x.Status)
                 .WithLabel("Status")
                 .IsDropDownListControl()
@@ -41,6 +46,9 @@ namespace Enigmatry.CodeGeneration.Tests.Mocks
             builder.FormControl(x => x.CategoryId).IsVisible(false);
             builder.FormControl(x => x.TypeId).IsVisible(false);
             builder.FormControl(x => x.SubTypeId).IsVisible(false);
+
+            builder
+                .WithValidationConfiguration(new FormMockValidationConfiguration());
         }
     }
 }

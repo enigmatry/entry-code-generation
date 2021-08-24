@@ -64,6 +64,10 @@ namespace Enigmatry.CodeGeneration
         {
             _logger.LogInformation("Generating {Framework} components", _options.Framework);
             _logger.LogInformation("Output dir {Directory}", _options.OutputDirectory);
+            if (_options.EnableI18N)
+            {
+                _logger.LogInformation("I18N: {0}", _options.EnableI18N ? "enabled" : "disabled");
+            }
             if (_options.Component.HasContent())
             {
                 _logger.LogInformation("Generating component: {Component}", _options.Component);

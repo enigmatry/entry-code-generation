@@ -26,7 +26,6 @@ namespace Enigmatry.CodeGeneration.Configuration
 
         public ComponentInfo(string name)
         : this(name, String.Empty, RoutingInfo.NoRouting(), ApiClientInfo.NoApiClient(), FeatureInfo.None())
-        {
-        }
+        { }
     }
 }

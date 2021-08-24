@@ -91,6 +91,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
                         IsVisible = _isVisible,
                         IsReadonly = _isReadonly,
                         Type = FormControlType,
+                        ValueType = PropertyInfo.PropertyType,
                         LabelTranslationId = labelTranslationId,
                         PlaceholderTranslationId = placeholderTranslationId,
                         HintTranslationId = hintTranslationId

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Enigmatry.BuildingBlocks.Validation;
 using Enigmatry.CodeGeneration.Configuration.Form;
 using FluentAssertions;
 using JetBrains.Annotations;
@@ -23,6 +25,16 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.Form
             componentModel.ComponentInfo.Feature.Name.Should().Be("Projects");
 
             componentModel.FormControls.Count.Should().Be(5);
+
+            var titleFormControl = componentModel.FormControls
+                .Single(x => x.PropertyName == nameof(ProjectDetails.Title).ToLowerInvariant());
+            titleFormControl.ValidationRules.Count.Should().Be(1);
+            titleFormControl.ValidationRules.Single().Name.Should().Be("maxLength");
+            var detailsFormControl = componentModel.FormControls
+                .Single(x => x.PropertyName == nameof(ProjectDetails.Description).ToLowerInvariant());
+            detailsFormControl.ValidationRules.Count.Should().Be(1);
+            detailsFormControl.ValidationRules.Single().Name.Should().Be("maxLength");
+
         }
 
         [UsedImplicitly]
@@ -33,6 +45,18 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.Form
             public string Description { get; set; } = String.Empty;
             public DateTimeOffset StartDate { get; set; }
             public DateTimeOffset EndDate { get; set; }
+        }
+
+        [UsedImplicitly]
+        private class ProjectDetailsValidation : ValidationConfiguration<ProjectDetails>
+        {
+            public ProjectDetailsValidation()
+            {
+                RuleFor(x => x.Title)
+                    .HasMaxLength(25, "Title is too long");
+                RuleFor(x => x.Description)
+                    .HasMaxLength(250, "Description is too long");
+            }
         }
 
         private class Configuration : IFormComponentConfiguration<ProjectDetails>
@@ -52,7 +76,8 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.Form
                 builder.FormControl(x => x.StartDate)
                     .WithLabel("Start")
                     .WithPlaceholder("Start");
-            }
+
+                builder.WithValidationConfiguration(new ProjectDetailsValidation());            }
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Enigmatry.CodeGeneration.Configuration.Form.Model;
 
 namespace Enigmatry.CodeGeneration.Configuration
@@ -25,5 +27,18 @@ namespace Enigmatry.CodeGeneration.Configuration
             }
             return value;
         }
+
+        public static bool IsNumber(Type type) =>
+            new List<Type>
+            {
+                typeof(short),
+                typeof(int),
+                typeof(long),
+                typeof(decimal),
+                typeof(double),
+                typeof(float),
+                typeof(byte)
+            }
+            .Any(x => x == type);
     }
 }

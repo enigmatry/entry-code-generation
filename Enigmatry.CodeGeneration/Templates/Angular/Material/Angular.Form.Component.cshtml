@@ -46,9 +46,21 @@ export class @Model.AngularComponentName() implements OnInit {
               @:arr.map(el => el = {value: el.value, label: el.displayName}))
             @:),
           }
-          @:hidden: !@control.IsVisible.ToString().ToLower()
-        @:}
-      @:},
+          @:hidden: !@control.IsVisible.ToString().ToLower(),
+          @if(control.ValidationRules.Any())
+          {
+          @Html.AddValidationFields(control)
+          }
+        @:},
+        @if(control.ValidationRules.Any())
+        {
+        @:validation: {
+          @:messages: {
+            @Html.AddValidationMessages(control, _options.EnableI18N)
+          @:}
+        @:},
+        }
+     @:},
    }];
  }
 

@@ -9,6 +9,7 @@ namespace Enigmatry.CodeGeneration.Tests.Mocks
         public string Description { get; set; } = String.Empty;
         public DateTimeOffset Date { get; set; }
         public decimal Money { get; set; }
+        public int Amount { get; set; }
         public EnumMock Status { get; set; }
         public Guid CategoryId { get; set; }
         public Guid TypeId { get; set; }

@@ -68,4 +68,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Enigmatry.BuildingBlocks.Validation">
+      <HintPath>..\..\enigmatry-blueprint-building-blocks\Enigmatry.BuildingBlocks.Validation\obj\Debug\netstandard2.0\Enigmatry.BuildingBlocks.Validation.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
