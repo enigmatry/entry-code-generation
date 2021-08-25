@@ -104,14 +104,14 @@ export class FormGeneratedComponent implements OnInit {
         },
       },
      {
-        key: 'status',
+        key: 'formStatus',
         type: 'select',
         templateOptions: {
           label: 'Status',
-          placeholder: 'Status',
+          placeholder: 'Form status',
           readonly: false,
           description: '',
-          options: lookupService.getStatus$.pipe(
+          options: lookupService.getFormStatus$.pipe(
             map((arr) =>
               arr.map(el => el = {value: el.value, label: el.displayName}))
             ),

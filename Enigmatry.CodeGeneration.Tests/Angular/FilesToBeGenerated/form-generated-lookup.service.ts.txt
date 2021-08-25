@@ -15,15 +15,15 @@ import { BehaviorSubject, Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class FormLookupService {
-	private _getStatusFixedValues = [
+	private _getFormStatusFixedValues = [
 		{ value: 0, displayName: 'First' },
 		{ value: 1, displayName: 'Second' },
 		{ value: 2, displayName: 'Third' },
 	];
 
-	private _getStatus = new BehaviorSubject<any[]>(this._getStatusFixedValues);
+	private _getFormStatus = new BehaviorSubject<any[]>(this._getFormStatusFixedValues);
 
-	getStatus$ = this._getStatus.asObservable();
+	getFormStatus$ = this._getFormStatus.asObservable();
 
     constructor() { }
 
@@ -32,13 +32,13 @@ export class FormLookupService {
 
 	displayOption(option: any): string { return option ? option.displayName : ''; }
 
-	getStatus(keyword: string) {
-		this._getStatus.next(this._getStatusFixedValues
+	getFormStatus(keyword: string) {
+		this._getFormStatus.next(this._getFormStatusFixedValues
 			.filter(x => x.displayName.toLowerCase().includes(keyword.toLowerCase())));
 	}
 
-	getStatusDisplayOption(value: any) {
-		return value !== undefined ? this._getStatusFixedValues
+	getFormStatusDisplayOption(value: any) {
+		return value !== undefined ? this._getFormStatusFixedValues
 			.find(x => x.value === value)?.displayName : '';
 	}
 

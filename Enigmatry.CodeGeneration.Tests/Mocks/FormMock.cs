@@ -10,7 +10,7 @@ namespace Enigmatry.CodeGeneration.Tests.Mocks
         public DateTimeOffset Date { get; set; }
         public decimal Money { get; set; }
         public int Amount { get; set; }
-        public EnumMock Status { get; set; }
+        public EnumMock FormStatus { get; set; }
         public Guid CategoryId { get; set; }
         public Guid TypeId { get; set; }
         public Guid SubTypeId { get; set; }

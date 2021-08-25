@@ -38,7 +38,7 @@ namespace Enigmatry.CodeGeneration.Tests.Mocks
                 .WithPlaceholder("Amount");
 
             builder
-                .FormControl(x => x.Status)
+                .FormControl(x => x.FormStatus)
                 .WithLabel("Status")
                 .IsDropDownListControl()
                 .WithFixedValues<EnumMock>();
