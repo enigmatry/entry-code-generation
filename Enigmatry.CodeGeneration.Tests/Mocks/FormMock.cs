@@ -14,5 +14,6 @@ namespace Enigmatry.CodeGeneration.Tests.Mocks
         public Guid CategoryId { get; set; }
         public Guid TypeId { get; set; }
         public Guid SubTypeId { get; set; }
+        public EnumMock MockRadio { get; set; }
     }
 }

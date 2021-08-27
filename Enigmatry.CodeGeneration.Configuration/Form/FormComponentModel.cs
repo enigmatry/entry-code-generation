@@ -43,7 +43,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
         public IEnumerable<FormControlModel> EditableFormControls => FormControls.Where(control => !control.IsReadonly);
         public IEnumerable<FormControlModel> AutocompleteFormControls => SelectFormControls.Where(x => x.Type == FormControlType.Autocomplete);
         private IEnumerable<FormControlModel> SelectFormControls => FormControls.Where(x => x is SelectFormControlModel);
-
+        public bool OptionsAvailable(FormControlModel control) => control is SelectFormControlModel && LookupService != null;
 
         private void SetValidationRulesToFormControl(FormControlModel formControl, IEnumerable<ValidationRule> validationRules)
         {

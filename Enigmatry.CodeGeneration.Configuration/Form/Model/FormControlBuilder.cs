@@ -65,6 +65,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
                 case FormControlType.Select:
                 case FormControlType.MultiSelect:
                 case FormControlType.Autocomplete:
+                case FormControlType.Radio:
                     return new SelectFormControlModel
                     {
                         ComponentInfo = componentInfo,
@@ -164,6 +165,16 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
                 Select = new SelectFormControlBuilder(PropertyInfo);
             }
             FormControlType = FormControlType.Autocomplete;
+            return Select;
+        }
+
+        public SelectFormControlBuilder IsRadioGroupControl()
+        {
+            if (Select == null)
+            {
+                Select = new SelectFormControlBuilder(PropertyInfo);
+            }
+            FormControlType = FormControlType.Radio;
             return Select;
         }
     }

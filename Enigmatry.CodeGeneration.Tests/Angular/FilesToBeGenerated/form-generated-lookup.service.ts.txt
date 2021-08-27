@@ -21,9 +21,17 @@ export class FormLookupService {
 		{ value: 2, displayName: 'Third' },
 	];
 
+    private _getMockRadioFixedValues = [
+		{ value: 0, displayName: 'First' },
+		{ value: 1, displayName: 'Second' },
+		{ value: 2, displayName: 'Third' },
+	];
+
 	private _getFormStatus = new BehaviorSubject<any[]>(this._getFormStatusFixedValues);
+	private _getMockRadio = new BehaviorSubject<any[]>(this._getMockRadioFixedValues);
 
 	getFormStatus$ = this._getFormStatus.asObservable();
+	getMockRadio$ = this._getMockRadio.asObservable();
 
     constructor() { }
 
@@ -37,8 +45,18 @@ export class FormLookupService {
 			.filter(x => x.displayName.toLowerCase().includes(keyword.toLowerCase())));
 	}
 
+    getMockRadio(keyword: string) {
+		this._getMockRadio.next(this._getMockRadioFixedValues
+			.filter(x => x.displayName.toLowerCase().includes(keyword.toLowerCase())));
+	}
+
 	getFormStatusDisplayOption(value: any) {
 		return value !== undefined ? this._getFormStatusFixedValues
+			.find(x => x.value === value)?.displayName : '';
+	}
+
+    getMockRadioDisplayOption(value: any) {
+		return value !== undefined ? this._getMockRadioFixedValues
 			.find(x => x.value === value)?.displayName : '';
 	}
 

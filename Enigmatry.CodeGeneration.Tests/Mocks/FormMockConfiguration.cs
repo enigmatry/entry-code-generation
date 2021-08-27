@@ -43,6 +43,12 @@ namespace Enigmatry.CodeGeneration.Tests.Mocks
                 .IsDropDownListControl()
                 .WithFixedValues<EnumMock>();
 
+            builder
+                .FormControl(x => x.MockRadio)
+                .WithLabel("Radio")
+                .IsRadioGroupControl()
+                .WithFixedValues<EnumMock>();
+
             builder.FormControl(x => x.CategoryId).IsVisible(false);
             builder.FormControl(x => x.TypeId).IsVisible(false);
             builder.FormControl(x => x.SubTypeId).IsVisible(false);

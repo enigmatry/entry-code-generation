@@ -8,6 +8,7 @@
         Select,
         MultiSelect,
         Datepicker,
-        Autocomplete
+        Autocomplete,
+        Radio
     }
 }

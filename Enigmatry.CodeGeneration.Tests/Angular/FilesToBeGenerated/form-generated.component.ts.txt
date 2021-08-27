@@ -118,6 +118,21 @@ export class FormGeneratedComponent implements OnInit {
           hidden: !true,
         },
       },
+      {
+        key: 'mockRadio',
+        type: 'radio',
+        templateOptions: {
+          label: 'Radio',
+          placeholder: 'Mockradio',
+          readonly: false,
+          description: '',
+          options: lookupService.getMockRadio$.pipe(
+            map((arr) =>
+              arr.map(el => el = {value: el.value, label: el.displayName}))
+            ),
+          hidden: !true,
+        },
+      },
 ];
  }
 

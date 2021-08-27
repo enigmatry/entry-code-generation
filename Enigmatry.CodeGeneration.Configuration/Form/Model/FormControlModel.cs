@@ -38,6 +38,8 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
                     return "datepicker";
                 case FormControlType.Autocomplete:
                     return "autocomplete";
+                case FormControlType.Radio:
+                    return "radio";
                 default:
                     throw new ArgumentOutOfRangeException();
             }

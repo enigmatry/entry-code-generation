@@ -40,7 +40,7 @@ export class @Model.AngularComponentName() implements OnInit {
           @:placeholder: @Html.Localize(control.PlaceholderTranslationId, control.Placeholder, _options.EnableI18N),
           @:readonly: @control.IsReadonly.ToString().ToLower(),
           @:description: @Html.Localize(control.HintTranslationId, control.Hint, _options.EnableI18N),
-          @if (control.GetFormlyFieldType() == "select" && Model.LookupService != null)
+          @if (Model.OptionsAvailable(control))
           {
           @:options: lookupService.get@(control.PropertyName.Pascalize())$.pipe(
             @:map((arr) =>
