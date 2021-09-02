@@ -41,7 +41,9 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
             switch (propertyType)
             {
                 case { } when propertyType == typeof(DateTime):
+                case { } when propertyType == typeof(DateTime?):
                 case { } when propertyType == typeof(DateTimeOffset):
+                case { } when propertyType == typeof(DateTimeOffset?):
                     FormControlType = FormControlType.Datepicker;
                     break;
                 case { } when propertyType == typeof(bool):
