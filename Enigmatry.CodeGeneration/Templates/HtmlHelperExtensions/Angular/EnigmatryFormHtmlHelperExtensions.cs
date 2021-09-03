@@ -22,7 +22,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 
             foreach (var validationRule in control.ValidationRules)
             {
-                htmlContent.Add(validationRule.AsNameValueString());
+                htmlContent.Add(validationRule.AsNameRulePair());
             }
 
             return html.Raw($"{String.Join(",\n", htmlContent)},\n");

@@ -2,18 +2,23 @@
 
 namespace Enigmatry.CodeGeneration.Tests.Mocks
 {
-    public class FormMockValidationConfiguration : ValidationConfiguration<FormMock>
+    public class FormMockValidationConfiguration : AbstractValidationConfiguration<FormMock>
     {
         public FormMockValidationConfiguration()
         {
             RuleFor(x => x.Name)
                 .IsRequired()
-                .HasMaxLength(50, "Name length is too long");
+                    .WithMessageTranslationId(Constants.CustomValidationMessageTranslationId)
+                .Max(50)
+                    .WithMessage(Constants.CustomValidationMessage)
+                    .WithMessageTranslationId(Constants.CustomValidationMessageTranslationId);
 
             RuleFor(x => x.Amount)
                 .IsRequired()
-                .HasMinLength(0, "Amount must be greater then 0")
-                .HasMaxLength(100, "Amount must be less then 100");
+                .Min(0)
+                    .WithMessage(Constants.CustomValidationMessage)
+                .Max(100)
+                    .WithMessage(Constants.CustomValidationMessage);
         }
     }
 }

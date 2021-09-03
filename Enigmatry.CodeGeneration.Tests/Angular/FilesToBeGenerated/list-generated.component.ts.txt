@@ -51,9 +51,9 @@ export class ListGeneratedComponent implements OnInit {
 
   ngOnInit(): void {
     this.columns = [
-{ field: 'id', header: 'Id', hide: true, sortable: true },
-{ field: 'name', header: 'Name', hide: false, sortable: false, cellTemplate: this.nameTpl },
-{ field: 'date', header: 'Date', hide: false, sortable: true, type: 'date', typeParameter: { format: 'mediumDate', timezone: 'UTC', locale: 'en' } }
+{ field: 'id', header: $localize `:@@test.list.id:Id`, hide: true, sortable: true },
+{ field: 'name', header: $localize `:@@CUSTOM_TRANSLATION_ID:Name`, hide: false, sortable: false, cellTemplate: this.nameTpl },
+{ field: 'date', header: $localize `:@@test.list.date:Date`, hide: false, sortable: true, type: 'date', typeParameter: { format: 'mediumDate', timezone: 'UTC', locale: 'en' } }
 ];
     this.contextMenuItems = [];
   }

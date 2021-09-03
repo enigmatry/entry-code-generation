@@ -20,14 +20,16 @@ namespace Enigmatry.CodeGeneration.Tests
         protected CodeGeneratorOptions _options = null!;
         protected IHtmlHelper _htmlHelper = null!;
         protected CodeGenerator _codeGenerator = null!;
+        protected bool _enableI18N = false;
 
         [SetUp]
         public void Setup()
         {
-            _options = new CodeGeneratorOptions(TestContext.CurrentContext.TestDirectory, Assembly.GetExecutingAssembly(), false) 
+            _options = new CodeGeneratorOptions(TestContext.CurrentContext.TestDirectory, Assembly.GetExecutingAssembly(), false)
             {
-                Component = String.Empty, 
-                Framework = Framework.Angular
+                Component = String.Empty,
+                Framework = Framework.Angular,
+                EnableI18N = _enableI18N
             };
 
             var hostBuilder = Host.CreateDefaultBuilder()

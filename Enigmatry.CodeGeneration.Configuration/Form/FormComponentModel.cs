@@ -17,7 +17,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
         public FormComponentModel(
             ComponentInfo componentInfo,
             IEnumerable<FormControlModel> formControls,
-            IEnumerable<ValidationRule> validationRules)
+            IEnumerable<IValidationRule> validationRules)
         {
             ComponentInfo = componentInfo;
             FormControls = formControls.ToList();
@@ -45,7 +45,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
         private IEnumerable<FormControlModel> SelectFormControls => FormControls.Where(x => x is SelectFormControlModel);
         public bool OptionsAvailable(FormControlModel control) => control is SelectFormControlModel && LookupService != null;
 
-        private void SetValidationRulesToFormControl(FormControlModel formControl, IEnumerable<ValidationRule> validationRules)
+        private void SetValidationRulesToFormControl(FormControlModel formControl, IEnumerable<IValidationRule> validationRules)
         {
             formControl.ValidationRules = validationRules
                 .Where(x => x.PropertyName == formControl.PropertyName)
@@ -57,7 +57,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
         {
             foreach (var validationRule in formControl.ValidationRules)
             {
-                validationRule.TrySetMessageTranslationId(
+                validationRule.TrySetDefaultMessageTranslationId(
                     $"{ComponentInfo.Feature.Name.Kebaberize()}" +
                     $".{ComponentInfo.Name.Kebaberize()}" +
                     $".{formControl.PropertyName.Kebaberize()}" +

@@ -18,7 +18,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         public string PlaceholderTranslationId { get; set; } = String.Empty;
         public string HintTranslationId { get; set; } = String.Empty;
         public Type? ValueType { get; set; }
-        public IList<ValidationRule> ValidationRules { get; set; } = new List<ValidationRule>();
+        public IList<IValidationRule> ValidationRules { get; set; } = new List<IValidationRule>();
 
 
         public string GetFormlyFieldType()

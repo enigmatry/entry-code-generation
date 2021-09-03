@@ -11,6 +11,13 @@ namespace Enigmatry.CodeGeneration.Tests.Angular
 {
     public class AngularCodeGeneratorFixture : CodeGenerationFixtureBase
     {
+        [SetUp]
+        public new void Setup()
+        {
+            _enableI18N = true;
+            base.Setup();
+        }
+
         [Test]
         public async Task Generate()
         {

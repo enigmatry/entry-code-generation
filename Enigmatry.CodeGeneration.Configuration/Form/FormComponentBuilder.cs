@@ -14,14 +14,14 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
     public class FormComponentBuilder<T> : BaseComponentBuilder<FormComponentModel>
     {
         private readonly IList<FormControlBuilder> _formControls;
-        private IList<ValidationRule> _validationRules;
+        private IList<IValidationRule> _validationRules;
 
         public FormComponentBuilder() : base(typeof(T))
         {
             _formControls = _modelType.GetProperties()
                 .Select(propertyInfo => new FormControlBuilder(propertyInfo))
                 .ToList();
-            _validationRules = new List<ValidationRule>();
+            _validationRules = new List<IValidationRule>();
 
             _componentInfoBuilder.Routing().WithIdRoute();
         }
@@ -34,7 +34,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
 
         public void WithValidationConfiguration(IHasValidationRules validationConfirguration)
         {
-            _validationRules = validationConfirguration.GetValidationRules().ToList();
+            _validationRules = validationConfirguration.ValidationRules.ToList();
         }
 
         public override FormComponentModel Build()

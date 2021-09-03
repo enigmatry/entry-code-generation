@@ -33,8 +33,8 @@ export class FormGeneratedComponent implements OnInit {
         key: 'name',
         type: 'input',
         templateOptions: {
-          label: 'Name',
-          placeholder: 'Name',
+          label: $localize `:@@test.form.name.label:Name`,
+          placeholder: $localize `:@@test.form.name.placeholder:Name`,
           readonly: false,
           description: '',
           hidden: !true,
@@ -43,8 +43,8 @@ export class FormGeneratedComponent implements OnInit {
         },
         validation: {
             messages: {
-                required: 'Name is required',
-                maxLength: 'Name length is too long'
+                required: $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:Name is required`,
+                maxLength: $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`
             }
         },
       },
@@ -52,8 +52,8 @@ export class FormGeneratedComponent implements OnInit {
         key: 'description',
         type: 'input',
         templateOptions: {
-          label: 'Description',
-          placeholder: 'Description',
+          label: $localize `:@@test.form.description.label:Description`,
+          placeholder: $localize `:@@test.form.description.placeholder:Description`,
           readonly: false,
           description: '',
           hidden: !true,
@@ -63,8 +63,8 @@ export class FormGeneratedComponent implements OnInit {
         key: 'date',
         type: 'datepicker',
         templateOptions: {
-          label: 'Date',
-          placeholder: 'Date',
+          label: $localize `:@@test.form.date.label:Date`,
+          placeholder: $localize `:@@test.form.date.placeholder:Date`,
           readonly: false,
           description: '',
           hidden: !true,
@@ -74,8 +74,8 @@ export class FormGeneratedComponent implements OnInit {
         key: 'money',
         type: 'input',
         templateOptions: {
-          label: 'Money',
-          placeholder: 'Money',
+          label: $localize `:@@test.form.money.label:Money`,
+          placeholder: $localize `:@@test.form.money.placeholder:Money`,
           readonly: false,
           description: '',
           hidden: !true,
@@ -85,8 +85,8 @@ export class FormGeneratedComponent implements OnInit {
         key: 'amount',
         type: 'input',
         templateOptions: {
-          label: 'Amount',
-          placeholder: 'Amount',
+          label: $localize `:@@test.form.amount.label:Amount`,
+          placeholder: $localize `:@@test.form.amount.placeholder:Amount`,
           readonly: false,
           description: '',
           hidden: !true,
@@ -97,9 +97,9 @@ export class FormGeneratedComponent implements OnInit {
         },
         validation: {
             messages: {
-                required: 'Amount is required',
-                min: 'Amount must be greater then 0',
-                max: 'Amount must be less then 100'
+                required: $localize `:@@test.form.amount.required:Amount is required`,
+                min: $localize `:@@test.form.amount.min:CUSTOM_VALIDATION_MESSAGE`,
+                max: $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAGE`
             }
         },
       },
@@ -107,8 +107,8 @@ export class FormGeneratedComponent implements OnInit {
         key: 'formStatus',
         type: 'select',
         templateOptions: {
-          label: 'Status',
-          placeholder: 'Form status',
+          label: $localize `:@@test.form.form-status.label:Status`,
+          placeholder: $localize `:@@test.form.form-status.placeholder:Form status`,
           readonly: false,
           description: '',
           options: lookupService.getFormStatus$.pipe(
@@ -122,8 +122,8 @@ export class FormGeneratedComponent implements OnInit {
         key: 'mockRadio',
         type: 'radio',
         templateOptions: {
-          label: 'Radio',
-          placeholder: 'Mockradio',
+          label: $localize `:@@test.form.mock-radio.label:Radio`,
+          placeholder: $localize `:@@test.form.mock-radio.placeholder:Mock radio`,
           readonly: false,
           description: '',
           options: lookupService.getMockRadio$.pipe(

@@ -48,14 +48,14 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.Form
         }
 
         [UsedImplicitly]
-        private class ProjectDetailsValidation : ValidationConfiguration<ProjectDetails>
+        private class ProjectDetailsValidation : AbstractValidationConfiguration<ProjectDetails>
         {
             public ProjectDetailsValidation()
             {
                 RuleFor(x => x.Title)
-                    .HasMaxLength(25, "Title is too long");
+                    .Max(25).WithMessage("Title is too long");
                 RuleFor(x => x.Description)
-                    .HasMaxLength(250, "Description is too long");
+                    .Max(250).WithMessage("Description is too long");
             }
         }
 

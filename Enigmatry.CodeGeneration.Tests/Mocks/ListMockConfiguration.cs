@@ -5,6 +5,7 @@ namespace Enigmatry.CodeGeneration.Tests.Mocks
 {
     public class ListMockConfiguration : IListComponentConfiguration<ListMock.Item>
     {
+
         public void Configure(ListComponentBuilder<ListMock.Item> builder)
         {
             builder
@@ -19,7 +20,7 @@ namespace Enigmatry.CodeGeneration.Tests.Mocks
             builder
                 .Column(x => x.Name)
                 .IsSortable(false)
-                .WithTranslationId("name")
+                .WithTranslationId(Constants.CustomTranslationId)
                 .WithCustomComponent("custom-cell");
 
             builder
