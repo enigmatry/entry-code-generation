@@ -13,6 +13,10 @@ import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPa
 @:import { map } from 'rxjs/operators';
 @:import { @(Model.ComponentInfo.Name)LookupService } from '../services/@(Model.AngularComponentDirectory())-generated-lookup.service';
 }
+@if (Model.HasCustomValidators)
+{
+@Html.ImportValidators(Model.FormControls, _options.ValidatorsPath)
+}
 
 @@Component({
   selector: '@Model.AngularComponentSelector(_options.GeneratedComponentPrefix)',
@@ -48,18 +52,26 @@ export class @Model.AngularComponentName() implements OnInit {
             @:),
           }
           @:hidden: !@control.IsVisible.ToString().ToLower(),
-          @if(control.ValidationRules.Any())
+          @if(control.BuiltInValidationRules.Any())
           {
           @Html.AddValidationFields(control)
           }
         @:},
-        @if(control.ValidationRules.Any())
+        @if(control.BuiltInValidationRules.Any())
         {
         @:validation: {
           @:messages: {
             @Html.AddValidationMessages(control, _options.EnableI18N)
           @:}
         @:},
+        }
+        @if (control.CustomValidator != null)
+        {
+            @Html.AddValidators(control.PropertyName, control.CustomValidator, _options.EnableI18N)
+        }
+        @if (control.AsyncCustomValidator != null)
+        {
+            @Html.AddAsuncValidators(control.PropertyName, control.AsyncCustomValidator, _options.EnableI18N)
         }
      @:},
    }];

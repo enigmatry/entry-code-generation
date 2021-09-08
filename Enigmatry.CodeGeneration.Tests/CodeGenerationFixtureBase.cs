@@ -29,7 +29,8 @@ namespace Enigmatry.CodeGeneration.Tests
             {
                 Component = String.Empty,
                 Framework = Framework.Angular,
-                EnableI18N = _enableI18N
+                EnableI18N = _enableI18N,
+                ValidatorsPath = "src/app/shared/validators/custom-validators"
             };
 
             var hostBuilder = Host.CreateDefaultBuilder()

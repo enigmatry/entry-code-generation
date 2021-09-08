@@ -2,7 +2,7 @@
 
 namespace Enigmatry.CodeGeneration.Tests.Mocks
 {
-    public class FormMockValidationConfiguration : AbstractValidationConfiguration<FormMock>
+    public class FormMockValidationConfiguration : ValidationConfiguration<FormMock>
     {
         public FormMockValidationConfiguration()
         {
@@ -11,14 +11,16 @@ namespace Enigmatry.CodeGeneration.Tests.Mocks
                     .WithMessageTranslationId(Constants.CustomValidationMessageTranslationId)
                 .Max(50)
                     .WithMessage(Constants.CustomValidationMessage)
-                    .WithMessageTranslationId(Constants.CustomValidationMessageTranslationId);
+                    .WithMessageTranslationId(Constants.CustomValidationMessageTranslationId)
+                .HasAsyncValidator(Constants.CustomAsyncValidator);
 
             RuleFor(x => x.Amount)
                 .IsRequired()
                 .Min(0)
                     .WithMessage(Constants.CustomValidationMessage)
                 .Max(100)
-                    .WithMessage(Constants.CustomValidationMessage);
+                    .WithMessage(Constants.CustomValidationMessage)
+                .HasValidator(Constants.CustomValidator);
         }
     }
 }

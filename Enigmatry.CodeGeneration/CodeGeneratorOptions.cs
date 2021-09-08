@@ -19,6 +19,7 @@ namespace Enigmatry.CodeGeneration
         public string Feature { get; set; } = String.Empty;
         public string GeneratedComponentPrefix { get; set; } = "app-g";
         public string ApiClientTsImportPath { get; set; } = "src/app/api/api-reference";
+        public string ValidatorsPath { get; set; } = "src/app/shared/validators/custom-validators";
         public bool EnableI18N { get; set; } = false;
     }
 }

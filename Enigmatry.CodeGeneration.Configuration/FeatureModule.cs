@@ -32,7 +32,6 @@ namespace Enigmatry.CodeGeneration.Configuration
 
         public FeatureModule(IGrouping<string, IComponentModel> components)
             : this(components.Key, components)
-        {
-        }
+        { }
     }
 }

@@ -12,6 +12,7 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
 import { IFormMock } from 'src/app/api/api-reference';
 import { map } from 'rxjs/operators';
 import { FormLookupService } from '../services/form-generated-lookup.service';
+import { ASYNC_CUSTOM_VALIDATOR, CUSTOM_VALIDATOR } from 'src/app/shared/validators/custom-validators';
 
 @Component({
   selector: 'app-g-form',
@@ -47,6 +48,7 @@ export class FormGeneratedComponent implements OnInit {
                 maxLength: $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`
             }
         },
+        asyncValidators: { name: { expression: ASYNC_CUSTOM_VALIDATOR, message: $localize `:@@test.form.name.custom-async-validator:ASYNC_CUSTOM_VALIDATOR validator condition is not meet` } },
       },
      {
         key: 'description',
@@ -102,6 +104,7 @@ export class FormGeneratedComponent implements OnInit {
                 max: $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAGE`
             }
         },
+        validators: { amount: { expression: CUSTOM_VALIDATOR, message: $localize `:@@test.form.amount.custom-validator:CUSTOM_VALIDATOR validator condition is not meet` } },
       },
      {
         key: 'formStatus',

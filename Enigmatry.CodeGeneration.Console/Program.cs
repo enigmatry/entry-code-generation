@@ -21,6 +21,7 @@ namespace Enigmatry.CodeGeneration.Console
         private static string _destinationDirectory = String.Empty;
         private static string _component = String.Empty;
         private static string _feature = String.Empty;
+        private static string _validatorsPath = String.Empty;
         private static bool _enableI18n = false;
 
         private static async Task<int> Main(string[] args)
@@ -57,9 +58,10 @@ namespace Enigmatry.CodeGeneration.Console
                 },
                 new Option<string>(new[] { "--component", "-c" }, "Single component to be generated"),
                 new Option<string>(new[] { "--feature", "-f" }, "Single feature to be generated"),
+                new Option<string>(new[] { "--validators-path", "-vlp" }, "Destination of custom-validators.ts file"),
                 new Option<bool>(new[] { "--enable-i18n", "-i" }, "Enable i18n")
             };
-            rootCommand.Handler = CommandHandler.Create<string, string, string, string, bool>(RootCommandHandler);
+            rootCommand.Handler = CommandHandler.Create<string, string, string, string, string, bool>(RootCommandHandler);
             return rootCommand;
         }
 
@@ -68,12 +70,14 @@ namespace Enigmatry.CodeGeneration.Console
             string destinationDirectory,
             string component = "",
             string feature = "",
+            string validatorsPath = "src/app/shared/validators/custom-validators",
             bool enableI18N = false)
         {
             _sourceAssembly = sourceAssembly;
             _destinationDirectory = destinationDirectory;
             _component = component;
             _feature = feature;
+            _validatorsPath = validatorsPath;
             _enableI18n = enableI18N;
 
             try

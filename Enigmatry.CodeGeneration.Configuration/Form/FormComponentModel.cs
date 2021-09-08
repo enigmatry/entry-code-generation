@@ -1,4 +1,5 @@
-﻿using Enigmatry.BuildingBlocks.Validation.ValidationRules;
+﻿using Enigmatry.BuildingBlocks.Validation;
+using Enigmatry.BuildingBlocks.Validation.ValidationRules;
 using Enigmatry.CodeGeneration.Configuration.Form.Model;
 using Enigmatry.CodeGeneration.Configuration.Form.Model.Select;
 using Enigmatry.CodeGeneration.Configuration.Services;
@@ -17,16 +18,13 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
         public FormComponentModel(
             ComponentInfo componentInfo,
             IEnumerable<FormControlModel> formControls,
-            IEnumerable<IValidationRule> validationRules)
+            IHasValidationRules? validationConfirguration)
         {
             ComponentInfo = componentInfo;
             FormControls = formControls.ToList();
 
-            foreach (var formControl in FormControls)
-            {
-                SetValidationRulesToFormControl(formControl, validationRules);
-            }
-
+            ApplyValidationConfiguration(validationConfirguration);
+            
             if (SelectFormControls.Any())
             {
                 LookupService = new LookupServiceModel
@@ -40,29 +38,57 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
         }
 
         public IEnumerable<FormControlModel> VisibleFormControls => FormControls.Where(control => control.IsVisible);
-        public IEnumerable<FormControlModel> EditableFormControls => FormControls.Where(control => !control.IsReadonly);
-        public IEnumerable<FormControlModel> AutocompleteFormControls => SelectFormControls.Where(x => x.Type == FormControlType.Autocomplete);
         private IEnumerable<FormControlModel> SelectFormControls => FormControls.Where(x => x is SelectFormControlModel);
         public bool OptionsAvailable(FormControlModel control) => control is SelectFormControlModel && LookupService != null;
+        public bool HasCustomValidators =>
+            FormControls.Any(control => control.CustomValidator != null) ||
+            FormControls.Any(control => control.AsyncCustomValidator != null);
 
-        private void SetValidationRulesToFormControl(FormControlModel formControl, IEnumerable<IValidationRule> validationRules)
+        private void ApplyValidationConfiguration(IHasValidationRules? validationConfirguration)
         {
-            formControl.ValidationRules = validationRules
+            if (validationConfirguration == null)
+                return;
+
+            foreach (var formControl in FormControls)
+            {
+                SetValidationRulesToFormControl(formControl, validationConfirguration);
+            }
+        }
+
+        private void SetValidationRulesToFormControl(FormControlModel formControl, IHasValidationRules validationConfirguration)
+        {
+            formControl.BuiltInValidationRules = validationConfirguration.BuiltInValidationRules
                 .Where(x => x.PropertyName == formControl.PropertyName)
                 .ToList();
+            formControl.CustomValidator = validationConfirguration.ValidatorValidationRules
+                .SingleOrDefault(x => x.PropertyName == formControl.PropertyName);
+            formControl.AsyncCustomValidator = validationConfirguration.AsyncValidatorValidationRules
+                .SingleOrDefault(x => x.PropertyName == formControl.PropertyName);
+
             SetTranslationIdsToValidationRules(formControl);
         }
 
         private void SetTranslationIdsToValidationRules(FormControlModel formControl)
         {
-            foreach (var validationRule in formControl.ValidationRules)
+            foreach (var validationRule in formControl.BuiltInValidationRules)
             {
-                validationRule.TrySetDefaultMessageTranslationId(
+                TrySetDefaultMessageTranslationId(validationRule, formControl);
+            }
+            if (formControl.CustomValidator != null)
+            {
+                TrySetDefaultMessageTranslationId(formControl.CustomValidator, formControl);
+            }
+            if (formControl.AsyncCustomValidator != null)
+            {
+                TrySetDefaultMessageTranslationId(formControl.AsyncCustomValidator, formControl);
+            }
+        }
+
+        private void TrySetDefaultMessageTranslationId(ValidationRule validationRule, FormControlModel formControl) =>
+            validationRule.TrySetDefaultMessageTranslationId(
                     $"{ComponentInfo.Feature.Name.Kebaberize()}" +
                     $".{ComponentInfo.Name.Kebaberize()}" +
                     $".{formControl.PropertyName.Kebaberize()}" +
                     $".{validationRule.Name.Kebaberize()}");
-            }
-        }
     }
 }

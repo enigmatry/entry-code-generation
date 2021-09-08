@@ -28,12 +28,12 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.Form
 
             var titleFormControl = componentModel.FormControls
                 .Single(x => x.PropertyName == nameof(ProjectDetails.Title).ToLowerInvariant());
-            titleFormControl.ValidationRules.Count.Should().Be(1);
-            titleFormControl.ValidationRules.Single().Name.Should().Be("maxLength");
+            titleFormControl.BuiltInValidationRules.Count.Should().Be(1);
+            titleFormControl.BuiltInValidationRules.Single().Name.Should().Be("maxLength");
             var detailsFormControl = componentModel.FormControls
                 .Single(x => x.PropertyName == nameof(ProjectDetails.Description).ToLowerInvariant());
-            detailsFormControl.ValidationRules.Count.Should().Be(1);
-            detailsFormControl.ValidationRules.Single().Name.Should().Be("maxLength");
+            detailsFormControl.BuiltInValidationRules.Count.Should().Be(1);
+            detailsFormControl.BuiltInValidationRules.Single().Name.Should().Be("maxLength");
 
         }
 
@@ -48,7 +48,7 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.Form
         }
 
         [UsedImplicitly]
-        private class ProjectDetailsValidation : AbstractValidationConfiguration<ProjectDetails>
+        private class ProjectDetailsValidation : ValidationConfiguration<ProjectDetails>
         {
             public ProjectDetailsValidation()
             {

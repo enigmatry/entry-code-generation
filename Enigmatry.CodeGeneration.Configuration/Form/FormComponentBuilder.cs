@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using Enigmatry.BuildingBlocks.Validation;
-using Enigmatry.BuildingBlocks.Validation.ValidationRules;
+﻿using Enigmatry.BuildingBlocks.Validation;
 using Enigmatry.CodeGeneration.Configuration.Builder;
 using Enigmatry.CodeGeneration.Configuration.Form.Model;
 using JetBrains.Annotations;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace Enigmatry.CodeGeneration.Configuration.Form
 {
@@ -14,14 +13,13 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
     public class FormComponentBuilder<T> : BaseComponentBuilder<FormComponentModel>
     {
         private readonly IList<FormControlBuilder> _formControls;
-        private IList<IValidationRule> _validationRules;
+        private IHasValidationRules? _validationConfirguration = null;
 
         public FormComponentBuilder() : base(typeof(T))
         {
             _formControls = _modelType.GetProperties()
                 .Select(propertyInfo => new FormControlBuilder(propertyInfo))
                 .ToList();
-            _validationRules = new List<IValidationRule>();
 
             _componentInfoBuilder.Routing().WithIdRoute();
         }
@@ -34,7 +32,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
 
         public void WithValidationConfiguration(IHasValidationRules validationConfirguration)
         {
-            _validationRules = validationConfirguration.ValidationRules.ToList();
+            _validationConfirguration = validationConfirguration;
         }
 
         public override FormComponentModel Build()
@@ -42,7 +40,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
             var componentInfo = _componentInfoBuilder.Build();
             var formControls = _formControls.Select(_ => _.Build(componentInfo));
 
-            return new FormComponentModel(componentInfo, formControls, _validationRules);
+            return new FormComponentModel(componentInfo, formControls, _validationConfirguration);
         }
 
         private FormControlBuilder FormControlBuilder<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
