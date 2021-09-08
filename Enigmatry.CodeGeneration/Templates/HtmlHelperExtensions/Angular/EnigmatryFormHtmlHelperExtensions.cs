@@ -1,5 +1,4 @@
-﻿
-using Enigmatry.BuildingBlocks.Validation.ValidationRules.CustomValidationRules;
+﻿using Enigmatry.BuildingBlocks.Validation.ValidationRules.CustomValidationRules;
 using Enigmatry.CodeGeneration.Configuration;
 using Enigmatry.CodeGeneration.Configuration.Form.Model;
 using Humanizer;
@@ -52,11 +51,11 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
         public static IHtmlContent AddValidators(this IHtmlHelper html, string propertyName, CustomValidatorValidationRule validator, bool enableI18N) =>
             html.Raw($"validators: {{ {propertyName.Camelize()}: {{ " +
                 $"expression: {validator.ValidatorName}, " +
-                $"message: {(enableI18N ? AngularLocalization.Localize(validator.MessageTranslationId, validator.Message) : validator.Message)} }} }},");
+                $"message: {(enableI18N ? AngularLocalization.Localize(validator.MessageTranslationId, validator.Message) : $"'{validator.Message}'")} }} }},");
 
         public static IHtmlContent AddAsuncValidators(this IHtmlHelper html, string propertyName, AsyncCustomValidatorValidationRule validator, bool enableI18N) =>
             html.Raw($"asyncValidators: {{ {propertyName.Camelize()}: {{ " +
                 $"expression: {validator.ValidatorName}, " +
-                $"message: {(enableI18N ? AngularLocalization.Localize(validator.MessageTranslationId, validator.Message) : validator.Message)} }} }},");
+                $"message: {(enableI18N ? AngularLocalization.Localize(validator.MessageTranslationId, validator.Message) : $"'{validator.Message}'")} }} }},");
     }
 }
