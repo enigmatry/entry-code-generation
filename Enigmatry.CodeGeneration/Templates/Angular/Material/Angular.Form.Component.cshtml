@@ -1,6 +1,7 @@
 ﻿@using Humanizer;
 @using Enigmatry.CodeGeneration
 @using Enigmatry.CodeGeneration.Angular
+@using Enigmatry.CodeGeneration.Configuration.Form.Model
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 @model Enigmatry.CodeGeneration.Configuration.Form.FormComponentModel;
 @inject CodeGeneratorOptions _options;
@@ -43,6 +44,10 @@ export class @Model.AngularComponentName() implements OnInit {
           @:label: @Html.Localize(control.LabelTranslationId, control.Label, _options.EnableI18N),
           @:placeholder: @Html.Localize(control.PlaceholderTranslationId, control.Placeholder, _options.EnableI18N),
           @:readonly: @control.IsReadonly.ToString().ToLower(),
+          @if (control.IsReadonly && control.Type == FormControlType.Datepicker)
+          {
+          @:disabled: true,
+          }
           @:description: @Html.Localize(control.HintTranslationId, control.Hint, _options.EnableI18N),
           @if (Model.OptionsAvailable(control))
           {
