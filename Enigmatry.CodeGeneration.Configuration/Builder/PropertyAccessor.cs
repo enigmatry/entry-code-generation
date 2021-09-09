@@ -11,7 +11,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Builder
         public PropertyInfo PropertyInfo { get; }
         public string Name => PropertyInfo.Name;
         public string DisplayName => PropertyInfo.Name.Humanize();
-        public Type PropertyType => PropertyInfo.PropertyType;
+        public Type PropertyType => Nullable.GetUnderlyingType(PropertyInfo.PropertyType) ?? PropertyInfo.PropertyType;
 
         public PropertyAccessor(PropertyInfo propertyInfo)
         {

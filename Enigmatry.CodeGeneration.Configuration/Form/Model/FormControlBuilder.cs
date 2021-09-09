@@ -37,13 +37,11 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
 
         private void SetDefaultFormControlType()
         {
-            var propertyType = PropertyInfo.PropertyType;
+            var propertyType = Nullable.GetUnderlyingType(PropertyInfo.PropertyType) ?? PropertyInfo.PropertyType;
             switch (propertyType)
             {
                 case { } when propertyType == typeof(DateTime):
-                case { } when propertyType == typeof(DateTime?):
                 case { } when propertyType == typeof(DateTimeOffset):
-                case { } when propertyType == typeof(DateTimeOffset?):
                     FormControlType = FormControlType.Datepicker;
                     break;
                 case { } when propertyType == typeof(bool):
