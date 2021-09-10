@@ -21,7 +21,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
         {
             var customComponents = columns.Where(c => c.HasCustomCellComponent);
             var viewChildTemplateRefs = customComponents.Select(CustomCellTemplateViewChildRef);
-            var htmlContent = $"{String.Join("\n", viewChildTemplateRefs)}\n";
+            var htmlContent = $"{String.Join("\r\n", viewChildTemplateRefs)}\r\n";
 
             return html.Raw(htmlContent);
         }
@@ -29,7 +29,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
         public static IHtmlContent CreateColumnDefs(this IHtmlHelper html, IEnumerable<ColumnDefinition> columns, bool enableI18N)
         {
             var columnDefs = columns.Select(definition => CreateColumnDef(definition, enableI18N)).ToList();
-            var htmlContent = columnDefs.Any() ? $"[\n{String.Join(",\n", columnDefs)}\n]" : "[]";
+            var htmlContent = columnDefs.Any() ? $"[\r\n{String.Join(",\r\n", columnDefs)}\r\n]" : "[]";
 
             return html.Raw(htmlContent);
         }
@@ -37,7 +37,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
         public static IHtmlContent CreateContextMenuItems(this IHtmlHelper html, IEnumerable<RowContextMenuItem> items, bool enableI18N)
         {
             var contextMenuItems = items.Select(item => ContextMenuItemToJs(item, enableI18N)).ToList();
-            var htmlContent = contextMenuItems.Any() ? $"[\n{String.Join(",\n", contextMenuItems)}\n]" : "[]";
+            var htmlContent = contextMenuItems.Any() ? $"[\r\n{String.Join(",\r\n", contextMenuItems)}\r\n]" : "[]";
 
             return html.Raw(htmlContent);
         }

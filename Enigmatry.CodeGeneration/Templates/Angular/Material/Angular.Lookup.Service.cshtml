@@ -15,21 +15,21 @@ export class @(Model.Name)LookupService {
     {
         @Html.Raw("\t")
         @Html.FixedValuesProperty(method)
-        @Html.Raw("\n")
+        @Html.Raw("\r\n")
     }
 
     @foreach(var method in Model.LookupMethods)
     {
         @Html.Raw("\t")
         @Html.MethodSubjectStatement(method)
-        @Html.Raw("\n")
+        @Html.Raw("\r\n")
     }
 
     @foreach(var method in Model.LookupMethods)
     {
         @Html.Raw("\t")
         @Html.MethodResponseProperty(method)
-        @Html.Raw("\n")
+        @Html.Raw("\r\n")
     }
 
     constructor(@Html.AsyncMethodDependencyInjections(Model.AsyncLookupMethods)) { }
@@ -39,7 +39,7 @@ export class @(Model.Name)LookupService {
         {
             @Html.Raw("\t\t")
             @Html.AsyncMethodInit(method)
-            @Html.Raw("\n")
+            @Html.Raw("\r\n")
         }
     }
 
@@ -49,18 +49,18 @@ export class @(Model.Name)LookupService {
     {
         @Html.Raw("\t")
         @Html.AsyncMethod(method)
-        @Html.Raw("\n")
+        @Html.Raw("\r\n")
     }
     @foreach(var method in Model.FixedValuesLookupMethods)
     {
         @Html.Raw("\t")
         @Html.FixedValuesFilterMethod(method)
-        @Html.Raw("\n")
+        @Html.Raw("\r\n")
     }
     @foreach(var method in Model.FixedValuesLookupMethods)
     {
         @Html.Raw("\t")
         @Html.FixedValuesDisplayOptionMethod(method)
-        @Html.Raw("\n")
+        @Html.Raw("\r\n")
     }
 }

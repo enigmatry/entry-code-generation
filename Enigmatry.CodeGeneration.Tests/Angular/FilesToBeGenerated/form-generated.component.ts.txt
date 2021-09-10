@@ -36,7 +36,7 @@ export class FormGeneratedComponent implements OnInit {
         templateOptions: {
           label: $localize `:@@test.form.name.label:Name`,
           placeholder: $localize `:@@test.form.name.placeholder:Name`,
-          readonly: false,
+          disabled: false,
           description: '',
           hidden: !true,
           required: true,
@@ -56,7 +56,7 @@ export class FormGeneratedComponent implements OnInit {
         templateOptions: {
           label: $localize `:@@test.form.description.label:Description`,
           placeholder: $localize `:@@test.form.description.placeholder:Description`,
-          readonly: false,
+          disabled: false,
           description: '',
           hidden: !true,
         },
@@ -67,7 +67,7 @@ export class FormGeneratedComponent implements OnInit {
         templateOptions: {
           label: $localize `:@@test.form.date.label:Date`,
           placeholder: $localize `:@@test.form.date.placeholder:Date`,
-          readonly: false,
+          disabled: false,
           description: '',
           hidden: !true,
         },
@@ -78,7 +78,7 @@ export class FormGeneratedComponent implements OnInit {
         templateOptions: {
           label: $localize `:@@test.form.money.label:Money`,
           placeholder: $localize `:@@test.form.money.placeholder:Money`,
-          readonly: false,
+          disabled: false,
           description: '',
           hidden: !true,
         },
@@ -89,7 +89,7 @@ export class FormGeneratedComponent implements OnInit {
         templateOptions: {
           label: $localize `:@@test.form.amount.label:Amount`,
           placeholder: $localize `:@@test.form.amount.placeholder:Amount`,
-          readonly: false,
+          disabled: false,
           description: '',
           hidden: !true,
           type: 'number',
@@ -112,7 +112,7 @@ export class FormGeneratedComponent implements OnInit {
         templateOptions: {
           label: $localize `:@@test.form.form-status.label:Status`,
           placeholder: $localize `:@@test.form.form-status.placeholder:Form status`,
-          readonly: false,
+          disabled: false,
           description: '',
           options: lookupService.getFormStatus$.pipe(
             map((arr) =>
@@ -127,7 +127,7 @@ export class FormGeneratedComponent implements OnInit {
         templateOptions: {
           label: $localize `:@@test.form.mock-radio.label:Radio`,
           placeholder: $localize `:@@test.form.mock-radio.placeholder:Mock radio`,
-          readonly: false,
+          disabled: false,
           description: '',
           options: lookupService.getMockRadio$.pipe(
             map((arr) =>

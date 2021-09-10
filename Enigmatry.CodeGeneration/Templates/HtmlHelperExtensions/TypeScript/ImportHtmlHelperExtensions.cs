@@ -13,7 +13,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
         public static IHtmlContent ImportModules(this IHtmlHelper html, IEnumerable<ModuleImport> modules)
         {
             var importStatements = modules.Select(module => CreateImportStatement(module.Name, module.Path));
-            return html.Raw(String.Join("\n", importStatements));
+            return html.Raw(String.Join("\r\n", importStatements));
         }
 
         public static IHtmlContent ImportStatement(this IHtmlHelper html, string imports, string fromPath)

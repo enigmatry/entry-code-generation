@@ -26,7 +26,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
                 htmlContent.Add(validationRule.AsNameRulePair());
             }
 
-            return html.Raw($"{String.Join(",\n", htmlContent)},\n");
+            return html.Raw($"{String.Join(",\r\n", htmlContent)},\r\n");
         }
 
         public static IHtmlContent AddValidationMessages(this IHtmlHelper html, FormControlModel form, bool enableI18N)
@@ -36,7 +36,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
                 .Select(x => enableI18N
                     ? $"{x.Name}: {AngularLocalization.Localize(x.MessageTranslationId, x.Message)}"
                     : $"{x.Name}: '{x.Message}'");
-            return html.Raw($"{String.Join(",\n", validationMessage)}\n");
+            return html.Raw($"{String.Join(",\r\n", validationMessage)}\r\n");
         }
 
         public static IHtmlContent ImportValidators(this IHtmlHelper html, IEnumerable<FormControlModel> formControls, string validatorsPath)

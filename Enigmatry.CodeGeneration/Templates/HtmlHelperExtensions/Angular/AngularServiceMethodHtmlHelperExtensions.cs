@@ -46,36 +46,36 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
         {
             var arguments = String.Join(", ", method.ArgumentNames.Select(x => x.Camelize()));
             var methodBody = 
-                $"{method.Name}({arguments}) {{\n" +
-                $"\t\tthis.{method.ApiClientName.Camelize()}.{method.Name}({arguments})\n" +
-                $"\t\t\t.subscribe(x => this.{method.AsSubjectStatement()}.next(x.items));\n" +
-                "\t}\n";
+                $"{method.Name}({arguments}) {{\r\n" +
+                $"\t\tthis.{method.ApiClientName.Camelize()}.{method.Name}({arguments})\r\n" +
+                $"\t\t\t.subscribe(x => this.{method.AsSubjectStatement()}.next(x.items));\r\n" +
+                "\t}\r\n";
             return html.Raw(methodBody);
         }
 
         public static IHtmlContent FixedValuesProperty(this IHtmlHelper html, FixedValuesLookupMethod method)
         {
-            var fixedValues = String.Join("\n", method.FixedValues.Select(x => $"\t\t{{ value: {x.Value}, displayName: '{x.DisplayName}' }},"));
-            return html.Raw($"private {method.AsFixedValuesProperty()} = [\n{fixedValues}\n\t];");
+            var fixedValues = String.Join("\r\n", method.FixedValues.Select(x => $"\t\t{{ value: {x.Value}, displayName: '{x.DisplayName}' }},"));
+            return html.Raw($"private {method.AsFixedValuesProperty()} = [\r\n{fixedValues}\r\n\t];");
         }
 
         public static IHtmlContent FixedValuesFilterMethod(this IHtmlHelper html, FixedValuesLookupMethod method)
         {
             var methodBody =
-                $"{method.Name}(keyword: string) {{\n" +
-                $"\t\tthis.{method.AsSubjectStatement()}.next(this.{method.AsFixedValuesProperty()}\n" +
-                $"\t\t\t.filter(x => x.displayName.toLowerCase().includes(keyword.toLowerCase())));\n" +
-                "\t}\n";
+                $"{method.Name}(keyword: string) {{\r\n" +
+                $"\t\tthis.{method.AsSubjectStatement()}.next(this.{method.AsFixedValuesProperty()}\r\n" +
+                $"\t\t\t.filter(x => x.displayName.toLowerCase().includes(keyword.toLowerCase())));\r\n" +
+                "\t}\r\n";
             return html.Raw(methodBody);
         }
 
         public static IHtmlContent FixedValuesDisplayOptionMethod(this IHtmlHelper html, FixedValuesLookupMethod method)
         {
             var methodBody =
-                $"{method.Name}DisplayOption(value: any) {{\n" +
-                $"\t\treturn value !== undefined ? this.{method.AsFixedValuesProperty()}\n" +
-                $"\t\t\t.find(x => x.value === value)?.displayName : '';\n" +
-                "\t}\n";
+                $"{method.Name}DisplayOption(value: any) {{\r\n" +
+                $"\t\treturn value !== undefined ? this.{method.AsFixedValuesProperty()}\r\n" +
+                $"\t\t\t.find(x => x.value === value)?.displayName : '';\r\n" +
+                "\t}\r\n";
             return html.Raw(methodBody);
         }
 
