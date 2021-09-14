@@ -28,6 +28,8 @@ export class ListGeneratedComponent implements OnInit {
   @Input() pageSizeOptions = [10, 50, 100];
   @Input() hidePageSize = !true;
 
+  @Input() defaultSort: { active: string, direction: 'asc' | 'desc' | '' } = { active: '', direction: '' };
+
   @Input() rowSelectable = false;
   @Input() multiSelectable = false;
 
