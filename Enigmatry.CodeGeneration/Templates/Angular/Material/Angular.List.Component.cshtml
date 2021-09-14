@@ -7,7 +7,7 @@
 @inject CodeGeneratorOptions _options;
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@@angular/core';
 import { CellTemplate, ColumnDef, ContextMenuItem } from '@@enigmatry/angular-building-blocks/enigmatry-grid';
-import { PagedData, PageEvent, SortEvent } from '@@enigmatry/angular-building-blocks/pagination';
+import { PagedData, PageEvent, SortDirection, SortEvent } from '@@enigmatry/angular-building-blocks/pagination';
 
 import { @(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPath';
 
@@ -27,7 +27,7 @@ export class @Model.AngularComponentName() implements OnInit {
   @@Input() pageSizeOptions = @Html.JsArray(Model.Pagination.PageSizeOptions);
   @@Input() hidePageSize = !@Model.Pagination.ShowPageSize.ToString().ToLower();
 
-  @@Input() defaultSort: { active: string, direction: 'asc' | 'desc' | '' } = { active: '', direction: '' };
+  @@Input() defaultSort: { sortBy?: string | undefined, sortDirection?: SortDirection } = { };
 
   @@Input() rowSelectable = @Model.Row.IsSelectable.ToString().ToLower();
   @@Input() multiSelectable = @((Model.Row.Selection == RowSelectionType.Multiple).ToString().ToLower());
