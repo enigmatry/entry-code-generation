@@ -22,18 +22,18 @@ import { ASYNC_CUSTOM_VALIDATOR, CUSTOM_VALIDATOR } from 'src/app/shared/validat
 export class FormGeneratedComponent implements OnInit {
 
   @Input() model: IFormMock = {};
-  @Input() set isView(value: boolean) {
-    this._isView = value;
+  @Input() set isReadonly(value: boolean) {
+    this._isReadonly = value;
     this.fields = this.initializeFields();
   }
-  get isView() {
-    return this._isView;
+  get isReadonly() {
+    return this._isReadonly;
   }
 
   @Output() save = new EventEmitter<IFormMock>();
   @Output() cancel = new EventEmitter<void>();
 
-  _isView: boolean;
+  _isReadonly: boolean;
   form = new FormGroup({});
   fields: FormlyFieldConfig[] = [];
 
@@ -57,7 +57,7 @@ export class FormGeneratedComponent implements OnInit {
         templateOptions: {
           label: $localize `:@@test.form.name.label:Name`,
           placeholder: $localize `:@@test.form.name.placeholder:Name`,
-          disabled: this.isView || false,
+          disabled: this.isReadonly || false,
           description: '',
           hidden: !true,
           required: true,
@@ -77,7 +77,7 @@ export class FormGeneratedComponent implements OnInit {
         templateOptions: {
           label: $localize `:@@test.form.description.label:Description`,
           placeholder: $localize `:@@test.form.description.placeholder:Description`,
-          disabled: this.isView || false,
+          disabled: this.isReadonly || false,
           description: '',
           hidden: !true,
         },
@@ -88,7 +88,7 @@ export class FormGeneratedComponent implements OnInit {
         templateOptions: {
           label: $localize `:@@test.form.date.label:Date`,
           placeholder: $localize `:@@test.form.date.placeholder:Date`,
-          disabled: this.isView || false,
+          disabled: this.isReadonly || false,
           description: '',
           hidden: !true,
         },
@@ -99,7 +99,7 @@ export class FormGeneratedComponent implements OnInit {
         templateOptions: {
           label: $localize `:@@test.form.money.label:Money`,
           placeholder: $localize `:@@test.form.money.placeholder:Money`,
-          disabled: this.isView || false,
+          disabled: this.isReadonly || false,
           description: '',
           hidden: !true,
         },
@@ -110,7 +110,7 @@ export class FormGeneratedComponent implements OnInit {
         templateOptions: {
           label: $localize `:@@test.form.amount.label:Amount`,
           placeholder: $localize `:@@test.form.amount.placeholder:Amount`,
-          disabled: this.isView || false,
+          disabled: this.isReadonly || false,
           description: '',
           hidden: !true,
           type: 'number',
@@ -133,7 +133,7 @@ export class FormGeneratedComponent implements OnInit {
         templateOptions: {
           label: $localize `:@@test.form.form-status.label:Status`,
           placeholder: $localize `:@@test.form.form-status.placeholder:Form status`,
-          disabled: this.isView || false,
+          disabled: this.isReadonly || false,
           description: '',
           options: this.lookupService.getFormStatus$.pipe(
             map((arr) =>
@@ -144,11 +144,11 @@ export class FormGeneratedComponent implements OnInit {
       },
       {
         key: 'mockRadio',
-        type: 'radio',
+        type: this.isReadonly ? 'readonly-radio' : 'radio',
         templateOptions: {
           label: $localize `:@@test.form.mock-radio.label:Radio`,
           placeholder: $localize `:@@test.form.mock-radio.placeholder:Mock radio`,
-          disabled: this.isView || false,
+          disabled: this.isReadonly || false,
           description: '',
           options: this.lookupService.getMockRadio$.pipe(
             map((arr) =>

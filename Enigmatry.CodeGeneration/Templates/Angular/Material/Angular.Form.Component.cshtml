@@ -26,18 +26,18 @@ import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPa
 export class @Model.AngularComponentName() implements OnInit {
 
   @@Input() model: I@(Model.ComponentInfo.ModelType) = {};
-  @@Input() set isView(value: boolean) {
-    this._isView = value;
+  @@Input() set isReadonly(value: boolean) {
+    this._isReadonly = value;
     this.fields = this.initializeFields();
   }
-  get isView() {
-    return this._isView;
+  get isReadonly() {
+    return this._isReadonly;
   }
 
 @@Output() save = new EventEmitter@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>"))();
   @@Output() cancel = new EventEmitter@(Html.Raw("<void>"))();
 
-  _isView: boolean;
+  _isReadonly: boolean;
   form = new FormGroup({});
   fields: FormlyFieldConfig[] = [];
 
@@ -57,13 +57,16 @@ export class @Model.AngularComponentName() implements OnInit {
     return [
     @foreach (var control in Model.VisibleFormControls)
     {
+      var type = control.GetFormlyFieldType();
+      var readonlyType = control.GetReadonlyFormlyFieldType();
+      var typeString = string.Equals(type, readonlyType) ? $"'{type}'" : $"this.isReadonly ? '{readonlyType}' : '{type}'";
       @:{
         @:key: '@control.PropertyName',
-        @:type: '@control.GetFormlyFieldType()',
+        @:type: @Html.Raw(typeString),
         @:templateOptions: {
           @:label: @Html.Localize(control.LabelTranslationId, control.Label, _options.EnableI18N),
           @:placeholder: @Html.Localize(control.PlaceholderTranslationId, control.Placeholder, _options.EnableI18N),
-          @:disabled: this.isView || @control.IsReadonly.ToString().ToLower(),
+          @:disabled: this.isReadonly || @control.IsReadonly.ToString().ToLower(),
           @:description: @Html.Localize(control.HintTranslationId, control.Hint, _options.EnableI18N),
           @if (Model.OptionsAvailable(control))
           {

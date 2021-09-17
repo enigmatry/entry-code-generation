@@ -48,5 +48,18 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+        public string GetReadonlyFormlyFieldType()
+        {
+            switch (Type)
+            {
+                case FormControlType.CheckBox:
+                    return "readonly-boolean";
+                case FormControlType.Radio:
+                    return "readonly-radio";
+                default:
+                    return GetFormlyFieldType();
+            }
+        }
     }
 }
