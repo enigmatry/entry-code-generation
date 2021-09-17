@@ -2,7 +2,7 @@
   "profiles": {
     "Enigmatry.CodeGeneration.Console": {
       "commandName": "Project",
-      "commandLineArgs": "Enigmatry.CodeGeneration.Console --source-assembly C:\\Source\\q-park-parkingshop\\QPark.Parkingshop.Backoffice.CodeGeneration.Setup\\bin\\Debug\\net5.0\\QPark.Parkingshop.Backoffice.CodeGeneration.Setup.dll --destination-directory C:\\Source\\q-park-parkingshop\\qpark-parkingshop-backoffice-app\\src\\app\\features"
+      "commandLineArgs": "Enigmatry.CodeGeneration.Console --source-assembly D:\\Projects\\enigmatry-blueprint-template\\Enigmatry.Blueprint.CodeGeneration.Setup\\bin\\Debug\\net5\\Enigmatry.Blueprint.CodeGeneration.Setup.dll --destination-directory D:\\Projects\\enigmatry-blueprint-template\\enigmatry-blueprint-app\\src\\app\\features"
     }
   }
 }
