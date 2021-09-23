@@ -1,7 +1,8 @@
-﻿using System;
-using System.Reflection;
-using Enigmatry.CodeGeneration.Configuration.Form.Model.Select;
+﻿using Enigmatry.CodeGeneration.Configuration.Form.Model.Select;
 using Humanizer;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace Enigmatry.CodeGeneration.Configuration.Form.Model
 {
@@ -16,6 +17,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         private string? _labelTranslationId;
         private string? _placeholderTranslationId;
         private string? _hintTranslationId;
+        private IList<string> _validators = new List<string>();
 
         public PropertyInfo PropertyInfo { get; }
         public FormControlType FormControlType { get; private set; }
@@ -79,7 +81,8 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
                         LookupMethod = Select?.Build().LookupMethod!,
                         LabelTranslationId = labelTranslationId,
                         PlaceholderTranslationId = placeholderTranslationId,
-                        HintTranslationId = hintTranslationId
+                        HintTranslationId = hintTranslationId,
+                        Validators = _validators
                     };
                 default:
                     return new FormControlModel
@@ -95,7 +98,8 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
                         ValueType = PropertyInfo.PropertyType,
                         LabelTranslationId = labelTranslationId,
                         PlaceholderTranslationId = placeholderTranslationId,
-                        HintTranslationId = hintTranslationId
+                        HintTranslationId = hintTranslationId,
+                        Validators = _validators
                     };
             }
         }
@@ -145,6 +149,15 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         public FormControlBuilder WithHintTranslationId(string translationId)
         {
             _hintTranslationId = translationId;
+            return this;
+        }
+
+        public FormControlBuilder WithValidator(string validatorName)
+        {
+            if (!_validators.Contains(validatorName))
+            {
+                _validators.Add(validatorName);
+            }
             return this;
         }
 

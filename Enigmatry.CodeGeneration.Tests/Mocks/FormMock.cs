@@ -10,6 +10,8 @@ namespace Enigmatry.CodeGeneration.Tests.Mocks
         public DateTimeOffset Date { get; set; }
         public decimal Money { get; set; }
         public int Amount { get; set; }
+        public string Email1 { get; set; } = String.Empty;
+        public string Email2 { get; set; } = String.Empty;
         public EnumMock FormStatus { get; set; }
         public Guid CategoryId { get; set; }
         public Guid TypeId { get; set; }

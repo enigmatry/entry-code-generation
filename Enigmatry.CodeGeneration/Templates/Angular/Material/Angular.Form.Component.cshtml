@@ -1,7 +1,8 @@
 ﻿@using Humanizer;
-@using Enigmatry.CodeGeneration
-@using Enigmatry.CodeGeneration.Angular
-@using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
+@using Enigmatry.CodeGeneration;
+@using Enigmatry.CodeGeneration.Angular;
+@using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
+@using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript;
 @model Enigmatry.CodeGeneration.Configuration.Form.FormComponentModel;
 @inject CodeGeneratorOptions _options;
 import { Component, EventEmitter, Input, OnInit, Output } from '@@angular/core';
@@ -10,12 +11,8 @@ import { FormlyFieldConfig } from '@@ngx-formly/core';
 import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPath';
 @if (Model.LookupService != null)
 {
-@:import { map } from 'rxjs/operators';
-@:import { @(Model.ComponentInfo.Name)LookupService } from '../services/@(Model.AngularComponentDirectory())-generated-lookup.service';
-}
-@if (Model.HasCustomValidators)
-{
-@Html.ImportValidators(Model.FormControls, _options.ValidatorsPath)
+    @:import { map } from 'rxjs/operators';
+    @:import { @(Model.ComponentInfo.Name)LookupService } from '../services/@(Model.AngularComponentDirectory())-generated-lookup.service';
 }
 
 @@Component({
@@ -41,7 +38,8 @@ export class @Model.AngularComponentName() implements OnInit {
   form = new FormGroup({});
   fields: FormlyFieldConfig[] = [];
 
-  constructor(@if (Model.LookupService != null) { <text>private lookupService: @(Model.ComponentInfo.Name)LookupService</text> }) {
+  constructor(@if (Model.LookupService != null)
+{<text>private lookupService: @(Model.ComponentInfo.Name)LookupService</text>}) {
     this.fields = this.initializeFields();
   }
 
@@ -55,49 +53,47 @@ export class @Model.AngularComponentName() implements OnInit {
 
   initializeFields(): FormlyFieldConfig[] {
     return [
-    @foreach (var control in Model.VisibleFormControls)
-    {
-      var type = control.GetFormlyFieldType();
-      var readonlyType = control.GetReadonlyFormlyFieldType();
-      var typeString = string.Equals(type, readonlyType) ? $"'{type}'" : $"this.isReadonly ? '{readonlyType}' : '{type}'";
-      @:{
-        @:key: '@control.PropertyName',
-        @:type: @Html.Raw(typeString),
-        @:templateOptions: {
-          @:label: @Html.Localize(control.LabelTranslationId, control.Label, _options.EnableI18N),
-          @:placeholder: @Html.Localize(control.PlaceholderTranslationId, control.Placeholder, _options.EnableI18N),
-          @:disabled: this.isReadonly || @control.IsReadonly.ToString().ToLower(),
-          @:description: @Html.Localize(control.HintTranslationId, control.Hint, _options.EnableI18N),
-          @if (Model.OptionsAvailable(control))
-          {
-          @:options: this.lookupService.get@(control.PropertyName.Pascalize())$.pipe(
+@foreach (var control in Model.VisibleFormControls)
+{
+    var type = control.GetFormlyFieldType();
+    var readonlyType = control.GetReadonlyFormlyFieldType();
+    var typeString = string.Equals(type, readonlyType) ? $"'{type}'" : $"this.isReadonly ? '{readonlyType}' : '{type}'";
+    @:{
+    @:key: '@control.PropertyName',
+    @:type: @Html.Raw(typeString),
+    @:templateOptions: {
+        @:label: @Html.Localize(control.LabelTranslationId, control.Label, _options.EnableI18N),
+        @:placeholder: @Html.Localize(control.PlaceholderTranslationId, control.Placeholder, _options.EnableI18N),
+        @:disabled: this.isReadonly || @control.IsReadonly.ToString().ToLower(),
+        @:description: @Html.Localize(control.HintTranslationId, control.Hint, _options.EnableI18N),
+        @if (Model.OptionsAvailable(control))
+        {
+            @:options: this.lookupService.get@(control.PropertyName.Pascalize())$.pipe(
             @:map((arr) =>
-              @:arr.map(el => el = {value: el.value, label: el.displayName}))
+            @:arr.map(el => el = {value: el.value, label: el.displayName}))
             @:),
-          }
-          @:hidden: !@control.IsVisible.ToString().ToLower(),
-          @if(control.BuiltInValidationRules.Any())
-          {
-          @Html.AddValidationFields(control)
-          }
-        @:},
-        @if(control.BuiltInValidationRules.Any())
-        {
-        @:validation: {
-          @:messages: {
-            @Html.AddValidationMessages(control, _options.EnableI18N)
-          @:}
-        @:},
         }
-        @if (control.CustomValidator != null)
+        @:hidden: !@control.IsVisible.ToString().ToLower(),
+        @if (control.ValidationRules.Any())
         {
-            @Html.AddValidators(control.PropertyName, control.CustomValidator, _options.EnableI18N)
+            @Html.AddValidationTemplateOptions(control)
         }
-        @if (control.AsyncCustomValidator != null)
-        {
-            @Html.AddAsuncValidators(control.PropertyName, control.AsyncCustomValidator, _options.EnableI18N)
-        }
-      @:},
+    @:},
+    @if (control.ValidationRules.Any(x => x.HasCustomMessage))
+    {
+    @:validation: {
+        @:messages: {
+            @Html.AddCustomValidationMessages(control, _options.EnableI18N)
+        @:}
+    @:},
+    }
+    @if (control.Validators.Any())
+    {
+    @:asyncValidators: {
+        @:validation: @Html.JsStringArray(control.Validators.Select(x => x.Camelize()))
+    @:},
+    }
+    @:},
     }
     ];
   }

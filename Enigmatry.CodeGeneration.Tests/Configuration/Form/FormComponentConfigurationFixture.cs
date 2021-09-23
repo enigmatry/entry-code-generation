@@ -28,12 +28,16 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.Form
 
             var titleFormControl = componentModel.FormControls
                 .Single(x => x.PropertyName == nameof(ProjectDetails.Title).ToLowerInvariant());
-            titleFormControl.BuiltInValidationRules.Count.Should().Be(1);
-            titleFormControl.BuiltInValidationRules.Single().Name.Should().Be("maxLength");
+            titleFormControl.ValidationRules.Count.Should().Be(1);
+            titleFormControl.ValidationRules.Single()
+                .FormlyRuleName
+                .Should().Be("maxLength");
             var detailsFormControl = componentModel.FormControls
                 .Single(x => x.PropertyName == nameof(ProjectDetails.Description).ToLowerInvariant());
-            detailsFormControl.BuiltInValidationRules.Count.Should().Be(1);
-            detailsFormControl.BuiltInValidationRules.Single().Name.Should().Be("maxLength");
+            detailsFormControl.ValidationRules.Count.Should().Be(1);
+            detailsFormControl.ValidationRules.Single()
+                .FormlyRuleName
+                .Should().Be("maxLength");
 
         }
 
@@ -53,9 +57,9 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.Form
             public ProjectDetailsValidation()
             {
                 RuleFor(x => x.Title)
-                    .Max(25).WithMessage("Title is too long");
+                    .MaxLength(25).WithMessage("Title is too long");
                 RuleFor(x => x.Description)
-                    .Max(250).WithMessage("Description is too long");
+                    .MaxLength(250).WithMessage("Description is too long");
             }
         }
 

@@ -55,6 +55,8 @@ namespace Enigmatry.CodeGeneration.Tests.Angular
                 var expectedContent = File.ReadAllText($"Angular/FilesToBeGenerated/{fileName}");
                 var generatedContent = generatedFile.Content;
 
+                System.Console.WriteLine($"Validation against {fileName} file!");
+
                 Uglify(generatedContent).Should().BeEquivalentTo(Uglify(expectedContent));
             }
         }

@@ -1,4 +1,5 @@
 ﻿using Enigmatry.BuildingBlocks.Validation;
+using System.Text.RegularExpressions;
 
 namespace Enigmatry.CodeGeneration.Tests.Mocks
 {
@@ -8,19 +9,24 @@ namespace Enigmatry.CodeGeneration.Tests.Mocks
         {
             RuleFor(x => x.Name)
                 .IsRequired()
-                    .WithMessageTranslationId(Constants.CustomValidationMessageTranslationId)
-                .Max(50)
-                    .WithMessage(Constants.CustomValidationMessage)
-                    .WithMessageTranslationId(Constants.CustomValidationMessageTranslationId)
-                .HasAsyncValidator(Constants.CustomAsyncValidator);
+                    .WithMessage(Constants.CustomValidationMessage, Constants.CustomValidationMessageTranslationId)
+                .MaxLength(50)
+                    .WithMessage(Constants.CustomValidationMessage, Constants.CustomValidationMessageTranslationId)
+                .Match(new Regex("/[A-Z]/"));
 
             RuleFor(x => x.Amount)
                 .IsRequired()
-                .Min(0)
+                .GreaterThen(0)
                     .WithMessage(Constants.CustomValidationMessage)
-                .Max(100)
-                    .WithMessage(Constants.CustomValidationMessage)
-                .HasValidator(Constants.CustomValidator);
+                .LessThen(100)
+                    .WithMessage(Constants.CustomValidationMessage);
+
+            RuleFor(x => x.Email1)
+                .EmailAddress()
+                    .WithMessage(Constants.CustomValidationMessage);
+
+            RuleFor(x => x.Email2)
+                .EmailAddress();
         }
     }
 }

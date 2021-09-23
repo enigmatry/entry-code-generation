@@ -12,7 +12,6 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
 import { IFormMock } from 'src/app/api/api-reference';
 import { map } from 'rxjs/operators';
 import { FormLookupService } from '../services/form-generated-lookup.service';
-import { ASYNC_CUSTOM_VALIDATOR, CUSTOM_VALIDATOR } from 'src/app/shared/validators/custom-validators';
 
 @Component({
   selector: 'app-g-form',
@@ -62,14 +61,17 @@ export class FormGeneratedComponent implements OnInit {
           hidden: !true,
           required: true,
           maxLength: 50,
+          pattern: /[A-Z]/,
         },
         validation: {
             messages: {
-                required: $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:Name is required`,
-                maxLength: $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`
+                required: $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`,
+                maxlength: $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`
             }
         },
-        asyncValidators: { name: { expression: ASYNC_CUSTOM_VALIDATOR, message: $localize `:@@test.form.name.custom-async-validator:ASYNC_CUSTOM_VALIDATOR validator condition is not meet` } },
+        asyncValidators: {
+            validation: [ 'uniqueName', 'isEnsured' ]
+        },
       },
      {
         key: 'description',
@@ -80,6 +82,9 @@ export class FormGeneratedComponent implements OnInit {
           disabled: this.isReadonly || false,
           description: '',
           hidden: !true,
+        },
+        asyncValidators: {
+            validation: [ 'validDescription' ]
         },
       },
      {
@@ -113,19 +118,51 @@ export class FormGeneratedComponent implements OnInit {
           disabled: this.isReadonly || false,
           description: '',
           hidden: !true,
-          type: 'number',
           required: true,
-          min: 0,
-          max: 100,
+          type: 'number',
+          min: 1,
+          max: 99,
         },
         validation: {
             messages: {
-                required: $localize `:@@test.form.amount.required:Amount is required`,
                 min: $localize `:@@test.form.amount.min:CUSTOM_VALIDATION_MESSAGE`,
                 max: $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAGE`
             }
         },
-        validators: { amount: { expression: CUSTOM_VALIDATOR, message: $localize `:@@test.form.amount.custom-validator:CUSTOM_VALIDATOR validator condition is not meet` } },
+      },
+     {
+        key: 'email1',
+        type: 'input',
+        templateOptions: {
+          label: $localize `:@@test.form.email1.label:Email 1`,
+          placeholder: $localize `:@@test.form.email1.placeholder:Email 1`,
+          disabled: this.isReadonly || false,
+          description: '',
+          hidden: !true,
+          pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+        },
+        validation: {
+            messages: {
+                pattern: $localize `:@@test.form.email1.pattern:CUSTOM_VALIDATION_MESSAGE`
+            }
+        },
+      },
+     {
+        key: 'email2',
+        type: 'input',
+        templateOptions: {
+          label: $localize `:@@test.form.email2.label:Email 2`,
+          placeholder: $localize `:@@test.form.email2.placeholder:Email 2`,
+          disabled: this.isReadonly || false,
+          description: '',
+          hidden: !true,
+          pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+        },
+        validation: {
+            messages: {
+                pattern: $localize `:@@validators.pattern.emailAddress:Invalid email address format`
+            }
+        },
       },
      {
         key: 'formStatus',

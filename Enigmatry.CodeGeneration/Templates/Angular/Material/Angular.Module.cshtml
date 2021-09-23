@@ -1,6 +1,7 @@
 ﻿@model Enigmatry.CodeGeneration.Configuration.FeatureModule;
 @using Enigmatry.CodeGeneration.Angular
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions
+@using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
 import { NgModule } from '@@angular/core';
 import { CommonModule } from '@@angular/common';
@@ -8,34 +9,50 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { EnigmatryGridModule } from '@@enigmatry/angular-building-blocks/enigmatry-grid';
 @if (Model.HasFormComponents)
 {
-@:import { FormlyModule } from '@@ngx-formly/core';
-@:import { FormlyMaterialModule } from '@@ngx-formly/material';
-@:import { MatNativeDateModule } from '@@angular/material/core';
-@:import { MatAutocompleteModule } from '@@angular/material/autocomplete';
-@:import { FormlyMatDatepickerModule } from '@@ngx-formly/material/datepicker';
+    @:import { FormlyModule, FORMLY_CONFIG } from '@@ngx-formly/core';
+    @:import { FormlyMaterialModule } from '@@ngx-formly/material';
+    @:import { MatNativeDateModule } from '@@angular/material/core';
+    @:import { MatAutocompleteModule } from '@@angular/material/autocomplete';
+    @:import { FormlyMatDatepickerModule } from '@@ngx-formly/material/datepicker';
 }
 @Html.ImportModules(Model.Imports)
 @Html.ImportComponentsFrom(Model)
+@Html.ImportValidators(Model)
 
 @@NgModule({
     declarations: @Html.JsArray(Model.Components, component => component.AngularComponentName()),
     imports: [
-        CommonModule,
-        SharedModule,
-        EnigmatryGridModule,
-        @if (Model.HasFormComponents)
-        {
+    CommonModule,
+    SharedModule,
+    EnigmatryGridModule,
+    @if (Model.HasFormComponents)
+    {
         @:MatAutocompleteModule,
         @:MatNativeDateModule,
-        @:FormlyModule.forChild(),
+        @:FormlyModule.forChild(
+        @if (Model.HasCommonValidationMessages)
+        {
+            @:{
+                @:validationMessages: [
+                    @Html.AddCommonValidationMessages(Model, true)
+                @:]
+            @:}
+        }
+        @:),
         @:FormlyMaterialModule,
         @:FormlyMatDatepickerModule,
-        }
-        @if (Model.HasModuleImports)
-        {
+    }
+    @if (Model.HasModuleImports)
+    {
         @String.Join(',', Model.Imports.Select(m => m.Name))
-        }
+    }
     ],
-    exports: @Html.JsArray(Model.Components, component => component.AngularComponentName())
-})
-export class @(Model.Name)GeneratedModule { }
+    exports: @Html.JsArray(Model.Components, component => component.AngularComponentName()),
+    providers: [
+    @if (Model.HasFormValidators)
+    {
+        @Html.AddFromValidationProvider(Model)
+    }
+    ]
+    })
+    export class @(Model.Name)GeneratedModule { }

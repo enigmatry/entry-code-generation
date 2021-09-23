@@ -1,8 +1,6 @@
-﻿using Enigmatry.BuildingBlocks.Validation.ValidationRules.BuiltInRules;
-using Enigmatry.BuildingBlocks.Validation.ValidationRules.CustomValidationRules;
+﻿using Enigmatry.BuildingBlocks.Validation.ValidationRules;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Enigmatry.CodeGeneration.Configuration.Form.Model
 {
@@ -20,10 +18,8 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         public string PlaceholderTranslationId { get; set; } = String.Empty;
         public string HintTranslationId { get; set; } = String.Empty;
         public Type? ValueType { get; set; }
-        public IList<BuiltInValidationRule> BuiltInValidationRules { get; set; } = new List<BuiltInValidationRule>();
-        public CustomValidatorValidationRule? CustomValidator { get; set; }
-        public AsyncCustomValidatorValidationRule? AsyncCustomValidator { get; set; }
-
+        public IList<IFormlyValidationRule> ValidationRules { get; set; } = new List<IFormlyValidationRule>();
+        public IList<string> Validators = new List<string>();
 
         public string GetFormlyFieldType()
         {

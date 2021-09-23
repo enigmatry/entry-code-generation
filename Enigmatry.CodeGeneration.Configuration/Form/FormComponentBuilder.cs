@@ -1,4 +1,5 @@
 ﻿using Enigmatry.BuildingBlocks.Validation;
+using Enigmatry.BuildingBlocks.Validation.ValidationRules;
 using Enigmatry.CodeGeneration.Configuration.Builder;
 using Enigmatry.CodeGeneration.Configuration.Form.Model;
 using JetBrains.Annotations;
@@ -13,7 +14,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
     public class FormComponentBuilder<T> : BaseComponentBuilder<FormComponentModel>
     {
         private readonly IList<FormControlBuilder> _formControls;
-        private IHasValidationRules? _validationConfirguration = null;
+        private IEnumerable<IFormlyValidationRule> _validationRules = new List<IFormlyValidationRule>();
 
         public FormComponentBuilder() : base(typeof(T))
         {
@@ -30,9 +31,9 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
             return FormControlBuilder(propertyExpression);
         }
 
-        public void WithValidationConfiguration(IHasValidationRules validationConfirguration)
+        public void WithValidationConfiguration(IHasFormlyValidationRules validationConfirguration)
         {
-            _validationConfirguration = validationConfirguration;
+            _validationRules = validationConfirguration.ValidationRules;
         }
 
         public override FormComponentModel Build()
@@ -40,7 +41,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
             var componentInfo = _componentInfoBuilder.Build();
             var formControls = _formControls.Select(_ => _.Build(componentInfo));
 
-            return new FormComponentModel(componentInfo, formControls, _validationConfirguration);
+            return new FormComponentModel(componentInfo, formControls, _validationRules);
         }
 
         private FormControlBuilder FormControlBuilder<TProperty>(Expression<Func<T, TProperty>> propertyExpression)

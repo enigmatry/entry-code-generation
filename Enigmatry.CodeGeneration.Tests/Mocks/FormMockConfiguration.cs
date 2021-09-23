@@ -16,11 +16,14 @@ namespace Enigmatry.CodeGeneration.Tests.Mocks
 
             builder.FormControl(x => x.Name)
                 .WithLabel("Name")
-                .WithPlaceholder("Name");
+                .WithPlaceholder("Name")
+                .WithValidator("UniqueName")
+                .WithValidator("IsEnsured");
 
             builder.FormControl(x => x.Description)
                 .WithLabel("Description")
-                .WithPlaceholder("Description");
+                .WithPlaceholder("Description")
+                .WithValidator("ValidDescription");
 
             builder
                 .FormControl(x => x.Date)

@@ -16,6 +16,16 @@ namespace Enigmatry.CodeGeneration.Configuration
         public bool HasTableComponents => Components.OfType<ListComponentModel>().Any();
         public bool HasFormComponents => Components.OfType<FormComponentModel>().Any();
         public bool HasModuleImports => Imports.Any();
+        public bool HasCommonValidationMessages =>
+            Components.OfType<FormComponentModel>()
+            .Any(form =>
+                form.FormControls.Any(control =>
+                    control.ValidationRules.Any(rule => !rule.HasCustomMessage)
+                )
+            );
+        public bool HasFormValidators =>
+            Components.OfType<FormComponentModel>()
+            .Any(form => form.FormControls.Any(control => control.Validators.Any()));
 
         public FeatureModule(string name, IEnumerable<IComponentModel> components)
         {
