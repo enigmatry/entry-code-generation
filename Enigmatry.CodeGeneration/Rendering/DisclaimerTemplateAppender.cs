@@ -17,6 +17,7 @@ namespace Enigmatry.CodeGeneration.Rendering
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------;
+/* eslint-disable */
 ";
 
         public bool AppendAtStart(string path) => Path.GetExtension(path) == ".ts";
