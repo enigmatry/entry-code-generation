@@ -70,9 +70,8 @@ export class FormGeneratedComponent implements OnInit {
                 maxlength: $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`
             }
         },
-        asyncValidators: {
-            validation: [ 'uniqueName', 'isEnsured' ]
-        },
+        modelOptions: { updateOn: 'blur' },
+        asyncValidators: { validation: [ 'isEnsured' ] },
       },
      {
         key: 'description',
@@ -84,9 +83,8 @@ export class FormGeneratedComponent implements OnInit {
           description: '',
           hidden: !true,
         },
-        asyncValidators: {
-            validation: [ 'validDescription' ]
-        },
+        modelOptions: { updateOn: 'blur' },
+        asyncValidators: { validation: [ 'validDescription' ] },
       },
      {
         key: 'date',

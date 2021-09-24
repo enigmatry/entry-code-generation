@@ -1,4 +1,5 @@
 ﻿using Enigmatry.BuildingBlocks.Validation.ValidationRules;
+using Enigmatry.CodeGeneration.Configuration.Form.Model.Validators;
 using System;
 using System.Collections.Generic;
 
@@ -19,7 +20,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         public string HintTranslationId { get; set; } = String.Empty;
         public Type? ValueType { get; set; }
         public IList<IFormlyValidationRule> ValidationRules { get; set; } = new List<IFormlyValidationRule>();
-        public IList<string> Validators = new List<string>();
+        public CustomValidator? Validator = null;
 
         public string GetFormlyFieldType()
         {
@@ -47,15 +48,12 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
 
         public string GetReadonlyFormlyFieldType()
         {
-            switch (Type)
+            return Type switch
             {
-                case FormControlType.CheckBox:
-                    return "readonly-boolean";
-                case FormControlType.Radio:
-                    return "readonly-radio";
-                default:
-                    return GetFormlyFieldType();
-            }
+                FormControlType.CheckBox => "readonly-boolean",
+                FormControlType.Radio => "readonly-radio",
+                _ => GetFormlyFieldType(),
+            };
         }
     }
 }

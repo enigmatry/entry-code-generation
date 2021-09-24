@@ -87,11 +87,10 @@ export class @Model.AngularComponentName() implements OnInit {
         @:}
     @:},
     }
-    @if (control.Validators.Any())
+    @if (control.Validator != null)
     {
-    @:asyncValidators: {
-        @:validation: @Html.JsStringArray(control.Validators.Select(x => x.Camelize()))
-    @:},
+    @Html.AddModelOpetions(control)
+    @Html.AddAsyncValidators(control)
     }
     @:},
     }

@@ -1,4 +1,5 @@
 ﻿using Enigmatry.CodeGeneration.Configuration.Form.Model.Select;
+using Enigmatry.CodeGeneration.Configuration.Form.Model.Validators;
 using Humanizer;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         private string? _labelTranslationId;
         private string? _placeholderTranslationId;
         private string? _hintTranslationId;
-        private IList<string> _validators = new List<string>();
+        private CustomValidator? _validator = null;
 
         public PropertyInfo PropertyInfo { get; }
         public FormControlType FormControlType { get; private set; }
@@ -82,7 +83,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
                         LabelTranslationId = labelTranslationId,
                         PlaceholderTranslationId = placeholderTranslationId,
                         HintTranslationId = hintTranslationId,
-                        Validators = _validators
+                        Validator = _validator
                     };
                 default:
                     return new FormControlModel
@@ -99,7 +100,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
                         LabelTranslationId = labelTranslationId,
                         PlaceholderTranslationId = placeholderTranslationId,
                         HintTranslationId = hintTranslationId,
-                        Validators = _validators
+                        Validator = _validator
                     };
             }
         }
@@ -152,12 +153,9 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
             return this;
         }
 
-        public FormControlBuilder WithValidator(string validatorName)
+        public FormControlBuilder WithValidator(string validatorName, ValidatorTrigger validatorTrigger = ValidatorTrigger.OnBlur)
         {
-            if (!_validators.Contains(validatorName))
-            {
-                _validators.Add(validatorName);
-            }
+            _validator = new CustomValidator(validatorName, validatorTrigger);
             return this;
         }
 

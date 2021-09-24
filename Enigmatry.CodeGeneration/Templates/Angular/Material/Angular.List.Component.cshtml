@@ -27,7 +27,7 @@ export class @Model.AngularComponentName() implements OnInit {
   @@Input() pageSizeOptions = @Html.JsArray(Model.Pagination.PageSizeOptions);
   @@Input() hidePageSize = !@Model.Pagination.ShowPageSize.ToString().ToLower();
 
-  @@Input() defaultSort: { sortBy?: string | undefined; sortDirection?: SortDirection } = { };
+  @@Input() defaultSort: { sortBy?: string | undefined, sortDirection?: SortDirection } = { };
 
   @@Input() rowSelectable = @Model.Row.IsSelectable.ToString().ToLower();
   @@Input() multiSelectable = @((Model.Row.Selection == RowSelectionType.Multiple).ToString().ToLower());

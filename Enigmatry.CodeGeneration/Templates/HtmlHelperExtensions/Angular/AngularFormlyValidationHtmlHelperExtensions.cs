@@ -1,7 +1,9 @@
 ﻿using Enigmatry.CodeGeneration.Configuration;
 using Enigmatry.CodeGeneration.Configuration.Form;
 using Enigmatry.CodeGeneration.Configuration.Form.Model;
+using Enigmatry.CodeGeneration.Configuration.Form.Model.Validators;
 using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript;
+using Humanizer;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -19,6 +21,16 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
                 .Distinct();
             return html.Raw($"{String.Join(",\r\n", templateOptions)},\r\n");
         }
+
+        public static IHtmlContent AddModelOpetions(this IHtmlHelper html, FormControlModel control) =>
+            control.Validator == null
+                ? html.Raw("")
+                : html.Raw($"modelOptions: {{ updateOn: '{control.Validator.Trigger}' }},\r\n");
+
+        public static IHtmlContent AddAsyncValidators(this IHtmlHelper html, FormControlModel control) =>
+            control.Validator == null
+                ? html.Raw("")
+                : html.Raw($"asyncValidators: {{ validation: [ '{control.Validator.Name.Camelize()}' ] }},\r\n");
 
         public static IHtmlContent AddCustomValidationMessages(this IHtmlHelper html, FormControlModel form, bool enableI18N)
         {

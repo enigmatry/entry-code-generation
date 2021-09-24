@@ -1,6 +1,7 @@
 ﻿using Enigmatry.CodeGeneration.Configuration;
 using Enigmatry.CodeGeneration.Configuration.Builder;
 using Enigmatry.CodeGeneration.Configuration.Form;
+using Enigmatry.CodeGeneration.Configuration.Form.Model.Validators;
 using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 using Enigmatry.CodeGeneration.Tests.Mocks;
 using Humanizer;
@@ -25,7 +26,7 @@ namespace Enigmatry.CodeGeneration.Tests.HtmlHelperExtensions.Angular
             );
             _formComponent.FormControls
                 .Single(x => x.PropertyName == nameof(FormMock.Name).Camelize())
-                .Validators = new[] { "nameValidator" };
+                .Validator = new CustomValidator("nameValidator");
             _featureModule = new FeatureModule("module", new[] { _formComponent });
         }
 
@@ -37,6 +38,26 @@ namespace Enigmatry.CodeGeneration.Tests.HtmlHelperExtensions.Angular
         {
             var formControl = _formComponent.FormControls.Single(x => x.PropertyName == propertyName.Camelize());
             return _htmlHelper.AddValidationTemplateOptions(formControl)?.ToString()?.Replace("\r\n", "") ?? "";
+        }
+
+        [TestCase(nameof(FormMock.Name), ExpectedResult = "modelOptions: { updateOn: 'blur' },")]
+        [TestCase(nameof(FormMock.Amount), ExpectedResult = "")]
+        [TestCase(nameof(FormMock.Email1), ExpectedResult = "")]
+        [TestCase(nameof(FormMock.Email1), ExpectedResult = "")]
+        public string AddModelOpetions(string propertyName)
+        {
+            var formControl = _formComponent.FormControls.Single(x => x.PropertyName == propertyName.Camelize());
+            return _htmlHelper.AddModelOpetions(formControl)?.ToString()?.Replace("\r\n", "") ?? "";
+        }
+
+        [TestCase(nameof(FormMock.Name), ExpectedResult = "asyncValidators: { validation: [ 'nameValidator' ] },")]
+        [TestCase(nameof(FormMock.Amount), ExpectedResult = "")]
+        [TestCase(nameof(FormMock.Email1), ExpectedResult = "")]
+        [TestCase(nameof(FormMock.Email1), ExpectedResult = "")]
+        public string AddAsyncValidators(string propertyName)
+        {
+            var formControl = _formComponent.FormControls.Single(x => x.PropertyName == propertyName.Camelize());
+            return _htmlHelper.AddAsyncValidators(formControl)?.ToString()?.Replace("\r\n", "") ?? "";
         }
 
         [TestCase(nameof(FormMock.Name), ExpectedResult =
