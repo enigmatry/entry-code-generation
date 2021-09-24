@@ -16,6 +16,7 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
         private bool _isSortable;
         private IPropertyFormatter _formatter;
         private string? _customCellComponent;
+        private string? _customCellCssClass;
 
         public ColumnDefinitionBuilder(PropertyInfo propertyInfo)
         {
@@ -49,7 +50,8 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
                 IsSortable = _isSortable,
                 IsVisible = _isVisible,
                 Formatter = _formatter,
-                CustomCellComponent = _customCellComponent
+                CustomCellComponent = _customCellComponent,
+                CustomCellCssClass = _customCellCssClass
             };
         }
 
@@ -90,6 +92,12 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
         public ColumnDefinitionBuilder WithCustomComponent(string componentName)
         {
             _customCellComponent = componentName;
+            return this;
+        }
+
+        public ColumnDefinitionBuilder WithCustomCssClass(string cssClassName)
+        {
+            _customCellCssClass = cssClassName;
             return this;
         }
 

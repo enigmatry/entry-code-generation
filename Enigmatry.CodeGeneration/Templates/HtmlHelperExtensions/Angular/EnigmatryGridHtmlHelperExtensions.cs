@@ -58,8 +58,8 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
         {
             var columnType = column.Formatter.JsFormatterName;
             var columnTypeParams = column.Formatter.ToJsObject();
-            var cellTemplate = $"this.{CustomCellTemplateRefId(column)}";
             var propertyName = column.Property.Camelize();
+            var cellTemplate = $"this.{CustomCellTemplateRefId(column)}";
 
             var header = enableI18N ? AngularLocalization.Localize(column.TranslationId, column.HeaderName) : column.HeaderName;
 
@@ -70,7 +70,8 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
                 JsProperty("sortable", column.IsSortable),
                 JsProperty("type", columnType, !columnType.HasContent()),
                 JsProperty("typeParameter", columnTypeParams, !columnType.HasContent(), true),
-                JsProperty("cellTemplate", cellTemplate, !column.HasCustomCellComponent, true)
+                JsProperty("cellTemplate", cellTemplate, !column.HasCustomCellComponent, true),
+                JsProperty("class", column.CustomCellCssClass ?? "", !column.HasCustomCellCssClass)
             );
         }
 

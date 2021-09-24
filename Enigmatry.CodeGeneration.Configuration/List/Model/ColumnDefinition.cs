@@ -13,6 +13,8 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
         public bool IsSortable { get; set; }
         public string TranslationId { get; set; } = String.Empty;
         public string? CustomCellComponent { get; set; }
+        public string? CustomCellCssClass { get; set; }
         public bool HasCustomCellComponent => CustomCellComponent.HasContent();
+        public bool HasCustomCellCssClass => CustomCellCssClass.HasContent();
     }
 }
