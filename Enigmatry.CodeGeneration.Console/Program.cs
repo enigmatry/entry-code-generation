@@ -7,6 +7,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Enigmatry.Blueprint.BuildingBlocks.TemplatingEngine;
 using Enigmatry.CodeGeneration.Angular;
+using Enigmatry.CodeGeneration.Console.Intro;
 using Enigmatry.CodeGeneration.Rendering;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,7 +40,7 @@ namespace Enigmatry.CodeGeneration.Console
             }
             finally
             {
-                PrintBlankLines();
+                System.Console.WriteLine();
                 Log.CloseAndFlush();
             }
         }
@@ -82,7 +83,7 @@ namespace Enigmatry.CodeGeneration.Console
 
             try
             {
-                PrintIntro();
+                new IntroGenerator().Print();
 
                 var host = CreateHostBuilder().Build();
 
@@ -130,34 +131,6 @@ namespace Enigmatry.CodeGeneration.Console
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<TStartup>(); })
                 .ConfigureContainer(configureContainer)
                 .UseConsoleLifetime();
-        }
-
-
-        private static void PrintIntro()
-        {
-            PrintBlankLines();
-            System.Console.ForegroundColor = ConsoleColor.DarkCyan;
-            System.Console.WriteLine(@" █▀▀ █▄░█ █ █▀▀ █▀▄▀█ ▄▀█ ▀█▀ █▀█ █▄█");
-            System.Console.WriteLine(@" ██▄ █░▀█ █ █▄█ █░▀░█ █▀█ ░█░ █▀▄ ░█░");
-            System.Console.ForegroundColor = ConsoleColor.Yellow;
-            System.Console.WriteLine(@"  ____  _                       _       _      _____          _         _____                           _             ");
-            System.Console.WriteLine(@" |  _ \| |                     (_)     | |    / ____|        | |       / ____|                         | |            ");
-            System.Console.WriteLine(@" | |_) | |_   _  ___ _ __  _ __ _ _ __ | |_  | |     ___   __| | ___  | |  __  ___ _ __   ___ _ __ __ _| |_ ___  _ __ ");
-            System.Console.WriteLine(@" |  _ <| | | | |/ _ \ '_ \| '__| | '_ \| __| | |    / _ \ / _` |/ _ \ | | |_ |/ _ \ '_ \ / _ \ '__/ _` | __/ _ \| '__|");
-            System.Console.WriteLine(@" | |_) | | |_| |  __/ |_) | |  | | | | | |_  | |___| (_) | (_| |  __/ | |__| |  __/ | | |  __/ | | (_| | || (_) | |   ");
-            System.Console.WriteLine(@" |____/|_|\__,_|\___| .__/|_|  |_|_| |_|\__|  \_____\___/ \__,_|\___|  \_____|\___|_| |_|\___|_|  \__,_|\__\___/|_|   ");
-            System.Console.WriteLine(@"                    | |                                                                                               ");
-            System.Console.WriteLine(@"                    |_|                                                                                               ");
-            System.Console.ForegroundColor = ConsoleColor.Gray;
-            PrintBlankLines();
-        }
-
-        private static void PrintBlankLines(int count = 1)
-        {
-            for (int i = 0; i < count; i++)
-            {
-                System.Console.WriteLine();
-            }
         }
     }
 }
