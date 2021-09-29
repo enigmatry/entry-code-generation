@@ -153,6 +153,12 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
             return this;
         }
 
+        /// <summary>
+        /// Configure custom field validator name and trigger event (onBlur is default)
+        /// </summary>
+        /// <param name="validatorName">Validator name to be matched on client side</param>
+        /// <param name="validatorTrigger">Event to trigger validator (default is onBlur)</param>
+        /// <returns></returns>
         public FormControlBuilder WithValidator(string validatorName, ValidatorTrigger validatorTrigger = ValidatorTrigger.OnBlur)
         {
             _validator = new CustomValidator(validatorName, validatorTrigger);

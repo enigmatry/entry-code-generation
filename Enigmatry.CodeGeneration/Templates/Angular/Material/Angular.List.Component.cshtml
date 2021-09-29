@@ -6,7 +6,7 @@
 @model Enigmatry.CodeGeneration.Configuration.List.ListComponentModel;
 @inject CodeGeneratorOptions _options;
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@@angular/core';
-import { CellTemplate, ColumnDef, ContextMenuItem } from '@@enigmatry/angular-building-blocks/enigmatry-grid';
+import { CellTemplate, ColumnDef, ContextMenuItem, RowContextMenuFormatter } from '@@enigmatry/angular-building-blocks/enigmatry-grid';
 import { PagedData, PageEvent, SortDirection, SortEvent } from '@@enigmatry/angular-building-blocks/pagination';
 
 import { @(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPath';
@@ -37,6 +37,7 @@ export class @Model.AngularComponentName() implements OnInit {
 
   @@Input() showContextMenu = @Model.Row.ShowContextMenu.ToString().ToLower();
   @@Input() contextMenuItems: ContextMenuItem[] = [];
+  @@Input() rowContextMenuFormatter: RowContextMenuFormatter;
 
   @@Input() columns: ColumnDef[] = [];
 
