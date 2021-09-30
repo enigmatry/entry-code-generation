@@ -33,5 +33,8 @@ namespace Enigmatry.CodeGeneration.Console.Intro
 
         public static bool IsMonday(this DateTime date) =>
             date.DayOfWeek == DayOfWeek.Monday;
+
+        public static bool IsFirstDayOfMonth(this DateTime date) =>
+            date.Day == 1;
     }
 }

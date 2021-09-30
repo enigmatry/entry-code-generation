@@ -14,11 +14,14 @@ namespace Enigmatry.CodeGeneration.Tests.Mocks
                     .WithMessage(Constants.CustomValidationMessage, Constants.CustomValidationMessageTranslationId)
                 .Match(new Regex("/[A-Z]/"));
 
+            RuleFor(x => x.Money)
+                .LessThen(999.99M);
+
             RuleFor(x => x.Amount)
                 .IsRequired()
                 .GreaterThen(0)
                     .WithMessage(Constants.CustomValidationMessage)
-                .LessThen(100)
+                .LessOrEqualTo(100)
                     .WithMessage(Constants.CustomValidationMessage);
 
             RuleFor(x => x.Email1)

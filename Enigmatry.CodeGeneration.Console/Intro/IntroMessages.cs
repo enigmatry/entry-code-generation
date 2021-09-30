@@ -15,7 +15,7 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 new IntroMessage("Woo-hoo, let's generate some code."),
                 new IntroMessage("The Dude abides."),
                 new IntroMessage("[MESSAGE_GOES_HERE]"),
-                new IntroMessage(@"4@$#F\#9%5|~!@$55^9HX"),
+                new IntroMessage(@"4@$#F\#9%5Zx~!@$55^9HX"),
                 new IntroMessage("What! Who allowed that?"),
                 new IntroMessage("Your password is incorrect"),
                 new IntroMessage("Please allow me to introduce myself ..."),
@@ -58,9 +58,11 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 new IntroMessage("01101000 01100101 01101100 01101100 01101111!"),
                 new IntroMessage("Running infinite loops ..."),
                 new IntroMessage("Booooring"),
+                new IntroMessage("Are you ready to rumble?"),
                 new IntroMessage("Generating code since 6. April 2021."),
                 new IntroMessage("\"Winamp, it really whips the llama's ass!\""),
                 new IntroMessage("Log your hours every day!"),
+                new IntroMessage("YOLO"),
                 new IntroMessage("Follow the white rabbit.")
                     .WithForegroundColor(ConsoleColor.Green),
                 new IntroMessage("Good morning! Did you sleep well?")
@@ -77,6 +79,8 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                     .WithCondition(() => DateTime.Now.IsNight()),
                 new IntroMessage("Take it easy, it's Friday.")
                     .WithCondition(() => DateTime.Now.IsFriday()),
+                new IntroMessage("Is it happy hour yet?")
+                    .WithCondition(() => DateTime.Now.IsFriday()),
                 new IntroMessage("It's Friday, I'm in love ...")
                     .WithCondition(() => DateTime.Now.IsFriday()),
                 new IntroMessage("The weekend is getting closer")
@@ -89,6 +93,8 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                     .WithForegroundColor(ConsoleColor.Cyan),
                 new IntroMessage("I hate Mondays")
                     .WithCondition(() => DateTime.Now.IsMonday()),
+                new IntroMessage("P A Y D A Y ! ! !")
+                    .WithCondition(() => DateTime.Now.IsFirstDayOfMonth()),
                 // Special cases:
                 new IntroMessage("It's the weekend and you should not be working >:(")
                     .WithType(IntroMessageType.SpecialCase)

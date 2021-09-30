@@ -33,6 +33,7 @@ import { CustomValidatorsService, customValidatorsFactory } from 'src/app/shared
         FormlyModule.forChild({
             validationMessages: [
                 { name: 'pattern', message: (err, field) => $localize `:@@validators.pattern:${field?.templateOptions?.label}:property-name: is not in valid format` },
+                { name: 'max', message: (err, field) => $localize `:@@validators.max:${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:` },
                 { name: 'required', message: (err, field) => $localize `:@@validators.required:${field?.templateOptions?.label}:property-name: is required` }
             ]
         }),

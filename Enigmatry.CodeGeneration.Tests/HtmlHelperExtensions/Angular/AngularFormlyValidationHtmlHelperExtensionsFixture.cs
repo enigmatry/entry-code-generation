@@ -31,7 +31,8 @@ namespace Enigmatry.CodeGeneration.Tests.HtmlHelperExtensions.Angular
         }
 
         [TestCase(nameof(FormMock.Name), ExpectedResult = "required: true,maxLength: 50,pattern: /[A-Z]/,")]
-        [TestCase(nameof(FormMock.Amount), ExpectedResult = "required: true,type: 'number',min: 1,max: 99,")]
+        [TestCase(nameof(FormMock.Money), ExpectedResult = "type: 'number',max: 999.99 - 1,")]
+        [TestCase(nameof(FormMock.Amount), ExpectedResult = "required: true,type: 'number',min: 0 + 1,max: 100,")]
         [TestCase(nameof(FormMock.Email1), ExpectedResult = "pattern: /^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$/,")]
         [TestCase(nameof(FormMock.Email2), ExpectedResult = "pattern: /^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$/,")]
         public string AddValidationTemplateOptions(string propertyName)
@@ -41,6 +42,7 @@ namespace Enigmatry.CodeGeneration.Tests.HtmlHelperExtensions.Angular
         }
 
         [TestCase(nameof(FormMock.Name), ExpectedResult = "modelOptions: { updateOn: 'blur' },")]
+        [TestCase(nameof(FormMock.Money), ExpectedResult = "")]
         [TestCase(nameof(FormMock.Amount), ExpectedResult = "")]
         [TestCase(nameof(FormMock.Email1), ExpectedResult = "")]
         [TestCase(nameof(FormMock.Email1), ExpectedResult = "")]
@@ -51,6 +53,7 @@ namespace Enigmatry.CodeGeneration.Tests.HtmlHelperExtensions.Angular
         }
 
         [TestCase(nameof(FormMock.Name), ExpectedResult = "asyncValidators: { validation: [ 'nameValidator' ] },")]
+        [TestCase(nameof(FormMock.Money), ExpectedResult = "")]
         [TestCase(nameof(FormMock.Amount), ExpectedResult = "")]
         [TestCase(nameof(FormMock.Email1), ExpectedResult = "")]
         [TestCase(nameof(FormMock.Email1), ExpectedResult = "")]
@@ -76,6 +79,7 @@ namespace Enigmatry.CodeGeneration.Tests.HtmlHelperExtensions.Angular
 
         [TestCase(ExpectedResult =
             "{ name: 'pattern', message: (err, field) => $localize `:@@validators.pattern:${field?.templateOptions?.label}:property-name: is not in valid format` }," +
+            "{ name: 'max', message: (err, field) => $localize `:@@validators.max:${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:` }," +
             "{ name: 'required', message: (err, field) => $localize `:@@validators.required:${field?.templateOptions?.label}:property-name: is required` }")]
         public string AddCommonValidationMessages() =>
             _htmlHelper.AddCommonValidationMessages(_featureModule, true)?.ToString()?.Replace("\r\n", "") ?? "";
