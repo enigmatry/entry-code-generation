@@ -107,7 +107,7 @@ export class FormGeneratedComponent implements OnInit {
           description: '',
           hidden: !true,
           type: 'number',
-          max: 999.99 - 1,
+          max: 999.99 - 0.1,
         },
       },
      {
