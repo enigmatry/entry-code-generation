@@ -11,8 +11,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { IFormMock } from 'src/app/api/api-reference';
-import { map } from 'rxjs/operators';
-import { FormLookupService } from '../services/form-generated-lookup.service';
+    import { map } from 'rxjs/operators';
+    import { FormLookupService } from '../services/form-generated-lookup.service';
+
 
 @Component({
   selector: 'app-g-form',
@@ -41,8 +42,7 @@ export class FormGeneratedComponent implements OnInit {
     this.fields = this.initializeFields();
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   onSubmit() {
     if (this.form.valid) {
@@ -51,150 +51,160 @@ export class FormGeneratedComponent implements OnInit {
   }
 
   initializeFields(): FormlyFieldConfig[] {
-    return [     {
+    return [
+        {
         key: 'name',
         type: 'input',
+        className: '',
         templateOptions: {
-          label: $localize `:@@test.form.name.label:Name`,
-          placeholder: $localize `:@@test.form.name.placeholder:Name`,
-          disabled: this.isReadonly || false,
-          description: '',
-          hidden: !true,
-          required: true,
-          maxLength: 50,
-          pattern: /[A-Z]/,
+        label: $localize `:@@test.form.name.label:Name`,
+        placeholder: $localize `:@@test.form.name.placeholder:Name`,
+        disabled: this.isReadonly || false,
+        description: '',
+        hidden: !true,
+required: true,
+maxLength: 50,
+pattern: /[A-Z]/,
         },
-        validation: {
+            validation: {
             messages: {
-                required: $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`,
-                maxlength: $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`
+required: $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`,
+maxlength: $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`
             }
+            },
+modelOptions: { updateOn: 'blur' },
+asyncValidators: { validation: [ 'isEnsured' ] },
         },
-        modelOptions: { updateOn: 'blur' },
-        asyncValidators: { validation: [ 'isEnsured' ] },
-      },
-     {
+        {
         key: 'description',
         type: 'input',
+        className: '',
         templateOptions: {
-          label: $localize `:@@test.form.description.label:Description`,
-          placeholder: $localize `:@@test.form.description.placeholder:Description`,
-          disabled: this.isReadonly || false,
-          description: '',
-          hidden: !true,
+        label: $localize `:@@test.form.description.label:Description`,
+        placeholder: $localize `:@@test.form.description.placeholder:Description`,
+        disabled: this.isReadonly || false,
+        description: '',
+        hidden: !true,
         },
-        modelOptions: { updateOn: 'blur' },
-        asyncValidators: { validation: [ 'validDescription' ] },
-      },
-     {
+modelOptions: { updateOn: 'blur' },
+asyncValidators: { validation: [ 'validDescription' ] },
+        },
+        {
         key: 'date',
         type: 'datepicker',
+        className: '',
         templateOptions: {
-          label: $localize `:@@test.form.date.label:Date`,
-          placeholder: $localize `:@@test.form.date.placeholder:Date`,
-          disabled: this.isReadonly || false,
-          description: '',
-          hidden: !true,
+        label: $localize `:@@test.form.date.label:Date`,
+        placeholder: $localize `:@@test.form.date.placeholder:Date`,
+        disabled: this.isReadonly || false,
+        description: '',
+        hidden: !true,
         },
-      },
-     {
+        },
+        {
         key: 'money',
         type: 'input',
+        className: '',
         templateOptions: {
-          label: $localize `:@@test.form.money.label:Money`,
-          placeholder: $localize `:@@test.form.money.placeholder:Money`,
-          disabled: this.isReadonly || false,
-          description: '',
-          hidden: !true,
-          type: 'number',
-          max: 999.99 - 0.1,
+        label: $localize `:@@test.form.money.label:Money`,
+        placeholder: $localize `:@@test.form.money.placeholder:Money`,
+        disabled: this.isReadonly || false,
+        description: '',
+        hidden: !true,
+type: 'number',
+max: 999.99 - 0.1,
         },
-      },
-     {
+        },
+        {
         key: 'amount',
         type: 'input',
+        className: '',
         templateOptions: {
-          label: $localize `:@@test.form.amount.label:Amount`,
-          placeholder: $localize `:@@test.form.amount.placeholder:Amount`,
-          disabled: this.isReadonly || false,
-          description: '',
-          hidden: !true,
-          required: true,
-          type: 'number',
-          min: 0 + 1,
-          max: 100,
+        label: $localize `:@@test.form.amount.label:Amount`,
+        placeholder: $localize `:@@test.form.amount.placeholder:Amount`,
+        disabled: this.isReadonly || false,
+        description: '',
+        hidden: !true,
+required: true,
+type: 'number',
+min: 0 + 1,
+max: 100,
         },
-        validation: {
+            validation: {
             messages: {
-                min: $localize `:@@test.form.amount.min:CUSTOM_VALIDATION_MESSAGE`,
-                max: $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAGE`
+min: $localize `:@@test.form.amount.min:CUSTOM_VALIDATION_MESSAGE`,
+max: $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAGE`
             }
+            },
         },
-      },
-     {
+        {
         key: 'email1',
         type: 'input',
+        className: '',
         templateOptions: {
-          label: $localize `:@@test.form.email1.label:Email 1`,
-          placeholder: $localize `:@@test.form.email1.placeholder:Email 1`,
-          disabled: this.isReadonly || false,
-          description: '',
-          hidden: !true,
-          pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+        label: $localize `:@@test.form.email1.label:Email 1`,
+        placeholder: $localize `:@@test.form.email1.placeholder:Email 1`,
+        disabled: this.isReadonly || false,
+        description: '',
+        hidden: !true,
+pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
         },
-        validation: {
+            validation: {
             messages: {
-                pattern: $localize `:@@test.form.email1.pattern:CUSTOM_VALIDATION_MESSAGE`
+pattern: $localize `:@@test.form.email1.pattern:CUSTOM_VALIDATION_MESSAGE`
             }
+            },
         },
-      },
-     {
+        {
         key: 'email2',
         type: 'input',
+        className: '',
         templateOptions: {
-          label: $localize `:@@test.form.email2.label:Email 2`,
-          placeholder: $localize `:@@test.form.email2.placeholder:Email 2`,
-          disabled: this.isReadonly || false,
-          description: '',
-          hidden: !true,
-          pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+        label: $localize `:@@test.form.email2.label:Email 2`,
+        placeholder: $localize `:@@test.form.email2.placeholder:Email 2`,
+        disabled: this.isReadonly || false,
+        description: '',
+        hidden: !true,
+pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
         },
-        validation: {
+            validation: {
             messages: {
-                pattern: $localize `:@@validators.pattern.emailAddress:Invalid email address format`
+pattern: $localize `:@@validators.pattern.emailAddress:Invalid email address format`
             }
+            },
         },
-      },
-     {
+        {
         key: 'formStatus',
         type: 'select',
+        className: '',
         templateOptions: {
-          label: $localize `:@@test.form.form-status.label:Status`,
-          placeholder: $localize `:@@test.form.form-status.placeholder:Form status`,
-          disabled: this.isReadonly || false,
-          description: '',
-          options: this.lookupService.getFormStatus$.pipe(
+        label: $localize `:@@test.form.form-status.label:Status`,
+        placeholder: $localize `:@@test.form.form-status.placeholder:Form status`,
+        disabled: this.isReadonly || false,
+        description: '',
+            options: this.lookupService.getFormStatus$.pipe(
             map((arr) =>
-              arr.map(el => el = {value: el.value, label: el.displayName}))
+            arr.map(el => el = {value: el.value, label: el.displayName}))
             ),
-          hidden: !true,
+        hidden: !true,
         },
-      },
-      {
+        },
+        {
         key: 'mockRadio',
         type: this.isReadonly ? 'readonly-radio' : 'radio',
+        className: '',
         templateOptions: {
-          label: $localize `:@@test.form.mock-radio.label:Radio`,
-          placeholder: $localize `:@@test.form.mock-radio.placeholder:Mock radio`,
-          disabled: this.isReadonly || false,
-          description: '',
-          options: this.lookupService.getMockRadio$.pipe(
+        label: $localize `:@@test.form.mock-radio.label:Radio`,
+        placeholder: $localize `:@@test.form.mock-radio.placeholder:Mock radio`,
+        disabled: this.isReadonly || false,
+        description: '',
+            options: this.lookupService.getMockRadio$.pipe(
             map((arr) =>
-              arr.map(el => el = {value: el.value, label: el.displayName}))
+            arr.map(el => el = {value: el.value, label: el.displayName}))
             ),
-          hidden: !true,
+        hidden: !true,
         },
-      },
-];
- }
+        },
+    ];
+  }
 }

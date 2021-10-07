@@ -14,7 +14,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 {
     public static class AngularFormlyValidationHtmlHelperExtensions
     {
-        public static IHtmlContent AddValidationTemplateOptions(this IHtmlHelper html, FormControlModel control)
+        public static IHtmlContent AddValidationTemplateOptions(this IHtmlHelper html, FormControl control)
         {
             var templateOptions = control.ValidationRules
                 .SelectMany(x => x.FormlyTemplateOptions)
@@ -22,17 +22,17 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
             return html.Raw($"{String.Join(",\r\n", templateOptions)},\r\n");
         }
 
-        public static IHtmlContent AddModelOpetions(this IHtmlHelper html, FormControlModel control) =>
+        public static IHtmlContent AddModelOpetions(this IHtmlHelper html, FormControl control) =>
             control.Validator == null
                 ? html.Raw("")
                 : html.Raw($"modelOptions: {{ updateOn: '{control.Validator.Trigger}' }},\r\n");
 
-        public static IHtmlContent AddAsyncValidators(this IHtmlHelper html, FormControlModel control) =>
+        public static IHtmlContent AddAsyncValidators(this IHtmlHelper html, FormControl control) =>
             control.Validator == null
                 ? html.Raw("")
                 : html.Raw($"asyncValidators: {{ validation: [ '{control.Validator.Name.Camelize()}' ] }},\r\n");
 
-        public static IHtmlContent AddCustomValidationMessages(this IHtmlHelper html, FormControlModel form, bool enableI18N)
+        public static IHtmlContent AddCustomValidationMessages(this IHtmlHelper html, FormControl form, bool enableI18N)
         {
             var validationMessages = form
                 .ValidationRules

@@ -9,6 +9,7 @@
         MultiSelect,
         Datepicker,
         Autocomplete,
-        Radio
+        Radio,
+        Group
     }
 }

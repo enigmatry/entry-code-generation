@@ -11,12 +11,12 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
     public class FormComponentModel : IComponentModel, IWithLookupService
     {
         public ComponentInfo ComponentInfo { get; }
-        public IList<FormControlModel> FormControls { get; set; }
+        public IList<FormControl> FormControls { get; set; }
         public LookupServiceModel? LookupService { get; set; }
 
         public FormComponentModel(
             ComponentInfo componentInfo,
-            IEnumerable<FormControlModel> formControls,
+            IEnumerable<FormControl> formControls,
             IEnumerable<IFormlyValidationRule> validationRules)
         {
             ComponentInfo = componentInfo;
@@ -30,15 +30,15 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
                 {
                     Name = componentInfo.Name,
                     Methods = SelectFormControls
-                        .Select(x => (SelectFormControlModel)x)
+                        .Select(x => (SelectFormControl)x)
                         .Select(x => x.LookupMethod)
                 };
             }
         }
 
-        public IEnumerable<FormControlModel> VisibleFormControls => FormControls.Where(control => control.IsVisible);
-        private IEnumerable<FormControlModel> SelectFormControls => FormControls.Where(x => x is SelectFormControlModel);
-        public bool OptionsAvailable(FormControlModel control) => control is SelectFormControlModel && LookupService != null;
+        public IEnumerable<FormControl> VisibleFormControls => FormControls.Where(control => control.IsVisible);
+        private IEnumerable<FormControl> SelectFormControls => FormControls.Where(x => x is SelectFormControl);
+        public bool OptionsAvailable(FormControl control) => control is SelectFormControl && LookupService != null;
 
         private void ApplyValidationConfiguration(IEnumerable<IFormlyValidationRule> validationRules)
         {
@@ -49,7 +49,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
             }
         }
 
-        private void SetValidationRulesToFormControl(FormControlModel formControl, IEnumerable<IFormlyValidationRule> validationRules)
+        private void SetValidationRulesToFormControl(FormControl formControl, IEnumerable<IFormlyValidationRule> validationRules)
         {
             formControl.ValidationRules = validationRules
                 .Where(x => x.PropertyName == formControl.PropertyName).ToList();

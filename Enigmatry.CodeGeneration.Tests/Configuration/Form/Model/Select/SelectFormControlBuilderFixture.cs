@@ -30,7 +30,7 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.Form.Model.Select
 
             var fixedLookupMethod = (FixedValuesLookupMethod)selectFormControlModel.LookupMethod;
 
-            fixedLookupMethod.Name.Should().Be($"get{formControlBuilder.PropertyInfo.Name}");
+            fixedLookupMethod.Name.Should().Be($"get{formControlBuilder.PropertyInfo!.Name}");
             fixedLookupMethod
                 .FixedValues.Select(x => x.Value)
                 .Should().BeEquivalentTo(Enum.GetValues(typeof(TestEnum)));
@@ -63,7 +63,7 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.Form.Model.Select
 
             var fixedLookupMethod = (FixedValuesLookupMethod)selectFormControlModel.LookupMethod;
 
-            fixedLookupMethod.Name.Should().Be($"get{formControlBuilder.PropertyInfo.Name}");
+            fixedLookupMethod.Name.Should().Be($"get{formControlBuilder.PropertyInfo!.Name}");
             fixedLookupMethod
                 .FixedValues.Select(x => x.Value)
                 .Should().BeEquivalentTo(customOptions.Select(x => x.Value));

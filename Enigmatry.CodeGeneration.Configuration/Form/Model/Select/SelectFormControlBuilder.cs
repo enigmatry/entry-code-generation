@@ -10,18 +10,18 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model.Select
 {
     public class SelectFormControlBuilder
     {
-        private PropertyInfo _propertyInfo;
+        private readonly string _propertyName;
         public LookupMethodBase LookupMethod { get; private set; } = null!;
 
-        public SelectFormControlBuilder(PropertyInfo propertyInfo)
+        public SelectFormControlBuilder(string propertyName)
         {
-            _propertyInfo = propertyInfo;
-            LookupMethod = new CustomLookupMethod($"get{_propertyInfo.Name.Pascalize()}");
+            _propertyName = propertyName;
+            LookupMethod = new CustomLookupMethod($"get{propertyName.Pascalize()}");
         }
 
         public SelectFormControlBuilder WithFixedValues(IEnumerable<SelectOption> fixedValues)
         {
-            LookupMethod = new FixedValuesLookupMethod($"get{_propertyInfo.Name.Pascalize()}", fixedValues);
+            LookupMethod = new FixedValuesLookupMethod($"get{_propertyName.Pascalize()}", fixedValues);
             return this;
         }
 
@@ -31,7 +31,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model.Select
                 .GetValues(typeof(T))
                 .Cast<T>()
                 .Select(x => new SelectOption(Convert.ToInt32(x), GetDisplayName<T>(x.ToString())));
-            LookupMethod = new FixedValuesLookupMethod($"get{_propertyInfo.Name.Pascalize()}", fixedValues);
+            LookupMethod = new FixedValuesLookupMethod($"get{_propertyName.Pascalize()}", fixedValues);
             return this;
         }
 
@@ -45,24 +45,9 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model.Select
             return this;
         }
 
-        public SelectFormControlBuilder DependsOn(FormControlBuilder leadingFormControl)
+        public SelectFormControl Build()
         {
-            Check.IsSelectFormControl(leadingFormControl);
-
-            LookupMethod
-                .ArgumentNames.Add(leadingFormControl.PropertyInfo.Name);
-
-            leadingFormControl
-                .Select
-                .LookupMethod
-                .DependentMethods.Add(LookupMethod);
-
-            return this;
-        }
-
-        public SelectFormControlModel Build()
-        {
-            return new SelectFormControlModel
+            return new SelectFormControl
             {
                 LookupMethod = LookupMethod
             };
@@ -73,8 +58,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model.Select
             Type type = typeof(T);
             var name = Enum
                 .GetNames(type)
-                .Where(enumValueName => enumValueName.Equals(value, StringComparison.CurrentCultureIgnoreCase))
-                .FirstOrDefault();
+                .FirstOrDefault(enumValueName => enumValueName.Equals(value, StringComparison.CurrentCultureIgnoreCase));
 
             if (name == null)
             {

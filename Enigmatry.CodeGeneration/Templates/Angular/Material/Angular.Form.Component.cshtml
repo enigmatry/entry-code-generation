@@ -1,8 +1,8 @@
 ﻿@using Humanizer;
 @using Enigmatry.CodeGeneration;
 @using Enigmatry.CodeGeneration.Angular;
+@using Enigmatry.CodeGeneration.Configuration.Form.Model
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
-@using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript;
 @model Enigmatry.CodeGeneration.Configuration.Form.FormComponentModel;
 @inject CodeGeneratorOptions _options;
 import { Component, EventEmitter, Input, OnInit, Output } from '@@angular/core';
@@ -13,6 +13,88 @@ import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPa
 {
     @:import { map } from 'rxjs/operators';
     @:import { @(Model.ComponentInfo.Name)LookupService } from '../services/@(Model.AngularComponentDirectory())-generated-lookup.service';
+}
+
+@functions {
+
+    void RenderControls(IEnumerable<FormControl> controls)
+    {
+        foreach (FormControl control in controls)
+        {
+            switch (control)
+            {
+                case FormControlGroup formControlGroup:
+                    CreateFieldGroup(formControlGroup);
+                    break;
+                default:
+                    CreateField(control);
+                    break;
+            }
+        }
+    }
+
+    void CreateField(FormControl control)
+    {
+        var type = control.GetFormlyType();
+        var readonlyType = control.GetReadonlyFormlyType();
+        var typeString = string.Equals(type, readonlyType) ? $"'{type}'" : $"this.isReadonly ? '{readonlyType}' : '{type}'";
+
+        @:{
+        @:key: '@control.PropertyName',
+        @:type: @Html.Raw(typeString),
+        @:className: '@Html.Raw(control.ClassName)',
+        @:templateOptions: {
+        @:label: @Html.Localize(control.LabelTranslationId, control.Label, _options.EnableI18N),
+        @:placeholder: @Html.Localize(control.PlaceholderTranslationId, control.Placeholder, _options.EnableI18N),
+        @:disabled: this.isReadonly || @control.IsReadonly.ToString().ToLower(),
+        @:description: @Html.Localize(control.HintTranslationId, control.Hint, _options.EnableI18N),
+        @if (Model.OptionsAvailable(control))
+        {
+            @:options: this.lookupService.get@(control.PropertyName.Pascalize())$.pipe(
+            @:map((arr) =>
+            @:arr.map(el => el = {value: el.value, label: el.displayName}))
+            @:),
+        }
+        @:hidden: !@control.IsVisible.ToString().ToLower(),
+        @if (control.ValidationRules.Any())
+        {
+            @Html.AddValidationTemplateOptions(control)
+        }
+        @:},
+        @if (control.ValidationRules.Any(x => x.HasCustomMessage))
+        {
+            @:validation: {
+            @:messages: {
+            @Html.AddCustomValidationMessages(control, _options.EnableI18N)
+            @:}
+            @:},
+        }
+        @if (control.Validator != null)
+        {
+            @Html.AddModelOpetions(control)
+            @Html.AddAsyncValidators(control)
+        }
+        @:},
+    }
+
+    void CreateFieldGroup(FormControlGroup controlGroup)
+    {
+        var type = controlGroup.GetFormlyType();
+
+        @:{
+        @:type: '@Html.Raw(type)',
+        @:fieldGroupClassName: '@Html.Raw(controlGroup.ClassName)',
+        @:templateOptions: {
+        @:label: @Html.Localize(controlGroup.LabelTranslationId, controlGroup.Label, _options.EnableI18N),
+        @:placeholder: @Html.Localize(controlGroup.PlaceholderTranslationId, controlGroup.Placeholder, _options.EnableI18N),
+        @:disabled: this.isReadonly || @controlGroup.IsReadonly.ToString().ToLower(),
+        @:description: @Html.Localize(controlGroup.HintTranslationId, controlGroup.Hint, _options.EnableI18N)
+        @:},
+        @:fieldGroup:[
+            RenderControls(controlGroup.FormControls);
+        @:]
+        @:},
+    }
 }
 
 @@Component({
@@ -31,7 +113,7 @@ export class @Model.AngularComponentName() implements OnInit {
     return this._isReadonly;
   }
 
-@@Output() save = new EventEmitter@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>"))();
+  @@Output() save = new EventEmitter@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>"))();
   @@Output() cancel = new EventEmitter@(Html.Raw("<void>"))();
 
   _isReadonly: boolean;
@@ -53,47 +135,7 @@ export class @Model.AngularComponentName() implements OnInit {
 
   initializeFields(): FormlyFieldConfig[] {
     return [
-@foreach (var control in Model.VisibleFormControls)
-{
-    var type = control.GetFormlyFieldType();
-    var readonlyType = control.GetReadonlyFormlyFieldType();
-    var typeString = string.Equals(type, readonlyType) ? $"'{type}'" : $"this.isReadonly ? '{readonlyType}' : '{type}'";
-    @:{
-    @:key: '@control.PropertyName',
-    @:type: @Html.Raw(typeString),
-    @:templateOptions: {
-        @:label: @Html.Localize(control.LabelTranslationId, control.Label, _options.EnableI18N),
-        @:placeholder: @Html.Localize(control.PlaceholderTranslationId, control.Placeholder, _options.EnableI18N),
-        @:disabled: this.isReadonly || @control.IsReadonly.ToString().ToLower(),
-        @:description: @Html.Localize(control.HintTranslationId, control.Hint, _options.EnableI18N),
-        @if (Model.OptionsAvailable(control))
-        {
-            @:options: this.lookupService.get@(control.PropertyName.Pascalize())$.pipe(
-            @:map((arr) =>
-            @:arr.map(el => el = {value: el.value, label: el.displayName}))
-            @:),
-        }
-        @:hidden: !@control.IsVisible.ToString().ToLower(),
-        @if (control.ValidationRules.Any())
-        {
-            @Html.AddValidationTemplateOptions(control)
-        }
-    @:},
-    @if (control.ValidationRules.Any(x => x.HasCustomMessage))
-    {
-    @:validation: {
-        @:messages: {
-            @Html.AddCustomValidationMessages(control, _options.EnableI18N)
-        @:}
-    @:},
-    }
-    @if (control.Validator != null)
-    {
-    @Html.AddModelOpetions(control)
-    @Html.AddAsyncValidators(control)
-    }
-    @:},
-    }
+        @{ RenderControls(Model.VisibleFormControls); }
     ];
   }
 }

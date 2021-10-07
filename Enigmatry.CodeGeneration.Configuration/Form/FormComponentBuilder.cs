@@ -13,15 +13,11 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
     [UsedImplicitly]
     public class FormComponentBuilder<T> : BaseComponentBuilder<FormComponentModel>
     {
-        private readonly IList<FormControlBuilder> _formControls;
+        private readonly IList<IControlBuilder> _formControls = new List<IControlBuilder>();
         private IEnumerable<IFormlyValidationRule> _validationRules = new List<IFormlyValidationRule>();
 
         public FormComponentBuilder() : base(typeof(T))
         {
-            _formControls = _modelType.GetProperties()
-                .Select(propertyInfo => new FormControlBuilder(propertyInfo))
-                .ToList();
-
             _componentInfoBuilder.Routing().WithIdRoute();
         }
 
@@ -31,27 +27,55 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
             return FormControlBuilder(propertyExpression);
         }
 
-        public void WithValidationConfiguration(IHasFormlyValidationRules validationConfirguration)
+        public FormControlGroupBuilder<T> FormControlGroup(string groupName)
         {
-            _validationRules = validationConfirguration.ValidationRules;
+            Check.NotNull(groupName, nameof(groupName));
+
+            var formControlBuilder = _formControls.FirstOrDefault(builder => builder.Has(groupName));
+            return (FormControlGroupBuilder<T>)GetOrCreateBuilder(formControlBuilder, () => new FormControlGroupBuilder<T>(groupName));
+        }
+
+        public void WithValidationConfiguration(IHasFormlyValidationRules validationConfiguration)
+        {
+            _validationRules = validationConfiguration.ValidationRules;
         }
 
         public override FormComponentModel Build()
         {
             var componentInfo = _componentInfoBuilder.Build();
-            var formControls = _formControls.Select(_ => _.Build(componentInfo));
+            var formControls = BuildFormControls(componentInfo).ToList();
 
             return new FormComponentModel(componentInfo, formControls, _validationRules);
+        }
+
+        private IEnumerable<FormControl> BuildFormControls(ComponentInfo componentInfo)
+        {
+            var buildFormControls = _formControls.Select(_ => _.Build(componentInfo)).ToList();
+
+            if (buildFormControls.OfType<FormControlGroup>().Any())
+            {
+                // NOTE:
+                // support advanced layouts with form control groups
+                // use only controls that are added during configuration!?
+                return buildFormControls;
+            }
+
+            // NOTE:
+            // by default controls are created for all properties in the model
+            return GetDefaultControlBuildersForAllProperties()
+                .Select(defaultPropertyBuilder => _formControls.FirstOrDefault(builder => builder.Has(defaultPropertyBuilder.PropertyInfo!)) ?? defaultPropertyBuilder)
+                .Select(controlBuilder => controlBuilder.Build(componentInfo))
+                .ToList();
         }
 
         private FormControlBuilder FormControlBuilder<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
         {
             var propertyInfo = propertyExpression.GetPropertyInfo();
-            var formControlBuilder = _formControls.FirstOrDefault(builder => builder.PropertyInfo == propertyInfo);
-            return GetOrAddBuilder(formControlBuilder, () => new FormControlBuilder(propertyInfo));
+            var formControlBuilder = _formControls.FirstOrDefault(builder => builder.Has(propertyInfo));
+            return (FormControlBuilder)GetOrCreateBuilder(formControlBuilder, () => new FormControlBuilder(propertyInfo));
         }
 
-        private FormControlBuilder GetOrAddBuilder(FormControlBuilder? builder, Func<FormControlBuilder> creator)
+        private IControlBuilder GetOrCreateBuilder(IControlBuilder? builder, Func<IControlBuilder> creator)
         {
             if (builder != null) return builder;
 
@@ -60,5 +84,13 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
 
             return formControlBuilder;
         }
+
+        private IEnumerable<IControlBuilder> GetDefaultControlBuildersForAllProperties()
+        {
+            return _modelType.GetProperties()
+                .Select(propertyInfo => (IControlBuilder)new FormControlBuilder(propertyInfo))
+                .ToList();
+        }
+
     }
 }

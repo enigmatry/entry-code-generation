@@ -1,11 +1,11 @@
-﻿using Enigmatry.BuildingBlocks.Validation.ValidationRules;
-using Enigmatry.CodeGeneration.Configuration.Form.Model.Validators;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Enigmatry.BuildingBlocks.Validation.ValidationRules;
+using Enigmatry.CodeGeneration.Configuration.Form.Model.Validators;
 
 namespace Enigmatry.CodeGeneration.Configuration.Form.Model
 {
-    public class FormControlModel
+    public class FormControl
     {
         public ComponentInfo ComponentInfo { get; set; } = null!;
         public string PropertyName { get; set; } = String.Empty;
@@ -14,15 +14,16 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         public string Hint { get; set; } = String.Empty;
         public bool IsVisible { get; set; }
         public bool IsReadonly { get; set; }
-        public FormControlType Type { get; set; }
+        public string? ClassName { get; set; } = String.Empty;
         public string LabelTranslationId { get; set; } = String.Empty;
         public string PlaceholderTranslationId { get; set; } = String.Empty;
         public string HintTranslationId { get; set; } = String.Empty;
+        public FormControlType Type { get; set; }
         public Type? ValueType { get; set; }
         public IList<IFormlyValidationRule> ValidationRules { get; set; } = new List<IFormlyValidationRule>();
-        public CustomValidator? Validator = null;
+        public CustomValidator? Validator { get; set; }
 
-        public string GetFormlyFieldType()
+        public virtual string GetFormlyType()
         {
             switch (Type)
             {
@@ -46,13 +47,13 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
             }
         }
 
-        public string GetReadonlyFormlyFieldType()
+        public virtual string GetReadonlyFormlyType()
         {
             return Type switch
             {
                 FormControlType.CheckBox => "readonly-boolean",
                 FormControlType.Radio => "readonly-radio",
-                _ => GetFormlyFieldType(),
+                _ => GetFormlyType(),
             };
         }
     }
