@@ -71,7 +71,8 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
                 JsProperty("type", columnType, !columnType.HasContent()),
                 JsProperty("typeParameter", columnTypeParams, !columnType.HasContent(), true),
                 JsProperty("cellTemplate", cellTemplate, !column.HasCustomCellComponent, true),
-                JsProperty("class", column.CustomCellCssClass ?? "", !column.HasCustomCellCssClass)
+                JsProperty("class", column.CustomCellCssClass ?? "", !column.HasCustomCellCssClass),
+                JsProperty("customProperties", JsObject(column.CustomProperties), !column.CustomProperties.Any(), true)
             );
         }
 
@@ -90,6 +91,11 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
         private static string JsObject(params string?[] properties)
         {
             return $"{{ {String.Join(", ", properties.Where(property => property.HasContent()))} }}";
+        }
+
+        private static string JsObject(IEnumerable<KeyValuePair<string, string>> properties)
+        {
+            return $"{{ {String.Join(", ", properties.Select(keyValue => JsProperty(keyValue.Key.Camelize(), keyValue.Value)))} }}";
         }
 
         private static string? JsProperty(string name, string value, bool skip = false, bool asObject = false)

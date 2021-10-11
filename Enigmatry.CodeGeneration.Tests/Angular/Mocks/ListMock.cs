@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Enigmatry.CodeGeneration.Tests.Mocks
+namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
 {
     public class ListMock
     {

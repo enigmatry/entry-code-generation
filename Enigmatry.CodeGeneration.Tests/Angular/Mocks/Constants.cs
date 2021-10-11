@@ -1,4 +1,4 @@
-﻿namespace Enigmatry.CodeGeneration.Tests.Mocks
+﻿namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
 {
     internal static class Constants
     {

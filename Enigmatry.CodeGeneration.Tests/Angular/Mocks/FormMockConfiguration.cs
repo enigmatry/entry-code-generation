@@ -1,6 +1,6 @@
 ﻿using Enigmatry.CodeGeneration.Configuration.Form;
 
-namespace Enigmatry.CodeGeneration.Tests.Mocks
+namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
 {
     public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
     {

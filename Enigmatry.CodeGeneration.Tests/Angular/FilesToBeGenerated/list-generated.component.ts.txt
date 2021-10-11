@@ -28,7 +28,7 @@ export class ListGeneratedComponent implements OnInit {
   @Input() showFirstLastButtons = true;
   @Input() pageSizeOptions = [10, 50, 100];
   @Input() hidePageSize = !true;
-  
+
   @Input() defaultSort: { sortBy?: string | undefined, sortDirection?: SortDirection } = { };
 
   @Input() rowSelectable = false;
@@ -49,14 +49,14 @@ export class ListGeneratedComponent implements OnInit {
   @Output() contextMenuItemSelected = new EventEmitter<{ itemId: string; rowData: ListMockItem }>();
   @Output() rowClick = new EventEmitter<ListMockItem>();
 
-  @ViewChild('nameTpl', { static: true }) nameTpl: TemplateRef<any>;
+@ViewChild('nameTpl', { static: true }) nameTpl: TemplateRef<any>;
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
     this.columns = [
 { field: 'id', header: $localize `:@@test.list.id:Id`, hide: true, sortable: true },
-{ field: 'name', header: $localize `:@@CUSTOM_TRANSLATION_ID:Name`, hide: false, sortable: false, cellTemplate: this.nameTpl, class: 'name-custom-class' },
+{ field: 'name', header: $localize `:@@CUSTOM_TRANSLATION_ID:Name`, hide: false, sortable: false, cellTemplate: this.nameTpl, class: 'name-custom-class', customProperties: { codeSystem: 'ABC' } },
 { field: 'date', header: $localize `:@@test.list.date:Date`, hide: false, sortable: true, type: 'date', typeParameter: { format: 'mediumDate', timezone: 'UTC', locale: 'en' } }
 ];
     this.contextMenuItems = [];

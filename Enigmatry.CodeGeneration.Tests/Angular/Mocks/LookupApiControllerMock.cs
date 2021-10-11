@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Enigmatry.CodeGeneration.Configuration.Form.Model.Select;
 
-namespace Enigmatry.CodeGeneration.Tests.Mocks
+namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
 {
     public class LookupApiControllerMock
     {

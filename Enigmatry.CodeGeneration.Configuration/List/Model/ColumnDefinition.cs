@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Enigmatry.CodeGeneration.Configuration.Formatters;
 
 namespace Enigmatry.CodeGeneration.Configuration.List.Model
@@ -14,6 +15,7 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
         public string TranslationId { get; set; } = String.Empty;
         public string? CustomCellComponent { get; set; }
         public string? CustomCellCssClass { get; set; }
+        public IDictionary<string, string> CustomProperties { get; set; } = new Dictionary<string, string>();
         public bool HasCustomCellComponent => CustomCellComponent.HasContent();
         public bool HasCustomCellCssClass => CustomCellCssClass.HasContent();
     }

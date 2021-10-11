@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Enigmatry.CodeGeneration.Configuration.Builder;
 using Enigmatry.CodeGeneration.Configuration.Formatters;
@@ -17,6 +18,7 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
         private IPropertyFormatter _formatter;
         private string? _customCellComponent;
         private string? _customCellCssClass;
+        private IDictionary<string, string> _customProperties = new Dictionary<string, string>();
 
         public ColumnDefinitionBuilder(PropertyInfo propertyInfo)
         {
@@ -51,34 +53,60 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
                 IsVisible = _isVisible,
                 Formatter = _formatter,
                 CustomCellComponent = _customCellComponent,
-                CustomCellCssClass = _customCellCssClass
+                CustomCellCssClass = _customCellCssClass,
+                CustomProperties = _customProperties
             };
         }
 
+        /// <summary>
+        /// Set column header
+        /// </summary>
+        /// <param name="headerName">header name</param>
+        /// <returns></returns>
         public ColumnDefinitionBuilder WithHeaderName(string headerName)
         {
             _headerName = headerName;
             return this;
         }
 
+        /// <summary>
+        /// Set header name translationId (i18n)
+        /// </summary>
+        /// <param name="translationId">translationId</param>
+        /// <returns></returns>
         public ColumnDefinitionBuilder WithTranslationId(string translationId)
         {
             _translationId = translationId;
             return this;
         }
 
+        /// <summary>
+        /// Set if column is sortable
+        /// </summary>
+        /// <param name="isSortable">isSortable</param>
+        /// <returns></returns>
         public ColumnDefinitionBuilder IsSortable(bool isSortable)
         {
             _isSortable = isSortable;
             return this;
         }
 
+        /// <summary>
+        /// Set if column is visible
+        /// </summary>
+        /// <param name="isVisible">isVisible</param>
+        /// <returns></returns>
         public ColumnDefinitionBuilder IsVisible(bool isVisible)
         {
             _isVisible = isVisible;
             return this;
         }
 
+        /// <summary>
+        /// Set column type formatter
+        /// </summary>
+        /// <param name="formatter">formatter</param>
+        /// <returns></returns>
         public ColumnDefinitionBuilder WithFormat(IPropertyFormatter formatter)
         {
             if (_propertyAccessor != null)
@@ -89,24 +117,45 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
             return this;
         }
 
+        /// <summary>
+        /// Set component name used for cell rendering
+        /// </summary>
+        /// <param name="componentName">componentName</param>
+        /// <returns></returns>
         public ColumnDefinitionBuilder WithCustomComponent(string componentName)
         {
             _customCellComponent = componentName;
             return this;
         }
 
+        /// <summary>
+        /// Set column css class name
+        /// </summary>
+        /// <param name="cssClassName">cssClassName</param>
+        /// <returns></returns>
         public ColumnDefinitionBuilder WithCustomCssClass(string cssClassName)
         {
             _customCellCssClass = cssClassName;
             return this;
         }
 
-        public bool HasProperty(PropertyInfo propertyInfo)
+        /// <summary>
+        /// Set custom properties that can be used to pass data to custom cell components
+        /// </summary>
+        /// <param name="dictionary">custom properties dictionary</param>
+        /// <returns></returns>
+        public ColumnDefinitionBuilder WithCustomProperties(IDictionary<string, string> dictionary)
+        {
+            _customProperties = new Dictionary<string, string>(dictionary);
+            return this;
+        }
+
+        internal bool HasProperty(PropertyInfo propertyInfo)
         {
             return _propertyAccessor != null && _propertyAccessor.PropertyInfo == propertyInfo;
         }
 
-        public bool HasProperty(string propertyName)
+        internal bool HasProperty(string propertyName)
         {
             return _propertyName == propertyName;
         }

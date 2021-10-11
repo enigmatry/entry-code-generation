@@ -3,11 +3,11 @@ using Enigmatry.CodeGeneration.Configuration.Builder;
 using Enigmatry.CodeGeneration.Configuration.Form;
 using Enigmatry.CodeGeneration.Configuration.Form.Model.Validators;
 using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
-using Enigmatry.CodeGeneration.Tests.Mocks;
 using Humanizer;
 using NUnit.Framework;
 using System;
 using System.Linq;
+using Enigmatry.CodeGeneration.Tests.Angular.Mocks;
 
 namespace Enigmatry.CodeGeneration.Tests.HtmlHelperExtensions.Angular
 {

@@ -1,7 +1,8 @@
-﻿using Enigmatry.CodeGeneration.Configuration.Formatters;
+﻿using System.Collections.Generic;
+using Enigmatry.CodeGeneration.Configuration.Formatters;
 using Enigmatry.CodeGeneration.Configuration.List;
 
-namespace Enigmatry.CodeGeneration.Tests.Mocks
+namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
 {
     public class ListMockConfiguration : IListComponentConfiguration<ListMock.Item>
     {
@@ -22,7 +23,8 @@ namespace Enigmatry.CodeGeneration.Tests.Mocks
                 .IsSortable(false)
                 .WithTranslationId(Constants.CustomTranslationId)
                 .WithCustomComponent("custom-cell")
-                .WithCustomCssClass("name-custom-class");
+                .WithCustomCssClass("name-custom-class")
+                .WithCustomProperties(new Dictionary<string, string> {{"CodeSystem", "ABC"}});
 
             builder
                 .Column(x => x.Date)
