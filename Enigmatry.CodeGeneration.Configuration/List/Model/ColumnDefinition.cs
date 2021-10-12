@@ -12,6 +12,7 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
         public IPropertyFormatter Formatter { get; set; } = new NoFormattingPropertyFormatter();
         public bool IsVisible { get; set; }
         public bool IsSortable { get; set; }
+        public string? SortId { get; set; }
         public string TranslationId { get; set; } = String.Empty;
         public string? CustomCellComponent { get; set; }
         public string? CustomCellCssClass { get; set; }

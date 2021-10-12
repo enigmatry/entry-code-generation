@@ -19,6 +19,7 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
         private string? _customCellComponent;
         private string? _customCellCssClass;
         private IDictionary<string, string> _customProperties = new Dictionary<string, string>();
+        private string? _sortId;
 
         public ColumnDefinitionBuilder(PropertyInfo propertyInfo)
         {
@@ -54,7 +55,8 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
                 Formatter = _formatter,
                 CustomCellComponent = _customCellComponent,
                 CustomCellCssClass = _customCellCssClass,
-                CustomProperties = _customProperties
+                CustomProperties = _customProperties,
+                SortId = _sortId
             };
         }
 
@@ -88,6 +90,17 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
         public ColumnDefinitionBuilder IsSortable(bool isSortable)
         {
             _isSortable = isSortable;
+            return this;
+        }
+
+        /// <summary>
+        /// Set id of the sort header. Defaults to the column's property name when not specified
+        /// </summary>
+        /// <param name="sortId">sortId</param>
+        /// <returns></returns>
+        public ColumnDefinitionBuilder WithSortId(string sortId)
+        {
+            _sortId = sortId;
             return this;
         }
 

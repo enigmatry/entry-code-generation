@@ -62,6 +62,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
             var cellTemplate = $"this.{CustomCellTemplateRefId(column)}";
 
             var header = enableI18N ? AngularLocalization.Localize(column.TranslationId, column.HeaderName) : column.HeaderName;
+            var sortProps = new KeyValuePair<string, string>[] { new("id", column.SortId ?? String.Empty) };
 
             return JsObject(
                 JsProperty("field", propertyName),
@@ -72,7 +73,8 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
                 JsProperty("typeParameter", columnTypeParams, !columnType.HasContent(), true),
                 JsProperty("cellTemplate", cellTemplate, !column.HasCustomCellComponent, true),
                 JsProperty("class", column.CustomCellCssClass ?? "", !column.HasCustomCellCssClass),
-                JsProperty("customProperties", JsObject(column.CustomProperties), !column.CustomProperties.Any(), true)
+                JsProperty("customProperties", JsObject(column.CustomProperties), !column.CustomProperties.Any(), true),
+                JsProperty("sortProp", JsObject(sortProps), !column.SortId.HasContent(), true)
             );
         }
 

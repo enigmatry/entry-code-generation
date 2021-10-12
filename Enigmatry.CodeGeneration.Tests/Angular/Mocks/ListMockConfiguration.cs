@@ -20,7 +20,7 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
 
             builder
                 .Column(x => x.Name)
-                .IsSortable(false)
+                .IsSortable(true).WithSortId("User.Name")
                 .WithTranslationId(Constants.CustomTranslationId)
                 .WithCustomComponent("custom-cell")
                 .WithCustomCssClass("name-custom-class")
