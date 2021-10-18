@@ -28,7 +28,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 
         public static IHtmlContent CreateColumnDefs(this IHtmlHelper html, IEnumerable<ColumnDefinition> columns, bool enableI18N)
         {
-            var columnDefs = columns.Select(definition => CreateColumnDef(definition, enableI18N)).ToList();
+            var columnDefs = columns.Where(x => x.IsVisible).Select(definition => CreateColumnDef(definition, enableI18N)).ToList();
             var htmlContent = columnDefs.Any() ? $"[\r\n{String.Join(",\r\n", columnDefs)}\r\n]" : "[]";
 
             return html.Raw(htmlContent);
