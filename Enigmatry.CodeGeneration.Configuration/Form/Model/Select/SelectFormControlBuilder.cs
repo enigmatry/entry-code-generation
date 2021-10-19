@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
-using Enigmatry.CodeGeneration.Configuration.Services;
 using Humanizer;
 
 namespace Enigmatry.CodeGeneration.Configuration.Form.Model.Select
@@ -11,59 +9,56 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model.Select
     public class SelectFormControlBuilder
     {
         private readonly string _propertyName;
-        public LookupMethodBase LookupMethod { get; private set; } = null!;
+        private IEnumerable<SelectOption> _fixedValues = new List<SelectOption>();
+        private string _valueKey = $"{nameof(SelectOption.Value).Camelize()}";
+        private string _displayKey = $"{nameof(SelectOption.DisplayName).Camelize()}";
 
         public SelectFormControlBuilder(string propertyName)
         {
             _propertyName = propertyName;
-            LookupMethod = new CustomLookupMethod($"get{propertyName.Pascalize()}");
         }
 
         public SelectFormControlBuilder WithFixedValues(IEnumerable<SelectOption> fixedValues)
         {
-            LookupMethod = new FixedValuesLookupMethod($"get{_propertyName.Pascalize()}", fixedValues);
+            _fixedValues = fixedValues.ToList();
             return this;
         }
 
         public SelectFormControlBuilder WithFixedValues<T>() where T : Enum
         {
-            var fixedValues = Enum
+            _fixedValues = Enum
                 .GetValues(typeof(T))
                 .Cast<T>()
-                .Select(x => new SelectOption(Convert.ToInt32(x), GetDisplayName<T>(x.ToString())));
-            LookupMethod = new FixedValuesLookupMethod($"get{_propertyName.Pascalize()}", fixedValues);
+                .Select(x => new SelectOption(Convert.ToInt32(x), GetDisplayName<T>(x.ToString())))
+                .ToList();
             return this;
         }
 
-        public SelectFormControlBuilder WithCallbackMethod(MethodInfo? lookupMethodInfo)
+        public SelectFormControlBuilder WithValueKey(string valueKey)
         {
-            if (lookupMethodInfo == null)
-            {
-                throw new InvalidEnumArgumentException("Missing async select callback method information.");
-            }
-            LookupMethod = new AsyncLookupMethod(lookupMethodInfo);
+            _valueKey = valueKey.Camelize();
+            return this;
+        }
+
+        public SelectFormControlBuilder WithDisplayKey(string displayKey)
+        {
+            _displayKey = displayKey.Camelize();
             return this;
         }
 
         public SelectFormControl Build()
         {
-            return new SelectFormControl
-            {
-                LookupMethod = LookupMethod
-            };
+            return new SelectFormControl { FixedOptions = _fixedValues, OptionValueKey = _valueKey, OptionDisplayKey = _displayKey, };
         }
 
-        public string GetDisplayName<T>(string value) where T : Enum
+        private string GetDisplayName<T>(string value) where T : Enum
         {
             Type type = typeof(T);
             var name = Enum
                 .GetNames(type)
                 .FirstOrDefault(enumValueName => enumValueName.Equals(value, StringComparison.CurrentCultureIgnoreCase));
 
-            if (name == null)
-            {
-                return String.Empty;
-            }
+            if (name == null) { return String.Empty; }
 
             var field = type.GetField(name);
             var customAttribute = field?.GetCustomAttributes(typeof(DescriptionAttribute), false);

@@ -11,7 +11,7 @@ namespace Enigmatry.CodeGeneration.Configuration
         public string Name { get; }
         public IEnumerable<IComponentModel> Components { get; }
         public IEnumerable<ModuleImport> Imports { get; }
-        public IEnumerable<IServiceModel> Services { get; }
+        public IEnumerable<IServiceModel> Services { get; } = new List<IServiceModel>();
 
         public bool HasTableComponents => Components.OfType<ListComponentModel>().Any();
         public bool HasFormComponents => Components.OfType<FormComponentModel>().Any();
@@ -31,13 +31,7 @@ namespace Enigmatry.CodeGeneration.Configuration
         {
             Name = name;
             Components = components.ToList();
-
             Imports = Components.SelectMany(c => c.ComponentInfo.Feature.Imports).ToList();
-
-            Services = Components
-                .Select(component => component as IWithLookupService)
-                .Select(component => component?.LookupService)
-                .Where(service => service != null)!;
         }
 
         public FeatureModule(IGrouping<string, IComponentModel> components)

@@ -63,12 +63,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Angular\FilesToBeGenerated\form-generated-lookup.service.ts.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="Enigmatry.BuildingBlocks.Validation">
       <HintPath>..\..\enigmatry-blueprint-building-blocks\Enigmatry.BuildingBlocks.Validation\obj\Debug\netstandard2.0\Enigmatry.BuildingBlocks.Validation.dll</HintPath>
     </Reference>

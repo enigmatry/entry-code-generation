@@ -1,19 +1,15 @@
-﻿@using Humanizer;
-@using Enigmatry.CodeGeneration;
+﻿@using Enigmatry.CodeGeneration;
 @using Enigmatry.CodeGeneration.Angular;
 @using Enigmatry.CodeGeneration.Configuration.Form.Model
+@using Enigmatry.CodeGeneration.Configuration.Form.Model.Select
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
+@using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
 @model Enigmatry.CodeGeneration.Configuration.Form.FormComponentModel;
 @inject CodeGeneratorOptions _options;
 import { Component, EventEmitter, Input, OnInit, Output } from '@@angular/core';
 import { FormGroup } from '@@angular/forms';
 import { FormlyFieldConfig } from '@@ngx-formly/core';
 import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPath';
-@if (Model.LookupService != null)
-{
-    @:import { map } from 'rxjs/operators';
-    @:import { @(Model.ComponentInfo.Name)LookupService } from '../services/@(Model.AngularComponentDirectory())-generated-lookup.service';
-}
 
 @functions {
 
@@ -48,12 +44,12 @@ import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPa
         @:placeholder: @Html.Localize(control.PlaceholderTranslationId, control.Placeholder, _options.EnableI18N),
         @:disabled: this.isReadonly || @control.IsReadonly.ToString().ToLower(),
         @:description: @Html.Localize(control.HintTranslationId, control.Hint, _options.EnableI18N),
-        @if (Model.OptionsAvailable(control))
+        @if (control is SelectFormControl select)
         {
-            @:options: this.lookupService.get@(control.PropertyName.Pascalize())$.pipe(
-            @:map((arr) =>
-            @:arr.map(el => el = {value: el.value, label: el.displayName}))
-            @:),
+            @:options: @Html.JsArray(select.FixedOptions, option => $"{{ value: {option.Value}, displayName: '{option.DisplayName}' }}"),
+            @:valueProp: '@select.OptionValueKey',
+            @:labelProp: '@select.OptionDisplayKey',
+
         }
         @:hidden: !@control.IsVisible.ToString().ToLower(),
         @if (control.ValidationRules.Any())
@@ -120,8 +116,7 @@ export class @Model.AngularComponentName() implements OnInit {
   form = new FormGroup({});
   fields: FormlyFieldConfig[] = [];
 
-  constructor(@if (Model.LookupService != null)
-{<text>private lookupService: @(Model.ComponentInfo.Name)LookupService</text>}) {
+  constructor() {
     this.fields = this.initializeFields();
   }
 

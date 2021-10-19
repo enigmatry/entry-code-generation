@@ -1,18 +1,16 @@
 ﻿using Enigmatry.BuildingBlocks.Validation.ValidationRules;
 using Enigmatry.CodeGeneration.Configuration.Form.Model;
 using Enigmatry.CodeGeneration.Configuration.Form.Model.Select;
-using Enigmatry.CodeGeneration.Configuration.Services;
 using Humanizer;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Enigmatry.CodeGeneration.Configuration.Form
 {
-    public class FormComponentModel : IComponentModel, IWithLookupService
+    public class FormComponentModel : IComponentModel
     {
         public ComponentInfo ComponentInfo { get; }
-        public IList<FormControl> FormControls { get; set; }
-        public LookupServiceModel? LookupService { get; set; }
+        public IList<FormControl> FormControls { get; }
 
         public FormComponentModel(
             ComponentInfo componentInfo,
@@ -23,22 +21,10 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
             FormControls = formControls.ToList();
 
             ApplyValidationConfiguration(validationRules);
-            
-            if (SelectFormControls.Any())
-            {
-                LookupService = new LookupServiceModel
-                {
-                    Name = componentInfo.Name,
-                    Methods = SelectFormControls
-                        .Select(x => (SelectFormControl)x)
-                        .Select(x => x.LookupMethod)
-                };
-            }
         }
 
         public IEnumerable<FormControl> VisibleFormControls => FormControls.Where(control => control.IsVisible);
         private IEnumerable<FormControl> SelectFormControls => FormControls.Where(x => x is SelectFormControl);
-        public bool OptionsAvailable(FormControl control) => control is SelectFormControl && LookupService != null;
 
         private void ApplyValidationConfiguration(IEnumerable<IFormlyValidationRule> validationRules)
         {

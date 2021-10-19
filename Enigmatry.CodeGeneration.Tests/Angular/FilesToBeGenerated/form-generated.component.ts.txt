@@ -11,8 +11,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { IFormMock } from 'src/app/api/api-reference';
-    import { map } from 'rxjs/operators';
-    import { FormLookupService } from '../services/form-generated-lookup.service';
 
 
 @Component({
@@ -38,7 +36,7 @@ export class FormGeneratedComponent implements OnInit {
   form = new FormGroup({});
   fields: FormlyFieldConfig[] = [];
 
-  constructor(private lookupService: FormLookupService) {
+  constructor() {
     this.fields = this.initializeFields();
   }
 
@@ -182,10 +180,9 @@ pattern: $localize `:@@validators.pattern.emailAddress:Invalid email address for
         placeholder: $localize `:@@test.form.form-status.placeholder:Form status`,
         disabled: this.isReadonly || false,
         description: '',
-            options: this.lookupService.getFormStatus$.pipe(
-            map((arr) =>
-            arr.map(el => el = {value: el.value, label: el.displayName}))
-            ),
+            options: [{ value: 0, displayName: 'First' }, { value: 1, displayName: 'Second' }, { value: 2, displayName: 'Third' }],
+            valueProp: 'value',
+            labelProp: 'displayName',
         hidden: !true,
         },
         },
@@ -198,10 +195,9 @@ pattern: $localize `:@@validators.pattern.emailAddress:Invalid email address for
         placeholder: $localize `:@@test.form.mock-radio.placeholder:Mock radio`,
         disabled: this.isReadonly || false,
         description: '',
-            options: this.lookupService.getMockRadio$.pipe(
-            map((arr) =>
-            arr.map(el => el = {value: el.value, label: el.displayName}))
-            ),
+            options: [{ value: 0, displayName: 'First' }, { value: 1, displayName: 'Second' }, { value: 2, displayName: 'Third' }],
+            valueProp: 'value',
+            labelProp: 'displayName',
         hidden: !true,
         },
         },

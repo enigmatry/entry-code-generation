@@ -25,11 +25,9 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
             var placeholderTranslationId = _placeholderTranslationId ?? $"{translationId}placeholder";
             var hintTranslationId = _hintTranslationId ?? $"{translationId}hint";
 
-            if (_formControlType == FormControlType.Select ||
-                _formControlType == FormControlType.MultiSelect ||
-                _formControlType == FormControlType.Autocomplete ||
-                _formControlType == FormControlType.Radio)
+            if (_select != null)
             {
+                var select = _select.Build();
                 return new SelectFormControl
                 {
                     ComponentInfo = componentInfo,
@@ -40,12 +38,14 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
                     IsVisible = _isVisible,
                     IsReadonly = _isReadonly,
                     Type = _formControlType,
-                    LookupMethod = _select?.Build().LookupMethod!,
                     LabelTranslationId = labelTranslationId,
                     PlaceholderTranslationId = placeholderTranslationId,
                     HintTranslationId = hintTranslationId,
                     Validator = _validator,
-                    ClassName = _className
+                    ClassName = _className,
+                    FixedOptions = select.FixedOptions,
+                    OptionValueKey = select.OptionValueKey,
+                    OptionDisplayKey = select.OptionDisplayKey
                 };
             }
             return new FormControl
