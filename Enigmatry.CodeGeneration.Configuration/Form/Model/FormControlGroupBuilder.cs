@@ -63,13 +63,15 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
             var labelTranslationId = _labelTranslationId ?? $"{translationId}label";
             var placeholderTranslationId = _placeholderTranslationId ?? $"{translationId}placeholder";
             var hintTranslationId = _hintTranslationId ?? $"{translationId}hint";
+            var label = _label ?? _propertyName.Humanize();
+            var placeholder = _placeholder ?? label;
 
             return new FormControlGroup
             {
                 ComponentInfo = componentInfo,
                 PropertyName = _propertyName,
-                Label = _label.Humanize(),
-                Placeholder = _placeholder.Humanize(),
+                Label = label,
+                Placeholder = placeholder,
                 Hint = _hint,
                 IsVisible = _isVisible,
                 IsReadonly = _isReadonly,

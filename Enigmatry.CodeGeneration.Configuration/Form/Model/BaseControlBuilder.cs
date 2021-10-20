@@ -9,10 +9,10 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
     {
         public PropertyInfo? PropertyInfo { get; }
         protected readonly string _propertyName;
-        protected string _label;
+        protected string? _label;
         protected bool _isVisible;
         protected bool _isReadonly;
-        protected string _placeholder;
+        protected string? _placeholder;
         protected string _hint;
         protected string? _labelTranslationId;
         protected string? _placeholderTranslationId;
@@ -30,8 +30,6 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         protected BaseControlBuilder(string propertyName)
         {
             _propertyName = propertyName.Camelize();
-            _label = propertyName.Humanize();
-            _placeholder = _label;
             _isVisible = true;
             _isReadonly = false;
             _hint = String.Empty;

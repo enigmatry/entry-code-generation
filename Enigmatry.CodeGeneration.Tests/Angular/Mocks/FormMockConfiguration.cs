@@ -16,13 +16,13 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
 
             builder.FormControl(x => x.Name)
                 .WithLabel("Name")
-                .WithPlaceholder("Name")
+                .WithPlaceholder("Some / Name")
                 .WithValidator("UniqueName")
                 .WithValidator("IsEnsured");
 
             builder.FormControl(x => x.Description)
-                .WithLabel("Description")
-                .WithPlaceholder("Description")
+                .WithLabel("Some Description")
+                // no placeholder specified, should default to value of label
                 .WithValidator("ValidDescription");
 
             builder
@@ -42,7 +42,7 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
 
             builder
                 .FormControl(x => x.FormStatus)
-                .WithLabel("Status")
+                //.WithLabel("Status")
                 .IsDropDownListControl()
                 .WithFixedValues<EnumMock>();
 
