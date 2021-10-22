@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Encodings.Web;
-using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 using Enigmatry.CodeGeneration.Configuration.Formatters;
+using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Enigmatry.CodeGeneration.Tests.HtmlHelperExtensions.Angular
+namespace Enigmatry.CodeGeneration.Tests.Angular.HtmlHelperExtensions
 {
     public class AngularFormattingHtmlHelperExtensionsFixture : CodeGenerationFixtureBase
     {

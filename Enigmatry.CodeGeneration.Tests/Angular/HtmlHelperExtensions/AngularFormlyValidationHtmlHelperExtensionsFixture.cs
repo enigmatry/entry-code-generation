@@ -1,15 +1,13 @@
-﻿using Enigmatry.CodeGeneration.Configuration;
-using Enigmatry.CodeGeneration.Configuration.Builder;
+﻿using System.Linq;
+using Enigmatry.CodeGeneration.Configuration;
 using Enigmatry.CodeGeneration.Configuration.Form;
 using Enigmatry.CodeGeneration.Configuration.Form.Model.Validators;
 using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
+using Enigmatry.CodeGeneration.Tests.Angular.Mocks;
 using Humanizer;
 using NUnit.Framework;
-using System;
-using System.Linq;
-using Enigmatry.CodeGeneration.Tests.Angular.Mocks;
 
-namespace Enigmatry.CodeGeneration.Tests.HtmlHelperExtensions.Angular
+namespace Enigmatry.CodeGeneration.Tests.Angular.HtmlHelperExtensions
 {
     public class AngularFormlyValidationHtmlHelperExtensionsFixture : CodeGenerationFixtureBase
     {
@@ -19,11 +17,12 @@ namespace Enigmatry.CodeGeneration.Tests.HtmlHelperExtensions.Angular
         [SetUp]
         public void SetUp()
         {
-            _formComponent = new FormComponentModel(
-                new ComponentInfo("form", String.Empty, RoutingInfo.NoRouting(), ApiClientInfo.NoApiClient(), new FeatureInfoBuilder().WithName("module").Build()),
-                new FormComponentBuilder<FormMock>().Build().FormControls,
-                new FormMockValidationConfiguration().ValidationRules
-            );
+            var componentBuilder = new FormMockConfiguration();
+            var builder = new FormComponentBuilder<FormMock>();
+            componentBuilder.Configure(builder);
+
+            _formComponent = builder.Build();
+
             _formComponent.FormControls
                 .Single(x => x.PropertyName == nameof(FormMock.Name).Camelize())
                 .Validator = new CustomValidator("nameValidator");
@@ -46,7 +45,7 @@ namespace Enigmatry.CodeGeneration.Tests.HtmlHelperExtensions.Angular
         [TestCase(nameof(FormMock.Amount), ExpectedResult = "")]
         [TestCase(nameof(FormMock.Email1), ExpectedResult = "")]
         [TestCase(nameof(FormMock.Email1), ExpectedResult = "")]
-        public string AddModelOpetions(string propertyName)
+        public string AddModelOptions(string propertyName)
         {
             var formControl = _formComponent.FormControls.Single(x => x.PropertyName == propertyName.Camelize());
             return _htmlHelper.AddModelOpetions(formControl)?.ToString()?.Replace("\r\n", "") ?? "";
@@ -67,9 +66,9 @@ namespace Enigmatry.CodeGeneration.Tests.HtmlHelperExtensions.Angular
             "required: $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`," +
             "maxlength: $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`")]
         [TestCase(nameof(FormMock.Amount),ExpectedResult =
-            "min: $localize `:@@module.form.amount.min:CUSTOM_VALIDATION_MESSAGE`," +
-            "max: $localize `:@@module.form.amount.max:CUSTOM_VALIDATION_MESSAGE`")]
-        [TestCase(nameof(FormMock.Email1), ExpectedResult = "pattern: $localize `:@@module.form.email1.pattern:CUSTOM_VALIDATION_MESSAGE`")]
+            "min: $localize `:@@test.form.amount.min:CUSTOM_VALIDATION_MESSAGE`," +
+            "max: $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAGE`")]
+        [TestCase(nameof(FormMock.Email1), ExpectedResult = "pattern: $localize `:@@test.form.email1.pattern:CUSTOM_VALIDATION_MESSAGE`")]
         [TestCase(nameof(FormMock.Email2), ExpectedResult = "pattern: $localize `:@@validators.pattern.emailAddress:Invalid email address format`")]
         public string AddCustomValidationMessages(string propertyName)
         {

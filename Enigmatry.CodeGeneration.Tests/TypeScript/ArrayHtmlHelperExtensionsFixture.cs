@@ -3,7 +3,7 @@ using System.Text.Encodings.Web;
 using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript;
 using NUnit.Framework;
 
-namespace Enigmatry.CodeGeneration.Tests.HtmlHelperExtensions.TypeScript
+namespace Enigmatry.CodeGeneration.Tests.TypeScript
 {
     public class ArrayHtmlHelperExtensionsFixture : CodeGenerationFixtureBase
     {

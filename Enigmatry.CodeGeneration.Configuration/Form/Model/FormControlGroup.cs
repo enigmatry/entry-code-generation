@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Enigmatry.BuildingBlocks.Validation.ValidationRules;
 
 namespace Enigmatry.CodeGeneration.Configuration.Form.Model
 {
@@ -11,6 +12,14 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         public override string GetFormlyType()
         {
             return SectionWrapperElement ?? String.Empty;
+        }
+
+        public override void ApplyValidationConfiguration(IEnumerable<IFormlyValidationRule> validationRules)
+        {
+            foreach (var formControl in FormControls)
+            {
+                formControl.ApplyValidationConfiguration(validationRules);
+            }
         }
     }
 }
