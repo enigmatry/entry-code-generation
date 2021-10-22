@@ -9,7 +9,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
     {
         public ComponentInfo ComponentInfo { get; }
         public IList<FormControl> FormControls { get; }
-        private IList<IFormlyValidationRule> ValidationRules { get; }
+        public IList<IFormlyValidationRule> ValidationRules { get; }
 
         public FormComponentModel(
             ComponentInfo componentInfo,

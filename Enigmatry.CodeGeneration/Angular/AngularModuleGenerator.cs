@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Enigmatry.CodeGeneration.Configuration;
-using Enigmatry.CodeGeneration.Configuration.Services;
 using Enigmatry.CodeGeneration.Rendering;
 using Humanizer;
 using JetBrains.Annotations;
@@ -16,9 +14,8 @@ namespace Enigmatry.CodeGeneration.Angular
     {
         private readonly IComponentGenerator _componentGenerator;
         private readonly ITemplateRenderer _templateRenderer;
-        private readonly ILogger<AngularModuleGenerator> _logger;
         private readonly IEnumerable<TemplateInfo> _moduleTemplates;
-        private readonly AngularSettings _angularSettings;
+        private readonly ILogger<AngularModuleGenerator> _logger;
 
         public AngularModuleGenerator(
             IComponentGenerator componentGenerator,
@@ -29,7 +26,6 @@ namespace Enigmatry.CodeGeneration.Angular
             _componentGenerator = componentGenerator;
             _templateRenderer = templateRenderer;
             _logger = logger;
-            _angularSettings = angularSettings;
             _moduleTemplates = angularSettings.Module.Templates;
         }
 
@@ -45,34 +41,12 @@ namespace Enigmatry.CodeGeneration.Angular
                 await _componentGenerator.GenerateAsync(directory, component);
             }
 
-            await GenerateServiceTemplates(module.Services, directory);
-            await GenerateModuleTemplates(module, directory);
-        }
-
-        private async Task GenerateModuleTemplates(IFeatureModule module, string directory)
-        {
-            foreach (TemplateInfo templateInfo in _moduleTemplates)
+            foreach (var templateInfo in _moduleTemplates)
             {
                 var fileName = templateInfo.FileNamingPattern.FormatWith(module.Name.Kebaberize());
                 var filePath = Path.Combine(directory, fileName);
 
                 await _templateRenderer.RenderAndSaveToFileAsync(templateInfo.TemplatePath, module, filePath);
-
-                _logger.LogInformation($"  {fileName} generated");
-            }
-        }
-
-        private async Task GenerateServiceTemplates(IEnumerable<IServiceModel> services, string directory)
-        {
-            var lookupServices = services.Where(service => service is LookupServiceModel);
-
-            foreach (var lookupService in lookupServices)
-            {
-                var serviceDirectory = Path.Combine(directory, "services");
-                var fileName = _angularSettings.Service.LookupServiceTemplate.FileNamingPattern.FormatWith(lookupService.Name.Kebaberize());
-                var filePath = Path.Combine(serviceDirectory, fileName);
-
-                await _templateRenderer.RenderAndSaveToFileAsync(_angularSettings.Service.LookupServiceTemplate.TemplatePath, lookupService, filePath);
 
                 _logger.LogInformation($"  {fileName} generated");
             }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Enigmatry.CodeGeneration.Configuration.Services;
 
 namespace Enigmatry.CodeGeneration.Configuration
 {
@@ -8,6 +7,5 @@ namespace Enigmatry.CodeGeneration.Configuration
         public string Name { get; }
         public IEnumerable<IComponentModel> Components { get; }
         public IEnumerable<ModuleImport> Imports { get; }
-        IEnumerable<IServiceModel> Services { get; }
     }
 }

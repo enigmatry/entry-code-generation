@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
-using JetBrains.Annotations;
 
 namespace Enigmatry.CodeGeneration.Angular
 {
     public class AngularSettings
     {
-        public string TemplatePath { get; set; }
-        public UiLibrary UiLibrary { get; set; }
-        public ComponentSettings Component { get; set; } 
-        public ModuleSettings Module { get; set; }
-        public ServiceSettings Service { get; set; }
+        public string TemplatePath { get; }
+        public UiLibrary UiLibrary { get; }
+        public ComponentSettings Component { get; } 
+        public ModuleSettings Module { get; }
 
         public AngularSettings(UiLibrary uiLibrary)
         {
@@ -18,13 +16,12 @@ namespace Enigmatry.CodeGeneration.Angular
 
             Component = new ComponentSettings(TemplatePath);
             Module = new ModuleSettings(TemplatePath);
-            Service = new ServiceSettings(TemplatePath);
         }
     }
 
     public class ComponentSettings
     {
-        public ComponentSettings([NotNull] string templatePath)
+        public ComponentSettings(string templatePath)
         {
             Templates = new List<TemplateInfo>
             {
@@ -38,7 +35,7 @@ namespace Enigmatry.CodeGeneration.Angular
 
     public class ModuleSettings
     {
-        public ModuleSettings([NotNull] string templatePath)
+        public ModuleSettings(string templatePath)
         {
             Templates = new List<TemplateInfo>
             {
@@ -46,16 +43,5 @@ namespace Enigmatry.CodeGeneration.Angular
             };
         }
         public IList<TemplateInfo> Templates { get; }
-    }
-
-    public class ServiceSettings
-    {
-        public ServiceSettings([NotNull] string templatePath)
-        {
-            LookupServiceTemplate = new TemplateInfo($"{templatePath}/Angular.Lookup.Service.cshtml", "{0}-generated-lookup.service.ts");
-        }
-
-        public TemplateInfo LookupServiceTemplate { get; }
-
     }
 }
