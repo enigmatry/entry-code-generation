@@ -39,13 +39,10 @@ import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPa
         @:key: '@control.PropertyName',
         @:type: @Html.Raw(typeString),
         @:className: '@Html.Raw(control.ClassName)',
+        @:hideExpression: !@control.IsVisible.ToString().ToLower(),
         @if (control.IsVisible)
         {
             CreateFieldTemplateOptions(control);
-        }
-        else
-        {
-            @:templateOptions: { hidden: true },
         }
         @if (control.ValidationRules.Any(x => x.HasCustomMessage))
         {
