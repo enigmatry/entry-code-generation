@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Humanizer;
 using JetBrains.Annotations;
 
 namespace Enigmatry.CodeGeneration.Configuration.Form.Model
@@ -16,12 +15,10 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
 
         internal FormControlGroupBuilder(PropertyInfo propertyInfo) : base(propertyInfo)
         {
-            _isVisible = true;
         }
 
         internal FormControlGroupBuilder(string propertyName) : base(propertyName)
         {
-            _isVisible = true;
         }
 
         public FormControlGroupBuilder<T> CreateUiSection(string wrapperElement)
@@ -59,31 +56,12 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         {
             var formControls = _formControls.Select(_ => _.Build(componentInfo));
 
-            var translationId = $"{componentInfo.TranslationId}.{_propertyName.Kebaberize()}.";
-            var labelTranslationId = _labelTranslationId ?? $"{translationId}label";
-            var placeholderTranslationId = _placeholderTranslationId ?? $"{translationId}placeholder";
-            var hintTranslationId = _hintTranslationId ?? $"{translationId}hint";
-            var label = _label ?? _propertyName.Humanize();
-            var placeholder = _placeholder ?? label;
-
-            return new FormControlGroup
+            return Build<FormControlGroup>(componentInfo, group =>
             {
-                ComponentInfo = componentInfo,
-                PropertyName = _propertyName,
-                Label = label,
-                Placeholder = placeholder,
-                Hint = _hint,
-                IsVisible = _isVisible,
-                IsReadonly = _isReadonly,
-                Type = FormControlType.Group,
-                ValueType = PropertyInfo?.PropertyType,
-                LabelTranslationId = labelTranslationId,
-                PlaceholderTranslationId = placeholderTranslationId,
-                HintTranslationId = hintTranslationId,
-                ClassName = _className,
-                SectionWrapperElement = _sectionWrapperElement,
-                FormControls = formControls.ToList()
-            };
+                group.Type = FormControlType.Group;
+                group.SectionWrapperElement = _sectionWrapperElement;
+                group.FormControls = formControls.ToList();
+            });
         }
 
         private IControlBuilder GetOrAddBuilder(IControlBuilder? builder, Func<IControlBuilder> creator)

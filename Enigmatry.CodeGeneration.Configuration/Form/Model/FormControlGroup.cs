@@ -11,7 +11,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
 
         public override string GetFormlyType()
         {
-            return SectionWrapperElement ?? String.Empty;
+            return SectionWrapperElement ?? CustomControlType ?? String.Empty;
         }
 
         public override void ApplyValidationConfiguration(IEnumerable<IFormlyValidationRule> validationRules)

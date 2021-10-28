@@ -21,12 +21,18 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         public string PlaceholderTranslationId { get; set; } = String.Empty;
         public string HintTranslationId { get; set; } = String.Empty;
         public FormControlType Type { get; set; }
+        public string? CustomControlType { get; set; }
         public Type? ValueType { get; set; }
         public IList<IFormlyValidationRule> ValidationRules { get; private set; } = new List<IFormlyValidationRule>();
         public CustomValidator? Validator { get; set; }
 
         public virtual string GetFormlyType()
         {
+            if (CustomControlType.HasContent())
+            {
+                return CustomControlType!;
+            }
+
             switch (Type)
             {
                 case FormControlType.Input:

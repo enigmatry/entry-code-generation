@@ -1,6 +1,5 @@
 ﻿using System;
 using Enigmatry.CodeGeneration.Configuration.Form.Model.Select;
-using Humanizer;
 using System.Reflection;
 
 namespace Enigmatry.CodeGeneration.Configuration.Form.Model
@@ -20,53 +19,17 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
 
         public override FormControl Build(ComponentInfo componentInfo)
         {
-            var translationId = $"{componentInfo.TranslationId}.{_propertyName.Kebaberize()}.";
-            var labelTranslationId = _labelTranslationId ?? $"{translationId}label";
-            var placeholderTranslationId = _placeholderTranslationId ?? $"{translationId}placeholder";
-            var hintTranslationId = _hintTranslationId ?? $"{translationId}hint";
-            var label = _label ?? _propertyName.Humanize();
-            var placeholder = _placeholder ?? label;
-
             if (_select != null)
             {
                 var select = _select.Build();
-                return new SelectFormControl
+                return Build<SelectFormControl>(componentInfo, control =>
                 {
-                    ComponentInfo = componentInfo,
-                    PropertyName = _propertyName,
-                    Label = label,
-                    Placeholder = placeholder,
-                    Hint = _hint,
-                    IsVisible = _isVisible,
-                    IsReadonly = _isReadonly,
-                    Type = _formControlType,
-                    LabelTranslationId = labelTranslationId,
-                    PlaceholderTranslationId = placeholderTranslationId,
-                    HintTranslationId = hintTranslationId,
-                    Validator = _validator,
-                    ClassName = _className,
-                    FixedOptions = select.FixedOptions,
-                    OptionValueKey = select.OptionValueKey,
-                    OptionDisplayKey = select.OptionDisplayKey
-                };
+                    control.FixedOptions = select.FixedOptions;
+                    control.OptionValueKey = select.OptionValueKey;
+                    control.OptionDisplayKey = select.OptionDisplayKey;
+                });
             }
-            return new FormControl
-            {
-                ComponentInfo = componentInfo,
-                PropertyName = _propertyName,
-                Label = label,
-                Placeholder = placeholder,
-                Hint = _hint,
-                IsVisible = _isVisible,
-                IsReadonly = _isReadonly,
-                Type = _formControlType,
-                ValueType = PropertyInfo?.PropertyType,
-                LabelTranslationId = labelTranslationId,
-                PlaceholderTranslationId = placeholderTranslationId,
-                HintTranslationId = hintTranslationId,
-                Validator = _validator,
-                ClassName = _className
-            };
+            return Build<FormControl>(componentInfo);
         }
 
         public SelectFormControlBuilder IsDropDownListControl()

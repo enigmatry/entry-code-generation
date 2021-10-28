@@ -20,6 +20,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         protected string? _className;
         protected FormControlType _formControlType;
         protected CustomValidator? _validator;
+        protected string? _customControlType;
 
         protected BaseControlBuilder(PropertyInfo propertyInfo) : this(propertyInfo.Name)
         {
@@ -167,10 +168,54 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         }
 
         /// <summary>
+        /// Configure custom form control type to be used
+        /// </summary>
+        /// <param name="controlTypeName"></param>
+        /// <returns></returns>
+        public TBuilder WithCustomControlType(string controlTypeName)
+        {
+            _customControlType = controlTypeName;
+            return (TBuilder)this;
+        }
+
+        /// <summary>
         /// Build form control
         /// </summary>
         /// <param name="componentInfo">Parent componentInfo</param>
         /// <returns></returns>
         public abstract FormControl Build(ComponentInfo componentInfo);
+
+        protected TControl Build<TControl>(ComponentInfo componentInfo, Action<TControl>? configureAction = null) where TControl : FormControl, new()
+        {
+            var translationId = $"{componentInfo.TranslationId}.{_propertyName.Kebaberize()}.";
+            var labelTranslationId = _labelTranslationId ?? $"{translationId}label";
+            var placeholderTranslationId = _placeholderTranslationId ?? $"{translationId}placeholder";
+            var hintTranslationId = _hintTranslationId ?? $"{translationId}hint";
+            var label = _label ?? _propertyName.Humanize();
+            var placeholder = _placeholder ?? label;
+
+            var formControl = new TControl
+            {
+                ComponentInfo = componentInfo,
+                PropertyName = _propertyName,
+                Label = label,
+                Placeholder = placeholder,
+                Hint = _hint,
+                IsVisible = _isVisible,
+                IsReadonly = _isReadonly,
+                Type = _formControlType,
+                ValueType = PropertyInfo?.PropertyType,
+                LabelTranslationId = labelTranslationId,
+                PlaceholderTranslationId = placeholderTranslationId,
+                HintTranslationId = hintTranslationId,
+                Validator = _validator,
+                ClassName = _className,
+                CustomControlType = _customControlType
+            };
+
+            configureAction?.Invoke(formControl);
+
+            return formControl;
+        }
     }
 }
