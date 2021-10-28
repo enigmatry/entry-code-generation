@@ -23,8 +23,6 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
             ApplyValidationConfiguration(ValidationRules);
         }
 
-        public IEnumerable<FormControl> VisibleFormControls => FormControls.Where(control => control.IsVisible);
-
         private void ApplyValidationConfiguration(IList<IFormlyValidationRule> validationRules)
         {
             if (validationRules.Any())

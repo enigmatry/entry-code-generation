@@ -50,6 +50,12 @@ export class FormGeneratedComponent implements OnInit {
 
   initializeFields(): FormlyFieldConfig[] {
     return [
+    {
+        key: 'id',
+        type: 'input',
+        className: '',
+        templateOptions: { hidden: true },
+        },
         {
         key: 'name',
         type: 'input',
@@ -185,6 +191,24 @@ pattern: $localize `:@@validators.pattern.emailAddress:Invalid email address for
             labelProp: 'displayName',
         hidden: !true,
         },
+        },
+        {
+        key: 'categoryId',
+        type: 'input',
+        className: '',
+        templateOptions: { hidden: true },
+        },
+        {
+        key: 'typeId',
+        type: 'input',
+        className: '',
+        templateOptions: { hidden: true },
+        },
+        {
+        key: 'subTypeId',
+        type: 'input',
+        className: '',
+        templateOptions: { hidden: true },
         },
         {
         key: 'mockRadio',

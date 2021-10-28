@@ -28,7 +28,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 
         public static IHtmlContent CreateColumnDefs(this IHtmlHelper html, IEnumerable<ColumnDefinition> columns, bool enableI18N)
         {
-            var columnDefs = columns.Where(x => x.IsVisible).Select(definition => CreateColumnDef(definition, enableI18N)).ToList();
+            var columnDefs = columns.Select(definition => CreateColumnDef(definition, enableI18N)).ToList();
             var htmlContent = columnDefs.Any() ? $"[\r\n{String.Join(",\r\n", columnDefs)}\r\n]" : "[]";
 
             return html.Raw(htmlContent);
@@ -66,7 +66,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 
             return JsObject(
                 JsProperty("field", propertyName),
-                JsProperty("header", header, false, enableI18N),
+                JsProperty("header", header, !column.IsVisible, enableI18N),
                 JsProperty("hide", !column.IsVisible),
                 JsProperty("sortable", column.IsSortable),
                 JsProperty("type", columnType, !columnType.HasContent()),

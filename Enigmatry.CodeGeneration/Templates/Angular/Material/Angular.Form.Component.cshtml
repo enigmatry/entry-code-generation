@@ -39,6 +39,32 @@ import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPa
         @:key: '@control.PropertyName',
         @:type: @Html.Raw(typeString),
         @:className: '@Html.Raw(control.ClassName)',
+        @if (control.IsVisible)
+        {
+            CreateFieldTemplateOptions(control);
+        }
+        else
+        {
+            @:templateOptions: { hidden: true },
+        }
+        @if (control.ValidationRules.Any(x => x.HasCustomMessage))
+        {
+            @:validation: {
+            @:messages: {
+            @Html.AddCustomValidationMessages(control, _options.EnableI18N)
+            @:}
+            @:},
+        }
+        @if (control.Validator != null)
+        {
+            @Html.AddModelOpetions(control)
+            @Html.AddAsyncValidators(control)
+        }
+        @:},
+    }
+
+    void CreateFieldTemplateOptions(FormControl control)
+    {
         @:templateOptions: {
         @:label: @Html.Localize(control.LabelTranslationId, control.Label, _options.EnableI18N),
         @:placeholder: @Html.Localize(control.PlaceholderTranslationId, control.Placeholder, _options.EnableI18N),
@@ -55,20 +81,6 @@ import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPa
         @if (control.ValidationRules.Any())
         {
             @Html.AddValidationTemplateOptions(control)
-        }
-        @:},
-        @if (control.ValidationRules.Any(x => x.HasCustomMessage))
-        {
-            @:validation: {
-            @:messages: {
-            @Html.AddCustomValidationMessages(control, _options.EnableI18N)
-            @:}
-            @:},
-        }
-        @if (control.Validator != null)
-        {
-            @Html.AddModelOpetions(control)
-            @Html.AddAsyncValidators(control)
         }
         @:},
     }
@@ -130,7 +142,7 @@ export class @Model.AngularComponentName() implements OnInit {
 
   initializeFields(): FormlyFieldConfig[] {
     return [
-        @{ RenderControls(Model.VisibleFormControls); }
+        @{ RenderControls(Model.FormControls); }
     ];
   }
 }
