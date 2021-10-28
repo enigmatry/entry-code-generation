@@ -50,17 +50,11 @@ export class FormGeneratedComponent implements OnInit {
 
   initializeFields(): FormlyFieldConfig[] {
     return [
-    {
-        key: 'id',
-        type: 'input',
-        className: '',
-        hideExpression: !false,
-        },
+    { key: 'id' },
         {
         key: 'name',
         type: 'input',
         className: '',
-        hideExpression: !true,
         templateOptions: {
         label: $localize `:@@test.form.name.label:Name`,
         placeholder: $localize `:@@test.form.name.placeholder:Some / Name`,
@@ -84,7 +78,6 @@ asyncValidators: { validation: [ 'isEnsured' ] },
         key: 'description',
         type: 'input',
         className: '',
-        hideExpression: !true,
         templateOptions: {
         label: $localize `:@@test.form.description.label:Some Description`,
         placeholder: $localize `:@@test.form.description.placeholder:Some Description`,
@@ -99,7 +92,6 @@ asyncValidators: { validation: [ 'validDescription' ] },
         key: 'date',
         type: 'datepicker',
         className: '',
-        hideExpression: !true,
         templateOptions: {
         label: $localize `:@@test.form.date.label:Date`,
         placeholder: $localize `:@@test.form.date.placeholder:Date`,
@@ -112,7 +104,6 @@ asyncValidators: { validation: [ 'validDescription' ] },
         key: 'money',
         type: 'input',
         className: '',
-        hideExpression: !true,
         templateOptions: {
         label: $localize `:@@test.form.money.label:Money`,
         placeholder: $localize `:@@test.form.money.placeholder:Money`,
@@ -127,7 +118,6 @@ max: 999.99 - 0.1,
         key: 'amount',
         type: 'input',
         className: '',
-        hideExpression: !true,
         templateOptions: {
         label: $localize `:@@test.form.amount.label:Amount`,
         placeholder: $localize `:@@test.form.amount.placeholder:Amount`,
@@ -150,7 +140,6 @@ max: $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAGE`
         key: 'email1',
         type: 'input',
         className: '',
-        hideExpression: !true,
         templateOptions: {
         label: $localize `:@@test.form.email1.label:Email 1`,
         placeholder: $localize `:@@test.form.email1.placeholder:Email 1`,
@@ -169,7 +158,6 @@ pattern: $localize `:@@test.form.email1.pattern:CUSTOM_VALIDATION_MESSAGE`
         key: 'email2',
         type: 'input',
         className: '',
-        hideExpression: !true,
         templateOptions: {
         label: $localize `:@@test.form.email2.label:Email 2`,
         placeholder: $localize `:@@test.form.email2.placeholder:Email 2`,
@@ -188,7 +176,6 @@ pattern: $localize `:@@validators.pattern.emailAddress:Invalid email address for
         key: 'formStatus',
         type: 'select',
         className: '',
-        hideExpression: !true,
         templateOptions: {
         label: $localize `:@@test.form.form-status.label:Form status`,
         placeholder: $localize `:@@test.form.form-status.placeholder:Form status`,
@@ -200,29 +187,13 @@ pattern: $localize `:@@validators.pattern.emailAddress:Invalid email address for
         hidden: !true,
         },
         },
-        {
-        key: 'categoryId',
-        type: 'input',
-        className: '',
-        hideExpression: !false,
-        },
-        {
-        key: 'typeId',
-        type: 'input',
-        className: '',
-        hideExpression: !false,
-        },
-        {
-        key: 'subTypeId',
-        type: 'input',
-        className: '',
-        hideExpression: !false,
-        },
+        { key: 'categoryId' },
+        { key: 'typeId' },
+        { key: 'subTypeId' },
         {
         key: 'mockRadio',
         type: this.isReadonly ? 'readonly-radio' : 'radio',
         className: '',
-        hideExpression: !true,
         templateOptions: {
         label: $localize `:@@test.form.mock-radio.label:Radio`,
         placeholder: $localize `:@@test.form.mock-radio.placeholder:Radio`,

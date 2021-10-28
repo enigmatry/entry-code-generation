@@ -35,28 +35,18 @@ import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPa
         var readonlyType = control.GetReadonlyFormlyType();
         var typeString = string.Equals(type, readonlyType) ? $"'{type}'" : $"this.isReadonly ? '{readonlyType}' : '{type}'";
 
+        @if (!control.IsVisible)
+        {
+        @:{ key: '@control.PropertyName' },
+        return;
+        }
+
         @:{
         @:key: '@control.PropertyName',
         @:type: @Html.Raw(typeString),
         @:className: '@Html.Raw(control.ClassName)',
-        @:hideExpression: !@control.IsVisible.ToString().ToLower(),
-        @if (control.IsVisible)
-        {
-            CreateFieldTemplateOptions(control);
-        }
-        @if (control.ValidationRules.Any(x => x.HasCustomMessage))
-        {
-            @:validation: {
-            @:messages: {
-            @Html.AddCustomValidationMessages(control, _options.EnableI18N)
-            @:}
-            @:},
-        }
-        @if (control.Validator != null)
-        {
-            @Html.AddModelOpetions(control)
-            @Html.AddAsyncValidators(control)
-        }
+        CreateFieldTemplateOptions(control);
+        CreateFieldValidationProperties(control);
         @:},
     }
 
@@ -80,6 +70,23 @@ import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPa
             @Html.AddValidationTemplateOptions(control)
         }
         @:},
+    }
+
+    void CreateFieldValidationProperties(FormControl control)
+    {
+        @if (control.ValidationRules.Any(x => x.HasCustomMessage))
+        {
+            @:validation: {
+            @:messages: {
+            @Html.AddCustomValidationMessages(control, _options.EnableI18N)
+            @:}
+            @:},
+        }
+        @if (control.Validator != null)
+        {
+            @Html.AddModelOpetions(control)
+            @Html.AddAsyncValidators(control)
+        }
     }
 
     void CreateFieldGroup(FormControlGroup controlGroup)
