@@ -6,7 +6,7 @@
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
 @model Enigmatry.CodeGeneration.Configuration.Form.FormComponentModel;
 @inject CodeGeneratorOptions _options;
-import { Component, EventEmitter, Input, OnInit, Output } from '@@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@@angular/core';
 import { FormGroup } from '@@angular/forms';
 import { FormlyFieldConfig } from '@@ngx-formly/core';
 import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPath';
@@ -124,6 +124,10 @@ export class @Model.AngularComponentName() implements OnInit {
   get isReadonly() {
     return this._isReadonly;
   }
+
+  @@Input() saveButtonText: string = 'Save';
+  @@Input() cancelButtonText: string = 'Cancel';
+  @@Input() formButtonsTemplate: TemplateRef@(Html.Raw("<any>")) | null | undefined;
 
   @@Output() save = new EventEmitter@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>"))();
   @@Output() cancel = new EventEmitter@(Html.Raw("<void>"))();

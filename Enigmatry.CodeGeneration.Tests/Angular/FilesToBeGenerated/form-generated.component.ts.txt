@@ -7,7 +7,7 @@
 // </auto-generated>
 // ------------------------------------------------------------------------------;
 /* eslint-disable */
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { IFormMock } from 'src/app/api/api-reference';
@@ -28,6 +28,10 @@ export class FormGeneratedComponent implements OnInit {
   get isReadonly() {
     return this._isReadonly;
   }
+
+  @Input() saveButtonText: string = 'Save';
+  @Input() cancelButtonText: string = 'Cancel';
+  @Input() formButtonsTemplate: TemplateRef<any> | null | undefined;
 
   @Output() save = new EventEmitter<IFormMock>();
   @Output() cancel = new EventEmitter<void>();
@@ -50,7 +54,7 @@ export class FormGeneratedComponent implements OnInit {
 
   initializeFields(): FormlyFieldConfig[] {
     return [
-    { key: 'id' },
+        { key: 'id' },
         {
         key: 'name',
         type: 'input',
