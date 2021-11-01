@@ -26,10 +26,12 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
 
             RuleFor(x => x.Email1)
                 .EmailAddress()
-                    .WithMessage(Constants.CustomValidationMessage);
+                    .WithMessage(Constants.CustomValidationMessage)
+                .MaxLength(50);
 
             RuleFor(x => x.Email2)
-                .EmailAddress();
+                .EmailAddress()
+                .MaxLength(50);
         }
     }
 }

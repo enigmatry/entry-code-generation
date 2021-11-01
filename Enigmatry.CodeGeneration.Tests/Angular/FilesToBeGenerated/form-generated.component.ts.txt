@@ -151,6 +151,7 @@ max: $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAGE`
         description: '',
         hidden: !true,
 pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+maxLength: 50,
         },
             validation: {
             messages: {
@@ -169,6 +170,7 @@ pattern: $localize `:@@test.form.email1.pattern:CUSTOM_VALIDATION_MESSAGE`
         description: '',
         hidden: !true,
 pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+maxLength: 50,
         },
             validation: {
             messages: {

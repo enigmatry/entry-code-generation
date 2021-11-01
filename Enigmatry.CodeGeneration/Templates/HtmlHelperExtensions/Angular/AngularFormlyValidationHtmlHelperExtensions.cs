@@ -55,7 +55,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
             {
                 foreach (var rule in control.ValidationRules.Where(x => !x.HasCustomMessage))
                 {
-                    if (!messages.ContainsKey(rule.FormlyRuleName))
+                    if (!messages.ContainsKey(rule.FormlyRuleName.ToLowerInvariant()))
                     {
                         var message = enableI18N
                             ? AngularLocalization.Localize(rule.MessageTranslationId, rule.FormlyValidationMessage)
