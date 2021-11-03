@@ -116,7 +116,7 @@ import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPa
 })
 export class @Model.AngularComponentName() implements OnInit {
 
-  @@Input() model: I@(Model.ComponentInfo.ModelType) = {};
+  @@Input() model: I@(Model.ComponentInfo.ModelType) = {} as I@(Model.ComponentInfo.ModelType);
   @@Input() set isReadonly(value: boolean) {
     this._isReadonly = value;
     this.fields = this.initializeFields();

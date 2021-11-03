@@ -20,7 +20,7 @@ import { IFormMock } from 'src/app/api/api-reference';
 })
 export class FormGeneratedComponent implements OnInit {
 
-  @Input() model: IFormMock = {};
+  @Input() model: IFormMock = {} as IFormMock;
   @Input() set isReadonly(value: boolean) {
     this._isReadonly = value;
     this.fields = this.initializeFields();
