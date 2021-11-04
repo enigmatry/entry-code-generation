@@ -110,7 +110,8 @@ namespace Enigmatry.CodeGeneration.Console
             var options = new CodeGeneratorOptions(_destinationDirectory, assembly, _enableI18n)
             {
                 Component = _component,
-                Feature = _feature
+                Feature = _feature,
+                ValidatorsPath = _validatorsPath
             };
 
             return builder

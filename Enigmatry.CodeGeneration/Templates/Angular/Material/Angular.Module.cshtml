@@ -1,8 +1,10 @@
-﻿@model Enigmatry.CodeGeneration.Configuration.FeatureModule;
+﻿@using Enigmatry.CodeGeneration;
 @using Enigmatry.CodeGeneration.Angular
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
+@model Enigmatry.CodeGeneration.Configuration.FeatureModule;
+@inject CodeGeneratorOptions _options;
 import { NgModule } from '@@angular/core';
 import { CommonModule } from '@@angular/common';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -17,7 +19,7 @@ import { EnigmatryGridModule } from '@@enigmatry/angular-building-blocks/enigmat
 }
 @Html.ImportModules(Model.Imports)
 @Html.ImportComponentsFrom(Model)
-@Html.ImportValidators(Model)
+@Html.ImportValidators(Model, _options.ValidatorsPath)
 
 @@NgModule({
     declarations: @Html.JsArray(Model.Components, component => component.AngularComponentName()),

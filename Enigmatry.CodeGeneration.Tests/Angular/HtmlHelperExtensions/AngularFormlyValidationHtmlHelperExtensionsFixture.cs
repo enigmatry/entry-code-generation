@@ -84,9 +84,9 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.HtmlHelperExtensions
         public string AddCommonValidationMessages() =>
             _htmlHelper.AddCommonValidationMessages(_featureModule, true)?.ToString()?.Replace("\r\n", "") ?? "";
 
-        [TestCase(ExpectedResult = "import { CustomValidatorsService, customValidatorsFactory } from 'src/app/shared/validators/custom-validators';")]
-        public string ImportValidators() =>
-            _htmlHelper.ImportValidators(_featureModule)?.ToString()?.Replace("\r\n", "") ?? "";
+        [TestCase("src/app/custom-path", ExpectedResult = "import { CustomValidatorsService, customValidatorsFactory } from 'src/app/custom-path';")]
+        public string ImportValidators(string path) =>
+            _htmlHelper.ImportValidators(_featureModule, path)?.ToString()?.Replace("\r\n", "") ?? "";
 
         [TestCase(ExpectedResult = "CustomValidatorsService,{ provide: FORMLY_CONFIG, multi: true, useFactory: customValidatorsFactory, deps: [ CustomValidatorsService ] }")]
         public string AddFromValidationProvider() =>

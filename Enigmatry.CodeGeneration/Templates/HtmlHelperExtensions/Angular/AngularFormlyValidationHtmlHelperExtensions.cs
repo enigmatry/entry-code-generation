@@ -71,9 +71,10 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
             return html.Raw($"{String.Join(",\r\n", messages.Values)}\r\n");
         }
 
-        public static IHtmlContent ImportValidators(this IHtmlHelper html, FeatureModule module) =>
+        public static IHtmlContent ImportValidators(this IHtmlHelper html, FeatureModule module, string validatorsPath) =>
             module.HasFormValidators
-                ? html.ImportStatement("CustomValidatorsService, customValidatorsFactory", "src/app/shared/validators/custom-validators")
+                ? html.ImportStatement(
+                    "CustomValidatorsService, customValidatorsFactory", validatorsPath)
                 : html.Raw("");
 
         public static IHtmlContent AddFromValidationProvider(this IHtmlHelper html, FeatureModule module) =>

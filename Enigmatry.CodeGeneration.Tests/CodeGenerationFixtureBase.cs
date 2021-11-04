@@ -20,6 +20,7 @@ namespace Enigmatry.CodeGeneration.Tests
         protected CodeGeneratorOptions _options = null!;
         protected IHtmlHelper _htmlHelper = null!;
         protected CodeGenerator _codeGenerator = null!;
+        protected string _validatorsPath = "src/app/shared/custom-path";
         protected bool _enableI18N = false;
 
         [SetUp]
@@ -30,7 +31,7 @@ namespace Enigmatry.CodeGeneration.Tests
                 Component = String.Empty,
                 Framework = Framework.Angular,
                 EnableI18N = _enableI18N,
-                ValidatorsPath = "src/app/shared/validators/custom-validators"
+                ValidatorsPath = _validatorsPath
             };
 
             var hostBuilder = Host.CreateDefaultBuilder()

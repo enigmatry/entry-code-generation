@@ -26,6 +26,9 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 new IntroMessage("Burek is with meat!"),
                 new IntroMessage("\"Fear is the mind-killer\""),
                 new IntroMessage("Are you SOLID?"),
+                new IntroMessage("Please enter your 2FA code: * * * *"),
+                new IntroMessage("(1923589348923) rows affected"),
+                new IntroMessage("\"Opinions are like assholes — Everyone’s got one\""),
                 new IntroMessage("Busy, busy, busy ..."),
                 new IntroMessage("... beep ... beep ... beep ..."),
                 new IntroMessage("Are you a robot?"),
@@ -114,6 +117,9 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                     .WithType(IntroMessageType.SpecialCase)
                     .WithCondition(() => DateTime.Now.IsLunchTime()),
                 new IntroMessage("So, what shell we order, Thai, Chinese, Mexican ... PIZZA?")
+                    .WithType(IntroMessageType.SpecialCase)
+                    .WithCondition(() => DateTime.Now.IsLunchTime()),
+                new IntroMessage("Don't get fat!")
                     .WithType(IntroMessageType.SpecialCase)
                     .WithCondition(() => DateTime.Now.IsLunchTime()),
                 new IntroMessage("Woo-hoo, lunch time!!!")

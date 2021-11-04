@@ -19,7 +19,7 @@ import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
 
 import { FormGeneratedComponent } from './form/form-generated.component';
 import { ListGeneratedComponent } from './list/list-generated.component';
-import { CustomValidatorsService, customValidatorsFactory } from 'src/app/shared/validators/custom-validators';
+import { CustomValidatorsService, customValidatorsFactory } from 'src/app/shared/custom-path';
 
 
 @NgModule({

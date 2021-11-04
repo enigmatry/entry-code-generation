@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Templates\Angular\Bootstrap\**" />
+    <EmbeddedResource Remove="Templates\Angular\Bootstrap\**" />
+    <None Remove="Templates\Angular\Bootstrap\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Templates\Angular\Material\Angular.Form.Component.cshtml" />
     <None Remove="Templates\Angular\Material\Angular.Form.Style.cshtml" />
     <None Remove="Templates\Angular\Material\Angular.Form.View.cshtml" />
@@ -58,9 +64,5 @@
     <ItemGroup>
     <ProjectReference Include="..\Enigmatry.CodeGeneration.Configuration\Enigmatry.CodeGeneration.Configuration.csproj" />
   </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Templates\Angular\Bootstrap\" />
-    </ItemGroup>
 
 </Project>
