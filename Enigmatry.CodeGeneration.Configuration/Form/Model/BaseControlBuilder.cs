@@ -18,6 +18,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         protected string? _placeholderTranslationId;
         protected string? _hintTranslationId;
         protected string? _className;
+        protected FormControlAppearance _appearance = FormControlAppearance.Standard;
         protected FormControlType _formControlType;
         protected CustomValidator? _validator;
         protected string? _customControlType;
@@ -156,6 +157,17 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         }
 
         /// <summary>
+        /// Configure form control appearance attribute (standard is default)
+        /// </summary>
+        /// <param name="appearance"></param>
+        /// <returns></returns>
+        public TBuilder WithAppearance(FormControlAppearance appearance)
+        {
+            _appearance = appearance;
+            return (TBuilder)this;
+        }
+
+        /// <summary>
         /// Configure custom field validator name and trigger event (onBlur is default)
         /// </summary>
         /// <param name="validatorName">Validator name to be matched on client side</param>
@@ -210,7 +222,8 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
                 HintTranslationId = hintTranslationId,
                 Validator = _validator,
                 ClassName = _className,
-                CustomControlType = _customControlType
+                CustomControlType = _customControlType,
+                Appearance = _appearance
             };
 
             configureAction?.Invoke(formControl);

@@ -1,4 +1,5 @@
 ﻿using Enigmatry.CodeGeneration.Configuration.Form;
+using Enigmatry.CodeGeneration.Configuration.Form.Model;
 
 namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
 {
@@ -18,7 +19,8 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 .WithLabel("Name")
                 .WithPlaceholder("Some / Name")
                 .WithValidator("UniqueName")
-                .WithValidator("IsEnsured");
+                .WithValidator("IsEnsured")
+                .WithAppearance(FormControlAppearance.Outline);
 
             builder.FormControl(x => x.Description)
                 .WithLabel("Some Description")

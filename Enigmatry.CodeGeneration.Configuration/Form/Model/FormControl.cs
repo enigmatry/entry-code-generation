@@ -20,6 +20,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         public string LabelTranslationId { get; set; } = String.Empty;
         public string PlaceholderTranslationId { get; set; } = String.Empty;
         public string HintTranslationId { get; set; } = String.Empty;
+        public FormControlAppearance Appearance { get; set; } = FormControlAppearance.Standard;
         public FormControlType Type { get; set; }
         public string? CustomControlType { get; set; }
         public Type? ValueType { get; set; }
@@ -64,6 +65,19 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
                 _ => GetFormlyType(),
             };
         }
+
+        public string GetAppearance()
+        {
+            return Appearance switch
+            {
+                FormControlAppearance.Standard => "standard",
+                FormControlAppearance.Fill => "fill",
+                FormControlAppearance.Outline => "outline",
+                FormControlAppearance.Legacy => "legacy",
+                _ => "standard"
+            };
+        }
+
 
         public virtual void ApplyValidationConfiguration(IEnumerable<IFormlyValidationRule> validationRules)
         {

@@ -57,6 +57,7 @@ import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPa
         @:placeholder: @Html.Localize(control.PlaceholderTranslationId, control.Placeholder, _options.EnableI18N),
         @:disabled: this.isReadonly || @control.IsReadonly.ToString().ToLower(),
         @:description: @Html.Localize(control.HintTranslationId, control.Hint, _options.EnableI18N),
+        @:appearance: '@Html.Raw(control.GetAppearance())',
         @if (control is SelectFormControl select)
         {
             @:options: @Html.JsArray(select.FixedOptions, option => $"{{ value: {option.Value}, displayName: '{option.DisplayName}' }}"),
