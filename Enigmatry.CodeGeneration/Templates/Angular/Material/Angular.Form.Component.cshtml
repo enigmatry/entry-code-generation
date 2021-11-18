@@ -4,6 +4,7 @@
 @using Enigmatry.CodeGeneration.Configuration.Form.Model.Select
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
+@using Humanizer
 @model Enigmatry.CodeGeneration.Configuration.Form.FormComponentModel;
 @inject CodeGeneratorOptions _options;
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@@angular/core';
@@ -38,8 +39,8 @@ import { IHideExpressionDictionary } from '@@enigmatry/angular-building-blocks/f
 
         @if (!control.IsVisible)
         {
-        @:{ key: '@control.PropertyName' },
-        return;
+            @:{ key: '@control.PropertyName' },
+            return;
         }
 
         @:{
@@ -62,11 +63,12 @@ import { IHideExpressionDictionary } from '@@enigmatry/angular-building-blocks/f
         @:appearance: '@Html.Raw(control.GetAppearance())',
         @if (control is SelectFormControl select)
         {
-            @:options: @Html.JsArray(select.FixedOptions, option => $"{{ value: {option.Value}, displayName: '{option.DisplayName}' }}"),
+            @:options: @Html.JsArray(select.FixedOptions, option =>
+                 $"{{ value: {option.Value}, displayName: {(@Html.Localize(option.TranslationId, option.DisplayName, _options.EnableI18N))} }}"),
             @:valueProp: '@select.OptionValueKey',
             @:labelProp: '@select.OptionDisplayKey',
 
-        }
+}
         @:hidden: !@control.IsVisible.ToString().ToLower(),
         @if (control.ValidationRules.Any())
         {
@@ -106,7 +108,7 @@ import { IHideExpressionDictionary } from '@@enigmatry/angular-building-blocks/f
         @:description: @Html.Localize(controlGroup.HintTranslationId, controlGroup.Hint, _options.EnableI18N)
         @:},
         @:fieldGroup:[
-            RenderControls(controlGroup.FormControls);
+        RenderControls(controlGroup.FormControls);
         @:]
         @:},
     }
@@ -155,7 +157,7 @@ export class @Model.AngularComponentName() implements OnInit {
 
   initializeFields(): FormlyFieldConfig[] {
     return [
-        @{ RenderControls(Model.FormControls); }
+@{ RenderControls(Model.FormControls); }
     ];
   }
 }

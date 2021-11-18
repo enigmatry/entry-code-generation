@@ -29,7 +29,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model.Select
             _fixedValues = Enum
                 .GetValues(typeof(T))
                 .Cast<T>()
-                .Select(x => new SelectOption(Convert.ToInt32(x), GetDisplayName<T>(x.ToString())))
+                .Select(x => new SelectOption(Convert.ToInt32(x), GetDisplayName<T>(x.ToString()), $"{ typeof(T).Name }.{x}"))
                 .ToList();
             return this;
         }
