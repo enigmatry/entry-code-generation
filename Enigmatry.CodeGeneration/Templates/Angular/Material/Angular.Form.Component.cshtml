@@ -46,7 +46,7 @@ import { IHideExpressionDictionary } from '@@enigmatry/angular-building-blocks/f
         @:key: '@control.PropertyName',
         @:type: @Html.Raw(typeString),
         @:className: '@Html.Raw(control.ClassName)',
-        @:hideExpression: this.fieldsHideExpressions?.@(control.PropertyName) ?? false
+        @:hideExpression: this.fieldsHideExpressions?.@(control.PropertyName) ?? false,
         CreateFieldTemplateOptions(control);
         CreateFieldValidationProperties(control);
         @:},
