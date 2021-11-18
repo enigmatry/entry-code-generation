@@ -10,6 +10,7 @@ import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@@a
 import { FormGroup } from '@@angular/forms';
 import { FormlyFieldConfig } from '@@ngx-formly/core';
 import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPath';
+import { IHideExpressionDictionary } from '@@enigmatry/angular-building-blocks/form';
 
 @functions {
 
@@ -45,6 +46,7 @@ import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPa
         @:key: '@control.PropertyName',
         @:type: @Html.Raw(typeString),
         @:className: '@Html.Raw(control.ClassName)',
+        @:hideExpression: this.fieldsHideExpressions?.@(control.PropertyName) ?? false
         CreateFieldTemplateOptions(control);
         CreateFieldValidationProperties(control);
         @:},
@@ -130,6 +132,8 @@ export class @Model.AngularComponentName() implements OnInit {
   @@Input() cancelButtonText: string = 'Cancel';
   @@Input() formButtonsTemplate: TemplateRef@(Html.Raw("<any>")) | null | undefined;
 
+  @@Input() fieldsHideExpressions: IHideExpressionDictionary<I@(Model.ComponentInfo.ModelType)> | undefined = undefined;
+
   @@Output() save = new EventEmitter@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>"))();
   @@Output() cancel = new EventEmitter@(Html.Raw("<void>"))();
 
@@ -137,11 +141,11 @@ export class @Model.AngularComponentName() implements OnInit {
   form = new FormGroup({});
   fields: FormlyFieldConfig[] = [];
 
-  constructor() {
+  constructor() { }
+
+  ngOnInit(): void {
     this.fields = this.initializeFields();
   }
-
-  ngOnInit(): void {}
 
   onSubmit() {
     if (this.form.valid) {
