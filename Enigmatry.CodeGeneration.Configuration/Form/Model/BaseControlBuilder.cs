@@ -18,7 +18,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         protected string? _placeholderTranslationId;
         protected string? _hintTranslationId;
         protected string? _className;
-        protected FormControlAppearance _appearance = FormControlAppearance.Standard;
+        protected FormControlAppearance? _appearance = null;
         protected FormControlType _formControlType;
         protected CustomValidator? _validator;
         protected string? _customControlType;

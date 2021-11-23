@@ -20,7 +20,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         public string LabelTranslationId { get; set; } = String.Empty;
         public string PlaceholderTranslationId { get; set; } = String.Empty;
         public string HintTranslationId { get; set; } = String.Empty;
-        public FormControlAppearance Appearance { get; set; } = FormControlAppearance.Standard;
+        public FormControlAppearance? Appearance { get; set; } = null;
         public FormControlType Type { get; set; }
         public string? CustomControlType { get; set; }
         public Type? ValueType { get; set; }
@@ -66,7 +66,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
             };
         }
 
-        public string GetAppearance()
+        public string? GetAppearance()
         {
             return Appearance switch
             {
@@ -74,7 +74,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
                 FormControlAppearance.Fill => "fill",
                 FormControlAppearance.Outline => "outline",
                 FormControlAppearance.Legacy => "legacy",
-                _ => "standard"
+                _ => null
             };
         }
 
