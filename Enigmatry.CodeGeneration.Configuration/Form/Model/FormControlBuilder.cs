@@ -6,7 +6,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
 {
     public class FormControlBuilder : BaseControlBuilder<FormControlBuilder>
     {
-        private SelectFormControlBuilder? _select;
+        private SelectControlOptionsBuilder? _selectOptionsBuilder;
 
         public FormControlBuilder(PropertyInfo propertyInfo) : base(propertyInfo)
         {
@@ -19,38 +19,36 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
 
         public override FormControl Build(ComponentInfo componentInfo)
         {
-            if (_select != null)
+            if (_selectOptionsBuilder != null)
             {
-                var select = _select.Build();
-                return Build<SelectFormControl>(componentInfo, control =>
-                {
-                    control.FixedOptions = select.FixedOptions;
-                    control.OptionValueKey = select.OptionValueKey;
-                    control.OptionDisplayKey = select.OptionDisplayKey;
-                });
+                return Build<SelectFormControl>(componentInfo, control => control.Options = _selectOptionsBuilder.Build());
             }
+
             return Build<FormControl>(componentInfo);
         }
 
-        public SelectFormControlBuilder IsDropDownListControl()
+        public FormControlBuilder IsDropDownListControl(Action<SelectControlOptionsBuilder>? options = null)
         {
-            _select ??= new SelectFormControlBuilder(_propertyName);
             _formControlType = FormControlType.Select;
-            return _select;
+            _selectOptionsBuilder = new SelectControlOptionsBuilder();
+            options?.Invoke(_selectOptionsBuilder);
+            return this;
         }
 
-        public SelectFormControlBuilder IsAutocompleteControl()
+        public FormControlBuilder IsAutocompleteControl(Action<SelectControlOptionsBuilder>? options = null)
         {
-            _select ??= new SelectFormControlBuilder(_propertyName);
             _formControlType = FormControlType.Autocomplete;
-            return _select;
+            _selectOptionsBuilder = new SelectControlOptionsBuilder();
+            options?.Invoke(_selectOptionsBuilder);
+            return this;
         }
 
-        public SelectFormControlBuilder IsRadioGroupControl()
+        public FormControlBuilder IsRadioGroupControl(Action<SelectControlOptionsBuilder>? options = null)
         {
-            _select ??= new SelectFormControlBuilder(_propertyName);
             _formControlType = FormControlType.Radio;
-            return _select;
+            _selectOptionsBuilder = new SelectControlOptionsBuilder();
+            options?.Invoke(_selectOptionsBuilder);
+            return this;
         }
 
         private static FormControlType GetDefaultFormControlType(PropertyInfo propertyInfo)

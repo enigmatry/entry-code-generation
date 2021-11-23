@@ -31,5 +31,12 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
                     .ForEach(formControl => formControl.ApplyValidationConfiguration(validationRules));
             }
         }
+
+        public IEnumerable<TControl> FormControlsOfType<TControl>() where TControl : FormControl
+        {
+            return FormControls.OfType<TControl>().Concat(
+                FormControls.OfType<FormControlGroup>()
+                    .SelectMany(x => x.FormControls).OfType<TControl>());
+        }
     }
 }

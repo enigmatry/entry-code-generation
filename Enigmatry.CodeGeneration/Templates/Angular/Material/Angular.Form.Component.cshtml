@@ -4,14 +4,14 @@
 @using Enigmatry.CodeGeneration.Configuration.Form.Model.Select
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
-@using Humanizer
 @model Enigmatry.CodeGeneration.Configuration.Form.FormComponentModel;
 @inject CodeGeneratorOptions _options;
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@@angular/core';
 import { FormGroup } from '@@angular/forms';
 import { FormlyFieldConfig } from '@@ngx-formly/core';
 import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPath';
-import { IHideExpressionDictionary } from '@@enigmatry/angular-building-blocks/form';
+import { IHideExpressionDictionary, SelectConfiguration } from '@@enigmatry/angular-building-blocks/form';
+import { BehaviorSubject } from 'rxjs';
 
 @functions {
 
@@ -35,7 +35,7 @@ import { IHideExpressionDictionary } from '@@enigmatry/angular-building-blocks/f
     {
         var type = control.GetFormlyType();
         var readonlyType = control.GetReadonlyFormlyType();
-        var typeString = string.Equals(type, readonlyType) ? $"'{type}'" : $"this.isReadonly ? '{readonlyType}' : '{type}'";
+        var typeString = String.Equals(type, readonlyType) ? $"'{type}'" : $"this.isReadonly ? '{readonlyType}' : '{type}'";
 
         @if (!control.IsVisible)
         {
@@ -63,12 +63,10 @@ import { IHideExpressionDictionary } from '@@enigmatry/angular-building-blocks/f
         @:appearance: '@Html.Raw(control.GetAppearance())',
         @if (control is SelectFormControl select)
         {
-            @:options: @Html.JsArray(select.FixedOptions, option =>
-                 $"{{ value: {option.Value}, displayName: {(@Html.Localize(option.TranslationId, option.DisplayName, _options.EnableI18N))} }}"),
-            @:valueProp: '@select.OptionValueKey',
-            @:labelProp: '@select.OptionDisplayKey',
-
-}
+            @:options: this.@(select.PropertyName)Options@(select.Options.HasDynamicValues ? "$" : String.Empty),
+            @:valueProp: this.@(select.PropertyName)OptionsConfiguration.valueProperty,
+            @:labelProp: this.@(select.PropertyName)OptionsConfiguration.labelProperty,
+        }
         @:hidden: !@control.IsVisible.ToString().ToLower(),
         @if (control.ValidationRules.Any())
         {
@@ -89,7 +87,7 @@ import { IHideExpressionDictionary } from '@@enigmatry/angular-building-blocks/f
         }
         @if (control.Validator != null)
         {
-            @Html.AddModelOpetions(control)
+            @Html.AddModelOptions(control)
             @Html.AddAsyncValidators(control)
         }
     }
@@ -111,6 +109,32 @@ import { IHideExpressionDictionary } from '@@enigmatry/angular-building-blocks/f
         RenderControls(controlGroup.FormControls);
         @:]
         @:},
+    }
+
+
+    void CreateInputsForSelectControlOptions()
+    {
+        foreach (var select in Model.FormControlsOfType<SelectFormControl>())
+        {
+            CreateSelectInput(select);
+        }
+    }
+
+    void CreateSelectInput(SelectFormControl select)
+    {
+        if (select.Options.HasDynamicValues)
+        {
+            @:private @(select.PropertyName)Options$ = new BehaviorSubject<any[]>([]);
+            @:@@Input()
+            @:get @(select.PropertyName)Options(): any[] { return this.@(select.PropertyName)Options$.value; }
+            @:set @(select.PropertyName)Options(value: any[]) { this.@(select.PropertyName)Options$.next(value); }
+            @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = {};
+        }
+        else
+        {
+            @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => $"{{ value: {option.Value}, displayName: {(@Html.Localize(option.TranslationId, option.DisplayName, _options.EnableI18N))} }}");
+            @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName' };
+        }
     }
 }
 
@@ -134,12 +158,14 @@ export class @Model.AngularComponentName() implements OnInit {
   @@Input() cancelButtonText: string = 'Cancel';
   @@Input() formButtonsTemplate: TemplateRef@(Html.Raw("<any>")) | null | undefined;
 
-  @@Input() fieldsHideExpressions: IHideExpressionDictionary<I@(Model.ComponentInfo.ModelType)> | undefined = undefined;
+  @@Input() fieldsHideExpressions: IHideExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
 
   @@Output() save = new EventEmitter@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>"))();
   @@Output() cancel = new EventEmitter@(Html.Raw("<void>"))();
 
-  _isReadonly: boolean;
+  @{CreateInputsForSelectControlOptions();}
+
+ _isReadonly: boolean;
   form = new FormGroup({});
   fields: FormlyFieldConfig[] = [];
 

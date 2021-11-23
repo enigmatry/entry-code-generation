@@ -44,15 +44,12 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
 
             builder
                 .FormControl(x => x.FormStatus)
-                //.WithLabel("Status")
-                .IsDropDownListControl()
-                .WithFixedValues<EnumMock>();
+                .IsDropDownListControl(options => options.WithFixedValues<EnumMock>());
 
             builder
                 .FormControl(x => x.MockRadio)
                 .WithLabel("Radio")
-                .IsRadioGroupControl()
-                .WithFixedValues<EnumMock>();
+                .IsRadioGroupControl(options => options.WithFixedValues<EnumMock>());
 
             builder.FormControl(x => x.CategoryId).IsVisible(false);
             builder.FormControl(x => x.TypeId).IsVisible(false);

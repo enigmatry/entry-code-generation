@@ -48,7 +48,7 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.HtmlHelperExtensions
         public string AddModelOptions(string propertyName)
         {
             var formControl = _formComponent.FormControls.Single(x => x.PropertyName == propertyName.Camelize());
-            return _htmlHelper.AddModelOpetions(formControl)?.ToString()?.Replace("\r\n", "") ?? "";
+            return _htmlHelper.AddModelOptions(formControl)?.ToString()?.Replace("\r\n", "") ?? "";
         }
 
         [TestCase(nameof(FormMock.Name), ExpectedResult = "asyncValidators: { validation: [ 'nameValidator' ] },")]

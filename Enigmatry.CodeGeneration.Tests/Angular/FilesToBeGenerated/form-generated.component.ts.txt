@@ -11,7 +11,8 @@ import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@an
 import { FormGroup } from '@angular/forms';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { IFormMock } from 'src/app/api/api-reference';
-import { IHideExpressionDictionary } from '@enigmatry/angular-building-blocks/form';
+import { IHideExpressionDictionary, SelectConfiguration } from '@enigmatry/angular-building-blocks/form';
+import { BehaviorSubject } from 'rxjs';
 
 
 @Component({
@@ -39,7 +40,12 @@ export class FormGeneratedComponent implements OnInit {
   @Output() save = new EventEmitter<IFormMock>();
   @Output() cancel = new EventEmitter<void>();
 
-  _isReadonly: boolean;
+            @Input() formStatusOptions: any[] = [{ value: 0, displayName: $localize `:@@EnumMock.First:First` }, { value: 1, displayName: $localize `:@@EnumMock.Second:Second` }, { value: 2, displayName: $localize `:@@EnumMock.Third:Third` }];
+            @Input() formStatusOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName' };
+            @Input() mockRadioOptions: any[] = [{ value: 0, displayName: $localize `:@@EnumMock.First:First` }, { value: 1, displayName: $localize `:@@EnumMock.Second:Second` }, { value: 2, displayName: $localize `:@@EnumMock.Third:Third` }];
+            @Input() mockRadioOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName' };
+
+ _isReadonly: boolean;
   form = new FormGroup({});
   fields: FormlyFieldConfig[] = [];
 
@@ -57,7 +63,7 @@ export class FormGeneratedComponent implements OnInit {
 
   initializeFields(): FormlyFieldConfig[] {
     return [
-        { key: 'id' },
+            { key: 'id' },
         {
         key: 'name',
         type: 'input',
@@ -206,15 +212,15 @@ pattern: $localize `:@@validators.pattern.emailAddress:Invalid email address for
         disabled: this.isReadonly || false,
         description: '',
         appearance: 'standard',
-            options: [{ value: 0, displayName: $localize `:@@EnumMock.First:First` }, { value: 1, displayName: $localize `:@@EnumMock.Second:Second` }, { value: 2, displayName: $localize `:@@EnumMock.Third:Third` }],
-            valueProp: 'value',
-            labelProp: 'displayName',
+            options: this.formStatusOptions,
+            valueProp: this.formStatusOptionsConfiguration.valueProperty,
+            labelProp: this.formStatusOptionsConfiguration.labelProperty,
         hidden: !true,
         },
         },
-        { key: 'categoryId' },
-        { key: 'typeId' },
-        { key: 'subTypeId' },
+            { key: 'categoryId' },
+            { key: 'typeId' },
+            { key: 'subTypeId' },
         {
         key: 'mockRadio',
         type: this.isReadonly ? 'readonly-radio' : 'radio',
@@ -226,9 +232,9 @@ pattern: $localize `:@@validators.pattern.emailAddress:Invalid email address for
         disabled: this.isReadonly || false,
         description: '',
         appearance: 'standard',
-            options: [{ value: 0, displayName: $localize `:@@EnumMock.First:First` }, { value: 1, displayName: $localize `:@@EnumMock.Second:Second` }, { value: 2, displayName: $localize `:@@EnumMock.Third:Third` }],
-            valueProp: 'value',
-            labelProp: 'displayName',
+            options: this.mockRadioOptions,
+            valueProp: this.mockRadioOptionsConfiguration.valueProperty,
+            labelProp: this.mockRadioOptionsConfiguration.labelProperty,
         hidden: !true,
         },
         },
