@@ -83,7 +83,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model.Select
 
         private static string GetTranslationId<T>(T @enum) where T : Enum
         {
-            return $"{typeof(T).Name}.{@enum}";
+            return $"enum.{typeof(T).Name}.{@enum}".Kebaberize();
         }
 
         private IEnumerable<SelectOption> GetFixedValuesWithEmptyOption()
