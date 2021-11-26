@@ -72,6 +72,7 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 new IntroMessage("\"Winamp, it really whips the llama's ass!\""),
                 new IntroMessage("Log your hours every day!"),
                 new IntroMessage("YOLO"),
+                new IntroMessage("Press play"),
                 new IntroMessage("Follow the white rabbit.")
                     .WithForegroundColor(ConsoleColor.Green),
                 new IntroMessage("Good morning! Did you sleep well?")
@@ -93,6 +94,8 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 new IntroMessage("It's Friday, I'm in love ...")
                     .WithCondition(() => DateTime.Now.IsFriday()),
                 new IntroMessage("The weekend is getting closer")
+                    .WithCondition(() => DateTime.Now.IsFriday()),
+                new IntroMessage("Every Friday is Good Firday")
                     .WithCondition(() => DateTime.Now.IsFriday()),
                 new IntroMessage("BLUE MONDAY :'(")
                     .WithCondition(() => DateTime.Now.IsMonday())

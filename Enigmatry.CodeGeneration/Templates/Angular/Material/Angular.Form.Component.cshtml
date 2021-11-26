@@ -10,7 +10,7 @@ import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@@a
 import { FormGroup } from '@@angular/forms';
 import { FormlyFieldConfig } from '@@ngx-formly/core';
 import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPath';
-import { IHideExpressionDictionary, SelectConfiguration } from '@@enigmatry/angular-building-blocks/form';
+import { IFieldExpressionDictionary, SelectConfiguration } from '@@enigmatry/angular-building-blocks/form';
 import { BehaviorSubject } from 'rxjs';
 
 @functions {
@@ -48,6 +48,9 @@ import { BehaviorSubject } from 'rxjs';
         @:type: @Html.Raw(typeString),
         @:className: '@Html.Raw(control.ClassName)',
         @:hideExpression: this.fieldsHideExpressions?.@(control.PropertyName) ?? false,
+        @:expressionProperties: {
+          @:'templateOptions.disabled': this.fieldsDisableExpressions?.@(control.PropertyName) ?? (() => false),
+        @:},
         CreateFieldTemplateOptions(control);
         CreateFieldValidationProperties(control);
         @:},
@@ -161,7 +164,8 @@ export class @Model.AngularComponentName() implements OnInit {
   @@Input() cancelButtonText: string = 'Cancel';
   @@Input() formButtonsTemplate: TemplateRef@(Html.Raw("<any>")) | null | undefined;
 
-  @@Input() fieldsHideExpressions: IHideExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
+  @@Input() fieldsHideExpressions: IFieldExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
+  @@Input() fieldsDisableExpressions: IFieldExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
 
   @@Output() save = new EventEmitter@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>"))();
   @@Output() cancel = new EventEmitter@(Html.Raw("<void>"))();
