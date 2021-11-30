@@ -144,7 +144,7 @@ import { BehaviorSubject } from 'rxjs';
         }
         else
         {
-            @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => $"{{ value: {option.Value}, displayName: {(@Html.Localize(option.TranslationId, option.DisplayName, _options.EnableI18N))} }}");
+            @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => $"{{ value: {option.Value ?? "null"}, displayName: {(@Html.Localize(option.TranslationId, option.DisplayName, _options.EnableI18N))} }}");
             @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName' };
         }
     }

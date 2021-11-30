@@ -46,7 +46,11 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
 
             builder
                 .FormControl(x => x.FormStatus)
-                .IsDropDownListControl(options => options.WithFixedValues<EnumMock>());
+                .IsDropDownListControl(options =>
+                {
+                    options.WithEmptyOption("None");
+                    options.WithFixedValues<EnumMock>();
+                });
 
             builder
                 .FormControl(x => x.MockRadio)

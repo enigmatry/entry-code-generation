@@ -48,9 +48,9 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model.Select
             return this;
         }
 
-        public SelectControlOptionsBuilder WithEmptyOption(string label)
+        public SelectControlOptionsBuilder WithEmptyOption(string label, string? transaltionId = null)
         {
-            _emptyOption = new SelectOption(null!, label, String.Empty);
+            _emptyOption = new SelectOption(null!, label, transaltionId ?? $"empty-option.{label.Kebaberize()}");
             return this;
         }
 
