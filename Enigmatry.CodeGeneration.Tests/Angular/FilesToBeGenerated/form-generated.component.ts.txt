@@ -43,6 +43,16 @@ export class FormGeneratedComponent implements OnInit {
 
   @Input() formStatusOptions: any[] = [{ value: null, displayName: $localize `:@@empty-option.none:None` }, { value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
   @Input() formStatusOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName' };
+  private categoryIdOptions$ = new BehaviorSubject<any[]>([]);
+  @Input()
+  get categoryIdOptions(): any[] { return this.categoryIdOptions$.value; }
+  set categoryIdOptions(value: any[]) { this.categoryIdOptions$.next(value); }
+  @Input() categoryIdOptionsConfiguration: SelectConfiguration = { valueProperty: 'id', labelProperty: 'categoryName' };
+  private typeIdOptions$ = new BehaviorSubject<any[]>([]);
+  @Input()
+  get typeIdOptions(): any[] { return this.typeIdOptions$.value; }
+  set typeIdOptions(value: any[]) { this.typeIdOptions$.next(value); }
+  @Input() typeIdOptionsConfiguration: SelectConfiguration = {};
   @Input() mockRadioOptions: any[] = [{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
   @Input() mockRadioOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName' };
 
@@ -238,8 +248,44 @@ pattern: $localize `:@@validators.pattern.emailAddress:Invalid email address for
         hidden: !true,
         },
         },
-            { key: 'categoryId' },
-            { key: 'typeId' },
+            {
+        key: 'categoryId',
+        type: 'select',
+        className: '',
+        hideExpression: this.fieldsHideExpressions?.categoryId ?? false,
+        expressionProperties: {
+          'templateOptions.disabled': this.fieldsDisableExpressions?.categoryId ?? (() => false),
+        },
+        templateOptions: {
+        label: $localize `:@@test.form.category-id.label:Category`,
+        placeholder: $localize `:@@test.form.category-id.placeholder:Category`,
+        disabled: this.isReadonly || false,
+        description: '',
+            options: this.categoryIdOptions$,
+            valueProp: this.categoryIdOptionsConfiguration.valueProperty,
+            labelProp: this.categoryIdOptionsConfiguration.labelProperty,
+        hidden: !true,
+        },
+        },
+        {
+        key: 'typeId',
+        type: 'select',
+        className: '',
+        hideExpression: this.fieldsHideExpressions?.typeId ?? false,
+        expressionProperties: {
+          'templateOptions.disabled': this.fieldsDisableExpressions?.typeId ?? (() => false),
+        },
+        templateOptions: {
+        label: $localize `:@@test.form.type-id.label:Type`,
+        placeholder: $localize `:@@test.form.type-id.placeholder:Type`,
+        disabled: this.isReadonly || false,
+        description: '',
+            options: this.typeIdOptions$,
+            valueProp: this.typeIdOptionsConfiguration.valueProperty,
+            labelProp: this.typeIdOptionsConfiguration.labelProperty,
+        hidden: !true,
+        },
+        },
             { key: 'subTypeId' },
         {
         key: 'mockRadio',

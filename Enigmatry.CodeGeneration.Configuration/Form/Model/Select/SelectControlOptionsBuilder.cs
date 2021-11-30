@@ -9,8 +9,8 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model.Select
     public class SelectControlOptionsBuilder
     {
         private IEnumerable<SelectOption> _fixedValues = new List<SelectOption>();
-        private string _valueKey = $"{nameof(SelectOption.Value).Camelize()}";
-        private string _displayKey = $"{nameof(SelectOption.DisplayName).Camelize()}";
+        private string _valueKey = String.Empty;
+        private string _displayKey = String.Empty;
         private bool _hasDynamicValues;
         private SelectOption? _emptyOption;
 

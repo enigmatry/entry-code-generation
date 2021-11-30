@@ -140,12 +140,19 @@ import { BehaviorSubject } from 'rxjs';
             @:@@Input()
             @:get @(select.PropertyName)Options(): any[] { return this.@(select.PropertyName)Options$.value; }
             @:set @(select.PropertyName)Options(value: any[]) { this.@(select.PropertyName)Options$.next(value); }
-            @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = {};
         }
         else
         {
             @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => $"{{ value: {option.Value ?? "null"}, displayName: {(@Html.Localize(option.TranslationId, option.DisplayName, _options.EnableI18N))} }}");
-            @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName' };
+        }
+
+        if (select.Options.HasCustomValueAndDisplayKeys)
+        {
+            @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = { valueProperty: '@(select.Options.OptionValueKey)', labelProperty: '@(select.Options.OptionDisplayKey)' };
+        }
+        else
+        {
+            @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = @(@Html.Raw(select.Options.DefaultOptionsAsString));
         }
     }
 

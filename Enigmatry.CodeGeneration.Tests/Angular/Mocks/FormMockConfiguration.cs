@@ -48,8 +48,8 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 .FormControl(x => x.FormStatus)
                 .IsDropDownListControl(options =>
                 {
-                    options.WithEmptyOption("None");
                     options.WithFixedValues<EnumMock>();
+                    options.WithEmptyOption("None");
                 });
 
             builder
@@ -57,8 +57,21 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 .WithLabel("Radio")
                 .IsRadioGroupControl(options => options.WithFixedValues<EnumMock>());
 
-            builder.FormControl(x => x.CategoryId).IsVisible(false);
-            builder.FormControl(x => x.TypeId).IsVisible(false);
+            builder
+                .FormControl(x => x.CategoryId)
+                .WithLabel("Category")
+                .IsDropDownListControl(options =>
+                {
+                    options.WithDynamicValues();
+                    options.WithValueKey("id");
+                    options.WithDisplayKey("categoryName");
+                });
+
+            builder
+                .FormControl(x => x.TypeId)
+                .WithLabel("Type")
+                .IsDropDownListControl(options => options.WithDynamicValues());
+
             builder.FormControl(x => x.SubTypeId).IsVisible(false);
 
             builder
