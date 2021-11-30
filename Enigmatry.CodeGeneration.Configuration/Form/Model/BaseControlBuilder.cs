@@ -1,7 +1,8 @@
-﻿using System;
-using System.Reflection;
-using Enigmatry.CodeGeneration.Configuration.Form.Model.Validators;
+﻿using Enigmatry.CodeGeneration.Configuration.Form.Model.Validators;
 using Humanizer;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace Enigmatry.CodeGeneration.Configuration.Form.Model
 {
@@ -22,6 +23,8 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         protected FormControlType _formControlType;
         protected CustomValidator? _validator;
         protected string? _customControlType;
+        protected List<string> _customWrappers = new List<string>();
+        protected string? _tooltipText;
 
         protected BaseControlBuilder(PropertyInfo propertyInfo) : this(propertyInfo.Name)
         {
@@ -180,6 +183,32 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         }
 
         /// <summary>
+        /// Configure custom field wrapper name
+        /// </summary>
+        /// <param name="wrapperName">Wrapper name to be matched on client side</param>
+        /// <returns></returns>
+        public TBuilder WithCustomWrapper(string wrapperName)
+        {
+            if (!_customWrappers.Contains(FormControl.DefaultWrapper))
+            {
+                _customWrappers.Add(FormControl.DefaultWrapper);
+            }
+            _customWrappers.Add(wrapperName);
+            return (TBuilder)this;
+        }
+
+        /// <summary>
+        /// Configure tooltip text
+        /// </summary>
+        /// <param name="tooltipText">Tooltip text to be displayed</param>
+        /// <returns></returns>
+        public TBuilder WithTooltipText(string tooltipText)
+        {
+            _tooltipText = tooltipText;
+            return (TBuilder)this;
+        }
+
+        /// <summary>
         /// Configure custom form control type to be used
         /// </summary>
         /// <param name="controlTypeName"></param>
@@ -223,7 +252,9 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
                 Validator = _validator,
                 ClassName = _className,
                 CustomControlType = _customControlType,
-                Appearance = _appearance
+                Appearance = _appearance,
+                CustomWrappers = _customWrappers,
+                TooltipText = _tooltipText
             };
 
             configureAction?.Invoke(formControl);

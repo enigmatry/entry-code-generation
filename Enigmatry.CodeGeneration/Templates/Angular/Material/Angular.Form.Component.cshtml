@@ -1,5 +1,6 @@
 ﻿@using Enigmatry.CodeGeneration;
 @using Enigmatry.CodeGeneration.Angular;
+@using Enigmatry.CodeGeneration.Configuration
 @using Enigmatry.CodeGeneration.Configuration.Form.Model
 @using Enigmatry.CodeGeneration.Configuration.Form.Model.Select
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
@@ -51,6 +52,7 @@ import { BehaviorSubject } from 'rxjs';
         @:expressionProperties: {
           @:'templateOptions.disabled': this.fieldsDisableExpressions?.@(control.PropertyName) ?? (() => false),
         @:},
+        CreateWrappers(control);
         CreateFieldTemplateOptions(control);
         CreateFieldValidationProperties(control);
         @:},
@@ -74,9 +76,13 @@ import { BehaviorSubject } from 'rxjs';
             @:labelProp: this.@(select.PropertyName)OptionsConfiguration.labelProperty,
         }
         @:hidden: !@control.IsVisible.ToString().ToLower(),
+        @if (control.TooltipText.HasContent())
+        {
+        @:tooltipText: '@(control.TooltipText)',
+        }
         @if (control.ValidationRules.Any())
         {
-            @Html.AddValidationTemplateOptions(control)
+            @:@Html.AddValidationTemplateOptions(control)
         }
         @:},
     }
@@ -140,6 +146,14 @@ import { BehaviorSubject } from 'rxjs';
         {
             @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => $"{{ value: {option.Value}, displayName: {(@Html.Localize(option.TranslationId, option.DisplayName, _options.EnableI18N))} }}");
             @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName' };
+        }
+    }
+
+    void CreateWrappers(FormControl control)
+    {
+        if (control.CustomWrappers.Count > 0)
+        {
+        @:wrappers: @Html.JsStringArray(control.CustomWrappers),
         }
     }
 }

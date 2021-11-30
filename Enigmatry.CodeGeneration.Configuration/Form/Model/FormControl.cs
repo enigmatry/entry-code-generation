@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Enigmatry.BuildingBlocks.Validation.ValidationRules;
+﻿using Enigmatry.BuildingBlocks.Validation.ValidationRules;
 using Enigmatry.CodeGeneration.Configuration.Form.Model.Validators;
 using Humanizer;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Enigmatry.CodeGeneration.Configuration.Form.Model
 {
     public class FormControl
     {
+        public const string DefaultWrapper = "form-field";
+
         public ComponentInfo ComponentInfo { get; set; } = null!;
         public string PropertyName { get; set; } = String.Empty;
         public string Label { get; set; } = String.Empty;
@@ -26,6 +28,8 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         public Type? ValueType { get; set; }
         public IList<IFormlyValidationRule> ValidationRules { get; private set; } = new List<IFormlyValidationRule>();
         public CustomValidator? Validator { get; set; }
+        public IList<string> CustomWrappers { get; set; } = new List<string>();
+        public string? TooltipText { get; set; }
 
         public virtual string GetFormlyType()
         {
@@ -77,7 +81,6 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
                 _ => null
             };
         }
-
 
         public virtual void ApplyValidationConfiguration(IEnumerable<IFormlyValidationRule> validationRules)
         {

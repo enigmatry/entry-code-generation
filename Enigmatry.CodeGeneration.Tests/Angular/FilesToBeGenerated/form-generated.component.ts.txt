@@ -73,6 +73,7 @@ export class FormGeneratedComponent implements OnInit {
         expressionProperties: {
           'templateOptions.disabled': this.fieldsDisableExpressions?.name ?? (() => false),
         },
+        wrappers: ['form-field', 'tooltip'],
         templateOptions: {
         label: $localize `:@@test.form.name.label:Name`,
         placeholder: $localize `:@@test.form.name.placeholder:Some / Name`,
@@ -80,6 +81,7 @@ export class FormGeneratedComponent implements OnInit {
         description: '',
         appearance: 'outline',
         hidden: !true,
+        tooltipText: 'Tooltip text',
 required: true,
 maxLength: 50,
 pattern: /[A-Z]/,

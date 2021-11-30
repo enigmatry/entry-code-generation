@@ -20,6 +20,8 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 .WithPlaceholder("Some / Name")
                 .WithValidator("UniqueName")
                 .WithValidator("IsEnsured")
+                .WithCustomWrapper("tooltip")
+                .WithTooltipText("Tooltip text")
                 .WithAppearance(FormControlAppearance.Outline);
 
             builder.FormControl(x => x.Description)
