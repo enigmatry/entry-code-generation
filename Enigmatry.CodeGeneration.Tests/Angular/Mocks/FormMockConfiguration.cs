@@ -32,7 +32,8 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
             builder
                 .FormControl(x => x.Date)
                 .WithLabel("Date")
-                .WithPlaceholder("Date");
+                .WithPlaceholder("Date")
+                .IsReadonly(true);
 
             builder
                 .FormControl(x => x.Money)

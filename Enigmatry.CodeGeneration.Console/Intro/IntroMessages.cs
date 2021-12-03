@@ -73,6 +73,7 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 new IntroMessage("Log your hours every day!"),
                 new IntroMessage("YOLO"),
                 new IntroMessage("Press play"),
+                new IntroMessage("Abort the mission!"),
                 new IntroMessage("Follow the white rabbit.")
                     .WithForegroundColor(ConsoleColor.Green),
                 new IntroMessage("Good morning! Did you sleep well?")
@@ -132,14 +133,17 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 new IntroMessage("Woo-hoo, lunch time!!!")
                     .WithType(IntroMessageType.SpecialCase)
                     .WithCondition(() => DateTime.Now.IsLunchTime()),
-                new IntroMessage("Me hungry")
+                new IntroMessage("Me so hungry")
                     .WithType(IntroMessageType.SpecialCase)
                     .WithCondition(() => DateTime.Now.IsLunchTime()),
-                new IntroMessage("It's Friday the 13th, stay out of the second floors!")
+                new IntroMessage("Feasting")
+                    .WithType(IntroMessageType.SpecialCase)
+                    .WithCondition(() => DateTime.Now.IsLunchTime()),
+                new IntroMessage("Stay out of the second floors!")
                     .WithType(IntroMessageType.SpecialCase)
                     .WithCondition(() => DateTime.Now.IsFriday13th())
                     .WithForegroundColor(ConsoleColor.Red),
-                new IntroMessage("It's Friday the 13th, run in zig-zag!")
+                new IntroMessage("Run in zig-zag!")
                     .WithType(IntroMessageType.SpecialCase)
                     .WithCondition(() => DateTime.Now.IsFriday13th())
                     .WithForegroundColor(ConsoleColor.Red),
@@ -148,6 +152,10 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                     .WithCondition(() => DateTime.Now.IsFriday13th())
                     .WithForegroundColor(ConsoleColor.Red),
                 new IntroMessage("Bring your shootgun")
+                    .WithType(IntroMessageType.SpecialCase)
+                    .WithCondition(() => DateTime.Now.IsFriday13th())
+                    .WithForegroundColor(ConsoleColor.Red),
+                new IntroMessage("Be quiet")
                     .WithType(IntroMessageType.SpecialCase)
                     .WithCondition(() => DateTime.Now.IsFriday13th())
                     .WithForegroundColor(ConsoleColor.Red),

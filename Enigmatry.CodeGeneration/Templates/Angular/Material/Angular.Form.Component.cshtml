@@ -12,7 +12,6 @@ import { FormGroup } from '@@angular/forms';
 import { FormlyFieldConfig } from '@@ngx-formly/core';
 import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPath';
 import { IFieldExpressionDictionary, SelectConfiguration } from '@@enigmatry/angular-building-blocks/form';
-import { BehaviorSubject } from 'rxjs';
 
 @functions {
 
@@ -50,7 +49,7 @@ import { BehaviorSubject } from 'rxjs';
         @:className: '@Html.Raw(control.ClassName)',
         @:hideExpression: this.fieldsHideExpressions?.@(control.PropertyName) ?? false,
         @:expressionProperties: {
-          @:'templateOptions.disabled': this.fieldsDisableExpressions?.@(control.PropertyName) ?? (() => false),
+          @:'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.@(control.PropertyName) ? this.fieldsDisableExpressions.@(control.PropertyName)(model) : @control.IsReadonly.ToString().ToLower())),
         @:},
         CreateWrappers(control);
         CreateFieldTemplateOptions(control);
@@ -63,7 +62,6 @@ import { BehaviorSubject } from 'rxjs';
         @:templateOptions: {
         @:label: @Html.Localize(control.LabelTranslationId, control.Label, _options.EnableI18N),
         @:placeholder: @Html.Localize(control.PlaceholderTranslationId, control.Placeholder, _options.EnableI18N),
-        @:disabled: this.isReadonly || @control.IsReadonly.ToString().ToLower(),
         @:description: @Html.Localize(control.HintTranslationId, control.Hint, _options.EnableI18N),
         @if (control.Appearance != null)
         {
