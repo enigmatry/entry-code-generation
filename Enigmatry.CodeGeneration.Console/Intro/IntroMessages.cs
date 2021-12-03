@@ -73,6 +73,7 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 new IntroMessage("Log your hours every day!"),
                 new IntroMessage("YOLO"),
                 new IntroMessage("Press play"),
+                new IntroMessage("The cake is a lie."),
                 new IntroMessage("Abort the mission!"),
                 new IntroMessage("Follow the white rabbit.")
                     .WithForegroundColor(ConsoleColor.Green),
