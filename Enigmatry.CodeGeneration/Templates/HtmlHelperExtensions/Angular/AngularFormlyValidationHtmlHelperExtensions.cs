@@ -38,7 +38,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
                 .ValidationRules
                 .Where(rule => rule.HasCustomMessage)
                 .Select(x => enableI18N
-                    ? $"{x.FormlyRuleName.ToLowerInvariant()}: {AngularLocalization.Localize(x.MessageTranslationId, x.FormlyValidationMessage)}"
+                    ? $"{x.FormlyRuleName.ToLowerInvariant()}: (err, field) => {AngularLocalization.Localize(x.MessageTranslationId, x.FormlyValidationMessage)}"
                     : $"{x.FormlyRuleName.ToLowerInvariant()}: '{x.FormlyValidationMessage}'"
                 );
             return html.Raw($"{String.Join(",\r\n", validationMessages)}\r\n");

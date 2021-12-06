@@ -96,8 +96,8 @@ pattern: /[A-Z]/,
         },
             validation: {
             messages: {
-required: $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`,
-maxlength: $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`
+required: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`,
+maxlength: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`
             }
             },
 modelOptions: { updateOn: 'blur' },
@@ -172,8 +172,8 @@ max: 100,
         },
             validation: {
             messages: {
-min: $localize `:@@test.form.amount.min:CUSTOM_VALIDATION_MESSAGE`,
-max: $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAGE`
+min: (err, field) => $localize `:@@test.form.amount.min:CUSTOM_VALIDATION_MESSAGE`,
+max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAGE`
             }
             },
         },
@@ -195,7 +195,7 @@ maxLength: 50,
         },
             validation: {
             messages: {
-pattern: $localize `:@@test.form.email1.pattern:CUSTOM_VALIDATION_MESSAGE`
+pattern: (err, field) => $localize `:@@test.form.email1.pattern:CUSTOM_VALIDATION_MESSAGE`
             }
             },
         },
@@ -217,7 +217,7 @@ maxLength: 50,
         },
             validation: {
             messages: {
-pattern: $localize `:@@validators.pattern.emailAddress:Invalid email address format`
+pattern: (err, field) => $localize `:@@validators.pattern.emailAddress:Invalid email address format`
             }
             },
         },

@@ -128,6 +128,9 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 new IntroMessage("So, what shell we order, Thai, Chinese, Mexican ... PIZZA?")
                     .WithType(IntroMessageType.SpecialCase)
                     .WithCondition(() => DateTime.Now.IsLunchTime()),
+                new IntroMessage("Go vegan")
+                    .WithType(IntroMessageType.SpecialCase)
+                    .WithCondition(() => DateTime.Now.IsLunchTime()),
                 new IntroMessage("Don't get fat!")
                     .WithType(IntroMessageType.SpecialCase)
                     .WithCondition(() => DateTime.Now.IsLunchTime()),

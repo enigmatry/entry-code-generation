@@ -63,13 +63,13 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.HtmlHelperExtensions
         }
 
         [TestCase(nameof(FormMock.Name), ExpectedResult =
-            "required: $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`," +
-            "maxlength: $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`")]
+            "required: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`," +
+            "maxlength: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`")]
         [TestCase(nameof(FormMock.Amount),ExpectedResult =
-            "min: $localize `:@@test.form.amount.min:CUSTOM_VALIDATION_MESSAGE`," +
-            "max: $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAGE`")]
-        [TestCase(nameof(FormMock.Email1), ExpectedResult = "pattern: $localize `:@@test.form.email1.pattern:CUSTOM_VALIDATION_MESSAGE`")]
-        [TestCase(nameof(FormMock.Email2), ExpectedResult = "pattern: $localize `:@@validators.pattern.emailAddress:Invalid email address format`")]
+            "min: (err, field) => $localize `:@@test.form.amount.min:CUSTOM_VALIDATION_MESSAGE`," +
+            "max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAGE`")]
+        [TestCase(nameof(FormMock.Email1), ExpectedResult = "pattern: (err, field) => $localize `:@@test.form.email1.pattern:CUSTOM_VALIDATION_MESSAGE`")]
+        [TestCase(nameof(FormMock.Email2), ExpectedResult = "pattern: (err, field) => $localize `:@@validators.pattern.emailAddress:Invalid email address format`")]
         public string AddCustomValidationMessages(string propertyName)
         {
             var formControl = _formComponent.FormControls.Single(x => x.PropertyName == propertyName.Camelize());
