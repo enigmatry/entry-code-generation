@@ -1,8 +1,7 @@
 ﻿@using Enigmatry.CodeGeneration;
 @using Enigmatry.CodeGeneration.Angular;
 @using Enigmatry.CodeGeneration.Configuration
-@using Enigmatry.CodeGeneration.Configuration.Form.Model
-@using Enigmatry.CodeGeneration.Configuration.Form.Model.Select
+@using Enigmatry.CodeGeneration.Configuration.Form.Controls
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
 @model Enigmatry.CodeGeneration.Configuration.Form.FormComponentModel;
@@ -34,11 +33,11 @@ import { BehaviorSubject } from 'rxjs';
 
     void CreateField(FormControl control)
     {
-        var type = control.GetFormlyType();
-        var readonlyType = control.GetReadonlyFormlyType();
+        var type = control.FormlyType;
+        var readonlyType = control.ReadonlyFormlyType;
         var typeString = String.Equals(type, readonlyType) ? $"'{type}'" : $"this.isReadonly ? '{readonlyType}' : '{type}'";
 
-        @if (!control.IsVisible)
+        @if (!control.Visible)
         {
             @:{ key: '@control.PropertyName' },
             return;
@@ -50,7 +49,7 @@ import { BehaviorSubject } from 'rxjs';
         @:className: '@Html.Raw(control.ClassName)',
         @:hideExpression: this.fieldsHideExpressions?.@(control.PropertyName) ?? false,
         @:expressionProperties: {
-          @:'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.@(control.PropertyName) ? this.fieldsDisableExpressions.@(control.PropertyName)(model) : @control.IsReadonly.ToString().ToLower())),
+          @:'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.@(control.PropertyName) ? this.fieldsDisableExpressions.@(control.PropertyName)(model) : @control.Readonly.ToString().ToLower())),
         @:},
         CreateWrappers(control);
         CreateFieldTemplateOptions(control);
@@ -61,9 +60,9 @@ import { BehaviorSubject } from 'rxjs';
     void CreateFieldTemplateOptions(FormControl control)
     {
         @:templateOptions: {
-        @:label: @Html.Localize(control.LabelTranslationId, control.Label, _options.EnableI18N),
-        @:placeholder: @Html.Localize(control.PlaceholderTranslationId, control.Placeholder, _options.EnableI18N),
-        @:description: @Html.Localize(control.HintTranslationId, control.Hint, _options.EnableI18N),
+        @:label: @Html.Localize(control.Label, _options.EnableI18N),
+        @:placeholder: @Html.Localize(control.Placeholder, _options.EnableI18N),
+        @:description: @Html.Localize(control.Hint, _options.EnableI18N),
         @if (control.Appearance != null)
         {
         @:appearance: '@Html.Raw(control.GetAppearance())',
@@ -74,10 +73,15 @@ import { BehaviorSubject } from 'rxjs';
             @:valueProp: this.@(select.PropertyName)OptionsConfiguration.valueProperty,
             @:labelProp: this.@(select.PropertyName)OptionsConfiguration.labelProperty,
         }
-        @:hidden: !@control.IsVisible.ToString().ToLower(),
-        @if (control.TooltipText.HasContent())
+        @if (control is TextareaFormControl textarea)
         {
-        @:tooltipText: '@(control.TooltipText)',
+            @:rows: @(textarea.Rows),
+            @:cols: @(textarea.Cols),
+        }
+        @:hidden: !@control.Visible.ToString().ToLower(),
+        @if (control.Tooltip.HasContent())
+        {
+        @:tooltipText: @Html.Localize(control.Tooltip, _options.EnableI18N),
         }
         @if (control.ValidationRules.Any())
         {
@@ -105,16 +109,16 @@ import { BehaviorSubject } from 'rxjs';
 
     void CreateFieldGroup(FormControlGroup controlGroup)
     {
-        var type = controlGroup.GetFormlyType();
+        var type = controlGroup.FormlyType;
 
         @:{
         @:type: '@Html.Raw(type)',
         @:fieldGroupClassName: '@Html.Raw(controlGroup.ClassName)',
         @:templateOptions: {
-        @:label: @Html.Localize(controlGroup.LabelTranslationId, controlGroup.Label, _options.EnableI18N),
-        @:placeholder: @Html.Localize(controlGroup.PlaceholderTranslationId, controlGroup.Placeholder, _options.EnableI18N),
-        @:disabled: this.isReadonly || @controlGroup.IsReadonly.ToString().ToLower(),
-        @:description: @Html.Localize(controlGroup.HintTranslationId, controlGroup.Hint, _options.EnableI18N)
+        @:label: @Html.Localize(controlGroup.Label, _options.EnableI18N),
+        @:placeholder: @Html.Localize(controlGroup.Placeholder, _options.EnableI18N),
+        @:disabled: this.isReadonly || @controlGroup.Readonly.ToString().ToLower(),
+        @:description: @Html.Localize(controlGroup.Hint, _options.EnableI18N)
         @:},
         @:fieldGroup:[
         RenderControls(controlGroup.FormControls);
@@ -142,7 +146,7 @@ import { BehaviorSubject } from 'rxjs';
         }
         else
         {
-            @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => $"{{ value: {option.Value ?? "null"}, displayName: {(@Html.Localize(option.TranslationId, option.DisplayName, _options.EnableI18N))} }}");
+            @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => $"{{ value: {option.Value ?? "null"}, displayName: {(@Html.Localize(option.DisplayName, _options.EnableI18N))} }}");
         }
 
         if (select.Options.HasCustomValueAndDisplayKeys)
@@ -157,9 +161,9 @@ import { BehaviorSubject } from 'rxjs';
 
     void CreateWrappers(FormControl control)
     {
-        if (control.CustomWrappers.Count > 0)
+        if (control.Wrappers.CustomWrappers.Any())
         {
-        @:wrappers: @Html.JsStringArray(control.CustomWrappers),
+        @:wrappers: @Html.JsStringArray(control.Wrappers.AllWrappers),
         }
     }
 }

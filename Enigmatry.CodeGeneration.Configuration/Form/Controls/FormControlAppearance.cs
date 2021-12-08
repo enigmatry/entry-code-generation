@@ -1,4 +1,4 @@
-﻿namespace Enigmatry.CodeGeneration.Configuration.Form.Model
+﻿namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
 {
     public enum FormControlAppearance
     {

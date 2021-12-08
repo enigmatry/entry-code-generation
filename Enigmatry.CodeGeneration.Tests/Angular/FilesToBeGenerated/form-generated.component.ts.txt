@@ -40,20 +40,20 @@ export class FormGeneratedComponent implements OnInit {
   @Output() save = new EventEmitter<IFormMock>();
   @Output() cancel = new EventEmitter<void>();
 
-  @Input() formStatusOptions: any[] = [{ value: null, displayName: $localize `:@@empty-option.none:None` }, { value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
-  @Input() formStatusOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName' };
-  private categoryIdOptions$ = new BehaviorSubject<any[]>([]);
-  @Input()
-  get categoryIdOptions(): any[] { return this.categoryIdOptions$.value; }
-  set categoryIdOptions(value: any[]) { this.categoryIdOptions$.next(value); }
-  @Input() categoryIdOptionsConfiguration: SelectConfiguration = { valueProperty: 'id', labelProperty: 'categoryName' };
-  private typeIdOptions$ = new BehaviorSubject<any[]>([]);
-  @Input()
-  get typeIdOptions(): any[] { return this.typeIdOptions$.value; }
-  set typeIdOptions(value: any[]) { this.typeIdOptions$.next(value); }
-  @Input() typeIdOptionsConfiguration: SelectConfiguration = {};
-  @Input() mockRadioOptions: any[] = [{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
-  @Input() mockRadioOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName' };
+            @Input() formStatusOptions: any[] = [{ value: null, displayName: $localize `:@@empty-option.none:None` }, { value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
+            @Input() formStatusOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName' };
+            private categoryIdOptions$ = new BehaviorSubject<any[]>([]);
+            @Input()
+            get categoryIdOptions(): any[] { return this.categoryIdOptions$.value; }
+            set categoryIdOptions(value: any[]) { this.categoryIdOptions$.next(value); }
+            @Input() categoryIdOptionsConfiguration: SelectConfiguration = { valueProperty: 'id', labelProperty: 'categoryName' };
+            private typeIdOptions$ = new BehaviorSubject<any[]>([]);
+            @Input()
+            get typeIdOptions(): any[] { return this.typeIdOptions$.value; }
+            set typeIdOptions(value: any[]) { this.typeIdOptions$.next(value); }
+            @Input() typeIdOptionsConfiguration: SelectConfiguration = {};
+            @Input() mockRadioOptions: any[] = [{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
+            @Input() mockRadioOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName' };
 
  _isReadonly: boolean;
   form = new FormGroup({});
@@ -89,10 +89,11 @@ export class FormGeneratedComponent implements OnInit {
         description: '',
         appearance: 'outline',
         hidden: !true,
-        tooltipText: 'Tooltip text',
-required: true,
+        tooltipText: $localize `:@@test.form.name.tooltip:Tooltip text`,
+            required: true,
 maxLength: 50,
 pattern: /[A-Z]/,
+
         },
             validation: {
             messages: {
@@ -105,7 +106,7 @@ asyncValidators: { validation: [ 'isEnsured' ] },
         },
         {
         key: 'description',
-        type: 'input',
+        type: 'textarea',
         className: '',
         hideExpression: this.fieldsHideExpressions?.description ?? false,
         expressionProperties: {
@@ -115,6 +116,8 @@ asyncValidators: { validation: [ 'isEnsured' ] },
         label: $localize `:@@test.form.description.label:Some Description`,
         placeholder: $localize `:@@test.form.description.placeholder:Some Description`,
         description: '',
+            rows: 2,
+            cols: 0,
         hidden: !true,
         },
 modelOptions: { updateOn: 'blur' },
@@ -148,8 +151,9 @@ asyncValidators: { validation: [ 'validDescription' ] },
         placeholder: $localize `:@@test.form.money.placeholder:Money`,
         description: '',
         hidden: !true,
-type: 'number',
+            type: 'number',
 max: 999.99 - 0.1,
+
         },
         },
         {
@@ -165,10 +169,11 @@ max: 999.99 - 0.1,
         placeholder: $localize `:@@test.form.amount.placeholder:Amount`,
         description: '',
         hidden: !true,
-required: true,
+            required: true,
 type: 'number',
 min: 0 + 1,
 max: 100,
+
         },
             validation: {
             messages: {
@@ -190,8 +195,9 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
         placeholder: $localize `:@@test.form.email1.placeholder:Email 1`,
         description: '',
         hidden: !true,
-pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+            pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
 maxLength: 50,
+
         },
             validation: {
             messages: {
@@ -212,8 +218,9 @@ pattern: (err, field) => $localize `:@@test.form.email1.pattern:CUSTOM_VALIDATIO
         placeholder: $localize `:@@test.form.email2.placeholder:Email 2`,
         description: '',
         hidden: !true,
-pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+            pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
 maxLength: 50,
+
         },
             validation: {
             messages: {
@@ -239,7 +246,7 @@ pattern: (err, field) => $localize `:@@validators.pattern.emailAddress:Invalid e
         hidden: !true,
         },
         },
-            {
+        {
         key: 'categoryId',
         type: 'select',
         className: '',

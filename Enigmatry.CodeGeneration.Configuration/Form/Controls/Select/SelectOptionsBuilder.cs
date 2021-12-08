@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Linq;
 using Humanizer;
 
-namespace Enigmatry.CodeGeneration.Configuration.Form.Model.Select
+namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
 {
-    public class SelectControlOptionsBuilder
+    public class SelectOptionsBuilder
     {
         private IEnumerable<SelectOption> _fixedValues = new List<SelectOption>();
         private string _valueKey = String.Empty;
@@ -14,13 +14,13 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model.Select
         private bool _hasDynamicValues;
         private SelectOption? _emptyOption;
 
-        public SelectControlOptionsBuilder WithFixedValues(IEnumerable<SelectOption> fixedValues)
+        public SelectOptionsBuilder WithFixedValues(IEnumerable<SelectOption> fixedValues)
         {
             _fixedValues = fixedValues.ToList();
             return this;
         }
 
-        public SelectControlOptionsBuilder WithFixedValues<T>() where T : Enum
+        public SelectOptionsBuilder WithFixedValues<T>() where T : Enum
         {
             _fixedValues = Enum
                 .GetValues(typeof(T))
@@ -30,33 +30,33 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model.Select
             return this;
         }
 
-        public SelectControlOptionsBuilder WithValueKey(string valueKey)
+        public SelectOptionsBuilder WithValueKey(string valueKey)
         {
             _valueKey = valueKey.Camelize();
             return this;
         }
 
-        public SelectControlOptionsBuilder WithDisplayKey(string displayKey)
+        public SelectOptionsBuilder WithDisplayKey(string displayKey)
         {
             _displayKey = displayKey.Camelize();
             return this;
         }
 
-        public SelectControlOptionsBuilder WithDynamicValues()
+        public SelectOptionsBuilder WithDynamicValues()
         {
             _hasDynamicValues = true;
             return this;
         }
 
-        public SelectControlOptionsBuilder WithEmptyOption(string label, string? transaltionId = null)
+        public SelectOptionsBuilder WithEmptyOption(string label, string? translationId = null)
         {
-            _emptyOption = new SelectOption(null!, label, transaltionId ?? $"empty-option.{label.Kebaberize()}");
+            _emptyOption = new SelectOption(null!, label, translationId ?? $"empty-option.{label.Kebaberize()}");
             return this;
         }
 
-        public SelectControlOptions Build()
+        public SelectOptions Build()
         {
-            return new SelectControlOptions
+            return new SelectOptions
             {
                 FixedOptions = GetFixedValuesWithEmptyOption(),
                 OptionValueKey = _valueKey,

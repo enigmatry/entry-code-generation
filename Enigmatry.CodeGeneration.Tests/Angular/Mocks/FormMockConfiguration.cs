@@ -1,5 +1,5 @@
 ﻿using Enigmatry.CodeGeneration.Configuration.Form;
-using Enigmatry.CodeGeneration.Configuration.Form.Model;
+using Enigmatry.CodeGeneration.Configuration.Form.Controls;
 
 namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
 {
@@ -24,9 +24,8 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 .WithTooltipText("Tooltip text")
                 .WithAppearance(FormControlAppearance.Outline);
 
-            builder.FormControl(x => x.Description)
+            builder.TextareaFormControl(x => x.Description)
                 .WithLabel("Some Description")
-                // no placeholder specified, should default to value of label
                 .WithValidator("ValidDescription");
 
             builder
@@ -46,22 +45,22 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 .WithPlaceholder("Amount");
 
             builder
-                .FormControl(x => x.FormStatus)
-                .IsDropDownListControl(options =>
+                .SelectFormControl(x => x.FormStatus)
+                .WithOptions(options =>
                 {
                     options.WithFixedValues<EnumMock>();
                     options.WithEmptyOption("None");
                 });
 
             builder
-                .FormControl(x => x.MockRadio)
+                .RadioGroupFormControl(x => x.MockRadio)
                 .WithLabel("Radio")
-                .IsRadioGroupControl(options => options.WithFixedValues<EnumMock>());
+                .WithOptions(options => options.WithFixedValues<EnumMock>());
 
             builder
-                .FormControl(x => x.CategoryId)
+                .SelectFormControl(x => x.CategoryId)
                 .WithLabel("Category")
-                .IsDropDownListControl(options =>
+                .WithOptions(options =>
                 {
                     options.WithDynamicValues();
                     options.WithValueKey("id");
@@ -69,9 +68,9 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 });
 
             builder
-                .FormControl(x => x.TypeId)
+                .SelectFormControl(x => x.TypeId)
                 .WithLabel("Type")
-                .IsDropDownListControl(options => options.WithDynamicValues());
+                .WithOptions(options => options.WithDynamicValues());
 
             builder.FormControl(x => x.SubTypeId).IsVisible(false);
 

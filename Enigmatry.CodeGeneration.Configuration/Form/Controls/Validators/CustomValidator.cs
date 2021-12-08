@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Enigmatry.CodeGeneration.Configuration.Form.Model.Validators
+namespace Enigmatry.CodeGeneration.Configuration.Form.Controls.Validators
 {
     public class CustomValidator
     {

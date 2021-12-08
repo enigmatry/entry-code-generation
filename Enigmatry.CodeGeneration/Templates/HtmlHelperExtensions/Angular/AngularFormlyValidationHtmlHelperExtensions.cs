@@ -1,7 +1,5 @@
 ﻿using Enigmatry.CodeGeneration.Configuration;
 using Enigmatry.CodeGeneration.Configuration.Form;
-using Enigmatry.CodeGeneration.Configuration.Form.Model;
-using Enigmatry.CodeGeneration.Configuration.Form.Model.Validators;
 using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript;
 using Humanizer;
 using Microsoft.AspNetCore.Html;
@@ -9,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Enigmatry.CodeGeneration.Configuration.Form.Controls;
 
 namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 {

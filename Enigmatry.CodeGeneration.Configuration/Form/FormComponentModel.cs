@@ -1,7 +1,7 @@
 ﻿using Enigmatry.BuildingBlocks.Validation.ValidationRules;
-using Enigmatry.CodeGeneration.Configuration.Form.Model;
 using System.Collections.Generic;
 using System.Linq;
+using Enigmatry.CodeGeneration.Configuration.Form.Controls;
 
 namespace Enigmatry.CodeGeneration.Configuration.Form
 {

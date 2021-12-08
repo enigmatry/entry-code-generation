@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Enigmatry.CodeGeneration.Configuration;
 using Enigmatry.CodeGeneration.Configuration.Form;
-using Enigmatry.CodeGeneration.Configuration.Form.Model.Validators;
+using Enigmatry.CodeGeneration.Configuration.Form.Controls.Validators;
 using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 using Enigmatry.CodeGeneration.Tests.Angular.Mocks;
 using Humanizer;

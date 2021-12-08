@@ -1,12 +1,14 @@
-﻿using Enigmatry.CodeGeneration.Configuration.Form.Model.Validators;
-using Humanizer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Enigmatry.CodeGeneration.Configuration.Form.Controls.Validators;
+using Humanizer;
 
-namespace Enigmatry.CodeGeneration.Configuration.Form.Model
+namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
 {
-    public abstract class BaseControlBuilder<TBuilder> : IControlBuilder where TBuilder : BaseControlBuilder<TBuilder>
+    public abstract class BaseControlBuilder<TControl, TBuilder> : IControlBuilder
+        where TControl : FormControl
+        where TBuilder : BaseControlBuilder<TControl, TBuilder>
     {
         public PropertyInfo? PropertyInfo { get; }
         protected readonly string _propertyName;
@@ -19,12 +21,11 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         protected string? _placeholderTranslationId;
         protected string? _hintTranslationId;
         protected string? _className;
-        protected FormControlAppearance? _appearance = null;
-        protected FormControlType _formControlType;
+        protected FormControlAppearance? _appearance;
         protected CustomValidator? _validator;
-        protected string? _customControlType;
         protected List<string> _customWrappers = new List<string>();
         protected string? _tooltipText;
+        protected string? _tooltipTranslationId;
 
         protected BaseControlBuilder(PropertyInfo propertyInfo) : this(propertyInfo.Name)
         {
@@ -189,10 +190,6 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         /// <returns></returns>
         public TBuilder WithCustomWrapper(string wrapperName)
         {
-            if (!_customWrappers.Contains(FormControl.DefaultWrapper))
-            {
-                _customWrappers.Add(FormControl.DefaultWrapper);
-            }
             _customWrappers.Add(wrapperName);
             return (TBuilder)this;
         }
@@ -209,13 +206,13 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         }
 
         /// <summary>
-        /// Configure custom form control type to be used
+        /// Configure translationId for tooltip text
         /// </summary>
-        /// <param name="controlTypeName"></param>
+        /// <param name="translationId"></param>
         /// <returns></returns>
-        public TBuilder WithCustomControlType(string controlTypeName)
+        public TBuilder WithTooltipTranslationId(string translationId)
         {
-            _customControlType = controlTypeName;
+            _tooltipTranslationId = translationId;
             return (TBuilder)this;
         }
 
@@ -226,40 +223,32 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Model
         /// <returns></returns>
         public abstract FormControl Build(ComponentInfo componentInfo);
 
-        protected TControl Build<TControl>(ComponentInfo componentInfo, Action<TControl>? configureAction = null) where TControl : FormControl, new()
+        protected TControl Build(ComponentInfo componentInfo, TControl control)
         {
             var translationId = $"{componentInfo.TranslationId}.{_propertyName.Kebaberize()}.";
+
             var labelTranslationId = _labelTranslationId ?? $"{translationId}label";
             var placeholderTranslationId = _placeholderTranslationId ?? $"{translationId}placeholder";
             var hintTranslationId = _hintTranslationId ?? $"{translationId}hint";
+            var tooltipTranslationId = _tooltipTranslationId ?? $"{translationId}tooltip";
             var label = _label ?? _propertyName.Humanize();
             var placeholder = _placeholder ?? label;
+            var tooltip = _tooltipText ?? String.Empty;
 
-            var formControl = new TControl
-            {
-                ComponentInfo = componentInfo,
-                PropertyName = _propertyName,
-                Label = label,
-                Placeholder = placeholder,
-                Hint = _hint,
-                IsVisible = _isVisible,
-                IsReadonly = _isReadonly,
-                Type = _formControlType,
-                ValueType = PropertyInfo?.PropertyType,
-                LabelTranslationId = labelTranslationId,
-                PlaceholderTranslationId = placeholderTranslationId,
-                HintTranslationId = hintTranslationId,
-                Validator = _validator,
-                ClassName = _className,
-                CustomControlType = _customControlType,
-                Appearance = _appearance,
-                CustomWrappers = _customWrappers,
-                TooltipText = _tooltipText
-            };
+            control.ComponentInfo = componentInfo;
+            control.PropertyName = _propertyName;
+            control.Label = new I18NString(labelTranslationId, label);
+            control.Placeholder = new I18NString(placeholderTranslationId, placeholder);
+            control.Hint = new I18NString(hintTranslationId, _hint);
+            control.Visible = _isVisible;
+            control.Readonly = _isReadonly;
+            control.Validator = _validator;
+            control.ClassName = _className;
+            control.Appearance = _appearance;
+            control.Tooltip = new I18NString(tooltipTranslationId, tooltip);
+            control.Wrappers = new FormControlWrappers(_customWrappers);
 
-            configureAction?.Invoke(formControl);
-
-            return formControl;
+            return control;
         }
     }
 }

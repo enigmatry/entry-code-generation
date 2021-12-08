@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Humanizer;
 
-namespace Enigmatry.CodeGeneration.Configuration.Form.Model.Select
+namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
 {
-    public class SelectControlOptions
+    public class SelectOptions
     {
         public IEnumerable<SelectOption> FixedOptions { get; set; } = new List<SelectOption>();
         public string OptionValueKey { get; set; } = String.Empty;
