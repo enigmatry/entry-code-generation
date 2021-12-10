@@ -6,11 +6,11 @@
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
 @model Enigmatry.CodeGeneration.Configuration.Form.FormComponentModel;
 @inject CodeGeneratorOptions _options;
-import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Optional, Output, TemplateRef } from '@@angular/core';
 import { FormGroup } from '@@angular/forms';
 import { FormlyFieldConfig } from '@@ngx-formly/core';
 import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPath';
-import { IFieldExpressionDictionary, SelectConfiguration } from '@@enigmatry/angular-building-blocks/form';
+import { IFieldExpressionDictionary, SelectConfiguration, ENIGMATRY_FIELD_TYPE_RESOLVER, FieldTypeResolver } from '@@enigmatry/angular-building-blocks/form';
 import { BehaviorSubject } from 'rxjs';
 
 @functions {
@@ -33,10 +33,6 @@ import { BehaviorSubject } from 'rxjs';
 
     void CreateField(FormControl control)
     {
-        var type = control.FormlyType;
-        var readonlyType = control.ReadonlyFormlyType;
-        var typeString = String.Equals(type, readonlyType) ? $"'{type}'" : $"this.isReadonly ? '{readonlyType}' : '{type}'";
-
         @if (!control.Visible)
         {
             @:{ key: '@control.PropertyName' },
@@ -45,11 +41,11 @@ import { BehaviorSubject } from 'rxjs';
 
         @:{
         @:key: '@control.PropertyName',
-        @:type: @Html.Raw(typeString),
+        @:type: this.resolveFieldType('@Html.Raw(control.FormlyType)', @control.Readonly.ToString().ToLower()),
         @:className: '@Html.Raw(control.ClassName)',
         @:hideExpression: this.fieldsHideExpressions?.@(control.PropertyName) ?? false,
         @:expressionProperties: {
-          @:'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.@(control.PropertyName) ? this.fieldsDisableExpressions.@(control.PropertyName)(model) : @control.Readonly.ToString().ToLower())),
+        @:'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.@(control.PropertyName) ? this.fieldsDisableExpressions.@(control.PropertyName)(model) : @control.Readonly.ToString().ToLower())),
         @:},
         CreateWrappers(control);
         CreateFieldTemplateOptions(control);
@@ -65,7 +61,7 @@ import { BehaviorSubject } from 'rxjs';
         @:description: @Html.Localize(control.Hint, _options.EnableI18N),
         @if (control.Appearance != null)
         {
-        @:appearance: '@Html.Raw(control.GetAppearance())',
+            @:appearance: '@Html.Raw(control.GetAppearance())',
         }
         @if (control is SelectControlBase select)
         {
@@ -86,7 +82,7 @@ import { BehaviorSubject } from 'rxjs';
         @:hidden: !@control.Visible.ToString().ToLower(),
         @if (control.Tooltip.HasContent())
         {
-        @:tooltipText: @Html.Localize(control.Tooltip, _options.EnableI18N),
+            @:tooltipText: @Html.Localize(control.Tooltip, _options.EnableI18N),
         }
         @if (control.ValidationRules.Any())
         {
@@ -145,32 +141,32 @@ import { BehaviorSubject } from 'rxjs';
         if (select.Options.HasDynamicValues)
         {
             @:private @(select.PropertyName)Options$ = new BehaviorSubject<any[]>([]);
-            @:@@Input()
-            @:get @(select.PropertyName)Options(): any[] { return this.@(select.PropertyName)Options$.value; }
-            @:set @(select.PropertyName)Options(value: any[]) { this.@(select.PropertyName)Options$.next(value); }
-        }
-        else
-        {
-            @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => $"{{ value: {option.Value ?? "null"}, displayName: {(@Html.Localize(option.DisplayName, _options.EnableI18N))} }}");
+                @:@@Input()
+                @:get @(select.PropertyName)Options(): any[] { return this.@(select.PropertyName)Options$.value; }
+                @:set @(select.PropertyName)Options(value: any[]) { this.@(select.PropertyName)Options$.next(value); }
+            }
+            else
+            {
+                @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => $"{{ value: {option.Value ?? "null"}, displayName: {(@Html.Localize(option.DisplayName, _options.EnableI18N))} }}");
+            }
+
+            if (select.Options.HasCustomValueAndDisplayKeys)
+            {
+                @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = { valueProperty: '@(select.Options.OptionValueKey)', labelProperty: '@(select.Options.OptionDisplayKey)' };
+            }
+            else
+            {
+                @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = @(@Html.Raw(select.Options.DefaultOptionsAsString));
+            }
         }
 
-        if (select.Options.HasCustomValueAndDisplayKeys)
+        void CreateWrappers(FormControl control)
         {
-            @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = { valueProperty: '@(select.Options.OptionValueKey)', labelProperty: '@(select.Options.OptionDisplayKey)' };
+            if (control.Wrappers.CustomWrappers.Any())
+            {
+                @:wrappers: @Html.JsStringArray(control.Wrappers.AllWrappers),
+            }
         }
-        else
-        {
-            @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = @(@Html.Raw(select.Options.DefaultOptionsAsString));
-        }
-    }
-
-    void CreateWrappers(FormControl control)
-    {
-        if (control.Wrappers.CustomWrappers.Any())
-        {
-        @:wrappers: @Html.JsStringArray(control.Wrappers.AllWrappers),
-        }
-    }
 }
 
 @@Component({
@@ -199,13 +195,13 @@ export class @Model.AngularComponentName() implements OnInit {
   @@Output() save = new EventEmitter@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>"))();
   @@Output() cancel = new EventEmitter@(Html.Raw("<void>"))();
 
-  @{CreateInputsForSelectControlOptions();}
+@{CreateInputsForSelectControlOptions();}
 
  _isReadonly: boolean;
   form = new FormGroup({});
   fields: FormlyFieldConfig[] = [];
 
-  constructor() { }
+  constructor(@@Optional() @@Inject(ENIGMATRY_FIELD_TYPE_RESOLVER) private _fieldTypeResolver: FieldTypeResolver) { }
 
   ngOnInit(): void {
     this.fields = this.initializeFields();
@@ -216,6 +212,9 @@ export class @Model.AngularComponentName() implements OnInit {
       this.save.emit(this.model);
     }
   }
+
+  resolveFieldType = (type: string, isControlReadonly: boolean): string =>
+    this._fieldTypeResolver ? this._fieldTypeResolver(type, this.isReadonly || isControlReadonly) : type;
 
   initializeFields(): FormlyFieldConfig[] {
     return [

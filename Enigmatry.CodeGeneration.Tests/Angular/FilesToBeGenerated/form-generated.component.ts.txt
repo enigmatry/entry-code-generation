@@ -7,11 +7,11 @@
 // </auto-generated>
 // ------------------------------------------------------------------------------;
 /* eslint-disable */
-import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Optional, Output, TemplateRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { IFormMock } from 'src/app/api/api-reference';
-import { IFieldExpressionDictionary, SelectConfiguration } from '@enigmatry/angular-building-blocks/form';
+import { IFieldExpressionDictionary, SelectConfiguration, ENIGMATRY_FIELD_TYPE_RESOLVER, FieldTypeResolver } from '@enigmatry/angular-building-blocks/form';
 import { BehaviorSubject } from 'rxjs';
 
 
@@ -41,26 +41,26 @@ export class FormGeneratedComponent implements OnInit {
   @Output() save = new EventEmitter<IFormMock>();
   @Output() cancel = new EventEmitter<void>();
 
-            @Input() formStatusOptions: any[] = [{ value: null, displayName: $localize `:@@empty-option.none:None` }, { value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
-            @Input() formStatusOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName' };
+                @Input() formStatusOptions: any[] = [{ value: null, displayName: $localize `:@@empty-option.none:None` }, { value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
+                @Input() formStatusOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName' };
             private categoryIdOptions$ = new BehaviorSubject<any[]>([]);
-            @Input()
-            get categoryIdOptions(): any[] { return this.categoryIdOptions$.value; }
-            set categoryIdOptions(value: any[]) { this.categoryIdOptions$.next(value); }
-            @Input() categoryIdOptionsConfiguration: SelectConfiguration = { valueProperty: 'id', labelProperty: 'categoryName' };
+                @Input()
+                get categoryIdOptions(): any[] { return this.categoryIdOptions$.value; }
+                set categoryIdOptions(value: any[]) { this.categoryIdOptions$.next(value); }
+                @Input() categoryIdOptionsConfiguration: SelectConfiguration = { valueProperty: 'id', labelProperty: 'categoryName' };
             private typesOptions$ = new BehaviorSubject<any[]>([]);
-            @Input()
-            get typesOptions(): any[] { return this.typesOptions$.value; }
-            set typesOptions(value: any[]) { this.typesOptions$.next(value); }
-            @Input() typesOptionsConfiguration: SelectConfiguration = {};
-            @Input() mockRadioOptions: any[] = [{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
-            @Input() mockRadioOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName' };
+                @Input()
+                get typesOptions(): any[] { return this.typesOptions$.value; }
+                set typesOptions(value: any[]) { this.typesOptions$.next(value); }
+                @Input() typesOptionsConfiguration: SelectConfiguration = {};
+                @Input() mockRadioOptions: any[] = [{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
+                @Input() mockRadioOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName' };
 
  _isReadonly: boolean;
   form = new FormGroup({});
   fields: FormlyFieldConfig[] = [];
 
-  constructor() { }
+  constructor(@Optional() @Inject(ENIGMATRY_FIELD_TYPE_RESOLVER) private _fieldTypeResolver: FieldTypeResolver) { }
 
   ngOnInit(): void {
     this.fields = this.initializeFields();
@@ -72,25 +72,28 @@ export class FormGeneratedComponent implements OnInit {
     }
   }
 
+  resolveFieldType = (type: string, isControlReadonly: boolean): string =>
+    this._fieldTypeResolver ? this._fieldTypeResolver(type, this.isReadonly || isControlReadonly) : type;
+
   initializeFields(): FormlyFieldConfig[] {
     return [
             { key: 'id' },
         {
         key: 'name',
-        type: 'input',
+        type: this.resolveFieldType('input', false),
         className: '',
         hideExpression: this.fieldsHideExpressions?.name ?? false,
         expressionProperties: {
-          'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.name ? this.fieldsDisableExpressions.name(model) : false)),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.name ? this.fieldsDisableExpressions.name(model) : false)),
         },
-        wrappers: ['form-field', 'tooltip'],
+                wrappers: ['form-field', 'tooltip'],
         templateOptions: {
         label: $localize `:@@test.form.name.label:Name`,
         placeholder: $localize `:@@test.form.name.placeholder:Some / Name`,
         description: '',
-        appearance: 'outline',
+            appearance: 'outline',
         hidden: !true,
-        tooltipText: $localize `:@@test.form.name.tooltip:Tooltip text`,
+            tooltipText: $localize `:@@test.form.name.tooltip:Tooltip text`,
             required: true,
 maxLength: 50,
 pattern: /[A-Z]/,
@@ -107,11 +110,11 @@ asyncValidators: { validation: [ 'isEnsured' ] },
         },
         {
         key: 'description',
-        type: 'textarea',
+        type: this.resolveFieldType('textarea', false),
         className: '',
         hideExpression: this.fieldsHideExpressions?.description ?? false,
         expressionProperties: {
-          'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.description ? this.fieldsDisableExpressions.description(model) : false)),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.description ? this.fieldsDisableExpressions.description(model) : false)),
         },
         templateOptions: {
         label: $localize `:@@test.form.description.label:Some Description`,
@@ -126,11 +129,11 @@ asyncValidators: { validation: [ 'validDescription' ] },
         },
         {
         key: 'date',
-        type: 'datepicker',
+        type: this.resolveFieldType('datepicker', true),
         className: '',
         hideExpression: this.fieldsHideExpressions?.date ?? false,
         expressionProperties: {
-          'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.date ? this.fieldsDisableExpressions.date(model) : true)),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.date ? this.fieldsDisableExpressions.date(model) : true)),
         },
         templateOptions: {
         label: $localize `:@@test.form.date.label:Date`,
@@ -141,11 +144,11 @@ asyncValidators: { validation: [ 'validDescription' ] },
         },
         {
         key: 'money',
-        type: 'input',
+        type: this.resolveFieldType('input', false),
         className: '',
         hideExpression: this.fieldsHideExpressions?.money ?? false,
         expressionProperties: {
-          'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.money ? this.fieldsDisableExpressions.money(model) : false)),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.money ? this.fieldsDisableExpressions.money(model) : false)),
         },
         templateOptions: {
         label: $localize `:@@test.form.money.label:Money`,
@@ -159,11 +162,11 @@ max: 999.99 - 0.1,
         },
         {
         key: 'amount',
-        type: 'input',
+        type: this.resolveFieldType('input', false),
         className: '',
         hideExpression: this.fieldsHideExpressions?.amount ?? false,
         expressionProperties: {
-          'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.amount ? this.fieldsDisableExpressions.amount(model) : false)),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.amount ? this.fieldsDisableExpressions.amount(model) : false)),
         },
         templateOptions: {
         label: $localize `:@@test.form.amount.label:Amount`,
@@ -185,11 +188,11 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
         },
         {
         key: 'email1',
-        type: 'input',
+        type: this.resolveFieldType('input', false),
         className: '',
         hideExpression: this.fieldsHideExpressions?.email1 ?? false,
         expressionProperties: {
-          'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.email1 ? this.fieldsDisableExpressions.email1(model) : false)),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.email1 ? this.fieldsDisableExpressions.email1(model) : false)),
         },
         templateOptions: {
         label: $localize `:@@test.form.email1.label:Email 1`,
@@ -208,11 +211,11 @@ pattern: (err, field) => $localize `:@@test.form.email1.pattern:CUSTOM_VALIDATIO
         },
         {
         key: 'email2',
-        type: 'input',
+        type: this.resolveFieldType('input', false),
         className: '',
         hideExpression: this.fieldsHideExpressions?.email2 ?? false,
         expressionProperties: {
-          'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.email2 ? this.fieldsDisableExpressions.email2(model) : false)),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.email2 ? this.fieldsDisableExpressions.email2(model) : false)),
         },
         templateOptions: {
         label: $localize `:@@test.form.email2.label:Email 2`,
@@ -231,11 +234,11 @@ pattern: (err, field) => $localize `:@@validators.pattern.emailAddress:Invalid e
         },
         {
         key: 'formStatus',
-        type: 'select',
+        type: this.resolveFieldType('select', false),
         className: '',
         hideExpression: this.fieldsHideExpressions?.formStatus ?? false,
         expressionProperties: {
-          'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.formStatus ? this.fieldsDisableExpressions.formStatus(model) : false)),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.formStatus ? this.fieldsDisableExpressions.formStatus(model) : false)),
         },
         templateOptions: {
         label: $localize `:@@test.form.form-status.label:Form status`,
@@ -249,11 +252,11 @@ pattern: (err, field) => $localize `:@@validators.pattern.emailAddress:Invalid e
         },
         {
         key: 'categoryId',
-        type: 'select',
+        type: this.resolveFieldType('select', false),
         className: '',
         hideExpression: this.fieldsHideExpressions?.categoryId ?? false,
         expressionProperties: {
-          'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.categoryId ? this.fieldsDisableExpressions.categoryId(model) : false)),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.categoryId ? this.fieldsDisableExpressions.categoryId(model) : false)),
         },
         templateOptions: {
         label: $localize `:@@test.form.category-id.label:Category`,
@@ -267,11 +270,11 @@ pattern: (err, field) => $localize `:@@validators.pattern.emailAddress:Invalid e
         },
         {
         key: 'types',
-        type: 'select',
+        type: this.resolveFieldType('select', false),
         className: '',
         hideExpression: this.fieldsHideExpressions?.types ?? false,
         expressionProperties: {
-          'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.types ? this.fieldsDisableExpressions.types(model) : false)),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.types ? this.fieldsDisableExpressions.types(model) : false)),
         },
         templateOptions: {
         label: $localize `:@@test.form.types.label:Types`,
@@ -288,11 +291,11 @@ pattern: (err, field) => $localize `:@@validators.pattern.emailAddress:Invalid e
             { key: 'subTypeId' },
         {
         key: 'mockRadio',
-        type: this.isReadonly ? 'readonly-radio' : 'radio',
+        type: this.resolveFieldType('radio', false),
         className: '',
         hideExpression: this.fieldsHideExpressions?.mockRadio ?? false,
         expressionProperties: {
-          'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.mockRadio ? this.fieldsDisableExpressions.mockRadio(model) : false)),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.mockRadio ? this.fieldsDisableExpressions.mockRadio(model) : false)),
         },
         templateOptions: {
         label: $localize `:@@test.form.mock-radio.label:Radio`,

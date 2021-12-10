@@ -23,21 +23,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         public CustomValidator? Validator { get; set; }
         public FormControlWrappers Wrappers { get; set; } = FormControlWrappers.Default;
         public abstract string FormlyType { get; }
-
-        // TODO: should be removed 
-        public string ReadonlyFormlyType
-        {
-            get
-            {
-                return this switch
-                {
-                    CheckboxFormControl _ => "readonly-boolean",
-                    RadioGroupFormControl _ => "readonly-radio",
-                    _ => FormlyType
-                };
-            }
-        }
-
+        
         public string? GetAppearance()
         {
             return Appearance switch
