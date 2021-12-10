@@ -14,6 +14,7 @@ import { IFormMock } from 'src/app/api/api-reference';
 import { IFieldExpressionDictionary, SelectConfiguration } from '@enigmatry/angular-building-blocks/form';
 import { BehaviorSubject } from 'rxjs';
 
+
 @Component({
   selector: 'app-g-form',
   templateUrl: './form-generated.component.html',
@@ -47,11 +48,11 @@ export class FormGeneratedComponent implements OnInit {
             get categoryIdOptions(): any[] { return this.categoryIdOptions$.value; }
             set categoryIdOptions(value: any[]) { this.categoryIdOptions$.next(value); }
             @Input() categoryIdOptionsConfiguration: SelectConfiguration = { valueProperty: 'id', labelProperty: 'categoryName' };
-            private typeIdOptions$ = new BehaviorSubject<any[]>([]);
+            private typesOptions$ = new BehaviorSubject<any[]>([]);
             @Input()
-            get typeIdOptions(): any[] { return this.typeIdOptions$.value; }
-            set typeIdOptions(value: any[]) { this.typeIdOptions$.next(value); }
-            @Input() typeIdOptionsConfiguration: SelectConfiguration = {};
+            get typesOptions(): any[] { return this.typesOptions$.value; }
+            set typesOptions(value: any[]) { this.typesOptions$.next(value); }
+            @Input() typesOptionsConfiguration: SelectConfiguration = {};
             @Input() mockRadioOptions: any[] = [{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
             @Input() mockRadioOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName' };
 
@@ -265,20 +266,22 @@ pattern: (err, field) => $localize `:@@validators.pattern.emailAddress:Invalid e
         },
         },
         {
-        key: 'typeId',
+        key: 'types',
         type: 'select',
         className: '',
-        hideExpression: this.fieldsHideExpressions?.typeId ?? false,
+        hideExpression: this.fieldsHideExpressions?.types ?? false,
         expressionProperties: {
-          'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.typeId ? this.fieldsDisableExpressions.typeId(model) : false)),
+          'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.types ? this.fieldsDisableExpressions.types(model) : false)),
         },
         templateOptions: {
-        label: $localize `:@@test.form.type-id.label:Type`,
-        placeholder: $localize `:@@test.form.type-id.placeholder:Type`,
+        label: $localize `:@@test.form.types.label:Types`,
+        placeholder: $localize `:@@test.form.types.placeholder:Types`,
         description: '',
-            options: this.typeIdOptions$,
-            valueProp: this.typeIdOptionsConfiguration.valueProperty,
-            labelProp: this.typeIdOptionsConfiguration.labelProperty,
+            options: this.typesOptions$,
+            valueProp: this.typesOptionsConfiguration.valueProperty,
+            labelProp: this.typesOptionsConfiguration.labelProperty,
+            multiple: true,
+            selectAllOption: $localize `:@@select-all-option.select-all:SelectAll`,
         hidden: !true,
         },
         },

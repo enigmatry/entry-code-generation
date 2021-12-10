@@ -13,6 +13,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         private string _displayKey = String.Empty;
         private bool _hasDynamicValues;
         private SelectOption? _emptyOption;
+        private SelectOption? _selectAllOption;
 
         public SelectOptionsBuilder WithFixedValues(IEnumerable<SelectOption> fixedValues)
         {
@@ -50,7 +51,13 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
 
         public SelectOptionsBuilder WithEmptyOption(string label, string? translationId = null)
         {
-            _emptyOption = new SelectOption(null!, label, translationId ?? $"empty-option.{label.Kebaberize()}");
+            _emptyOption = new SelectOption(null, label, translationId ?? $"empty-option.{label.Kebaberize()}");
+            return this;
+        }
+
+        public SelectOptionsBuilder WithSelectAllOption(string label, string? translationId = null)
+        {
+            _selectAllOption = new SelectOption(null, label, translationId ?? $"select-all-option.{label.Kebaberize()}");
             return this;
         }
 
@@ -62,7 +69,8 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
                 OptionValueKey = _valueKey,
                 OptionDisplayKey = _displayKey,
                 HasDynamicValues = _hasDynamicValues,
-                EmptyOption = _emptyOption
+                EmptyOption = _emptyOption,
+                SelectAllOption = _selectAllOption
             };
         }
 

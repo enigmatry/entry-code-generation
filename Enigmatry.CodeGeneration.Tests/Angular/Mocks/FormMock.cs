@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
 {
@@ -14,7 +16,7 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
         public string Email2 { get; set; } = String.Empty;
         public EnumMock FormStatus { get; set; }
         public Guid CategoryId { get; set; }
-        public Guid TypeId { get; set; }
+        public IEnumerable<Guid> Types { get; set; } = Enumerable.Empty<Guid>();
         public Guid SubTypeId { get; set; }
         public EnumMock MockRadio { get; set; }
     }

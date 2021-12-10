@@ -68,9 +68,13 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 });
 
             builder
-                .SelectFormControl(x => x.TypeId)
-                .WithLabel("Type")
-                .WithOptions(options => options.WithDynamicValues());
+                .MultiSelectFormControl(x => x.Types)
+                .WithLabel("Types")
+                .WithOptions(options =>
+                {
+                    options.WithDynamicValues();
+                    options.WithSelectAllOption("SelectAll");
+                });
 
             builder.FormControl(x => x.SubTypeId).IsVisible(false);
 

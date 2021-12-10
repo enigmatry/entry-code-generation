@@ -67,11 +67,16 @@ import { BehaviorSubject } from 'rxjs';
         {
         @:appearance: '@Html.Raw(control.GetAppearance())',
         }
-        @if (control is SelectFormControl select)
+        @if (control is SelectControlBase select)
         {
             @:options: this.@(select.PropertyName)Options@(select.Options.HasDynamicValues ? "$" : String.Empty),
             @:valueProp: this.@(select.PropertyName)OptionsConfiguration.valueProperty,
             @:labelProp: this.@(select.PropertyName)OptionsConfiguration.labelProperty,
+        }
+        @if (control is MultiSelectFormControl multiSelect)
+        {
+            @:multiple: true,
+            @:selectAllOption: @Html.Localize(multiSelect.Options.SelectAllOption?.DisplayName, _options.EnableI18N),
         }
         @if (control is TextareaFormControl textarea)
         {
@@ -129,13 +134,13 @@ import { BehaviorSubject } from 'rxjs';
 
     void CreateInputsForSelectControlOptions()
     {
-        foreach (var select in Model.FormControlsOfType<SelectFormControl>())
+        foreach (var select in Model.FormControlsOfType<SelectControlBase>())
         {
             CreateSelectInput(select);
         }
     }
 
-    void CreateSelectInput(SelectFormControl select)
+    void CreateSelectInput(SelectControlBase select)
     {
         if (select.Options.HasDynamicValues)
         {

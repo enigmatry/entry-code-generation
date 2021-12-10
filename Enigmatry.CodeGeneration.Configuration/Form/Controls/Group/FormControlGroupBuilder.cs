@@ -52,6 +52,11 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
             return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new SelectFormControlBuilder(propertyInfo));
         }
 
+        public MultiSelectFormControlBuilder MultiSelectFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+        {
+            return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new MultiSelectFormControlBuilder(propertyInfo));
+        }
+
         public RadioGroupFormControlBuilder RadioGroupFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
         {
             return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new RadioGroupFormControlBuilder(propertyInfo));
