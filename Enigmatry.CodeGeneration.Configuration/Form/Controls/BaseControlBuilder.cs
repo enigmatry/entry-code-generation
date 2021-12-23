@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Enigmatry.CodeGeneration.Configuration.Form.Controls.Validators;
+using Enigmatry.CodeGeneration.Configuration.Formatters;
 using Humanizer;
 
 namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
@@ -26,6 +27,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         protected List<string> _customWrappers = new List<string>();
         protected string? _tooltipText;
         protected string? _tooltipTranslationId;
+        protected IPropertyFormatter? _formatter;
 
         protected BaseControlBuilder(PropertyInfo propertyInfo) : this(propertyInfo.Name)
         {
@@ -215,6 +217,17 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
             _tooltipTranslationId = translationId;
             return (TBuilder)this;
         }
+        
+        /// <summary>
+        /// Set field type formatter
+        /// </summary>
+        /// <param name="formatter">formatter</param>
+        /// <returns></returns>
+        public TBuilder WithFormat(IPropertyFormatter formatter)
+        {
+            _formatter = formatter;
+            return (TBuilder)this;
+        }
 
         /// <summary>
         /// Build form control
@@ -247,6 +260,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
             control.Appearance = _appearance;
             control.Tooltip = new I18NString(tooltipTranslationId, tooltip);
             control.Wrappers = new FormControlWrappers(_customWrappers);
+            control.Formatter = _formatter;
 
             return control;
         }

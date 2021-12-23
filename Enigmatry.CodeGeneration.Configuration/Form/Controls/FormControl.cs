@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Enigmatry.BuildingBlocks.Validation.ValidationRules;
 using Enigmatry.CodeGeneration.Configuration.Form.Controls.Validators;
+using Enigmatry.CodeGeneration.Configuration.Formatters;
 using Humanizer;
 
 namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
@@ -23,6 +24,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         public CustomValidator? Validator { get; set; }
         public FormControlWrappers Wrappers { get; set; } = FormControlWrappers.Default;
         public abstract string FormlyType { get; }
+        public IPropertyFormatter? Formatter { get; set; }
         
         public string? GetAppearance()
         {

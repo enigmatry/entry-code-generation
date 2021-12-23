@@ -88,6 +88,10 @@ import { BehaviorSubject } from 'rxjs';
         {
             @:@Html.AddValidationTemplateOptions(control)
         }
+        @if (control.Formatter != null)
+        {
+            @:typeFormatDef: @Html.Raw(control.Formatter.ToJsObject())
+        }
         @:},
     }
 

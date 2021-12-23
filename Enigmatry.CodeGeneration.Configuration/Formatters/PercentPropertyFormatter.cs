@@ -34,7 +34,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Formatters
 
         public override string ToJsObject()
         {
-            return DigitsInfo.HasContent() ? $"{{ digitsInfo: \'{DigitsInfo}\', locale: \'{Locale}\' }}" : "undefined";
+            return DigitsInfo.HasContent() ? $"{{ name: \'{JsFormatterName}\', digitsInfo: \'{DigitsInfo}\', locale: \'{Locale}\' }}" : $"{{ name: \'{JsFormatterName}\' }}";
         }
     }
 }

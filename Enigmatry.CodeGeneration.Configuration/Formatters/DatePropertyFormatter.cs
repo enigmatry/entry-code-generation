@@ -32,7 +32,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Formatters
 
         public override string ToJsObject()
         {
-            return Format.HasContent() ? $"{{ format: \'{Format}\', timezone: \'{TimeZone}\', locale: \'{Locale}\' }}" : "undefined";
+            return Format.HasContent() ? $"{{ name: \'{JsFormatterName}\', format: \'{Format}\', timezone: \'{TimeZone}\', locale: \'{Locale}\' }}" : $"{{ name: \'{JsFormatterName}\' }}";
         }
     }
 }

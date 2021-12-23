@@ -9,6 +9,6 @@ namespace Enigmatry.CodeGeneration.Configuration.Formatters
 
         public override string JsFormatterName => "boolean";
 
-        public override string ToJsObject() => "undefined";
+        public override string ToJsObject() => $"{{ name: \'{JsFormatterName}\' }}";
     }
 }

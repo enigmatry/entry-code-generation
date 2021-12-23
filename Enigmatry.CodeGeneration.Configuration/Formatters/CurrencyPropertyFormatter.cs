@@ -49,8 +49,8 @@ namespace Enigmatry.CodeGeneration.Configuration.Formatters
         public override string ToJsObject()
         {
             return CurrencyCode.HasContent()
-                ? $"{{ currencyCode: \'{CurrencyCode}\', display: \'{Display}\', digitsInfo: \'{DigitsInfo}\', locale: \'{Locale}\' }}"
-                : "undefined";
+                ? $"{{ name: \'{JsFormatterName}\', currencyCode: \'{CurrencyCode}\', display: \'{Display}\', digitsInfo: \'{DigitsInfo}\', locale: \'{Locale}\' }}"
+                : $"{{ name: \'{JsFormatterName}\' }}";
         }
     }
 }
