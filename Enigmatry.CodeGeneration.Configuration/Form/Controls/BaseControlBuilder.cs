@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Enigmatry.CodeGeneration.Configuration.Builder;
 using Enigmatry.CodeGeneration.Configuration.Form.Controls.Validators;
 using Enigmatry.CodeGeneration.Configuration.Formatters;
 using Humanizer;
@@ -11,7 +12,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         where TControl : FormControl
         where TBuilder : BaseControlBuilder<TControl, TBuilder>
     {
-        public PropertyInfo? PropertyInfo { get; }
+        private readonly PropertyAccessor? _propertyAccessor;
         protected readonly string _propertyName;
         protected string? _label;
         protected bool _isVisible;
@@ -31,8 +32,9 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
 
         protected BaseControlBuilder(PropertyInfo propertyInfo) : this(propertyInfo.Name)
         {
-            PropertyInfo = propertyInfo;
+            _propertyAccessor = new PropertyAccessor(propertyInfo);
             _isVisible = !propertyInfo.Name.Equals("id", StringComparison.InvariantCultureIgnoreCase);
+            _formatter = _propertyAccessor.GetDefaultPropertyFormatter();
         }
 
         protected BaseControlBuilder(string propertyName)
@@ -42,6 +44,8 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
             _isReadonly = false;
             _hint = String.Empty;
         }
+
+        public PropertyInfo? PropertyInfo => _propertyAccessor?.PropertyInfo;
 
         /// <summary>
         /// Check if builder has given property info
@@ -225,6 +229,10 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         /// <returns></returns>
         public TBuilder WithFormat(IPropertyFormatter formatter)
         {
+            if (_propertyAccessor != null)
+            {
+                formatter.ValidateInputType(_propertyAccessor.PropertyType);
+            }
             _formatter = formatter;
             return (TBuilder)this;
         }
