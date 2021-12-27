@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Enigmatry.CodeGeneration.Configuration;
 using Enigmatry.CodeGeneration.Configuration.List;
 using FluentAssertions;
@@ -12,9 +13,9 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration
         [Test]
         public void Test_ConfigurationScanner_ShouldGetComponentsFromComponentConfigurations()
         {
-            var scanner = new ConfigurationScanner(new[] {typeof(Model1Configuration), typeof(Model2Configuration)});
+            var scanner = new ConfigurationScanner(new[] { typeof(Model1Configuration), typeof(Model2Configuration) });
 
-            var components = scanner.GetComponents().ToList();
+            List<IComponentModel>? components = scanner.GetComponents().ToList();
 
             components.Count.Should().Be(2);
             components[0].ComponentInfo.Name.Should().Be("Model1");
@@ -24,12 +25,23 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration
         [Test]
         public void Test_ConfigurationScanner_ShouldIgnoreTypesThatAreNotComponentConfigurations()
         {
-            var scanner = new ConfigurationScanner(new[] {typeof(Model1Configuration), typeof(Model2) });
+            var scanner = new ConfigurationScanner(new[] { typeof(Model1Configuration), typeof(Model2) });
 
-            var components = scanner.GetComponents().ToList();
+            List<IComponentModel>? components = scanner.GetComponents().ToList();
 
             components.Count.Should().Be(1);
             components[0].ComponentInfo.Name.Should().Be("Model1");
+        }
+
+        [Test]
+        public void Test_ConfigurationScanner_ShouldIgnoreAbstractAndOrGenericComponentConfigurations()
+        {
+            var scanner = new ConfigurationScanner(new[] { typeof(Model2Configuration), typeof(GenericConfiguration<>), typeof(AbstractConfiguration) });
+
+            List<IComponentModel>? components = scanner.GetComponents().ToList();
+
+            components.Count.Should().Be(1);
+            components[0].ComponentInfo.Name.Should().Be("Model2");
         }
 
         internal class Model1
@@ -37,6 +49,10 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration
         }
 
         internal class Model2
+        {
+        }
+
+        internal class Model3
         {
         }
 
@@ -50,6 +66,20 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration
         internal class Model2Configuration : IListComponentConfiguration<Model2>
         {
             public void Configure(ListComponentBuilder<Model2> builder)
+            {
+            }
+        }
+
+        internal class GenericConfiguration<T> : IListComponentConfiguration<T> where T : class
+        {
+            public void Configure(ListComponentBuilder<T> builder)
+            {
+            }
+        }
+
+        internal abstract class AbstractConfiguration : IListComponentConfiguration<Model3>
+        {
+            public void Configure(ListComponentBuilder<Model3> builder)
             {
             }
         }

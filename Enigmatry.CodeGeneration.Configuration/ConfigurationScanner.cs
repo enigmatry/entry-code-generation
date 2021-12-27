@@ -29,6 +29,7 @@ namespace Enigmatry.CodeGeneration.Configuration
             var openGenericType = typeof(IComponentConfiguration<>);
 
             return from type in _types
+                where !type.IsAbstract && !type.ContainsGenericParameters
                 let interfaces = type.GetInterfaces()
                 let genericInterfaces = interfaces.Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == openGenericType)
                 let matchingInterface = genericInterfaces.FirstOrDefault()
