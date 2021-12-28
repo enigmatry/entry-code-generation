@@ -92,6 +92,7 @@ export class FormGeneratedComponent implements OnInit {
         placeholder: $localize `:@@test.form.name.placeholder:Some / Name`,
         description: '',
             appearance: 'outline',
+            floatLabel: 'always',
         hidden: !true,
             tooltipText: $localize `:@@test.form.name.tooltip:Tooltip text`,
             required: true,

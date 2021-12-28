@@ -61,6 +61,8 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 new IntroMessage("Pushing to the limits"),
                 new IntroMessage("Push me, pull me"),
                 new IntroMessage("Consolidate my nuggets"),
+                new IntroMessage("It's overkill"),
+                new IntroMessage("Regularly exercise"),
                 new IntroMessage("OK, OK, hold your horses, I'll start in a second"),
                 new IntroMessage("You want me to generate THAT?"),
                 new IntroMessage("I can see sharp"),
@@ -130,6 +132,7 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                     .WithCondition(() => DateTime.Now.IsLunchTime()),
                 new IntroMessage("Go vegan")
                     .WithType(IntroMessageType.SpecialCase)
+                    .WithForegroundColor(ConsoleColor.Green)
                     .WithCondition(() => DateTime.Now.IsLunchTime()),
                 new IntroMessage("Don't get fat!")
                     .WithType(IntroMessageType.SpecialCase)
@@ -166,6 +169,7 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 // Important dates:
                 new IntroMessage("Happy New Year's Eve!!!")
                     .WithType(IntroMessageType.Important)
+                    .WithForegroundColor(ConsoleColor.Red)
                     .WithCondition(() => DateTime.Now.IsNewYearsEve()),
                 new IntroMessage("Happy birthday Alan Turing!")
                     .WithType(IntroMessageType.Important)

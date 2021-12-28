@@ -22,7 +22,8 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 .WithValidator("IsEnsured")
                 .WithCustomWrapper("tooltip")
                 .WithTooltipText("Tooltip text")
-                .WithAppearance(FormControlAppearance.Outline);
+                .WithAppearance(FormControlAppearance.Outline)
+                .WithFloatLabel(FormControlFloatLabel.Always);
 
             builder.TextareaFormControl(x => x.Description)
                 .WithLabel("Some Description")

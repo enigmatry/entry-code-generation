@@ -24,6 +24,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         protected string? _hintTranslationId;
         protected string? _className;
         protected FormControlAppearance? _appearance;
+        protected FormControlFloatLabel? _floatLabel;
         protected CustomValidator? _validator;
         protected List<string> _customWrappers = new List<string>();
         protected string? _tooltipText;
@@ -178,6 +179,17 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         }
 
         /// <summary>
+        /// Configure form control floatLabel attribute (never is default)
+        /// </summary>
+        /// <param name="floatLabel"></param>
+        /// <returns></returns>
+        public TBuilder WithFloatLabel(FormControlFloatLabel floatLabel)
+        {
+            _floatLabel = floatLabel;
+            return (TBuilder)this;
+        }
+
+        /// <summary>
         /// Configure custom field validator name and trigger event (onBlur is default)
         /// </summary>
         /// <param name="validatorName">Validator name to be matched on client side</param>
@@ -266,6 +278,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
             control.Validator = _validator;
             control.ClassName = _className;
             control.Appearance = _appearance;
+            control.FloatLabel = _floatLabel;
             control.Tooltip = new I18NString(tooltipTranslationId, tooltip);
             control.Wrappers = new FormControlWrappers(_customWrappers);
             control.Formatter = _formatter;

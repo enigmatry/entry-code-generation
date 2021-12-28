@@ -20,23 +20,28 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         public bool Readonly { get; set; }
         public string? ClassName { get; set; } = String.Empty;
         public FormControlAppearance? Appearance { get; set; }
+        public FormControlFloatLabel? FloatLabel { get; set; }
         public IList<IFormlyValidationRule> ValidationRules { get; private set; } = new List<IFormlyValidationRule>();
         public CustomValidator? Validator { get; set; }
         public FormControlWrappers Wrappers { get; set; } = FormControlWrappers.Default;
         public abstract string FormlyType { get; }
         public IPropertyFormatter? Formatter { get; set; }
         
-        public string? GetAppearance()
+        public string? GetAppearance() => Appearance switch
         {
-            return Appearance switch
-            {
-                FormControlAppearance.Standard => "standard",
-                FormControlAppearance.Fill => "fill",
-                FormControlAppearance.Outline => "outline",
-                FormControlAppearance.Legacy => "legacy",
-                _ => null
-            };
-        }
+            FormControlAppearance.Standard => "standard",
+            FormControlAppearance.Fill => "fill",
+            FormControlAppearance.Outline => "outline",
+            FormControlAppearance.Legacy => "legacy",
+            _ => null
+        };
+
+        public string? GetFloatLabel() => FloatLabel switch
+        {
+            FormControlFloatLabel.Never => "never",
+            FormControlFloatLabel.Always => "always",
+            _ => null
+        };
 
         public virtual void ApplyValidationConfiguration(IEnumerable<IFormlyValidationRule> validationRules)
         {

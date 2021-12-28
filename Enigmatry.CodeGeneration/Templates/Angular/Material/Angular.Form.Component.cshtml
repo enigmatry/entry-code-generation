@@ -63,6 +63,10 @@ import { BehaviorSubject } from 'rxjs';
         {
             @:appearance: '@Html.Raw(control.GetAppearance())',
         }
+        @if (control.FloatLabel != null)
+        {
+            @:floatLabel: '@Html.Raw(control.GetFloatLabel())',
+        }
         @if (control is SelectControlBase select)
         {
             @:options: this.@(select.PropertyName)Options@(select.Options.HasDynamicValues ? "$" : String.Empty),
