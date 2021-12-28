@@ -30,6 +30,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         protected string? _tooltipText;
         protected string? _tooltipTranslationId;
         protected IPropertyFormatter? _formatter;
+        protected bool _ignore;
 
         protected BaseControlBuilder(PropertyInfo propertyInfo) : this(propertyInfo.Name)
         {
@@ -250,6 +251,14 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         }
 
         /// <summary>
+        /// Set control ignore value to true
+        /// </summary>
+        public void Ignore()
+        {
+            _ignore = true;
+        }
+
+        /// <summary>
         /// Build form control
         /// </summary>
         /// <param name="componentInfo">Parent componentInfo</param>
@@ -282,6 +291,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
             control.Tooltip = new I18NString(tooltipTranslationId, tooltip);
             control.Wrappers = new FormControlWrappers(_customWrappers);
             control.Formatter = _formatter;
+            control.Ignore = _ignore;
 
             return control;
         }

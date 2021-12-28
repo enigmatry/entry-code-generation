@@ -100,24 +100,32 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
 
             if (formControls.OfType<FormControlGroup>().Any())
             {
-                // NOTE:
-                // support advanced layouts with form control groups
-                // use only controls that are added during configuration!?
+                // When using FormControlGroups
+                // we assume that configuration will control the order (OrderBy -> Configuration)
                 return formControls;
             }
 
-            // NOTE:
-            // by default controls are created for all properties in the model
-            return GetDefaultControlBuildersForAllProperties()
-                .Select(defaultPropertyBuilder => _formGroup.GetControlBuilder(defaultPropertyBuilder.PropertyInfo!) ?? defaultPropertyBuilder)
-                .Select(controlBuilder => controlBuilder.Build(componentInfo))
-                .ToList();
+            if (componentInfo.IncludeUnconfiguredProperties)
+            {
+                var unconfiguredFormControls = BuildUnconfiguredFormControls(componentInfo);
+                formControls = formControls.Concat(unconfiguredFormControls).ToList();
+            }
+
+            if (componentInfo.OrderByType == OrderByType.Model)
+            {
+                var properties = _modelType.GetProperties().Select(propertyInfo => propertyInfo.Name.ToUpper()).ToList();
+                return formControls.OrderBy(formControl => properties.IndexOf(formControl.PropertyName.ToUpper()));
+            }
+
+            // OrderBy = Configuration
+            return formControls;
         }
 
-        private IEnumerable<IControlBuilder> GetDefaultControlBuildersForAllProperties()
+        private IEnumerable<FormControl> BuildUnconfiguredFormControls(ComponentInfo componentInfo)
         {
             return _modelType.GetProperties()
-                .Select(propertyInfo => new InferredFormControlBuilder(propertyInfo))
+                .Where(propertyInfo => !_formGroup.HasControlBuilder(propertyInfo))
+                .Select(propertyInfo => new InferredFormControlBuilder(propertyInfo).Build(componentInfo))
                 .ToList();
         }
     }

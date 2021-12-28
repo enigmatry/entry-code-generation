@@ -1,4 +1,5 @@
-﻿using Enigmatry.CodeGeneration.Configuration.Form;
+﻿using Enigmatry.CodeGeneration.Configuration;
+using Enigmatry.CodeGeneration.Configuration.Form;
 using Enigmatry.CodeGeneration.Configuration.Form.Controls;
 
 namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
@@ -10,7 +11,8 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
             builder
                 .Component()
                 .HasName("Form")
-                .BelongsToFeature("Test");
+                .BelongsToFeature("Test")
+                .OrderBy(OrderByType.Configuration);
 
             builder.FormControl(x => x.Id)
                 .IsVisible(false);
@@ -77,7 +79,8 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                     options.WithSelectAllOption("SelectAll");
                 });
 
-            builder.FormControl(x => x.SubTypeId).IsVisible(false);
+            builder.FormControl(x => x.SubTypeId)
+                .Ignore();
 
             builder
                 .WithValidationConfiguration(new FormMockValidationConfiguration());

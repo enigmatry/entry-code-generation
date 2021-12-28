@@ -43,6 +43,8 @@ export class FormGeneratedComponent implements OnInit {
 
                 @Input() formStatusOptions: any[] = [{ value: null, displayName: $localize `:@@empty-option.none:None` }, { value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
                 @Input() formStatusOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName' };
+                @Input() mockRadioOptions: any[] = [{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
+                @Input() mockRadioOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName' };
             private categoryIdOptions$ = new BehaviorSubject<any[]>([]);
                 @Input()
                 get categoryIdOptions(): any[] { return this.categoryIdOptions$.value; }
@@ -53,8 +55,6 @@ export class FormGeneratedComponent implements OnInit {
                 get typesOptions(): any[] { return this.typesOptions$.value; }
                 set typesOptions(value: any[]) { this.typesOptions$.next(value); }
                 @Input() typesOptionsConfiguration: SelectConfiguration = {};
-                @Input() mockRadioOptions: any[] = [{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
-                @Input() mockRadioOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName' };
 
  _isReadonly: boolean;
   form = new FormGroup({});
@@ -190,52 +190,6 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
             },
         },
         {
-        key: 'email1',
-        type: this.resolveFieldType('input', false),
-        className: '',
-        hideExpression: this.fieldsHideExpressions?.email1 ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.email1 ? this.fieldsDisableExpressions.email1(model) : false)),
-        },
-        templateOptions: {
-        label: $localize `:@@test.form.email1.label:Email 1`,
-        placeholder: $localize `:@@test.form.email1.placeholder:Email 1`,
-        description: '',
-        hidden: !true,
-            pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
-maxLength: 50,
-typeFormatDef:undefined
-        },
-            validation: {
-            messages: {
-pattern: (err, field) => $localize `:@@test.form.email1.pattern:CUSTOM_VALIDATION_MESSAGE`
-            }
-            },
-        },
-        {
-        key: 'email2',
-        type: this.resolveFieldType('input', false),
-        className: '',
-        hideExpression: this.fieldsHideExpressions?.email2 ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.email2 ? this.fieldsDisableExpressions.email2(model) : false)),
-        },
-        templateOptions: {
-        label: $localize `:@@test.form.email2.label:Email 2`,
-        placeholder: $localize `:@@test.form.email2.placeholder:Email 2`,
-        description: '',
-        hidden: !true,
-            pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
-maxLength: 50,
-typeFormatDef:undefined
-        },
-            validation: {
-            messages: {
-pattern: (err, field) => $localize `:@@validators.pattern.emailAddress:Invalid email address format`
-            }
-            },
-        },
-        {
         key: 'formStatus',
         type: this.resolveFieldType('select', false),
         className: '',
@@ -250,6 +204,25 @@ pattern: (err, field) => $localize `:@@validators.pattern.emailAddress:Invalid e
             options: this.formStatusOptions,
             valueProp: this.formStatusOptionsConfiguration.valueProperty,
             labelProp: this.formStatusOptionsConfiguration.labelProperty,
+        hidden: !true,
+        typeFormatDef:undefined
+        },
+        },
+        {
+        key: 'mockRadio',
+        type: this.resolveFieldType('radio', false),
+        className: '',
+        hideExpression: this.fieldsHideExpressions?.mockRadio ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.mockRadio ? this.fieldsDisableExpressions.mockRadio(model) : false)),
+        },
+        templateOptions: {
+        label: $localize `:@@test.form.mock-radio.label:Radio`,
+        placeholder: $localize `:@@test.form.mock-radio.placeholder:Radio`,
+        description: '',
+            options: this.mockRadioOptions,
+            valueProp: this.mockRadioOptionsConfiguration.valueProperty,
+            labelProp: this.mockRadioOptionsConfiguration.labelProperty,
         hidden: !true,
         typeFormatDef:undefined
         },
@@ -294,25 +267,51 @@ pattern: (err, field) => $localize `:@@validators.pattern.emailAddress:Invalid e
         typeFormatDef:undefined
         },
         },
-            { key: 'subTypeId' },
         {
-        key: 'mockRadio',
-        type: this.resolveFieldType('radio', false),
+        key: 'email1',
+        type: this.resolveFieldType('input', false),
         className: '',
-        hideExpression: this.fieldsHideExpressions?.mockRadio ?? false,
+        hideExpression: this.fieldsHideExpressions?.email1 ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.mockRadio ? this.fieldsDisableExpressions.mockRadio(model) : false)),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.email1 ? this.fieldsDisableExpressions.email1(model) : false)),
         },
         templateOptions: {
-        label: $localize `:@@test.form.mock-radio.label:Radio`,
-        placeholder: $localize `:@@test.form.mock-radio.placeholder:Radio`,
+        label: $localize `:@@test.form.email1.label:Email 1`,
+        placeholder: $localize `:@@test.form.email1.placeholder:Email 1`,
         description: '',
-            options: this.mockRadioOptions,
-            valueProp: this.mockRadioOptionsConfiguration.valueProperty,
-            labelProp: this.mockRadioOptionsConfiguration.labelProperty,
         hidden: !true,
-        typeFormatDef:undefined
+            pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+maxLength: 50,
+typeFormatDef:undefined
         },
+            validation: {
+            messages: {
+pattern: (err, field) => $localize `:@@test.form.email1.pattern:CUSTOM_VALIDATION_MESSAGE`
+            }
+            },
+        },
+        {
+        key: 'email2',
+        type: this.resolveFieldType('input', false),
+        className: '',
+        hideExpression: this.fieldsHideExpressions?.email2 ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.email2 ? this.fieldsDisableExpressions.email2(model) : false)),
+        },
+        templateOptions: {
+        label: $localize `:@@test.form.email2.label:Email 2`,
+        placeholder: $localize `:@@test.form.email2.placeholder:Email 2`,
+        description: '',
+        hidden: !true,
+            pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+maxLength: 50,
+typeFormatDef:undefined
+        },
+            validation: {
+            messages: {
+pattern: (err, field) => $localize `:@@validators.pattern.emailAddress:Invalid email address format`
+            }
+            },
         },
     ];
   }

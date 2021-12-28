@@ -11,6 +11,8 @@ namespace Enigmatry.CodeGeneration.Configuration.Builder
         private readonly ApiClientInfoBuilder _apiClientInfoBuilder;
         private readonly FeatureInfoBuilder _featureInfoBuilder;
         private string? _translationId;
+        private bool _includeUnconfiguredProperties = true;
+        private OrderByType _orderByType = OrderByType.Model;
 
         public ComponentInfoBuilder(Type modelType)
         {
@@ -40,6 +42,18 @@ namespace Enigmatry.CodeGeneration.Configuration.Builder
             return this;
         }
 
+        public ComponentInfoBuilder IncludeUnconfiguredProperties(bool value = true)
+        {
+            _includeUnconfiguredProperties = value;
+            return this;
+        }
+
+        public ComponentInfoBuilder OrderBy(OrderByType orderByType)
+        {
+            _orderByType = orderByType;
+            return this;
+        }
+
         public RoutingInfoBuilder Routing() => _routingInfoBuilder;
 
         public ApiClientInfoBuilder ApiClient() => _apiClientInfoBuilder;
@@ -48,7 +62,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Builder
 
         public ComponentInfo Build()
         {
-            return new ComponentInfo(_componentName, _modelType, 
+            return new ComponentInfo(_componentName, _modelType, _includeUnconfiguredProperties, _orderByType,
                 _routingInfoBuilder.Build(), _apiClientInfoBuilder.Build(), _featureInfoBuilder.Build(), _translationId);
         }
     }

@@ -26,7 +26,8 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         public FormControlWrappers Wrappers { get; set; } = FormControlWrappers.Default;
         public abstract string FormlyType { get; }
         public IPropertyFormatter? Formatter { get; set; }
-        
+        public bool Ignore { get; set; }
+
         public string? GetAppearance() => Appearance switch
         {
             FormControlAppearance.Standard => "standard",

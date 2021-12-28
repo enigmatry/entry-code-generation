@@ -89,9 +89,9 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
 
         public IList<FormControl> BuildFormControls(ComponentInfo componentInfo)
         {
-            return _controlBuilders.Select(_ => _.Build(componentInfo)).ToList();
+            return _controlBuilders.Select(_ => _.Build(componentInfo)).Where(_ => !_.Ignore).ToList();
         }
-
+        
         public override FormControl Build(ComponentInfo componentInfo)
         {
             var formControlGroup = new FormControlGroup { WrapperElement = _wrapperElement, FormControls = BuildFormControls(componentInfo) };
@@ -102,6 +102,11 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         public IControlBuilder? GetControlBuilder(PropertyInfo propertyInfo)
         {
             return _controlBuilders.FirstOrDefault(builder => builder.Has(propertyInfo));
+        }
+
+        public bool HasControlBuilder(PropertyInfo propertyInfo)
+        {
+            return _controlBuilders.Any(builder => builder.Has(propertyInfo));
         }
 
         private TBuilder GetOrCreateBuilder<TBuilder>(PropertyInfo propertyInfo, Func<PropertyInfo, TBuilder> creator) where TBuilder : IControlBuilder
