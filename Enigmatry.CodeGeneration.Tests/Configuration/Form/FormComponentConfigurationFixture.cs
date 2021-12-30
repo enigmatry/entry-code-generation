@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Enigmatry.BuildingBlocks.Validation;
+using Enigmatry.CodeGeneration.Configuration;
 using Enigmatry.CodeGeneration.Configuration.Form;
 using FluentAssertions;
 using JetBrains.Annotations;
@@ -11,34 +12,90 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.Form
     [Category("unit")]
     public class FormComponentConfigurationFixture
     {
+        private FormConfiguration _configuration = null!;
+        private FormComponentBuilder<ProjectDetails> _builder = null!;
+
+        [SetUp]
+        public void Setup()
+        {
+            _configuration = new FormConfiguration();
+            _builder = new FormComponentBuilder<ProjectDetails>();
+        }
+
         [Test]
         public void TestFormComponentConfiguration()
         {
-            var configuration = new Configuration();
-            var builder = new FormComponentBuilder<ProjectDetails>();
+            _configuration.Configure(_builder);
+            var formComponent = _builder.Build();
 
-            configuration.Configure(builder);
-            var componentModel = builder.Build();
+            formComponent.Should().NotBeNull();
+            formComponent.ComponentInfo.Name.Should().Be("ProjectDetails");
+            formComponent.ComponentInfo.Feature.Name.Should().Be("Projects");
 
-            componentModel.Should().NotBeNull();
-            componentModel.ComponentInfo.Name.Should().Be("ProjectDetails");
-            componentModel.ComponentInfo.Feature.Name.Should().Be("Projects");
+            formComponent.FormControls.Count.Should().Be(5);
 
-            componentModel.FormControls.Count.Should().Be(5);
-
-            var titleFormControl = componentModel.FormControls
+            var titleFormControl = formComponent.FormControls
                 .Single(x => x.PropertyName == nameof(ProjectDetails.Title).ToLowerInvariant());
+
             titleFormControl.ValidationRules.Count.Should().Be(1);
             titleFormControl.ValidationRules.Single()
                 .FormlyRuleName
                 .Should().Be("maxLength");
-            var detailsFormControl = componentModel.FormControls
+
+            var detailsFormControl = formComponent.FormControls
                 .Single(x => x.PropertyName == nameof(ProjectDetails.Description).ToLowerInvariant());
             detailsFormControl.ValidationRules.Count.Should().Be(1);
             detailsFormControl.ValidationRules.Single()
                 .FormlyRuleName
                 .Should().Be("maxLength");
+        }
 
+        [Test]
+        public void TestExcludedUnconfiguredProperties()
+        {
+            _builder.Component().IncludeUnconfiguredProperties(false);
+
+            _configuration.Configure(_builder);
+            var formComponent = _builder.Build();
+
+            formComponent.Should().NotBeNull();
+            formComponent.FormControls.Count.Should().Be(4);
+        }
+
+        [Test]
+        public void TestOrderByModel()
+        {
+            _builder.Component().OrderBy(OrderByType.Model);
+
+            _configuration.Configure(_builder);
+            var formComponent = _builder.Build();
+
+            formComponent.Should().NotBeNull();
+            formComponent.FormControls.Count.Should().Be(5);
+
+            formComponent.FormControls.ElementAt(0).PropertyName.ToLower().Should().Be(nameof(ProjectDetails.Id).ToLower());
+            formComponent.FormControls.ElementAt(1).PropertyName.ToLower().Should().Be(nameof(ProjectDetails.Title).ToLower());
+            formComponent.FormControls.ElementAt(2).PropertyName.ToLower().Should().Be(nameof(ProjectDetails.Description).ToLower());
+            formComponent.FormControls.ElementAt(3).PropertyName.ToLower().Should().Be(nameof(ProjectDetails.StartDate).ToLower());
+            formComponent.FormControls.ElementAt(4).PropertyName.ToLower().Should().Be(nameof(ProjectDetails.EndDate).ToLower());
+        }
+
+        [Test]
+        public void TestOrderByConfiguration()
+        {
+            _builder.Component().OrderBy(OrderByType.Configuration);
+
+            _configuration.Configure(_builder);
+            var formComponent = _builder.Build();
+
+            formComponent.Should().NotBeNull();
+            formComponent.FormControls.Count.Should().Be(5);
+
+            formComponent.FormControls.ElementAt(0).PropertyName.ToLower().Should().Be(nameof(ProjectDetails.Id).ToLower());
+            formComponent.FormControls.ElementAt(1).PropertyName.ToLower().Should().Be(nameof(ProjectDetails.Title).ToLower());
+            formComponent.FormControls.ElementAt(2).PropertyName.ToLower().Should().Be(nameof(ProjectDetails.StartDate).ToLower());
+            formComponent.FormControls.ElementAt(3).PropertyName.ToLower().Should().Be(nameof(ProjectDetails.EndDate).ToLower());
+            formComponent.FormControls.ElementAt(4).PropertyName.ToLower().Should().Be(nameof(ProjectDetails.Description).ToLower());
         }
 
         [UsedImplicitly]
@@ -63,7 +120,7 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.Form
             }
         }
 
-        private class Configuration : IFormComponentConfiguration<ProjectDetails>
+        private class FormConfiguration : IFormComponentConfiguration<ProjectDetails>
         {
             public void Configure(FormComponentBuilder<ProjectDetails> builder)
             {
@@ -77,11 +134,11 @@ namespace Enigmatry.CodeGeneration.Tests.Configuration.Form
                     .WithLabel("Title")
                     .WithPlaceholder("Title");
 
-                builder.FormControl(x => x.StartDate)
-                    .WithLabel("Start")
-                    .WithPlaceholder("Start");
+                builder.DatepickerFormControl(x => x.StartDate);
+                builder.DatepickerFormControl(x => x.EndDate);
 
-                builder.WithValidationConfiguration(new ProjectDetailsValidation());            }
+                builder.WithValidationConfiguration(new ProjectDetailsValidation());
+            }
         }
     }
 }
