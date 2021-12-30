@@ -67,6 +67,8 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 new IntroMessage("You want me to generate THAT?"),
                 new IntroMessage("I can see sharp"),
                 new IntroMessage("01101000 01100101 01101100 01101100 01101111!"),
+                new IntroMessage("#NOPREASURE"),
+                new IntroMessage("You are my favorite developer ;)"),
                 new IntroMessage("Running infinite loops ..."),
                 new IntroMessage("Booooring"),
                 new IntroMessage("Are you ready to rumble?"),
@@ -74,6 +76,11 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 new IntroMessage("\"Winamp, it really whips the llama's ass!\""),
                 new IntroMessage("Log your hours every day!"),
                 new IntroMessage("YOLO"),
+                new IntroMessage("I like you very much"),
+                new IntroMessage("The clock is ticking ..."),
+                new IntroMessage("Totally awesome"),
+                new IntroMessage("This will take a while"),
+                new IntroMessage("You made a mistake!"),
                 new IntroMessage("Press play"),
                 new IntroMessage("The cake is a lie."),
                 new IntroMessage("Abort the mission!"),
@@ -171,6 +178,10 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                     .WithType(IntroMessageType.Important)
                     .WithForegroundColor(ConsoleColor.Red)
                     .WithCondition(() => DateTime.Now.IsNewYearsEve()),
+                new IntroMessage("It is the first day of the year. Make a new year's resolution ;)")
+                    .WithType(IntroMessageType.Important)
+                    .WithForegroundColor(ConsoleColor.Yellow)
+                    .WithCondition(() => DateTime.Now.IsFirstDayOfYear()),
                 new IntroMessage("Happy birthday Alan Turing!")
                     .WithType(IntroMessageType.Important)
                     .WithCondition(() => new DateTime(1912, 6, 23).IsBirthDay()),

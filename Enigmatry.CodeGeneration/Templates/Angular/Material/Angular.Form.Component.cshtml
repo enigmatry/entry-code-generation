@@ -59,14 +59,8 @@ import { BehaviorSubject } from 'rxjs';
         @:label: @Html.Localize(control.Label, _options.EnableI18N),
         @:placeholder: @Html.Localize(control.Placeholder, _options.EnableI18N),
         @:description: @Html.Localize(control.Hint, _options.EnableI18N),
-        @if (control.Appearance != null)
-        {
-            @:appearance: '@Html.Raw(control.GetAppearance())',
-        }
-        @if (control.FloatLabel != null)
-        {
-            @:floatLabel: '@Html.Raw(control.GetFloatLabel())',
-        }
+        @Html.Appearance(control.Appearance)
+        @Html.FloatLabel(control.FloatLabel)
         @if (control is SelectControlBase select)
         {
             @:options: this.@(select.PropertyName)Options@(select.Options.HasDynamicValues ? "$" : String.Empty),
@@ -123,6 +117,7 @@ import { BehaviorSubject } from 'rxjs';
         @:{
         @:type: '@Html.Raw(type)',
         @:fieldGroupClassName: '@Html.Raw(controlGroup.ClassName)',
+        CreateCustomWrappers(controlGroup);
         @:templateOptions: {
         @:label: @Html.Localize(controlGroup.Label, _options.EnableI18N),
         @:placeholder: @Html.Localize(controlGroup.Placeholder, _options.EnableI18N),
@@ -152,29 +147,37 @@ import { BehaviorSubject } from 'rxjs';
                 @:@@Input()
                 @:get @(select.PropertyName)Options(): any[] { return this.@(select.PropertyName)Options$.value; }
                 @:set @(select.PropertyName)Options(value: any[]) { this.@(select.PropertyName)Options$.next(value); }
-            }
-            else
-            {
-                @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => $"{{ value: {option.Value ?? "null"}, displayName: {(@Html.Localize(option.DisplayName, _options.EnableI18N))} }}");
-            }
-
-            if (select.Options.HasCustomValueAndDisplayKeys)
-            {
-                @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = { valueProperty: '@(select.Options.OptionValueKey)', labelProperty: '@(select.Options.OptionDisplayKey)' };
-            }
-            else
-            {
-                @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = @(@Html.Raw(select.Options.DefaultOptionsAsString));
-            }
         }
-
-        void CreateWrappers(FormControl control)
+        else
         {
-            if (control.Wrappers.CustomWrappers.Any())
-            {
-                @:wrappers: @Html.JsStringArray(control.Wrappers.AllWrappers),
-            }
+            @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => $"{{ value: {option.Value ?? "null"}, displayName: {(@Html.Localize(option.DisplayName, _options.EnableI18N))} }}");
         }
+
+        if (select.Options.HasCustomValueAndDisplayKeys)
+        {
+            @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = { valueProperty: '@(select.Options.OptionValueKey)', labelProperty: '@(select.Options.OptionDisplayKey)' };
+        }
+        else
+        {
+            @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = @(@Html.Raw(select.Options.DefaultOptionsAsString));
+        }
+    }
+
+    void CreateWrappers(FormControl control)
+    {
+        if (control.Wrappers.CustomWrappers.Any())
+        {
+            @:wrappers: @Html.JsStringArray(control.Wrappers.AllWrappers),
+        }
+    }
+
+    void CreateCustomWrappers(FormControl control)
+    {
+        if (control.Wrappers.CustomWrappers.Any())
+        {
+            @:wrappers: @Html.JsStringArray(control.Wrappers.CustomWrappers),
+        }
+    }
 }
 
 @@Component({

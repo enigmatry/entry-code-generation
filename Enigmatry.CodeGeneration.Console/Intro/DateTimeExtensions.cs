@@ -10,6 +10,9 @@ namespace Enigmatry.CodeGeneration.Console.Intro
         public static bool IsNewYearsEve(this DateTime date) =>
             date.ToString("dd/MM") == "31/12";
 
+        public static bool IsFirstDayOfYear(this DateTime date) =>
+            date.ToString("dd/MM") == "1/1";
+
         public static bool IsBirthDay(this DateTime date) =>
             DateTime.Now.ToString("dd/MM") == date.ToString("dd/MM");
 

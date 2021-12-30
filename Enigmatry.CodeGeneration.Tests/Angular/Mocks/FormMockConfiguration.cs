@@ -14,10 +14,12 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 .BelongsToFeature("Test")
                 .OrderBy(OrderByType.Configuration);
 
-            builder.FormControl(x => x.Id)
+            builder
+                .FormControl(x => x.Id)
                 .IsVisible(false);
 
-            builder.FormControl(x => x.Name)
+            builder
+                .FormControl(x => x.Name)
                 .WithLabel("Name")
                 .WithPlaceholder("Some / Name")
                 .WithValidator("UniqueName")
@@ -27,7 +29,8 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 .WithAppearance(FormControlAppearance.Outline)
                 .WithFloatLabel(FormControlFloatLabel.Always);
 
-            builder.TextareaFormControl(x => x.Description)
+            builder
+                .TextareaFormControl(x => x.Description)
                 .WithLabel("Some Description")
                 .WithValidator("ValidDescription");
 
@@ -79,8 +82,20 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                     options.WithSelectAllOption("SelectAll");
                 });
 
-            builder.FormControl(x => x.SubTypeId)
+            builder
+                .FormControl(x => x.SubTypeId)
                 .Ignore();
+
+            builder
+                .FormControl(x => x.Email1);
+
+            builder
+                .FormControl(x => x.Email2);
+
+            var group = builder
+                .FormControlGroup("Group Name")
+                .CreateUiSection("group-type")
+                .WithCustomWrapper("group-wrapper");
 
             builder
                 .WithValidationConfiguration(new FormMockValidationConfiguration());

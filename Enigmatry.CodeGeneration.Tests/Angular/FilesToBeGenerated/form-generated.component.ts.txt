@@ -313,6 +313,19 @@ pattern: (err, field) => $localize `:@@validators.pattern.emailAddress:Invalid e
             }
             },
         },
+        {
+            type: 'group-type',
+            fieldGroupClassName: '',
+            wrappers: ['group-wrapper'],
+            templateOptions: {
+                label: $localize `:@@test.form.group-name.label:Group name`,
+                placeholder: $localize `:@@test.form.group-name.placeholder:Group name`,
+                disabled: this.isReadonly || false,
+                description: ''
+            },
+            fieldGroup:[
+            ]
+        },
     ];
   }
 }

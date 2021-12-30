@@ -94,7 +94,10 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         
         public override FormControl Build(ComponentInfo componentInfo)
         {
-            var formControlGroup = new FormControlGroup { WrapperElement = _wrapperElement, FormControls = BuildFormControls(componentInfo) };
+            var formControlGroup = new FormControlGroup {
+                WrapperElement = _wrapperElement,
+                FormControls = BuildFormControls(componentInfo)
+            };
 
             return Build(componentInfo, formControlGroup);
         }

@@ -28,22 +28,6 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         public IPropertyFormatter? Formatter { get; set; }
         public bool Ignore { get; set; }
 
-        public string? GetAppearance() => Appearance switch
-        {
-            FormControlAppearance.Standard => "standard",
-            FormControlAppearance.Fill => "fill",
-            FormControlAppearance.Outline => "outline",
-            FormControlAppearance.Legacy => "legacy",
-            _ => null
-        };
-
-        public string? GetFloatLabel() => FloatLabel switch
-        {
-            FormControlFloatLabel.Never => "never",
-            FormControlFloatLabel.Always => "always",
-            _ => null
-        };
-
         public virtual void ApplyValidationConfiguration(IEnumerable<IFormlyValidationRule> validationRules)
         {
             ValidationRules = validationRules
