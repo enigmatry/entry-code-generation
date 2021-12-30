@@ -97,7 +97,7 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
             builder
                 .FormControl(x => x.Email2);
 
-            var group = builder
+            _ = builder
                 .FormControlGroup("Group Name")
                 .CreateUiSection("group-type")
                 .WithCustomWrapper("group-wrapper");
