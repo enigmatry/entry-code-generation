@@ -109,7 +109,12 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
 
         public bool HasControlBuilder(PropertyInfo propertyInfo)
         {
-            return _controlBuilders.Any(builder => builder.Has(propertyInfo));
+            return Has(propertyInfo);
+        }
+
+        public override bool Has(PropertyInfo propertyInfo)
+        {
+            return PropertyInfo != null && PropertyInfo == propertyInfo || _controlBuilders.Any(builder => builder.Has(propertyInfo));
         }
 
         private TBuilder GetOrCreateBuilder<TBuilder>(PropertyInfo propertyInfo, Func<PropertyInfo, TBuilder> creator) where TBuilder : IControlBuilder

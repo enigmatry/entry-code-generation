@@ -86,6 +86,11 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 .FormControl(x => x.SubTypeId)
                 .Ignore();
 
+            var group = builder
+                .FormControlGroup("Group Name")
+                .CreateUiSection("group-type")
+                .WithCustomWrapper("group-wrapper");
+
             builder
                 .FormControl(x => x.Email1);
 

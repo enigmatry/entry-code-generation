@@ -268,6 +268,19 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
         },
         },
         {
+            type: 'group-type',
+            fieldGroupClassName: '',
+            wrappers: ['group-wrapper'],
+            templateOptions: {
+                label: $localize `:@@test.form.group-name.label:Group name`,
+                placeholder: $localize `:@@test.form.group-name.placeholder:Group name`,
+                disabled: this.isReadonly || false,
+                description: ''
+            },
+            fieldGroup:[
+            ]
+        },
+        {
         key: 'email1',
         type: this.resolveFieldType('input', false),
         className: '',

@@ -98,17 +98,17 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
         {
             var formControls = _formGroup.BuildFormControls(componentInfo);
 
+            if (componentInfo.IncludeUnconfiguredProperties)
+            {
+                var unconfiguredFormControls = BuildUnconfiguredFormControls(componentInfo);
+                formControls = formControls.Concat(unconfiguredFormControls).ToList();
+            }
+
             if (formControls.OfType<FormControlGroup>().Any())
             {
                 // When using FormControlGroups
                 // we assume that configuration will control the order (OrderBy -> Configuration)
                 return formControls;
-            }
-
-            if (componentInfo.IncludeUnconfiguredProperties)
-            {
-                var unconfiguredFormControls = BuildUnconfiguredFormControls(componentInfo);
-                formControls = formControls.Concat(unconfiguredFormControls).ToList();
             }
 
             if (componentInfo.OrderByType == OrderByType.Model)

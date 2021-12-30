@@ -54,7 +54,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         /// </summary>
         /// <param name="propertyInfo">property info</param>
         /// <returns></returns>
-        public bool Has(PropertyInfo propertyInfo)
+        public virtual bool Has(PropertyInfo propertyInfo)
         {
             return PropertyInfo != null && PropertyInfo == propertyInfo;
         }
