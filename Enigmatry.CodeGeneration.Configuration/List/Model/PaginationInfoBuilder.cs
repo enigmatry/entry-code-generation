@@ -6,8 +6,8 @@ namespace Enigmatry.CodeGeneration.Configuration.List.Model
     {
         private bool _showPaginator = true;
         private bool _showFirstLastPageButtons = true;
-        private int _pageSize = 10;
-        private IEnumerable<int> _pageSizeOptions = new[] {10, 50, 100};
+        private int _pageSize = 20;
+        private IEnumerable<int> _pageSizeOptions = new[] {20, 50, 100};
         private bool _showPageSize = true;
 
         public PaginationInfoBuilder ShowPaginator(bool value)
