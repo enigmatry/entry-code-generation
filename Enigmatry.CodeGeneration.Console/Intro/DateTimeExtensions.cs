@@ -8,10 +8,10 @@ namespace Enigmatry.CodeGeneration.Console.Intro
             date.DayOfWeek == DayOfWeek.Sunday || date.DayOfWeek == DayOfWeek.Saturday;
 
         public static bool IsNewYearsEve(this DateTime date) =>
-            date.ToString("dd/MM") == "31/12";
+            date.Day == 31 && date.Month == 12;
 
         public static bool IsFirstDayOfYear(this DateTime date) =>
-            date.ToString("dd/MM") == "1/1";
+            date.Day == 1 && date.Month == 1;
 
         public static bool IsBirthDay(this DateTime date) =>
             DateTime.Now.ToString("dd/MM") == date.ToString("dd/MM");
