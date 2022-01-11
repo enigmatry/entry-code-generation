@@ -11,6 +11,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         public string OptionValueKey { get; set; } = String.Empty;
         public string OptionDisplayKey { get; set; } = String.Empty;
         public SelectOption? EmptyOption { get; set; }
+        public string OptionSortKey { get; set; } = String.Empty;
         public SelectOption? SelectAllOption { get; set; }
         public bool HasDynamicValues { get; set; }
         public bool HasFixedValues => FixedOptions.Any();
@@ -18,7 +19,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
 
         public string DefaultOptionsAsString =>
             HasFixedValues
-                ? $"{{ valueProperty: '{nameof(SelectOption.Value).Camelize()}', labelProperty: '{nameof(SelectOption.DisplayName).Camelize()}' }}"
+                ? $"{{ valueProperty: '{nameof(SelectOption.Value).Camelize()}', labelProperty: '{nameof(SelectOption.DisplayName).Camelize()}', sortProperty: '{OptionSortKey.Camelize()}' }}"
                 : "{}";
     }
 }

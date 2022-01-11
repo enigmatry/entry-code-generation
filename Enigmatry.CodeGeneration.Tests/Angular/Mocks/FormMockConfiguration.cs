@@ -56,6 +56,7 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 {
                     options.WithFixedValues<EnumMock>();
                     options.WithEmptyOption("None");
+                    options.WithSortKey("displayName");
                 });
 
             builder
@@ -71,6 +72,7 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                     options.WithDynamicValues();
                     options.WithValueKey("id");
                     options.WithDisplayKey("categoryName");
+                    options.WithSortKey("categoryName");
                 });
 
             builder
@@ -80,6 +82,7 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 {
                     options.WithDynamicValues();
                     options.WithSelectAllOption("SelectAll");
+                    options.WithSortKey("value");
                 });
 
             builder

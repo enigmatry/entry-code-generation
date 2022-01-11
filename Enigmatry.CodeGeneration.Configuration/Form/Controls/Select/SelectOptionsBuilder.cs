@@ -11,6 +11,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         private IEnumerable<SelectOption> _fixedValues = new List<SelectOption>();
         private string _valueKey = String.Empty;
         private string _displayKey = String.Empty;
+        private string _sortKey = String.Empty;
         private bool _hasDynamicValues;
         private SelectOption? _emptyOption;
         private SelectOption? _selectAllOption;
@@ -43,6 +44,12 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
             return this;
         }
 
+        public SelectOptionsBuilder WithSortKey(string sortKey)
+        {
+            _sortKey = sortKey.Camelize();
+            return this;
+        }
+
         public SelectOptionsBuilder WithDynamicValues()
         {
             _hasDynamicValues = true;
@@ -68,6 +75,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
                 FixedOptions = GetFixedValuesWithEmptyOption(),
                 OptionValueKey = _valueKey,
                 OptionDisplayKey = _displayKey,
+                OptionSortKey = _sortKey,
                 HasDynamicValues = _hasDynamicValues,
                 EmptyOption = _emptyOption,
                 SelectAllOption = _selectAllOption

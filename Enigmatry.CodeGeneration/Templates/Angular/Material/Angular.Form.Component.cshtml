@@ -6,12 +6,13 @@
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
 @model Enigmatry.CodeGeneration.Configuration.Form.FormComponentModel;
 @inject CodeGeneratorOptions _options;
-import { Component, EventEmitter, Inject, Input, OnInit, Optional, Output, TemplateRef } from '@@angular/core';
+import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Optional, Output, TemplateRef } from '@@angular/core';
 import { FormGroup } from '@@angular/forms';
 import { FormlyFieldConfig } from '@@ngx-formly/core';
 import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPath';
-import { IFieldExpressionDictionary, SelectConfiguration, ENIGMATRY_FIELD_TYPE_RESOLVER, FieldTypeResolver } from '@@enigmatry/angular-building-blocks/form';
-import { BehaviorSubject } from 'rxjs';
+import { IFieldExpressionDictionary, SelectConfiguration, ENIGMATRY_FIELD_TYPE_RESOLVER, FieldTypeResolver, sortOptions } from '@@enigmatry/angular-building-blocks/form';
+import { BehaviorSubject, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @functions {
 
@@ -63,7 +64,7 @@ import { BehaviorSubject } from 'rxjs';
         @Html.FloatLabel(control.FloatLabel)
         @if (control is SelectControlBase select)
         {
-            @:options: this.@(select.PropertyName)Options@(select.Options.HasDynamicValues ? "$" : String.Empty),
+            @:options: @(select.Options.HasDynamicValues ? String.Empty : "of(")this.@(select.PropertyName)Options@(select.Options.HasDynamicValues ? "$" : ")").pipe(map(opts => sortOptions(opts, this.@(select.PropertyName)OptionsConfiguration.valueProperty, this.@(select.PropertyName)OptionsConfiguration.sortProperty, this._localeId))),
             @:valueProp: this.@(select.PropertyName)OptionsConfiguration.valueProperty,
             @:labelProp: this.@(select.PropertyName)OptionsConfiguration.labelProperty,
         }
@@ -147,37 +148,37 @@ import { BehaviorSubject } from 'rxjs';
                 @:@@Input()
                 @:get @(select.PropertyName)Options(): any[] { return this.@(select.PropertyName)Options$.value; }
                 @:set @(select.PropertyName)Options(value: any[]) { this.@(select.PropertyName)Options$.next(value); }
-        }
-        else
-        {
-            @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => $"{{ value: {option.Value ?? "null"}, displayName: {(@Html.Localize(option.DisplayName, _options.EnableI18N))} }}");
+            }
+            else
+            {
+                @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => $"{{ value: {option.Value ?? "null"}, displayName: {(@Html.Localize(option.DisplayName, _options.EnableI18N))} }}");
+            }
+
+            if (select.Options.HasCustomValueAndDisplayKeys)
+            {
+                @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = { valueProperty: '@(select.Options.OptionValueKey)', labelProperty: '@(select.Options.OptionDisplayKey)', sortProperty: '@(select.Options.OptionSortKey)' };
+            }
+            else
+            {
+                @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = @(@Html.Raw(select.Options.DefaultOptionsAsString));
+            }
         }
 
-        if (select.Options.HasCustomValueAndDisplayKeys)
+        void CreateWrappers(FormControl control)
         {
-            @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = { valueProperty: '@(select.Options.OptionValueKey)', labelProperty: '@(select.Options.OptionDisplayKey)' };
+            if (control.Wrappers.CustomWrappers.Any())
+            {
+                @:wrappers: @Html.JsStringArray(control.Wrappers.AllWrappers),
+            }
         }
-        else
-        {
-            @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = @(@Html.Raw(select.Options.DefaultOptionsAsString));
-        }
-    }
 
-    void CreateWrappers(FormControl control)
-    {
-        if (control.Wrappers.CustomWrappers.Any())
+        void CreateCustomWrappers(FormControl control)
         {
-            @:wrappers: @Html.JsStringArray(control.Wrappers.AllWrappers),
+            if (control.Wrappers.CustomWrappers.Any())
+            {
+                @:wrappers: @Html.JsStringArray(control.Wrappers.CustomWrappers),
+            }
         }
-    }
-
-    void CreateCustomWrappers(FormControl control)
-    {
-        if (control.Wrappers.CustomWrappers.Any())
-        {
-            @:wrappers: @Html.JsStringArray(control.Wrappers.CustomWrappers),
-        }
-    }
 }
 
 @@Component({
@@ -208,11 +209,13 @@ export class @Model.AngularComponentName() implements OnInit {
 
 @{CreateInputsForSelectControlOptions();}
 
- _isReadonly: boolean;
+  _isReadonly: boolean;
   form = new FormGroup({});
   fields: FormlyFieldConfig[] = [];
 
-  constructor(@@Optional() @@Inject(ENIGMATRY_FIELD_TYPE_RESOLVER) private _fieldTypeResolver: FieldTypeResolver) { }
+  constructor(
+    @@Inject(LOCALE_ID) private _localeId: string,
+    @@Optional() @@Inject(ENIGMATRY_FIELD_TYPE_RESOLVER) private _fieldTypeResolver: FieldTypeResolver) { }
 
   ngOnInit(): void {
     this.fields = this.initializeFields();
