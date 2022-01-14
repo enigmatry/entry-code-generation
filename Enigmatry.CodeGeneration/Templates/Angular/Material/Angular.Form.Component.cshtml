@@ -62,6 +62,11 @@ import { map } from 'rxjs/operators';
         @:description: @Html.Localize(control.Hint, _options.EnableI18N),
         @Html.Appearance(control.Appearance)
         @Html.FloatLabel(control.FloatLabel)
+        @if (control is ButtonFormControl button)
+        {
+            @:text: @Html.Localize(button.Text, _options.EnableI18N),
+            @:onClick: ($event: any) => this.buttonClick.emit('@control.PropertyName'),
+        }
         @if (control is SelectControlBase select)
         {
             @:options: @(select.Options.HasDynamicValues ? String.Empty : "of(")this.@(select.PropertyName)Options@(select.Options.HasDynamicValues ? "$" : ")").pipe(map(opts => sortOptions(opts, this.@(select.PropertyName)OptionsConfiguration.valueProperty, this.@(select.PropertyName)OptionsConfiguration.sortProperty, this._localeId))),
@@ -206,6 +211,7 @@ export class @Model.AngularComponentName() implements OnInit {
 
   @@Output() save = new EventEmitter@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>"))();
   @@Output() cancel = new EventEmitter@(Html.Raw("<void>"))();
+  @@Output() buttonClick = new EventEmitter@(Html.Raw("<string>"))();
 
 @{CreateInputsForSelectControlOptions();}
 

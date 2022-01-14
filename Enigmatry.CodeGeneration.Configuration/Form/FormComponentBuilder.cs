@@ -81,6 +81,11 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
             return _formGroup.FormControlGroup(name);
         }
 
+        public ButtonFormControlBuilder ButtonFormControl(string name)
+        {
+            return _formGroup.ButtonFormControl(name);
+        }
+
         public void WithValidationConfiguration(IHasFormlyValidationRules validationConfiguration)
         {
             _validationRules = validationConfiguration.ValidationRules;

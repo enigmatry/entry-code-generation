@@ -1,4 +1,5 @@
-﻿using Enigmatry.CodeGeneration.Configuration;
+﻿using System;
+using Enigmatry.CodeGeneration.Configuration;
 using Enigmatry.CodeGeneration.Configuration.Form;
 using Enigmatry.CodeGeneration.Configuration.Form.Controls;
 
@@ -17,6 +18,12 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
             builder
                 .FormControl(x => x.Id)
                 .IsVisible(false);
+
+            builder
+                .ButtonFormControl("ResetFormBtn")
+                .WithLabel(String.Empty)
+                .WithText("Reset")
+                .WithClassName("primary-button");
 
             builder
                 .FormControl(x => x.Name)

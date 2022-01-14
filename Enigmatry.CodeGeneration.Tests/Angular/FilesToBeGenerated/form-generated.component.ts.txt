@@ -40,6 +40,7 @@ export class FormGeneratedComponent implements OnInit {
 
   @Output() save = new EventEmitter<IFormMock>();
   @Output() cancel = new EventEmitter<void>();
+  @Output() buttonClick = new EventEmitter<string>();
 
                 @Input() formStatusOptions: any[] = [{ value: null, displayName: $localize `:@@empty-option.none:None` }, { value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
                 @Input() formStatusOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: 'displayName' };
@@ -80,6 +81,23 @@ export class FormGeneratedComponent implements OnInit {
   initializeFields(): FormlyFieldConfig[] {
     return [
             { key: 'id' },
+        {
+        key: 'resetFormBtn',
+        type: this.resolveFieldType('button', false),
+        className: 'primary-button',
+        hideExpression: this.fieldsHideExpressions?.resetFormBtn ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.resetFormBtn ? this.fieldsDisableExpressions.resetFormBtn(model) : false)),
+        },
+        templateOptions: {
+        label: '',
+        placeholder: '',
+        description: '',
+        text: $localize `:@@test.form.reset-form-btn.text:Reset`,
+        onClick: ($event: any) => this.buttonClick.emit('resetFormBtn'),
+        hidden: !true,
+        },
+        },
         {
         key: 'name',
         type: this.resolveFieldType('input', false),

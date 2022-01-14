@@ -87,6 +87,11 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
             return GetOrCreateBuilder(name, propertyName => new FormControlGroupBuilder<T>(propertyName));
         }
 
+        public ButtonFormControlBuilder ButtonFormControl(string name)
+        {
+            return GetOrCreateBuilder(name, propertyName => new ButtonFormControlBuilder(propertyName));
+        }
+
         public IList<FormControl> BuildFormControls(ComponentInfo componentInfo)
         {
             return _controlBuilders.Select(_ => _.Build(componentInfo)).Where(_ => !_.Ignore).ToList();
