@@ -1,5 +1,5 @@
-﻿using Enigmatry.CodeGeneration.Configuration;
-using Enigmatry.CodeGeneration.Configuration.Form;
+﻿using Enigmatry.CodeGeneration.Configuration.Form;
+using Enigmatry.CodeGeneration.Configuration.Form.Controls;
 using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 using Enigmatry.CodeGeneration.Tests.Angular.Mocks;
 using Humanizer;
@@ -26,7 +26,7 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.HtmlHelperExtensions
         [TestCase(nameof(FormMock.Description), ExpectedResult = "")]
         public string Appearance(string propertyName)
         {
-            var formControl = _formComponent.FormControls.Single(x => x.PropertyName == propertyName.Camelize());
+            var formControl = _formComponent.FormControlsOfType<FormControl>().Single(x => x.PropertyName == propertyName.Camelize());
             return _htmlHelper.Appearance(formControl.Appearance)?.ToString()?.Replace("\r\n", "") ?? "";
         }
 
@@ -34,7 +34,7 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.HtmlHelperExtensions
         [TestCase(nameof(FormMock.Description), ExpectedResult = "")]
         public string FloatLabel(string propertyName)
         {
-            var formControl = _formComponent.FormControls.Single(x => x.PropertyName == propertyName.Camelize());
+            var formControl = _formComponent.FormControlsOfType<FormControl>().Single(x => x.PropertyName == propertyName.Camelize());
             return _htmlHelper.FloatLabel(formControl.FloatLabel)?.ToString()?.Replace("\r\n", "") ?? "";
         }
     }

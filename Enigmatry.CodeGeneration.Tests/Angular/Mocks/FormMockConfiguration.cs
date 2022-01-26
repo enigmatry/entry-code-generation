@@ -14,7 +14,7 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 .HasName("Form")
                 .BelongsToFeature("Test")
                 .OrderBy(OrderByType.Configuration);
-
+            
             builder
                 .FormControl(x => x.Id)
                 .IsVisible(false);
@@ -25,7 +25,12 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 .WithText("Reset")
                 .WithClassName("primary-button");
 
-            builder
+            var formGroup = builder
+                .FormControlGroup("Group Name")
+                .CreateUiSection("group-type")
+                .WithCustomWrapper("group-wrapper");
+
+            formGroup
                 .FormControl(x => x.Name)
                 .WithLabel("Name")
                 .WithPlaceholder("Some / Name")
@@ -36,28 +41,28 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 .WithAppearance(FormControlAppearance.Outline)
                 .WithFloatLabel(FormControlFloatLabel.Always);
 
-            builder
+            formGroup
                 .TextareaFormControl(x => x.Description)
                 .WithLabel("Some Description")
                 .WithValidator("ValidDescription");
 
-            builder
+            formGroup
                 .FormControl(x => x.Date)
                 .WithLabel("Date")
                 .WithPlaceholder("Date")
                 .IsReadonly(true);
 
-            builder
+            formGroup
                 .FormControl(x => x.Money)
                 .WithLabel("Money")
                 .WithPlaceholder("Money");
 
-            builder
+            formGroup
                 .FormControl(x => x.Amount)
                 .WithLabel("Amount")
                 .WithPlaceholder("Amount");
 
-            builder
+            formGroup
                 .SelectFormControl(x => x.FormStatus)
                 .WithOptions(options =>
                 {
@@ -66,12 +71,12 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                     options.WithSortKey("displayName");
                 });
 
-            builder
+            formGroup
                 .RadioGroupFormControl(x => x.MockRadio)
                 .WithLabel("Radio")
                 .WithOptions(options => options.WithFixedValues<EnumMock>());
 
-            builder
+            formGroup
                 .SelectFormControl(x => x.CategoryId)
                 .WithLabel("Category")
                 .WithOptions(options =>
@@ -82,7 +87,7 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                     options.WithSortKey("categoryName");
                 });
 
-            builder
+            formGroup
                 .MultiSelectFormControl(x => x.Types)
                 .WithLabel("Types")
                 .WithOptions(options =>
@@ -92,14 +97,9 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                     options.WithSortKey("value");
                 });
 
-            builder
+            formGroup
                 .FormControl(x => x.SubTypeId)
                 .Ignore();
-
-            _ = builder
-                .FormControlGroup("Group Name")
-                .CreateUiSection("group-type")
-                .WithCustomWrapper("group-wrapper");
 
             builder
                 .WithValidationConfiguration(new FormMockValidationConfiguration());

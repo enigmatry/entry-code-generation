@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Enigmatry.BuildingBlocks.Validation.ValidationRules;
+using System;
 using System.Collections.Generic;
-using Enigmatry.BuildingBlocks.Validation.ValidationRules;
+using System.Linq;
 
 namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
 {
@@ -16,6 +17,13 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
             {
                 formControl.ApplyValidationConfiguration(validationRules);
             }
+        }
+
+        public IEnumerable<TControl> FormControlsOfType<TControl>() where TControl : FormControl
+        {
+            return FormControls.OfType<TControl>().Concat(
+                FormControls.OfType<FormControlGroup>()
+                    .SelectMany(x => x.FormControlsOfType<TControl>()));
         }
     }
 }

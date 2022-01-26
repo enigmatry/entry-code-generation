@@ -36,7 +36,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
         {
             return FormControls.OfType<TControl>().Concat(
                 FormControls.OfType<FormControlGroup>()
-                    .SelectMany(x => x.FormControls).OfType<TControl>());
+                    .SelectMany(x => x.FormControlsOfType<TControl>()));
         }
     }
 }

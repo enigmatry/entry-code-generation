@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Enigmatry.CodeGeneration.Configuration.Form;
+using Enigmatry.CodeGeneration.Configuration.Form.Controls;
 
 namespace Enigmatry.CodeGeneration.Configuration
 {
@@ -18,7 +19,7 @@ namespace Enigmatry.CodeGeneration.Configuration
 
         public bool HasFormValidators =>
             Components.OfType<FormComponentModel>()
-                .Any(form => form.FormControls.Any(control => control.Validator != null));
+                .Any(form => form.FormControlsOfType<FormControl>().Any(control => control.Validator != null));
 
         public FeatureModule(string name, IEnumerable<IComponentModel> components)
         {

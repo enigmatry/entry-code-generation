@@ -99,6 +99,17 @@ export class FormGeneratedComponent implements OnInit {
         },
         },
         {
+        type: 'group-type',
+        fieldGroupClassName: '',
+                wrappers: ['group-wrapper'],
+        templateOptions: {
+        label: $localize `:@@test.form.group-name.label:Group name`,
+        placeholder: $localize `:@@test.form.group-name.placeholder:Group name`,
+        disabled: this.isReadonly || false,
+        description: ''
+        },
+        fieldGroup:[
+        {
         key: 'name',
         type: this.resolveFieldType('input', false),
         className: '',
@@ -287,18 +298,7 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
         typeFormatDef:undefined
         },
         },
-        {
-            type: 'group-type',
-            fieldGroupClassName: '',
-            wrappers: ['group-wrapper'],
-            templateOptions: {
-                label: $localize `:@@test.form.group-name.label:Group name`,
-                placeholder: $localize `:@@test.form.group-name.placeholder:Group name`,
-                disabled: this.isReadonly || false,
-                description: ''
-            },
-            fieldGroup:[
-            ]
+        ]
         },
         {
         key: 'email1',

@@ -48,7 +48,7 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
             var messages = new Dictionary<string, string>();
             var formControls = module
                 .Components.OfType<FormComponentModel>()
-                .SelectMany(form => form.FormControls);
+                .SelectMany(form => form.FormControlsOfType<FormControl>());
 
             foreach (var control in formControls)
             {
