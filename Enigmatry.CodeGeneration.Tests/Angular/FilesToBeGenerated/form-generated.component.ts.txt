@@ -37,6 +37,7 @@ export class FormGeneratedComponent implements OnInit {
 
   @Input() fieldsHideExpressions: IFieldExpressionDictionary<IFormMock> | undefined = undefined;
   @Input() fieldsDisableExpressions: IFieldExpressionDictionary<IFormMock> | undefined = undefined;
+  @Input() fieldsRequiredExpressions: IFieldExpressionDictionary<IFormMock> | undefined = undefined;
 
   @Output() save = new EventEmitter<IFormMock>();
   @Output() cancel = new EventEmitter<void>();
@@ -88,6 +89,7 @@ export class FormGeneratedComponent implements OnInit {
         hideExpression: this.fieldsHideExpressions?.resetFormBtn ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.resetFormBtn ? this.fieldsDisableExpressions.resetFormBtn(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.resetFormBtn ? this.fieldsRequiredExpressions.resetFormBtn(model) : false),
         },
         templateOptions: {
         label: '',
@@ -116,6 +118,7 @@ export class FormGeneratedComponent implements OnInit {
         hideExpression: this.fieldsHideExpressions?.name ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.name ? this.fieldsDisableExpressions.name(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.name ? this.fieldsRequiredExpressions.name(model) : true),
         },
                 wrappers: ['form-field', 'tooltip'],
         templateOptions: {
@@ -147,6 +150,7 @@ asyncValidators: { validation: [ 'isEnsured' ] },
         hideExpression: this.fieldsHideExpressions?.description ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.description ? this.fieldsDisableExpressions.description(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.description ? this.fieldsRequiredExpressions.description(model) : false),
         },
         templateOptions: {
         label: $localize `:@@test.form.description.label:Some Description`,
@@ -167,6 +171,7 @@ asyncValidators: { validation: [ 'validDescription' ] },
         hideExpression: this.fieldsHideExpressions?.date ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.date ? this.fieldsDisableExpressions.date(model) : true)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.date ? this.fieldsRequiredExpressions.date(model) : false),
         },
         templateOptions: {
         label: $localize `:@@test.form.date.label:Date`,
@@ -183,6 +188,7 @@ asyncValidators: { validation: [ 'validDescription' ] },
         hideExpression: this.fieldsHideExpressions?.money ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.money ? this.fieldsDisableExpressions.money(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.money ? this.fieldsRequiredExpressions.money(model) : false),
         },
         templateOptions: {
         label: $localize `:@@test.form.money.label:Money`,
@@ -201,6 +207,7 @@ typeFormatDef:{name:'number'}
         hideExpression: this.fieldsHideExpressions?.amount ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.amount ? this.fieldsDisableExpressions.amount(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.amount ? this.fieldsRequiredExpressions.amount(model) : true),
         },
         templateOptions: {
         label: $localize `:@@test.form.amount.label:Amount`,
@@ -227,6 +234,7 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
         hideExpression: this.fieldsHideExpressions?.formStatus ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.formStatus ? this.fieldsDisableExpressions.formStatus(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.formStatus ? this.fieldsRequiredExpressions.formStatus(model) : false),
         },
         templateOptions: {
         label: $localize `:@@test.form.form-status.label:Form status`,
@@ -246,6 +254,7 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
         hideExpression: this.fieldsHideExpressions?.mockRadio ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.mockRadio ? this.fieldsDisableExpressions.mockRadio(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.mockRadio ? this.fieldsRequiredExpressions.mockRadio(model) : false),
         },
         templateOptions: {
         label: $localize `:@@test.form.mock-radio.label:Radio`,
@@ -265,6 +274,7 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
         hideExpression: this.fieldsHideExpressions?.categoryId ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.categoryId ? this.fieldsDisableExpressions.categoryId(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.categoryId ? this.fieldsRequiredExpressions.categoryId(model) : false),
         },
         templateOptions: {
         label: $localize `:@@test.form.category-id.label:Category`,
@@ -284,6 +294,7 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
         hideExpression: this.fieldsHideExpressions?.types ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.types ? this.fieldsDisableExpressions.types(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.types ? this.fieldsRequiredExpressions.types(model) : false),
         },
         templateOptions: {
         label: $localize `:@@test.form.types.label:Types`,
@@ -307,6 +318,7 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
         hideExpression: this.fieldsHideExpressions?.email1 ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.email1 ? this.fieldsDisableExpressions.email1(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.email1 ? this.fieldsRequiredExpressions.email1(model) : false),
         },
         templateOptions: {
         label: $localize `:@@test.form.email1.label:Email 1`,
@@ -330,6 +342,7 @@ pattern: (err, field) => $localize `:@@test.form.email1.pattern:CUSTOM_VALIDATIO
         hideExpression: this.fieldsHideExpressions?.email2 ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.email2 ? this.fieldsDisableExpressions.email2(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.email2 ? this.fieldsRequiredExpressions.email2(model) : false),
         },
         templateOptions: {
         label: $localize `:@@test.form.email2.label:Email 2`,

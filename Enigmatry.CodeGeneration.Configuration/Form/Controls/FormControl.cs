@@ -43,5 +43,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
                     $".{validationRule.FormlyRuleName.Kebaberize()}"
                 );
         }
+
+        public bool IsRequired => ValidationRules.HasRule<IsRequiredValidationRule>();
     }
 }

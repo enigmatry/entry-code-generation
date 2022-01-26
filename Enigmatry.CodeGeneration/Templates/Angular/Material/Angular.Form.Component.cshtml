@@ -47,6 +47,7 @@ import { map } from 'rxjs/operators';
         @:hideExpression: this.fieldsHideExpressions?.@(control.PropertyName) ?? false,
         @:expressionProperties: {
         @:'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.@(control.PropertyName) ? this.fieldsDisableExpressions.@(control.PropertyName)(model) : @control.Readonly.ToString().ToLower())),
+        @:'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.@(control.PropertyName) ? this.fieldsRequiredExpressions.@(control.PropertyName)(model) : @control.IsRequired.ToString().ToLower()),
         @:},
         CreateWrappers(control);
         CreateFieldTemplateOptions(control);
@@ -208,6 +209,7 @@ export class @Model.AngularComponentName() implements OnInit {
 
   @@Input() fieldsHideExpressions: IFieldExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
   @@Input() fieldsDisableExpressions: IFieldExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
+  @@Input() fieldsRequiredExpressions: IFieldExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
 
   @@Output() save = new EventEmitter@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>"))();
   @@Output() cancel = new EventEmitter@(Html.Raw("<void>"))();
