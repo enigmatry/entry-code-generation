@@ -10,7 +10,7 @@ import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Optional, Ou
 import { FormGroup } from '@@angular/forms';
 import { FormlyFieldConfig } from '@@ngx-formly/core';
 import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPath';
-import { IFieldExpressionDictionary, SelectConfiguration, ENIGMATRY_FIELD_TYPE_RESOLVER, FieldTypeResolver, sortOptions } from '@@enigmatry/angular-building-blocks/form';
+import { IFieldExpressionDictionary, IFieldPropertyExpressionDictionary, SelectConfiguration, ENIGMATRY_FIELD_TYPE_RESOLVER, FieldTypeResolver, sortOptions } from '@@enigmatry/angular-building-blocks/form';
 import { BehaviorSubject, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -48,6 +48,7 @@ import { map } from 'rxjs/operators';
         @:expressionProperties: {
         @:'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.@(control.PropertyName) ? this.fieldsDisableExpressions.@(control.PropertyName)(model) : @control.Readonly.ToString().ToLower())),
         @:'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.@(control.PropertyName) ? this.fieldsRequiredExpressions.@(control.PropertyName)(model) : @control.IsRequired.ToString().ToLower()),
+        @:'model.@(control.PropertyName)': (model) => (this.fieldsPropertyExpressions?.@(control.PropertyName) ? this.fieldsPropertyExpressions.@(control.PropertyName)(model) : model.@(control.PropertyName)),
         @:},
         CreateWrappers(control);
         CreateFieldTemplateOptions(control);
@@ -210,6 +211,7 @@ export class @Model.AngularComponentName() implements OnInit {
   @@Input() fieldsHideExpressions: IFieldExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
   @@Input() fieldsDisableExpressions: IFieldExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
   @@Input() fieldsRequiredExpressions: IFieldExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
+  @@Input() fieldsPropertyExpressions: IFieldPropertyExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
 
   @@Output() save = new EventEmitter@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>"))();
   @@Output() cancel = new EventEmitter@(Html.Raw("<void>"))();
