@@ -11,6 +11,8 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         [Description("outline")]
         Outline = 2,
         [Description("legacy")]
-        Legacy = 3
+        Legacy = 3,
+        [Description("none")]
+        None = 4
     }
 }
