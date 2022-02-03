@@ -10,7 +10,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         // TODO: move to configuration
         private IEnumerable<string> DefaultWrappers { get; } = new[] { "form-field" };
         public IEnumerable<string> CustomWrappers { get; }
-        public IEnumerable<string> AllWrappers => DefaultWrappers.Concat(CustomWrappers);
+        public IEnumerable<string> AllWrappers => DefaultWrappers.Where(wrapperName => !CustomWrappers.Contains(wrapperName)).Concat(CustomWrappers);
 
         public FormControlWrappers(IEnumerable<string> customWrappers)
         {

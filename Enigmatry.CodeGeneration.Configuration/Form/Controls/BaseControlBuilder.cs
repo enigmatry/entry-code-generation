@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Enigmatry.CodeGeneration.Configuration.Builder;
 using Enigmatry.CodeGeneration.Configuration.Form.Controls.Validators;
@@ -209,7 +210,17 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         /// <returns></returns>
         public TBuilder WithCustomWrapper(string wrapperName)
         {
-            _customWrappers.Add(wrapperName);
+            return WithCustomWrappers(wrapperName);
+        }
+
+        /// <summary>
+        /// Configure custom field wrappers names
+        /// </summary>
+        /// <param name="wrappersNames">Wrappers names to be matched on client side</param>
+        /// <returns></returns>
+        public TBuilder WithCustomWrappers(params string[] wrappersNames)
+        {
+            _customWrappers.AddRange(wrappersNames);
             return (TBuilder)this;
         }
 

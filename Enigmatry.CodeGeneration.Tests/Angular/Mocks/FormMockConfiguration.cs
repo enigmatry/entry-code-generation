@@ -48,6 +48,7 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
 
             formGroup
                 .FormControl(x => x.Date)
+                .WithCustomWrappers("tooltip", "form-field")
                 .WithLabel("Date")
                 .WithPlaceholder("Date")
                 .IsReadonly(true);
