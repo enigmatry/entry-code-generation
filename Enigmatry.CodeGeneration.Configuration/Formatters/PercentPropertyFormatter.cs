@@ -7,6 +7,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Formatters
     {
         public string DigitsInfo { get; private set; } = String.Empty;
         public string Locale { get; private set; } = String.Empty;
+        public decimal? Multiplier { get; private set; }
         public override string JsFormatterName => "percent";
 
         public override IList<Type> SupportedInputTypes() =>
@@ -32,9 +33,18 @@ namespace Enigmatry.CodeGeneration.Configuration.Formatters
             return this;
         }
 
+        public PercentPropertyFormatter WithMultiplier(decimal value)
+        {
+            Multiplier = value;
+            return this;
+        }
+
         public override string ToJsObject()
         {
-            return DigitsInfo.HasContent() ? $"{{ name: \'{JsFormatterName}\', digitsInfo: \'{DigitsInfo}\', locale: \'{Locale}\' }}" : $"{{ name: \'{JsFormatterName}\' }}";
+            var multiplier = Multiplier.HasValue ? $", multiplier: \'{Multiplier}\'" : String.Empty;
+            return DigitsInfo.HasContent() ? 
+                $"{{ name: \'{JsFormatterName}\', digitsInfo: \'{DigitsInfo}\', locale: \'{Locale}\'{multiplier} }}" : 
+                $"{{ name: \'{JsFormatterName}\'{multiplier} }}";
         }
     }
 }
