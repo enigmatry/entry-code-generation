@@ -102,6 +102,30 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 .FormControl(x => x.SubTypeId)
                 .Ignore();
 
+            formGroup
+                .ArrayFormControl(x => x.Addresses)
+                .WithCustomControlType("array-field")
+                .WithCustomWrapper("array-wrapper")
+                .WithItemConfiguration(config =>
+                    {
+                        config
+                            .WithCustomWrapper("group-wrapper");
+                        config
+                            .FormControl(x => x.Id)
+                            .IsVisible(false);
+                        config
+                            .InputFormControl(x => x.City)
+                            .WithDefaultValue("Amsterdam");
+                        config
+                            .InputFormControl(x => x.Street);
+                        config
+                            .InputFormControl(x => x.HouseNumber);
+                        config
+                            .CheckboxFormControl(x => x.Verified)
+                            .IsReadonly(true);
+                    }
+                );
+
             builder
                 .WithValidationConfiguration(new FormMockValidationConfiguration());
         }

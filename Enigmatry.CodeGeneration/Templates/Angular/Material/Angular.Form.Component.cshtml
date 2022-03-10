@@ -2,6 +2,7 @@
 @using Enigmatry.CodeGeneration.Angular;
 @using Enigmatry.CodeGeneration.Configuration
 @using Enigmatry.CodeGeneration.Configuration.Form.Controls
+@using Enigmatry.CodeGeneration.Configuration.Form.Controls.Array
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
 @model Enigmatry.CodeGeneration.Configuration.Form.FormComponentModel;
@@ -44,6 +45,10 @@ import { map } from 'rxjs/operators';
         @:key: '@control.PropertyName',
         @:type: this.resolveFieldType('@Html.Raw(control.FormlyType)', @control.Readonly.ToString().ToLower()),
         @:className: '@Html.Raw(control.ClassName)',
+        @if (control.DefaultValue != null)
+        {
+        @:defaultValue: '@Html.Raw(control.DefaultValue)',
+        }
         @:hideExpression: this.fieldsHideExpressions?.@(control.PropertyName) ?? false,
         @:expressionProperties: {
         @:'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.@(control.PropertyName) ? this.fieldsDisableExpressions.@(control.PropertyName)(model) : @control.Readonly.ToString().ToLower())),
@@ -53,6 +58,11 @@ import { map } from 'rxjs/operators';
         CreateWrappers(control);
         CreateFieldTemplateOptions(control);
         CreateFieldValidationProperties(control);
+        @if (control is ArrayFormControl arrayControl)
+        {
+            @:fieldArray:
+                RenderControls(new List<FormControl> { arrayControl.FormControlGroup });
+        }
         @:},
     }
 
@@ -175,7 +185,7 @@ import { map } from 'rxjs/operators';
         {
             if (control.Wrappers.CustomWrappers.Any())
             {
-                @:wrappers: @Html.JsStringArray(control.Wrappers.AllWrappers),
+                @:wrappers: @Html.JsStringArray(control is ArrayFormControl ? control.Wrappers.CustomWrappers : control.Wrappers.AllWrappers),
             }
         }
 

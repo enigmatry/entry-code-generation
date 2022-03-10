@@ -321,6 +321,113 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
         typeFormatDef:undefined
         },
         },
+        {
+        key: 'addresses',
+        type: this.resolveFieldType('array-field', false),
+        className: '',
+        hideExpression: this.fieldsHideExpressions?.addresses ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.addresses ? this.fieldsDisableExpressions.addresses(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.addresses ? this.fieldsRequiredExpressions.addresses(model) : false),
+        'model.addresses': (model) => (this.fieldsPropertyExpressions?.addresses ? this.fieldsPropertyExpressions.addresses(model) : model.addresses),
+        },
+                wrappers: ['array-wrapper'],
+        templateOptions: {
+        label: $localize `:@@test.form.addresses.label:Addresses`,
+        placeholder: $localize `:@@test.form.addresses.placeholder:Addresses`,
+        description: '',
+        hidden: !true,
+            typeFormatDef: undefined
+        },
+            fieldArray:
+        {
+        type: '',
+        fieldGroupClassName: '',
+                wrappers: ['group-wrapper'],
+        templateOptions: {
+        label: '',
+        placeholder: '',
+        disabled: this.isReadonly || false,
+        description: ''
+        },
+        fieldGroup:[
+            { key: 'id' },
+        {
+        key: 'city',
+        type: this.resolveFieldType('input', false),
+        className: '',
+        defaultValue: 'Amsterdam',
+        hideExpression: this.fieldsHideExpressions?.city ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.city ? this.fieldsDisableExpressions.city(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.city ? this.fieldsRequiredExpressions.city(model) : false),
+        'model.city': (model) => (this.fieldsPropertyExpressions?.city ? this.fieldsPropertyExpressions.city(model) : model.city),
+        },
+        templateOptions: {
+        label: $localize `:@@test.form.city.label:City`,
+        placeholder: $localize `:@@test.form.city.placeholder:City`,
+        description: '',
+        hidden: !true,
+            typeFormatDef: undefined
+        },
+        },
+        {
+        key: 'street',
+        type: this.resolveFieldType('input', false),
+        className: '',
+        hideExpression: this.fieldsHideExpressions?.street ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.street ? this.fieldsDisableExpressions.street(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.street ? this.fieldsRequiredExpressions.street(model) : false),
+        'model.street': (model) => (this.fieldsPropertyExpressions?.street ? this.fieldsPropertyExpressions.street(model) : model.street),
+        },
+        templateOptions: {
+        label: $localize `:@@test.form.street.label:Street`,
+        placeholder: $localize `:@@test.form.street.placeholder:Street`,
+        description: '',
+        hidden: !true,
+            typeFormatDef: undefined
+        },
+        },
+        {
+        key: 'houseNumber',
+        type: this.resolveFieldType('input', false),
+        className: '',
+        hideExpression: this.fieldsHideExpressions?.houseNumber ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.houseNumber ? this.fieldsDisableExpressions.houseNumber(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.houseNumber ? this.fieldsRequiredExpressions.houseNumber(model) : false),
+        'model.houseNumber': (model) => (this.fieldsPropertyExpressions?.houseNumber ? this.fieldsPropertyExpressions.houseNumber(model) : model.houseNumber),
+        },
+        templateOptions: {
+        label: $localize `:@@test.form.house-number.label:House number`,
+        placeholder: $localize `:@@test.form.house-number.placeholder:House number`,
+        description: '',
+        hidden: !true,
+            typeFormatDef: undefined
+        },
+        },
+        {
+        key: 'verified',
+        type: this.resolveFieldType('checkbox', true),
+        className: '',
+        hideExpression: this.fieldsHideExpressions?.verified ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.verified ? this.fieldsDisableExpressions.verified(model) : true)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.verified ? this.fieldsRequiredExpressions.verified(model) : false),
+        'model.verified': (model) => (this.fieldsPropertyExpressions?.verified ? this.fieldsPropertyExpressions.verified(model) : model.verified),
+        },
+        templateOptions: {
+        label: $localize `:@@test.form.verified.label:Verified`,
+        placeholder: $localize `:@@test.form.verified.placeholder:Verified`,
+        description: '',
+        hidden: !true,
+            typeFormatDef: { name: 'boolean' }
+        },
+        },
+        ]
+        },
+        },
         ]
         },
         {

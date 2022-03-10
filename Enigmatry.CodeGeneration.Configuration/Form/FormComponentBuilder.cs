@@ -1,12 +1,13 @@
 ﻿using Enigmatry.BuildingBlocks.Validation;
 using Enigmatry.BuildingBlocks.Validation.ValidationRules;
 using Enigmatry.CodeGeneration.Configuration.Builder;
+using Enigmatry.CodeGeneration.Configuration.Form.Controls;
+using Enigmatry.CodeGeneration.Configuration.Form.Controls.Array;
 using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Enigmatry.CodeGeneration.Configuration.Form.Controls;
 
 namespace Enigmatry.CodeGeneration.Configuration.Form
 {
@@ -84,6 +85,11 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
         public ButtonFormControlBuilder ButtonFormControl(string name)
         {
             return _formGroup.ButtonFormControl(name);
+        }
+
+        public ArrayFormControlBuilder<TProperty> ArrayFormControl<TProperty>(Expression<Func<T, IEnumerable<TProperty>>> propertyExpression)
+        {
+            return _formGroup.ArrayFormControl(propertyExpression);
         }
 
         public void WithValidationConfiguration(IHasFormlyValidationRules validationConfiguration)

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Enigmatry.CodeGeneration.Configuration.Builder;
 using Enigmatry.CodeGeneration.Configuration.Form.Controls.Validators;
@@ -32,6 +31,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         protected string? _tooltipTranslationId;
         protected IPropertyFormatter? _formatter;
         protected bool _ignore;
+        protected string? _defaultValue;
 
         protected BaseControlBuilder(PropertyInfo propertyInfo) : this(propertyInfo.Name)
         {
@@ -270,6 +270,15 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         }
 
         /// <summary>
+        /// Set control default value
+        /// </summary>
+        public TBuilder WithDefaultValue(string defaultValue)
+        {
+            _defaultValue = defaultValue;
+            return (TBuilder)this;
+        }
+
+        /// <summary>
         /// Build form control
         /// </summary>
         /// <param name="componentInfo">Parent componentInfo</param>
@@ -303,6 +312,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
             control.Wrappers = new FormControlWrappers(_customWrappers);
             control.Formatter = _formatter;
             control.Ignore = _ignore;
+            control.DefaultValue = _defaultValue;
 
             return control;
         }

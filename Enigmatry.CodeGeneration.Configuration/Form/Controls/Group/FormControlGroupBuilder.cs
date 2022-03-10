@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Enigmatry.CodeGeneration.Configuration.Form.Controls.Array;
+using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using JetBrains.Annotations;
 
 namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
 {
@@ -90,6 +91,11 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         public ButtonFormControlBuilder ButtonFormControl(string name)
         {
             return GetOrCreateBuilder(name, propertyName => new ButtonFormControlBuilder(propertyName));
+        }
+
+        public ArrayFormControlBuilder<TProperty> ArrayFormControl<TProperty>(Expression<Func<T, IEnumerable<TProperty>>> propertyExpression)
+        {
+            return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new ArrayFormControlBuilder<TProperty>(propertyInfo));
         }
 
         public IList<FormControl> BuildFormControls(ComponentInfo componentInfo)
