@@ -13,7 +13,6 @@ import { EnigmatryGridModule } from '@@enigmatry/angular-building-blocks/enigmat
 {
     @:import { FormlyModule, FORMLY_CONFIG } from '@@ngx-formly/core';
     @:import { FormlyMaterialModule } from '@@ngx-formly/material';
-    @:import { MatNativeDateModule } from '@@angular/material/core';
     @:import { MatAutocompleteModule } from '@@angular/material/autocomplete';
     @:import { FormlyMatDatepickerModule } from '@@ngx-formly/material/datepicker';
 }
@@ -30,7 +29,6 @@ import { EnigmatryGridModule } from '@@enigmatry/angular-building-blocks/enigmat
     @if (Model.HasFormComponents)
     {
         @:MatAutocompleteModule,
-        @:MatNativeDateModule,
         @:FormlyModule.forChild(
         @if (Model.HasCommonValidationMessages)
         {

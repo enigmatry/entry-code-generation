@@ -11,40 +11,39 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { EnigmatryGridModule } from '@enigmatry/angular-building-blocks/enigmatry-grid';
-import { FormlyModule, FORMLY_CONFIG } from '@ngx-formly/core';
-import { FormlyMaterialModule } from '@ngx-formly/material';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
+    import { FormlyModule, FORMLY_CONFIG } from '@ngx-formly/core';
+    import { FormlyMaterialModule } from '@ngx-formly/material';
+    import { MatAutocompleteModule } from '@angular/material/autocomplete';
+    import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
 
 import { FormGeneratedComponent } from './form/form-generated.component';
 import { ListGeneratedComponent } from './list/list-generated.component';
-import { CustomValidatorsService, customValidatorsFactory } from 'src/app/shared/custom-path';
 
+import { CustomValidatorsService, customValidatorsFactory } from 'src/app/shared/custom-path';
 
 @NgModule({
     declarations: [FormGeneratedComponent, ListGeneratedComponent],
     imports: [
-        CommonModule,
-        SharedModule,
-        EnigmatryGridModule,
+    CommonModule,
+    SharedModule,
+    EnigmatryGridModule,
         MatAutocompleteModule,
-        MatNativeDateModule,
-        FormlyModule.forChild({
-            validationMessages: [            
-                { name: 'maxlength', message: (err, field) => $localize `:@@validators.maxLength:${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters` },
-                { name: 'pattern', message: (err, field) => $localize `:@@validators.pattern:${field?.templateOptions?.label}:property-name: is not in valid format` },
-                { name: 'max', message: (err, field) => $localize `:@@validators.max:${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:` },
-                { name: 'required', message: (err, field) => $localize `:@@validators.required:${field?.templateOptions?.label}:property-name: is required` }
-            ]
-        }),
+        FormlyModule.forChild(
+            {
+                validationMessages: [
+{ name: 'maxlength', message: (err, field) => $localize `:@@validators.maxLength:${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters` },
+{ name: 'pattern', message: (err, field) => $localize `:@@validators.pattern:${field?.templateOptions?.label}:property-name: is not in valid format` },
+{ name: 'max', message: (err, field) => $localize `:@@validators.max:${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:` },
+{ name: 'required', message: (err, field) => $localize `:@@validators.required:${field?.templateOptions?.label}:property-name: is required` }
+                ]
+            }
+        ),
         FormlyMaterialModule,
         FormlyMatDatepickerModule,
     ],
     exports: [FormGeneratedComponent, ListGeneratedComponent],
     providers: [
-        CustomValidatorsService,
-        { provide: FORMLY_CONFIG, multi: true, useFactory: customValidatorsFactory, deps: [ CustomValidatorsService ] }
-    ]
-})
-export class TestGeneratedModule { }
+CustomValidatorsService,
+{ provide: FORMLY_CONFIG, multi: true, useFactory: customValidatorsFactory, deps: [ CustomValidatorsService ] }    ]
+    })
+    export class TestGeneratedModule { }
