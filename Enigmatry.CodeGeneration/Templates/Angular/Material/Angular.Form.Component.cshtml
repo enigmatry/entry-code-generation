@@ -1,6 +1,5 @@
 ﻿@using Enigmatry.CodeGeneration;
 @using Enigmatry.CodeGeneration.Angular;
-@using Enigmatry.CodeGeneration.Configuration
 @using Enigmatry.CodeGeneration.Configuration.Form.Controls
 @using Enigmatry.CodeGeneration.Configuration.Form.Controls.Array
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
@@ -94,6 +93,9 @@ import { map } from 'rxjs/operators';
         {
             @:rows: @(textarea.Rows),
             @:cols: @(textarea.Cols),
+            @:autosize: @textarea.AutoResize.ToString().ToLower(),
+            @:autosizeMinRows: @(textarea.AutoResizeMinRows),
+            @:autosizeMaxRows: @(textarea.AutoResizeMaxRows),
         }
         @:hidden: !@control.Visible.ToString().ToLower(),
         @if (control.Tooltip.HasContent())
