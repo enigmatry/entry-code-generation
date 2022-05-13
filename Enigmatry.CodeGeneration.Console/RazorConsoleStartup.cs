@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using Enigmatry.Blueprint.BuildingBlocks.TemplatingEngine;
+using Enigmatry.BuildingBlocks.TemplatingEngine;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

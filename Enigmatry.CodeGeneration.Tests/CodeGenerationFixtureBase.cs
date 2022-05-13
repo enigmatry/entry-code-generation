@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using Enigmatry.Blueprint.BuildingBlocks.TemplatingEngine;
+using Enigmatry.BuildingBlocks.TemplatingEngine;
 using Enigmatry.CodeGeneration.Angular;
 using Enigmatry.CodeGeneration.Rendering;
 using Microsoft.AspNetCore.Hosting;
