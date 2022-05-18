@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
-    <PackageReference Include="Enigmatry.BuildingBlocks.TemplatingEngine" Version="1.1.243" />
+    <PackageReference Include="Enigmatry.BuildingBlocks.TemplatingEngine" Version="1.1.244" />
     <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
