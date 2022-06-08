@@ -17,6 +17,9 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
             {
                 case { } when propertyType == typeof(DateTime):
                 case { } when propertyType == typeof(DateTimeOffset):
+#if NET6_0
+                case { } when propertyType == typeof(DateOnly):
+#endif
                     return Build(componentInfo, new DatepickerFormControl());
                 case { } when propertyType == typeof(bool):
                     return Build(componentInfo, new CheckboxFormControl());
