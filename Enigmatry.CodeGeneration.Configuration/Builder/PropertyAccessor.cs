@@ -31,6 +31,9 @@ namespace Enigmatry.CodeGeneration.Configuration.Builder
             {
                 case { } when propertyType == typeof(DateTime):
                 case { } when propertyType == typeof(DateTimeOffset):
+#if NET6_0
+                case { } when propertyType == typeof(DateOnly):
+#endif
                     return new DatePropertyFormatter();
                 case { } when propertyType == typeof(float):
                 case { } when propertyType == typeof(double):

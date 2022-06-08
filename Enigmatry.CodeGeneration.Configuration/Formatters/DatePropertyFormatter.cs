@@ -10,7 +10,14 @@ namespace Enigmatry.CodeGeneration.Configuration.Formatters
         public string Locale { get; private set; } = String.Empty;
         public override string JsFormatterName => "date";
 
-        public override IList<Type> SupportedInputTypes() => new List<Type> {typeof(DateTime), typeof(DateTimeOffset)};
+        public override IList<Type> SupportedInputTypes() => new List<Type>
+        {
+            typeof(DateTime), 
+            typeof(DateTimeOffset),
+            #if NET6_0
+            typeof(DateOnly)
+            #endif
+        };
 
         public DatePropertyFormatter WithFormat(string value)
         {
