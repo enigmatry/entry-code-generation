@@ -135,7 +135,7 @@ import { map } from 'rxjs/operators';
         var type = controlGroup.FormlyType;
 
         @:{
-        @:type: '@Html.Raw(type)',
+        @:type: this.resolveFieldType('@Html.Raw(type)', @controlGroup.Readonly.ToString().ToLower()),
         @:fieldGroupClassName: '@Html.Raw(controlGroup.ClassName)',
         CreateCustomWrappers(controlGroup);
         @:templateOptions: {

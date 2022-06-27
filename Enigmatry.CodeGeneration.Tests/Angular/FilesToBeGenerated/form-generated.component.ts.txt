@@ -103,7 +103,7 @@ export class FormGeneratedComponent implements OnInit {
         },
         },
         {
-        type: 'group-type',
+        type: this.resolveFieldType('group-type', false),
         fieldGroupClassName: '',
                 wrappers: ['group-wrapper'],
         templateOptions: {
@@ -343,9 +343,9 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
             typeFormatDef: undefined
         },
             fieldArray:
-        {
-        type: '',
-        fieldGroupClassName: '',
+        {        
+        type: this.resolveFieldType('', false),
+        fieldGroupClassName: '',        
                 wrappers: ['group-wrapper'],
         templateOptions: {
         label: '',
