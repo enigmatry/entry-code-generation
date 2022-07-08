@@ -16,6 +16,7 @@
                 [showContextMenu]="showContextMenu"
                 [contextMenuItems]="contextMenuItems"
                 [rowContextMenuFormatter]="rowContextMenuFormatter"
+                [rowClassFormatter]="rowClassFormatter"
                 (pageChange)="pageChange.emit($event)"
                 (sortChange)="sortChange.emit($event)"
                 (rowSelectionChange)="selectionChange.emit($event)"
