@@ -62,6 +62,7 @@ import { map } from 'rxjs/operators';
             @:fieldArray:
                 RenderControls(new List<FormControl> { arrayControl.FormControlGroup });
         }
+        @Html.AddModelOptions(control)
         @:},
     }
 
@@ -125,7 +126,6 @@ import { map } from 'rxjs/operators';
         }
         @if (control.Validator != null)
         {
-            @Html.AddModelOptions(control)
             @Html.AddAsyncValidators(control)
         }
     }

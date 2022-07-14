@@ -44,8 +44,7 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.HtmlHelperExtensions
         [TestCase(nameof(FormMock.Name), ExpectedResult = "modelOptions: { updateOn: 'blur' },")]
         [TestCase(nameof(FormMock.Money), ExpectedResult = "")]
         [TestCase(nameof(FormMock.Amount), ExpectedResult = "")]
-        [TestCase(nameof(FormMock.Email1), ExpectedResult = "")]
-        [TestCase(nameof(FormMock.Email1), ExpectedResult = "")]
+        [TestCase(nameof(FormMock.Date), ExpectedResult = "modelOptions: { updateOn: 'blur' },")]
         public string AddModelOptions(string propertyName)
         {
             var formControl = _formComponent.FormControlsOfType<FormControl>().Single(x => x.PropertyName == propertyName.Camelize());

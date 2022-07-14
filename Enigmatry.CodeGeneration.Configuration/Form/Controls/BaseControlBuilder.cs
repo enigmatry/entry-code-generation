@@ -32,6 +32,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         protected IPropertyFormatter? _formatter;
         protected bool _ignore;
         protected string? _defaultValue;
+        protected ValueUpdateTrigger? _valueUpdateTrigger;
 
         protected BaseControlBuilder(PropertyInfo propertyInfo) : this(propertyInfo.Name)
         {
@@ -192,14 +193,13 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         }
 
         /// <summary>
-        /// Configure custom field validator name and trigger event (onBlur is default)
+        /// Configure custom field validator name (default trigger event is change)
         /// </summary>
         /// <param name="validatorName">Validator name to be matched on client side</param>
-        /// <param name="validatorTrigger">Event to trigger validator (default is onBlur)</param>
         /// <returns></returns>
-        public TBuilder WithValidator(string validatorName, ValidatorTrigger validatorTrigger = ValidatorTrigger.OnBlur)
+        public TBuilder WithValidator(string validatorName)
         {
-            _validator = new CustomValidator(validatorName, validatorTrigger);
+            _validator = new CustomValidator(validatorName);
             return (TBuilder)this;
         }
 
@@ -279,6 +279,15 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         }
 
         /// <summary>
+        /// Set control update on trigger
+        /// </summary>
+        public TBuilder WithUpdateOn(ValueUpdateTrigger valueUpdateTrigger)
+        {
+            _valueUpdateTrigger = valueUpdateTrigger;
+            return (TBuilder)this;
+        }
+
+        /// <summary>
         /// Build form control
         /// </summary>
         /// <param name="componentInfo">Parent componentInfo</param>
@@ -313,6 +322,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
             control.Formatter = _formatter;
             control.Ignore = _ignore;
             control.DefaultValue = _defaultValue;
+            control.ValueUpdateTrigger = _valueUpdateTrigger ?? control.ValueUpdateTrigger;
 
             return control;
         }

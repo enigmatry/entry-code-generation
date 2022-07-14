@@ -15,6 +15,7 @@ import { IFieldExpressionDictionary, IFieldPropertyExpressionDictionary, SelectC
 import { BehaviorSubject, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+
 @Component({
   selector: 'app-g-form',
   templateUrl: './form-generated.component.html',
@@ -59,7 +60,7 @@ export class FormGeneratedComponent implements OnInit {
                 set typesOptions(value: any[]) { this.typesOptions$.next(value); }
                 @Input() typesOptionsConfiguration: SelectConfiguration = {};
 
- _isReadonly: boolean;
+  _isReadonly: boolean;
   form = new FormGroup({});
   fields: FormlyFieldConfig[] = [];
 
@@ -97,8 +98,8 @@ export class FormGeneratedComponent implements OnInit {
         label: '',
         placeholder: '',
         description: '',
-        text: $localize `:@@test.form.reset-form-btn.text:Reset`,
-        onClick: ($event: any) => this.buttonClick.emit('resetFormBtn'),
+            text: $localize `:@@test.form.reset-form-btn.text:Reset`,
+            onClick: ($event: any) => this.buttonClick.emit('resetFormBtn'),
         hidden: !true,
         },
         },
@@ -128,14 +129,15 @@ export class FormGeneratedComponent implements OnInit {
         label: $localize `:@@test.form.name.label:Name`,
         placeholder: $localize `:@@test.form.name.placeholder:Some / Name`,
         description: '',
-            appearance: 'outline',
-            floatLabel: 'always',
+appearance: 'outline',
+floatLabel: 'always',
         hidden: !true,
             tooltipText: $localize `:@@test.form.name.tooltip:Tooltip text`,
             required: true,
 maxLength: 50,
 pattern: /[A-Z]/,
-typeFormatDef:undefined
+
+            typeFormatDef: undefined
         },
             validation: {
             messages: {
@@ -143,8 +145,8 @@ required: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID
 maxlength: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`
             }
             },
-modelOptions: { updateOn: 'blur' },
 asyncValidators: { validation: [ 'isEnsured' ] },
+modelOptions: { updateOn: 'blur' },
         },
         {
         key: 'description',
@@ -166,10 +168,10 @@ asyncValidators: { validation: [ 'isEnsured' ] },
             autosizeMinRows: 0,
             autosizeMaxRows: 0,
         hidden: !true,
-        typeFormatDef:undefined
+            typeFormatDef: undefined
         },
-modelOptions: { updateOn: 'blur' },
 asyncValidators: { validation: [ 'validDescription' ] },
+modelOptions: { updateOn: 'blur' },
         },
         {
         key: 'date',
@@ -180,15 +182,16 @@ asyncValidators: { validation: [ 'validDescription' ] },
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.date ? this.fieldsDisableExpressions.date(model) : true)),
         'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.date ? this.fieldsRequiredExpressions.date(model) : false),
         'model.date': (model) => (this.fieldsPropertyExpressions?.date ? this.fieldsPropertyExpressions.date(model) : model.date),
-        }, 
-        wrappers: ['tooltip', 'form-field'],
+        },
+                wrappers: ['tooltip', 'form-field'],
         templateOptions: {
         label: $localize `:@@test.form.date.label:Date`,
         placeholder: $localize `:@@test.form.date.placeholder:Date`,
         description: '',
         hidden: !true,
-        typeFormatDef:{name:'date'}
+            typeFormatDef: { name: 'date' }
         },
+modelOptions: { updateOn: 'blur' },
         },
         {
         key: 'money',
@@ -207,7 +210,8 @@ asyncValidators: { validation: [ 'validDescription' ] },
         hidden: !true,
             type: 'number',
 max: 999.99 - 0.1,
-typeFormatDef:{name:'number'}
+
+            typeFormatDef: { name: 'number' }
         },
         },
         {
@@ -229,7 +233,8 @@ typeFormatDef:{name:'number'}
 type: 'number',
 min: 0 + 1,
 max: 100,
-typeFormatDef:undefined
+
+            typeFormatDef: undefined
         },
             validation: {
             messages: {
@@ -256,7 +261,7 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
             valueProp: this.formStatusOptionsConfiguration.valueProperty,
             labelProp: this.formStatusOptionsConfiguration.labelProperty,
         hidden: !true,
-        typeFormatDef:undefined
+            typeFormatDef: undefined
         },
         },
         {
@@ -277,7 +282,7 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
             valueProp: this.mockRadioOptionsConfiguration.valueProperty,
             labelProp: this.mockRadioOptionsConfiguration.labelProperty,
         hidden: !true,
-        typeFormatDef:undefined
+            typeFormatDef: undefined
         },
         },
         {
@@ -298,7 +303,7 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
             valueProp: this.categoryIdOptionsConfiguration.valueProperty,
             labelProp: this.categoryIdOptionsConfiguration.labelProperty,
         hidden: !true,
-        typeFormatDef:undefined
+            typeFormatDef: undefined
         },
         },
         {
@@ -321,7 +326,7 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
             multiple: true,
             selectAllOption: $localize `:@@select-all-option.select-all:SelectAll`,
         hidden: !true,
-        typeFormatDef:undefined
+            typeFormatDef: undefined
         },
         },
         {
@@ -343,9 +348,9 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
             typeFormatDef: undefined
         },
             fieldArray:
-        {        
+        {
         type: this.resolveFieldType('', false),
-        fieldGroupClassName: '',        
+        fieldGroupClassName: '',
                 wrappers: ['group-wrapper'],
         templateOptions: {
         label: '',
@@ -450,7 +455,8 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
         hidden: !true,
             pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
 maxLength: 50,
-typeFormatDef:undefined
+
+            typeFormatDef: undefined
         },
             validation: {
             messages: {
@@ -475,7 +481,8 @@ pattern: (err, field) => $localize `:@@test.form.email1.pattern:CUSTOM_VALIDATIO
         hidden: !true,
             pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
 maxLength: 50,
-typeFormatDef:undefined
+
+            typeFormatDef: undefined
         },
             validation: {
             messages: {

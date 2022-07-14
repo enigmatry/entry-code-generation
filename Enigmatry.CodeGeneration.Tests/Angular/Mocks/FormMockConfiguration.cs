@@ -2,6 +2,7 @@
 using Enigmatry.CodeGeneration.Configuration;
 using Enigmatry.CodeGeneration.Configuration.Form;
 using Enigmatry.CodeGeneration.Configuration.Form.Controls;
+using Enigmatry.CodeGeneration.Configuration.Form.Controls.Validators;
 
 namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
 {
@@ -39,12 +40,14 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 .WithCustomWrapper("tooltip")
                 .WithTooltipText("Tooltip text")
                 .WithAppearance(FormControlAppearance.Outline)
-                .WithFloatLabel(FormControlFloatLabel.Always);
+                .WithFloatLabel(FormControlFloatLabel.Always)
+                .WithUpdateOn(ValueUpdateTrigger.OnBlur);
 
             formGroup
                 .TextareaFormControl(x => x.Description)
                 .WithLabel("Some Description")
-                .WithValidator("ValidDescription");
+                .WithValidator("ValidDescription")
+                .WithUpdateOn(ValueUpdateTrigger.OnBlur);
 
             formGroup
                 .FormControl(x => x.Date)

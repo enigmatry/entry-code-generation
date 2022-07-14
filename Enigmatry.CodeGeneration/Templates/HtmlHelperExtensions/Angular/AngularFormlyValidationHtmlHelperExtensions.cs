@@ -21,11 +21,6 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
             return html.Raw($"{String.Join(",\r\n", templateOptions)},\r\n");
         }
 
-        public static IHtmlContent AddModelOptions(this IHtmlHelper html, FormControl control) =>
-            control.Validator == null
-                ? html.Raw("")
-                : html.Raw($"modelOptions: {{ updateOn: '{control.Validator.Trigger}' }},\r\n");
-
         public static IHtmlContent AddAsyncValidators(this IHtmlHelper html, FormControl control) =>
             control.Validator == null
                 ? html.Raw("")

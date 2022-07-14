@@ -28,6 +28,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         public IPropertyFormatter? Formatter { get; set; }
         public bool Ignore { get; set; }
         public string? DefaultValue { get; set; }
+        public ValueUpdateTrigger? ValueUpdateTrigger { get; set; }
 
         public virtual void ApplyValidationConfiguration(IEnumerable<IFormlyValidationRule> validationRules)
         {
