@@ -6,13 +6,13 @@
 @using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
 @model Enigmatry.CodeGeneration.Configuration.Form.FormComponentModel;
 @inject CodeGeneratorOptions _options;
-import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Optional, Output, TemplateRef } from '@@angular/core';
+import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, OnDestroy, Optional, Output, TemplateRef } from '@@angular/core';
 import { FormGroup } from '@@angular/forms';
 import { FormlyFieldConfig } from '@@ngx-formly/core';
 import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPath';
 import { IFieldExpressionDictionary, IFieldPropertyExpressionDictionary, SelectConfiguration, ENIGMATRY_FIELD_TYPE_RESOLVER, FieldTypeResolver, sortOptions } from '@@enigmatry/angular-building-blocks/form';
-import { BehaviorSubject, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, of, Subject, Subscription } from 'rxjs';
+import { map, throttleTime } from 'rxjs/operators';
 
 @functions {
 
@@ -205,7 +205,7 @@ import { map } from 'rxjs/operators';
   templateUrl: './@(Model.AngularComponentFileName()).html',
   styleUrls: ['./@(Model.AngularComponentFileName()).scss']
 })
-export class @Model.AngularComponentName() implements OnInit {
+export class @Model.AngularComponentName() implements OnInit, OnDestroy {
 
   @@Input() model: I@(Model.ComponentInfo.ModelType) = {} as I@(Model.ComponentInfo.ModelType);
   @@Input() set isReadonly(value: boolean) {
@@ -218,6 +218,7 @@ export class @Model.AngularComponentName() implements OnInit {
 
   @@Input() saveButtonText: string = 'Save';
   @@Input() cancelButtonText: string = 'Cancel';
+  @@Input() saveButtonDisabled: boolean = false;
   @@Input() formButtonsTemplate: TemplateRef@(Html.Raw("<any>")) | null | undefined;
 
   @@Input() fieldsHideExpressions: IFieldExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
@@ -234,6 +235,8 @@ export class @Model.AngularComponentName() implements OnInit {
   _isReadonly: boolean;
   form = new FormGroup({});
   fields: FormlyFieldConfig[] = [];
+  private _submitClicks = new Subject<void>();
+  private _submitClicksSubscription: Subscription;
 
   constructor(
     @@Inject(LOCALE_ID) private _localeId: string,
@@ -241,11 +244,18 @@ export class @Model.AngularComponentName() implements OnInit {
 
   ngOnInit(): void {
     this.fields = this.initializeFields();
+    this._submitClicksSubscription = this._submitClicks
+        .pipe(throttleTime(500))
+        .subscribe(() => this.save.emit(this.model));
+  }
+
+  ngOnDestroy(): void {
+      this._submitClicksSubscription.unsubscribe();
   }
 
   onSubmit() {
     if (this.form.valid) {
-      this.save.emit(this.model);
+      this._submitClicks.next();
     }
   }
 

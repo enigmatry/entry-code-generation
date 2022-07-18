@@ -67,7 +67,7 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 new IntroMessage("You want me to generate THAT?"),
                 new IntroMessage("I can see sharp"),
                 new IntroMessage("01101000 01100101 01101100 01101100 01101111!"),
-                new IntroMessage("#NOPREASURE"),
+                new IntroMessage("#NOPRESSURE"),
                 new IntroMessage("You are my favorite developer ;)"),
                 new IntroMessage("Running infinite loops ..."),
                 new IntroMessage("Booooring"),
@@ -84,6 +84,8 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 new IntroMessage("Press play"),
                 new IntroMessage("The cake is a lie."),
                 new IntroMessage("Abort the mission!"),
+                new IntroMessage("Go fish!")
+                    .WithForegroundColor(ConsoleColor.Blue),
                 new IntroMessage("Follow the white rabbit.")
                     .WithForegroundColor(ConsoleColor.Green),
                 new IntroMessage("Good morning! Did you sleep well?")
