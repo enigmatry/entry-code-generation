@@ -313,6 +313,7 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
             valueProp: this.categoryIdOptionsConfiguration.valueProperty,
             labelProp: this.categoryIdOptionsConfiguration.labelProperty,
         hidden: !true,
+metadata: { entityType: 'Category', filter: 'category_name' },
             typeFormatDef: undefined
         },
         },

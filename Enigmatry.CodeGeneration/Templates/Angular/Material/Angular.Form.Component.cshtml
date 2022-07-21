@@ -107,6 +107,10 @@ import { map, throttleTime } from 'rxjs/operators';
         {
             @:@Html.AddValidationTemplateOptions(control)
         }
+        @if (control.Metadata.Any())
+        {
+            @Html.AddMetadata(control.Metadata)
+        }
         @if (control.Formatter != null)
         {
             @:typeFormatDef: @Html.Raw(control.Formatter.ToJsObject())

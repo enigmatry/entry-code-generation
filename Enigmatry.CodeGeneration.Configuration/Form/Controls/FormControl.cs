@@ -29,6 +29,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         public bool Ignore { get; set; }
         public string? DefaultValue { get; set; }
         public ValueUpdateTrigger? ValueUpdateTrigger { get; set; }
+        public IEnumerable<KeyValuePair<string, string>> Metadata { get; set; } = new List<KeyValuePair<string, string>>();
 
         public virtual void ApplyValidationConfiguration(IEnumerable<IFormlyValidationRule> validationRules)
         {

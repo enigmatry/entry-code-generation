@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Enigmatry.CodeGeneration.Configuration;
 using Enigmatry.CodeGeneration.Configuration.Form;
 using Enigmatry.CodeGeneration.Configuration.Form.Controls;
@@ -89,7 +90,11 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                     options.WithValueKey("id");
                     options.WithDisplayKey("categoryName");
                     options.WithSortKey("categoryName");
-                });
+                })
+                .WithMetadata(
+                    new KeyValuePair<string, string>("entityType", "Category"),
+                    new KeyValuePair<string, string>("filter", "category_name")
+                );
 
             formGroup
                 .MultiSelectFormControl(x => x.Types)

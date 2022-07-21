@@ -33,6 +33,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         protected bool _ignore;
         protected string? _defaultValue;
         protected ValueUpdateTrigger? _valueUpdateTrigger;
+        protected IEnumerable<KeyValuePair<string, string>> _metadata = new List<KeyValuePair<string, string>>();
 
         protected BaseControlBuilder(PropertyInfo propertyInfo) : this(propertyInfo.Name)
         {
@@ -288,6 +289,15 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         }
 
         /// <summary>
+        /// Add control metadata as key-value pairs
+        /// </summary>
+        public TBuilder WithMetadata(params KeyValuePair<string, string>[] metadata)
+        {
+            _metadata = metadata;
+            return (TBuilder)this;
+        }
+
+        /// <summary>
         /// Build form control
         /// </summary>
         /// <param name="componentInfo">Parent componentInfo</param>
@@ -323,6 +333,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
             control.Ignore = _ignore;
             control.DefaultValue = _defaultValue;
             control.ValueUpdateTrigger = _valueUpdateTrigger ?? control.ValueUpdateTrigger;
+            control.Metadata = _metadata;
 
             return control;
         }
