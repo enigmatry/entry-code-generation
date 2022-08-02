@@ -38,6 +38,8 @@ export class ListGeneratedComponent implements OnInit {
   @Input() headerTemplate: TemplateRef<any> | CellTemplate;
   @Input() cellTemplate: TemplateRef<any> | CellTemplate;
 
+  @Input() noResultTemplate: TemplateRef<any> | null;
+
   @Input() showContextMenu = false;
   @Input() contextMenuItems: ContextMenuItem[] = [];
   @Input() rowContextMenuFormatter: RowContextMenuFormatter;

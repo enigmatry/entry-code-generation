@@ -13,6 +13,7 @@
                 [loading]="loading"
                 [headerTemplate]="headerTemplate"
                 [cellTemplate]="cellTemplate"
+                [noResultTemplate]="noResultTemplate"
                 [showContextMenu]="showContextMenu"
                 [contextMenuItems]="contextMenuItems"
                 [rowContextMenuFormatter]="rowContextMenuFormatter"
