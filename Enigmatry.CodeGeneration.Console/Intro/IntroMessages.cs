@@ -86,6 +86,11 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 new IntroMessage("Abort the mission!"),
                 new IntroMessage("I am GOAT"),
                 new IntroMessage("Commit your changes."),
+                new IntroMessage("\"Zed's dead, baby. Zed's dead.\"")
+                    .WithBackgroundColor(ConsoleColor.Yellow)
+                    .WithForegroundColor(ConsoleColor.Black),
+                new IntroMessage("Sexy times")
+                    .WithForegroundColor(ConsoleColor.Red),
                 new IntroMessage("Go fish!")
                     .WithForegroundColor(ConsoleColor.Blue),
                 new IntroMessage("Follow the white rabbit.")
