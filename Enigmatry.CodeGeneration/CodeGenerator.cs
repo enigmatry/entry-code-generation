@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Enigmatry.CodeGeneration.Configuration;
+﻿using Enigmatry.CodeGeneration.Configuration;
 using Enigmatry.CodeGeneration.Rendering;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Enigmatry.CodeGeneration
 {
@@ -35,6 +36,28 @@ namespace Enigmatry.CodeGeneration
             LogEnd();
         }
 
+        private void LogStart()
+        {
+            _logger.LogInformation("Generating {Framework} components", _options.Framework);
+            _logger.LogInformation("Output dir {Directory}", _options.OutputDirectory);
+            _logger.LogInformation("I18N: {I18nEnabled}", _options.EnableI18N ? "enabled" : "disabled");
+            _logger.LogInformation("Generated components prefix: {Prefix}", _options.GeneratedComponentPrefix);
+            if (_options.ValidatorsPath.HasContent())
+            {
+                _logger.LogInformation("Validators dir {Directory}", _options.ValidatorsPath);
+            }
+            if (_options.Component.HasContent())
+            {
+                _logger.LogInformation("Generating component: {Component}", _options.Component);
+            }
+            if (_options.Feature.HasContent())
+            {
+                _logger.LogInformation("Generating feature: {Feature}", _options.Feature);
+            }
+            _logger.LogInformation("Searching component definitions in assembly {Assembly}", _options.SourceAssembly.GetName().Name + ".dll");
+            _logger.LogInformation("");
+        }
+
         private void BuildDefinitions()
         {
             _components = ConfigurationScanner.FindComponentsInAssembly(_options.SourceAssembly).ToList();
@@ -60,26 +83,7 @@ namespace Enigmatry.CodeGeneration
             }
         }
 
-        private void LogStart()
-        {
-            _logger.LogInformation("Generating {Framework} components", _options.Framework);
-            _logger.LogInformation("Output dir {Directory}", _options.OutputDirectory);
-            if (_options.EnableI18N)
-            {
-                _logger.LogInformation("I18N: {0}", _options.EnableI18N ? "enabled" : "disabled");
-            }
-            if (_options.Component.HasContent())
-            {
-                _logger.LogInformation("Generating component: {Component}", _options.Component);
-            }
-            if (_options.Feature.HasContent())
-            {
-                _logger.LogInformation("Generating feature: {Feature}", _options.Feature);
-            }
-            _logger.LogInformation("Searching component definitions in assembly {Assembly}", _options.SourceAssembly.GetName().Name + ".dll");
-        }
-
         private void LogComponentsCount() => _logger.LogInformation("Found {Number} component(s)", _components.Count);
-        private void LogEnd() => _logger.LogInformation("End");
+        private void LogEnd() => _logger.LogInformation("End" + Environment.NewLine);
     }
 }

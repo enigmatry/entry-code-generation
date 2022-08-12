@@ -33,11 +33,11 @@ namespace Enigmatry.CodeGeneration.Angular
         {
             var directory = Path.Combine(outputDir, module.Name.Kebaberize(), "generated");
 
-            _logger.LogInformation($"Generating {module.Name} module components");
+            _logger.LogInformation("Generating {ModuleName} feature module", module.Name);
 
             foreach (var component in module.Components)
             {
-                _logger.LogInformation($" Found {component.ComponentInfo.Name} component");
+                _logger.LogInformation(" Generating {ComponentName} component", component.ComponentInfo.Name);
                 await _componentGenerator.GenerateAsync(directory, component);
             }
 

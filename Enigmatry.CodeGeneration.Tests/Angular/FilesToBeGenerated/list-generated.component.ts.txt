@@ -37,7 +37,8 @@ export class ListGeneratedComponent implements OnInit {
 
   @Input() headerTemplate: TemplateRef<any> | CellTemplate;
   @Input() cellTemplate: TemplateRef<any> | CellTemplate;
-
+  
+  @Input() noResultText: string;
   @Input() noResultTemplate: TemplateRef<any> | null;
 
   @Input() showContextMenu = false;

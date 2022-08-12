@@ -35,7 +35,8 @@ export class @Model.AngularComponentName() implements OnInit {
 
   @@Input() headerTemplate: TemplateRef@(Html.Raw("<any>")) | CellTemplate;
   @@Input() cellTemplate: TemplateRef@(Html.Raw("<any>")) | CellTemplate;
-
+      
+  @@Input() noResultText: string;
   @@Input() noResultTemplate: TemplateRef@(Html.Raw("<any>")) | null;
 
   @@Input() showContextMenu = @Model.Row.ShowContextMenu.ToString().ToLower();

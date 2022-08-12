@@ -85,7 +85,7 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 new IntroMessage("The cake is a lie."),
                 new IntroMessage("Abort the mission!"),
                 new IntroMessage("I am GOAT"),
-                new IntroMessage("I am GOAT"),
+                new IntroMessage("Commit your changes."),
                 new IntroMessage("Go fish!")
                     .WithForegroundColor(ConsoleColor.Blue),
                 new IntroMessage("Follow the white rabbit.")
