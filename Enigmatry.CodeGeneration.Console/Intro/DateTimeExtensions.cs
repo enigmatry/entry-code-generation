@@ -7,7 +7,7 @@ namespace Enigmatry.CodeGeneration.Console.Intro
         public static bool IsWeekend(this DateTime date) =>
             date.DayOfWeek == DayOfWeek.Sunday || date.DayOfWeek == DayOfWeek.Saturday;
 
-        public static bool IsNewYearsEve(this DateTime date) =>
+        public static bool IsLastDayOfYear(this DateTime date) =>
             date.Day == 31 && date.Month == 12;
 
         public static bool IsFirstDayOfYear(this DateTime date) =>

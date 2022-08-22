@@ -1,45 +1,50 @@
 ﻿using System;
+using System.Reflection.Metadata;
 
 namespace Enigmatry.CodeGeneration.Console.Intro
 {
-    internal class IntroMessage
+    internal class IntroMessage : IntroContent
     {
-        private const string TrimSuffix = "...";
-        private const ConsoleColor DefaultForegroundColor = ConsoleColor.Gray;
-        private const ConsoleColor DefaultBackgroundColor = ConsoleColor.Black;
+        private const string ContentPrefix = " ";
+        private const string ContnetSufix = "...";
 
-        public string Text { get; private set; } = String.Empty;
         public IntroMessageType Type { get; private set; } = IntroMessageType.Regular;
         public Func<bool> Condition { get; private set; } = null;
-        public ConsoleColor ForegroundColor { get; private set; } = ConsoleColor.Magenta;
-        public ConsoleColor BackgroundColor { get; private set; } = DefaultBackgroundColor;
-
-        public IntroMessage(string text)
-        {
-            Text = $" {text}";
-        }
-
         public bool SatisfiesCondition => Condition == null || Condition.Invoke();
 
-        public void Print(int maxLength)
+        public IntroMessage(string content)
+        {
+            Content = content;
+            ForegroundColor = ConsoleColor.Magenta;
+        }
+
+        public void Print(int maxLineLength)
         {
             System.Console.ForegroundColor = ForegroundColor;
             System.Console.BackgroundColor = BackgroundColor;
 
-            if (Text.Length > maxLength)
+            var totalContentLength = Content.Length + ContentPrefix.Length;
+            if (totalContentLength > maxLineLength)
             {
-                System.Console.WriteLine($"{Text.Substring(0, maxLength - TrimSuffix.Length)}{TrimSuffix}");
+                var trimmedContnetLength = maxLineLength - ContnetSufix.Length - ContentPrefix.Length;
+                System.Console.BackgroundColor = DefaultBackgroundColor;
+                System.Console.Write(ContentPrefix);
+                System.Console.BackgroundColor = BackgroundColor;
+                System.Console.WriteLine($"{Content[..(trimmedContnetLength)]}{ContnetSufix}");
             }
-            else if (Text.Length < maxLength)
+            else if (totalContentLength < maxLineLength)
             {
                 System.Console.BackgroundColor = DefaultBackgroundColor;
-                System.Console.Write(new string(' ', maxLength - Text.Length));
+                System.Console.Write(new string(' ', maxLineLength - Content.Length));
                 System.Console.BackgroundColor = BackgroundColor;
-                System.Console.WriteLine(Text);
+                System.Console.WriteLine(Content);
             }
             else
             {
-                System.Console.WriteLine(Text);
+                System.Console.BackgroundColor = DefaultBackgroundColor;
+                System.Console.Write(ContentPrefix);
+                System.Console.BackgroundColor = BackgroundColor;
+                System.Console.WriteLine(Content);
             }
 
             System.Console.ForegroundColor = DefaultForegroundColor;
@@ -69,5 +74,8 @@ namespace Enigmatry.CodeGeneration.Console.Intro
             BackgroundColor = color;
             return this;
         }
+
+        public IntroMessage WithColors(ConsoleColor foregroundColor, ConsoleColor backgroundColor = ConsoleColor.Black) =>
+            WithForegroundColor(foregroundColor).WithBackgroundColor(backgroundColor);
     }
 }

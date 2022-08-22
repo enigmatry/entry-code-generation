@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Enigmatry.CodeGeneration.Console.Intro
 {
     internal static class IntroMessages
     {
-        public static List<IntroMessage> Get =>
-            new()
+        public static List<IntroMessage> GetRegular() =>
+            new List<IntroMessage>
             {
-                // Regular:
                 new IntroMessage("Hello world!"),
                 new IntroMessage("Nice day, isn't it?"),
                 new IntroMessage("You look handsome ;)"),
@@ -16,7 +16,6 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 new IntroMessage("The Dude abides."),
                 new IntroMessage("Less is more!"),
                 new IntroMessage("Keep it simple"),
-                new IntroMessage("\"Bring out the Gimp\""),
                 new IntroMessage("[MESSAGE_GOES_HERE]"),
                 new IntroMessage(@"4@$#F\#9%5Zx~!@$55^9HX"),
                 new IntroMessage("What! Who allowed that?"),
@@ -26,7 +25,7 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 new IntroMessage("Think outside the box"),
                 new IntroMessage("Please allow me to introduce myself ..."),
                 new IntroMessage("Are you sure you are not missing any semicolons?"),
-                new IntroMessage("Ah, the great outdoors ..."),
+                new IntroMessage("\"Ah, the great outdoors!\""),
                 new IntroMessage("Burek is with meat!"),
                 new IntroMessage("\"Fear is the mind-killer\""),
                 new IntroMessage("Are you SOLID?"),
@@ -79,22 +78,28 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 new IntroMessage("I like you very much"),
                 new IntroMessage("The clock is ticking ..."),
                 new IntroMessage("Totally awesome"),
-                new IntroMessage("This will take a while"),
+                new IntroMessage("This might take a while"),
+                new IntroMessage("This might take a WHALE"),
                 new IntroMessage("You made a mistake!"),
                 new IntroMessage("Press play"),
                 new IntroMessage("The cake is a lie."),
                 new IntroMessage("Abort the mission!"),
                 new IntroMessage("I am GOAT"),
                 new IntroMessage("Commit your changes."),
-                new IntroMessage("\"Zed's dead, baby. Zed's dead.\"")
-                    .WithBackgroundColor(ConsoleColor.Yellow)
-                    .WithForegroundColor(ConsoleColor.Black),
-                new IntroMessage("Sexy times")
-                    .WithForegroundColor(ConsoleColor.Red),
-                new IntroMessage("Go fish!")
-                    .WithForegroundColor(ConsoleColor.Blue),
-                new IntroMessage("Follow the white rabbit.")
-                    .WithForegroundColor(ConsoleColor.Green),
+                new IntroMessage("Okie dokie"),
+                new IntroMessage("Ignorance is bliss."),
+                new IntroMessage("I promise I won’t laugh"),
+                new IntroMessage("\"Be happy to.\""),
+                new IntroMessage(@"1 / 0 = ... ... :-/ ... ... >:o ... ... ... :'( ... ... ..."),
+                new IntroMessage("...---...  ...---... ...---..."),
+                new IntroMessage("Cherrypicking ..."),
+                new IntroMessage("Executing order 66 ...").WithColors(ConsoleColor.Red),
+                new IntroMessage("Sexy times").WithColors(ConsoleColor.Red),
+                new IntroMessage("Go fish!").WithColors(ConsoleColor.Blue),
+                new IntroMessage(" Bring out the Gimp. ").WithColors(ConsoleColor.Black, ConsoleColor.DarkYellow),
+                new IntroMessage(" Zed's dead, baby. Zed's dead. ").WithColors(ConsoleColor.Black, ConsoleColor.DarkYellow),
+                new IntroMessage(" There is no spoon. ").WithColors(ConsoleColor.Black, ConsoleColor.DarkGreen),
+                new IntroMessage(" Follow the white rabbit. ").WithColors(ConsoleColor.Black, ConsoleColor.DarkGreen),
                 new IntroMessage("Good morning! Did you sleep well?")
                     .WithCondition(() => DateTime.Now.IsMorning()),
                 new IntroMessage("Don't forget to eat your breakfast")
@@ -111,92 +116,83 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                     .WithCondition(() => DateTime.Now.IsFriday()),
                 new IntroMessage("Is it happy hour yet?")
                     .WithCondition(() => DateTime.Now.IsFriday()),
-                new IntroMessage("It's Friday, I'm in love ...")
+                new IntroMessage("\"It's Friday, I'm in love ...\"")
                     .WithCondition(() => DateTime.Now.IsFriday()),
                 new IntroMessage("The weekend is getting closer")
                     .WithCondition(() => DateTime.Now.IsFriday()),
                 new IntroMessage("Every Friday is Good Firday")
                     .WithCondition(() => DateTime.Now.IsFriday()),
-                new IntroMessage("BLUE MONDAY :'(")
-                    .WithCondition(() => DateTime.Now.IsMonday())
-                    .WithForegroundColor(ConsoleColor.Cyan),
-                new IntroMessage("I don't care if Monday's blue ...")
-                    .WithCondition(() => DateTime.Now.IsMonday())
-                    .WithForegroundColor(ConsoleColor.Cyan),
+                new IntroMessage("BLUE MONDAY :'(").WithColors(ConsoleColor.Cyan)
+                    .WithCondition(() => DateTime.Now.IsMonday()),
+                new IntroMessage(" I don't care if Monday's blue ... ").WithColors(ConsoleColor.Black, ConsoleColor.DarkCyan)
+                    .WithCondition(() => DateTime.Now.IsMonday()),
                 new IntroMessage("I hate Mondays")
                     .WithCondition(() => DateTime.Now.IsMonday()),
                 new IntroMessage("P A Y D A Y ! ! !")
                     .WithCondition(() => DateTime.Now.IsFirstDayOfMonth()),
-                // Special cases:
+            }
+            .Where(message => message.SatisfiesCondition).ToList();
+
+        public static List<IntroMessage> GetImportant() =>
+            new List<IntroMessage>
+            {
                 new IntroMessage("It's the weekend and you should not be working >:(")
-                    .WithType(IntroMessageType.SpecialCase)
                     .WithCondition(() => DateTime.Now.IsWeekend()),
                 new IntroMessage("There are better ways to spend your weekends")
-                    .WithType(IntroMessageType.SpecialCase)
                     .WithCondition(() => DateTime.Now.IsWeekend()),
                 new IntroMessage("Go out, have fun. It's the weekend!")
-                    .WithType(IntroMessageType.SpecialCase)
                     .WithCondition(() => DateTime.Now.IsWeekend()),
                 new IntroMessage("STOP WORKING!")
-                    .WithType(IntroMessageType.SpecialCase)
+                    .WithCondition(() => DateTime.Now.IsWeekend()),
+                new IntroMessage("Take a vacation!")
+                    .WithCondition(() => DateTime.Now.IsWeekend()),
+                new IntroMessage("You should ask for a raise.")
+                    .WithCondition(() => DateTime.Now.IsWeekend()),
+                new IntroMessage("\"Work, work.\"")
                     .WithCondition(() => DateTime.Now.IsWeekend()),
                 new IntroMessage("Ah, the best time of the day, lunch time!")
-                    .WithType(IntroMessageType.SpecialCase)
                     .WithCondition(() => DateTime.Now.IsLunchTime()),
                 new IntroMessage("So, what shell we order, Thai, Chinese, Mexican ... PIZZA?")
-                    .WithType(IntroMessageType.SpecialCase)
                     .WithCondition(() => DateTime.Now.IsLunchTime()),
-                new IntroMessage("Go vegan")
-                    .WithType(IntroMessageType.SpecialCase)
-                    .WithForegroundColor(ConsoleColor.Green)
+                new IntroMessage("Go vegan").WithColors(ConsoleColor.Green)
                     .WithCondition(() => DateTime.Now.IsLunchTime()),
                 new IntroMessage("Don't get fat!")
-                    .WithType(IntroMessageType.SpecialCase)
                     .WithCondition(() => DateTime.Now.IsLunchTime()),
                 new IntroMessage("Woo-hoo, lunch time!!!")
-                    .WithType(IntroMessageType.SpecialCase)
                     .WithCondition(() => DateTime.Now.IsLunchTime()),
                 new IntroMessage("Me so hungry")
-                    .WithType(IntroMessageType.SpecialCase)
                     .WithCondition(() => DateTime.Now.IsLunchTime()),
-                new IntroMessage("Feasting")
-                    .WithType(IntroMessageType.SpecialCase)
+                new IntroMessage("Feasting ...")
                     .WithCondition(() => DateTime.Now.IsLunchTime()),
-                new IntroMessage("Stay out of the second floors!")
-                    .WithType(IntroMessageType.SpecialCase)
-                    .WithCondition(() => DateTime.Now.IsFriday13th())
-                    .WithForegroundColor(ConsoleColor.Red),
-                new IntroMessage("Run in zig-zag!")
-                    .WithType(IntroMessageType.SpecialCase)
-                    .WithCondition(() => DateTime.Now.IsFriday13th())
-                    .WithForegroundColor(ConsoleColor.Red),
-                new IntroMessage("Lock your doors")
-                    .WithType(IntroMessageType.SpecialCase)
-                    .WithCondition(() => DateTime.Now.IsFriday13th())
-                    .WithForegroundColor(ConsoleColor.Red),
-                new IntroMessage("Bring your shootgun")
-                    .WithType(IntroMessageType.SpecialCase)
-                    .WithCondition(() => DateTime.Now.IsFriday13th())
-                    .WithForegroundColor(ConsoleColor.Red),
-                new IntroMessage("Be quiet")
-                    .WithType(IntroMessageType.SpecialCase)
-                    .WithCondition(() => DateTime.Now.IsFriday13th())
-                    .WithForegroundColor(ConsoleColor.Red),
-                // Important dates:
-                new IntroMessage("Happy New Year's Eve!!!")
-                    .WithType(IntroMessageType.Important)
-                    .WithForegroundColor(ConsoleColor.Red)
-                    .WithCondition(() => DateTime.Now.IsNewYearsEve()),
-                new IntroMessage("It is the first day of the year. Make a new year's resolution ;)")
-                    .WithType(IntroMessageType.Important)
-                    .WithForegroundColor(ConsoleColor.Yellow)
+                new IntroMessage("Stay out of the second floors!").WithColors(ConsoleColor.Red)
+                    .WithCondition(() => DateTime.Now.IsFriday13th()),
+                new IntroMessage("Run in zig-zag!").WithColors(ConsoleColor.Red)
+                    .WithCondition(() => DateTime.Now.IsFriday13th()),
+                new IntroMessage("Lock your doors").WithColors(ConsoleColor.Red)
+                    .WithCondition(() => DateTime.Now.IsFriday13th()),
+                new IntroMessage("Bring your shootgun").WithColors(ConsoleColor.Red)
+                    .WithCondition(() => DateTime.Now.IsFriday13th()),
+                new IntroMessage("Be quiet").WithColors(ConsoleColor.Red)
+                    .WithCondition(() => DateTime.Now.IsFriday13th()),
+            }
+            .Select(message => message.WithType(IntroMessageType.Important))
+            .Where(message => message.SatisfiesCondition).ToList();
+
+        public static List<IntroMessage> GetVeryImportant() =>
+            new List<IntroMessage>
+            {
+                new IntroMessage("Happy New Year's Eve!!!").WithColors(ConsoleColor.Red)
+                    .WithCondition(() => DateTime.Now.IsLastDayOfYear()),
+                new IntroMessage("It is the first day of the year. Make a new year's resolution ;)").WithColors(ConsoleColor.Yellow)
                     .WithCondition(() => DateTime.Now.IsFirstDayOfYear()),
-                new IntroMessage("Happy birthday Alan Turing!")
-                    .WithType(IntroMessageType.Important)
+                new IntroMessage("Happy birthday, Alan Turing!")
                     .WithCondition(() => new DateTime(1912, 6, 23).IsBirthDay()),
-                new IntroMessage("Happy birthday Miljan & Vladan :D")
-                    .WithType(IntroMessageType.Important)
+                new IntroMessage("Happy birthday, Miljan & Vladan!")
                     .WithCondition(() => new DateTime(1985, 9, 12).IsBirthDay()),
-            };
+                new IntroMessage("Happy birthday, Ziggy Stardust!").WithColors(ConsoleColor.White)
+                    .WithCondition(() => new DateTime(1947, 1, 8).IsBirthDay()),
+            }
+            .Select(message => message.WithType(IntroMessageType.VeryImportant))
+            .Where(message => message.SatisfiesCondition).ToList();
     }
 }

@@ -2,37 +2,60 @@
 
 namespace Enigmatry.CodeGeneration.Console.Intro
 {
-    internal class IntroLogoLine
+    internal class IntroLogoLine : IntroContent
     {
-        public const int LineMaxLength = 120;
+        private const int MaxContentLength = 120;
 
-        public string Text { get; private set; } = String.Empty;
-        public ConsoleColor Color { get; private set; }
         public bool EndWithNewLine { get; private set; } = true;
 
-        public IntroLogoLine(string text, ConsoleColor color, bool endWithNewLine = true)
+        public IntroLogoLine(string content)
         {
-            Text = text.Length > LineMaxLength
-                ? text.Substring(0, LineMaxLength)
-                : text;
-            Color = color;
+            Content = content.Length > MaxContentLength ? content[..MaxContentLength] : content;
+        }
+
+        public IntroLogoLine(string text, ConsoleColor color, bool endWithNewLine = true) : this(text)
+        {
+            ForegroundColor = color;
             EndWithNewLine = endWithNewLine;
         }
 
         public void Print()
         {
-            System.Console.ForegroundColor = Color;
+            System.Console.ForegroundColor = ForegroundColor;
+            System.Console.BackgroundColor = BackgroundColor;
 
             if (EndWithNewLine)
             {
-                System.Console.WriteLine(Text);
+                System.Console.WriteLine(Content);
             }
             else
             {
-                System.Console.Write(Text);
+                System.Console.Write(Content);
             }
 
-            System.Console.ForegroundColor = ConsoleColor.Gray;
+            System.Console.ForegroundColor = DefaultForegroundColor;
+            System.Console.BackgroundColor = DefaultBackgroundColor;
         }
+
+        public IntroLogoLine WithEndWithNewLine(bool endWithNewLine)
+        {
+            EndWithNewLine = endWithNewLine;
+            return this;
+        }
+
+        public IntroLogoLine WithForegroundColor(ConsoleColor color)
+        {
+            ForegroundColor = color;
+            return this;
+        }
+
+        public IntroLogoLine WithBackgroundColor(ConsoleColor color)
+        {
+            BackgroundColor = color;
+            return this;
+        }
+
+        public IntroLogoLine WithColors(ConsoleColor foregroundColor, ConsoleColor backgroundColor = ConsoleColor.Black) =>
+            WithForegroundColor(foregroundColor).WithBackgroundColor(backgroundColor);
     }
 }
