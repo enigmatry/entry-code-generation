@@ -51,8 +51,8 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 new IntroMessage("I love this ... :D"),
                 new IntroMessage("\"Work. Work never changes.\""),
                 new IntroMessage("\"O Captain, my Captain!\""),
-                new IntroMessage("Let's play throw and catch. I'll throw."),
                 new IntroMessage("\"If you want to win you mustn't lose\""),
+                new IntroMessage("Let's play throw and catch. I'll throw."),
                 new IntroMessage("It's a perfect day"),
                 new IntroMessage("Update me regularly!"),
                 new IntroMessage("if (true) { Console.Write(\"I LOVE YOU!\"); }"),
@@ -100,6 +100,7 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                 new IntroMessage(" Zed's dead, baby. Zed's dead. ").WithColors(ConsoleColor.Black, ConsoleColor.DarkYellow),
                 new IntroMessage(" There is no spoon. ").WithColors(ConsoleColor.Black, ConsoleColor.DarkGreen),
                 new IntroMessage(" Follow the white rabbit. ").WithColors(ConsoleColor.Black, ConsoleColor.DarkGreen),
+                new IntroMessage(" We can't stop here, this is bat country. ").WithColors(ConsoleColor.Black, ConsoleColor.DarkMagenta),
                 new IntroMessage("Good morning! Did you sleep well?")
                     .WithCondition(() => DateTime.Now.IsMorning()),
                 new IntroMessage("Don't forget to eat your breakfast")
@@ -189,8 +190,12 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                     .WithCondition(() => new DateTime(1912, 6, 23).IsBirthDay()),
                 new IntroMessage("Happy birthday, Miljan & Vladan!")
                     .WithCondition(() => new DateTime(1985, 9, 12).IsBirthDay()),
-                new IntroMessage("Happy birthday, Ziggy Stardust!").WithColors(ConsoleColor.White)
+                new IntroMessage("Happy birthday, The Thin White Duke!").WithColors(ConsoleColor.White)
                     .WithCondition(() => new DateTime(1947, 1, 8).IsBirthDay()),
+                new IntroMessage("Happy birthday to ME, WOO-HOO!")
+                    .WithCondition(() => new DateTime(2021, 4, 6).IsBirthDay()),
+                new IntroMessage("Happy birthday, Andries!")
+                    .WithCondition(() => new DateTime(1975, 11, 18).IsBirthDay()),
             }
             .Select(message => message.WithType(IntroMessageType.VeryImportant))
             .Where(message => message.SatisfiesCondition).ToList();
