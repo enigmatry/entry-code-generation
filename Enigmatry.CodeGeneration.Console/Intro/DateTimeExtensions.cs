@@ -39,5 +39,8 @@ namespace Enigmatry.CodeGeneration.Console.Intro
 
         public static bool IsFirstDayOfMonth(this DateTime date) =>
             date.Day == 1;
+
+        public static bool IsDayOfYear(this DateTime date, int dayOfYear) =>
+            date.DayOfYear == dayOfYear;
     }
 }

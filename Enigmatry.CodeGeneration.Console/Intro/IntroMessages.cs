@@ -137,6 +137,8 @@ namespace Enigmatry.CodeGeneration.Console.Intro
         public static List<IntroMessage> GetImportant() =>
             new List<IntroMessage>
             {
+                new IntroMessage("Happy Programmers' Day to You!")
+                    .WithCondition(() => DateTime.Now.IsDayOfYear(256)),
                 new IntroMessage("It's the weekend and you should not be working >:(")
                     .WithCondition(() => DateTime.Now.IsWeekend()),
                 new IntroMessage("There are better ways to spend your weekends")
