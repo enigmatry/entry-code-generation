@@ -111,6 +111,9 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 .Ignore();
 
             formGroup
+                .PasswordFormControl(x => x.Password);
+
+            formGroup
                 .ArrayFormControl(x => x.Addresses)
                 .WithCustomControlType("array-field")
                 .WithCustomWrapper("array-wrapper")

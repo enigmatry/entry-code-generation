@@ -2,7 +2,7 @@
 
 namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
 {
-    public class InputFormControlBuilder : BaseControlBuilder<InputFormControl, InputFormControlBuilder>
+    public class InputFormControlBuilder : InputControlBuilderBase<InputFormControl, InputFormControlBuilder>
     {
         public InputFormControlBuilder(PropertyInfo propertyInfo) : base(propertyInfo)
         {

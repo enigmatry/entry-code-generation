@@ -31,6 +31,14 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
         {
             return _formGroup.InputFormControl(propertyExpression);
         }
+        public EmailFormControlBuilder EmailFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+        {
+            return _formGroup.EmailFormControl(propertyExpression);
+        }
+        public PasswordFormControlBuilder PasswordFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+        {
+            return _formGroup.PasswordFormControl(propertyExpression);
+        }
 
         public CheckboxFormControlBuilder CheckboxFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
         {

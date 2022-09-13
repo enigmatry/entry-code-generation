@@ -339,6 +339,25 @@ metadata: { entityType: 'Category', filter: 'category_name' },
         hidden: !true,
             typeFormatDef: undefined
         },
+        },        
+        {
+        key: 'password',
+        type: this.resolveFieldType('input', false),
+        className: '',
+        hideExpression: this.fieldsHideExpressions?.password ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.password ? this.fieldsDisableExpressions.password(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.password ? this.fieldsRequiredExpressions.password(model) : false),
+        'model.password': (model) => (this.fieldsPropertyExpressions?.password ? this.fieldsPropertyExpressions.password(model) : model.password),
+        },
+        templateOptions: {
+        label: $localize `:@@test.form.password.label:Password`,
+        placeholder: $localize `:@@test.form.password.placeholder:Password`,
+        description: '',
+        type: 'password',
+        hidden: !true,
+            typeFormatDef: undefined
+        },
         },
         {
         key: 'addresses',

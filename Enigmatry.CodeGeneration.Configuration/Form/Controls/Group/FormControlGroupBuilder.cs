@@ -38,6 +38,16 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
             return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new InputFormControlBuilder(propertyInfo));
         }
 
+        public EmailFormControlBuilder EmailFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+        {
+            return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new EmailFormControlBuilder(propertyInfo));
+        }
+
+        public PasswordFormControlBuilder PasswordFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+        {
+            return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new PasswordFormControlBuilder(propertyInfo));
+        }
+
         public CheckboxFormControlBuilder CheckboxFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
         {
             return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new CheckboxFormControlBuilder(propertyInfo));

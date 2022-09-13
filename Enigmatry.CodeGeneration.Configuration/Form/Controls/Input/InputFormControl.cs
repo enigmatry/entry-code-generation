@@ -1,7 +1,7 @@
 ﻿namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
 {
-    public class InputFormControl : FormControl
+    public class InputFormControl : InputControlBase
     {
-        public override string FormlyType => "input";
+        public override string? Type { get; set; }
     }
 }
