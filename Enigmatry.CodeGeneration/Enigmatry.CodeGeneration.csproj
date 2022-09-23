@@ -56,7 +56,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Enigmatry.BuildingBlocks.TemplatingEngine" Version="1.1.299" />
+    <PackageReference Include="Enigmatry.BuildingBlocks.TemplatingEngine" Version="1.1.301" />
     <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" />
   </ItemGroup>
 
