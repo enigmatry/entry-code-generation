@@ -155,7 +155,7 @@ required: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID
 maxlength: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`
             }
             },
-asyncValidators: { validation: [ 'isEnsured' ] },
+asyncValidators: { validation: [ 'uniqueName', 'isEnsured' ] },
 modelOptions: { updateOn: 'blur' },
         },
         {

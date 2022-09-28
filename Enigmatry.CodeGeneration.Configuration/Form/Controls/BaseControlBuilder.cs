@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using Enigmatry.CodeGeneration.Configuration.Builder;
+﻿using Enigmatry.CodeGeneration.Configuration.Builder;
 using Enigmatry.CodeGeneration.Configuration.Form.Controls.Validators;
 using Enigmatry.CodeGeneration.Configuration.Formatters;
 using Humanizer;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
 {
@@ -25,7 +25,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         protected string? _className;
         protected FormControlAppearance? _appearance;
         protected FormControlFloatLabel? _floatLabel;
-        protected CustomValidator? _validator;
+        protected List<CustomValidator> _validators = new List<CustomValidator>();
         protected List<string> _customWrappers = new List<string>();
         protected string? _tooltipText;
         protected string? _tooltipTranslationId;
@@ -194,13 +194,16 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         }
 
         /// <summary>
-        /// Configure custom field validator name (default trigger event is change)
+        /// Configure custom field validator names (default trigger event is change)
         /// </summary>
-        /// <param name="validatorName">Validator name to be matched on client side</param>
+        /// <param name="validatorNames">Validator names to be matched on client side</param>
         /// <returns></returns>
-        public TBuilder WithValidator(string validatorName)
+        public TBuilder WithValidators(params string[] validatorNames)
         {
-            _validator = new CustomValidator(validatorName);
+            foreach (var name in validatorNames)
+            {
+                _validators.Add(new CustomValidator(name));
+            }
             return (TBuilder)this;
         }
 
@@ -246,7 +249,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
             _tooltipTranslationId = translationId;
             return (TBuilder)this;
         }
-        
+
         /// <summary>
         /// Set field type formatter
         /// </summary>
@@ -323,7 +326,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
             control.Hint = new I18NString(hintTranslationId, _hint);
             control.Visible = _isVisible;
             control.Readonly = _isReadonly;
-            control.Validator = _validator;
+            control.Validators = _validators;
             control.ClassName = _className;
             control.Appearance = _appearance;
             control.FloatLabel = _floatLabel;

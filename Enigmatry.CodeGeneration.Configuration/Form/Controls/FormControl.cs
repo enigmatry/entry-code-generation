@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Enigmatry.BuildingBlocks.Validation.ValidationRules;
+﻿using Enigmatry.BuildingBlocks.Validation.ValidationRules;
 using Enigmatry.CodeGeneration.Configuration.Form.Controls.Validators;
 using Enigmatry.CodeGeneration.Configuration.Formatters;
 using Humanizer;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
 {
@@ -22,7 +22,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         public FormControlAppearance? Appearance { get; set; }
         public FormControlFloatLabel? FloatLabel { get; set; }
         public IList<IFormlyValidationRule> ValidationRules { get; private set; } = new List<IFormlyValidationRule>();
-        public CustomValidator? Validator { get; set; }
+        public IEnumerable<CustomValidator> Validators { get; set; } = new List<CustomValidator>();
         public FormControlWrappers Wrappers { get; set; } = FormControlWrappers.Default;
         public abstract string FormlyType { get; }
         public IPropertyFormatter? Formatter { get; set; }

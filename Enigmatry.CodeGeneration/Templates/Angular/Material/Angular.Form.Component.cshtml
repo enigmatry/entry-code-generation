@@ -132,7 +132,7 @@ import { map, throttleTime } from 'rxjs/operators';
             @:}
             @:},
         }
-        @if (control.Validator != null)
+        @if (control.Validators.Any())
         {
             @Html.AddAsyncValidators(control)
         }

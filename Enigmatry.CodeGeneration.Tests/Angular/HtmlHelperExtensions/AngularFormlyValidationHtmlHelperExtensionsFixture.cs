@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Enigmatry.CodeGeneration.Configuration;
+﻿using Enigmatry.CodeGeneration.Configuration;
 using Enigmatry.CodeGeneration.Configuration.Form;
 using Enigmatry.CodeGeneration.Configuration.Form.Controls;
 using Enigmatry.CodeGeneration.Configuration.Form.Controls.Validators;
@@ -7,6 +6,7 @@ using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 using Enigmatry.CodeGeneration.Tests.Angular.Mocks;
 using Humanizer;
 using NUnit.Framework;
+using System.Linq;
 
 namespace Enigmatry.CodeGeneration.Tests.Angular.HtmlHelperExtensions
 {
@@ -26,7 +26,7 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.HtmlHelperExtensions
 
             _formComponent.FormControlsOfType<FormControl>()
                 .Single(x => x.PropertyName == nameof(FormMock.Name).Camelize())
-                .Validator = new CustomValidator("nameValidator");
+                .Validators = new[] { new CustomValidator("nameValidator") };
             _featureModule = new FeatureModule("module", new[] { _formComponent });
         }
 
@@ -65,7 +65,7 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.HtmlHelperExtensions
         [TestCase(nameof(FormMock.Name), ExpectedResult =
             "required: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`," +
             "maxlength: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`")]
-        [TestCase(nameof(FormMock.Amount),ExpectedResult =
+        [TestCase(nameof(FormMock.Amount), ExpectedResult =
             "min: (err, field) => $localize `:@@test.form.amount.min:CUSTOM_VALIDATION_MESSAGE`," +
             "max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAGE`")]
         [TestCase(nameof(FormMock.Email1), ExpectedResult = "pattern: (err, field) => $localize `:@@test.form.email1.pattern:CUSTOM_VALIDATION_MESSAGE`")]

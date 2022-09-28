@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Enigmatry.CodeGeneration.Configuration;
 using Enigmatry.CodeGeneration.Configuration.Form;
 using Enigmatry.CodeGeneration.Configuration.Form.Controls;
-using Enigmatry.CodeGeneration.Configuration.Form.Controls.Validators;
 
 namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
 {
@@ -36,8 +35,7 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 .FormControl(x => x.Name)
                 .WithLabel("Name")
                 .WithPlaceholder("Some / Name")
-                .WithValidator("UniqueName")
-                .WithValidator("IsEnsured")
+                .WithValidators("UniqueName", "IsEnsured")
                 .WithCustomWrapper("tooltip")
                 .WithTooltipText("Tooltip text")
                 .WithAppearance(FormControlAppearance.Outline)
@@ -47,7 +45,7 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
             formGroup
                 .TextareaFormControl(x => x.Description)
                 .WithLabel("Some Description")
-                .WithValidator("ValidDescription")
+                .WithValidators("ValidDescription")
                 .WithUpdateOn(ValueUpdateTrigger.OnBlur);
 
             formGroup

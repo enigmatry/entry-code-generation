@@ -19,7 +19,7 @@ namespace Enigmatry.CodeGeneration.Configuration
 
         public bool HasFormValidators =>
             Components.OfType<FormComponentModel>()
-                .Any(form => form.FormControlsOfType<FormControl>().Any(control => control.Validator != null));
+                .Any(form => form.FormControlsOfType<FormControl>().Any(control => control.Validators.Any()));
 
         public FeatureModule(string name, IEnumerable<IComponentModel> components)
         {

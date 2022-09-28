@@ -1,5 +1,6 @@
 ﻿using Enigmatry.CodeGeneration.Configuration;
 using Enigmatry.CodeGeneration.Configuration.Form;
+using Enigmatry.CodeGeneration.Configuration.Form.Controls;
 using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript;
 using Humanizer;
 using Microsoft.AspNetCore.Html;
@@ -7,7 +8,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Enigmatry.CodeGeneration.Configuration.Form.Controls;
 
 namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 {
@@ -22,9 +22,9 @@ namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
         }
 
         public static IHtmlContent AddAsyncValidators(this IHtmlHelper html, FormControl control) =>
-            control.Validator == null
-                ? html.Raw("")
-                : html.Raw($"asyncValidators: {{ validation: [ '{control.Validator.Name.Camelize()}' ] }},\r\n");
+            control.Validators.Any()
+                ? html.Raw($"asyncValidators: {{ validation: [ {String.Join(", ", control.Validators.Select(x => $"'{x.Name.Camelize()}'"))} ] }},\r\n")
+                : html.Raw("");
 
         public static IHtmlContent AddCustomValidationMessages(this IHtmlHelper html, FormControl form, bool enableI18N)
         {

@@ -1,4 +1,4 @@
-﻿namespace Enigmatry.CodeGeneration.Configuration.Form.Controls.Validators
+﻿namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
 {
     // same as: https://angular.io/api/forms/AbstractControlOptions#updateOn
     public enum ValueUpdateTrigger

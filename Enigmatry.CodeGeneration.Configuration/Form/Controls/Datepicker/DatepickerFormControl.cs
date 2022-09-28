@@ -1,11 +1,10 @@
-﻿
-namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
+﻿namespace Enigmatry.CodeGeneration.Configuration.Form.Controls.Datepicker
 {
-    public class DatepickerFormControl: FormControl
+    public class DatepickerFormControl : FormControl
     {
         public DatepickerFormControl()
         {
-            ValueUpdateTrigger = Validators.ValueUpdateTrigger.OnBlur;
+            ValueUpdateTrigger = Controls.ValueUpdateTrigger.OnBlur;
         }
 
         public override string FormlyType => "datepicker";
