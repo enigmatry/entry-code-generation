@@ -80,6 +80,11 @@ namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
                 .WithOptions(options => options.WithFixedValues<EnumMock>());
 
             formGroup
+                .MultiCheckboxFormControl(x => x.MockMultiCheckbox)
+                .WithLabel("MultiCheckbox")
+                .WithOptions(options => options.WithFixedValues<EnumMock>());
+
+            formGroup
                 .SelectFormControl(x => x.CategoryId)
                 .WithLabel("Category")
                 .WithOptions(options =>

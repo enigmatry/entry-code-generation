@@ -2,6 +2,6 @@
 {
     public class PasswordFormControl : InputControlBase
     {
-        public override string? Type { get; set; } = "password";
+        public override string Type => "password";
     }
 }

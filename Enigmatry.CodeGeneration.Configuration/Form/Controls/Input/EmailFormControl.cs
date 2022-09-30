@@ -2,6 +2,6 @@
 {
     public class EmailFormControl : InputControlBase
     {
-        public override string? Type { get; set; } = "email";
+        public override string Type => "email";
     }
 }

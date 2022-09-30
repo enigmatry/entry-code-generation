@@ -2,28 +2,20 @@
 
 namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
 {
-    public abstract class InputControlBuilderBase<TControl, TBuilder> : BaseControlBuilder<TControl, TBuilder> where TControl : InputControlBase
-        where TBuilder : InputControlBuilderBase<TControl, TBuilder>
+    public class InputControlBuilderBase<T> : BaseControlBuilder<T, InputControlBuilderBase<T>> where T : InputControlBase, new()
     {
-        protected string? _type;
-
-        protected InputControlBuilderBase(PropertyInfo propertyInfo) : base(propertyInfo)
+        public InputControlBuilderBase(PropertyInfo propertyInfo) : base(propertyInfo)
         {
         }
 
-        protected InputControlBuilderBase(string propertyName) : base(propertyName)
+        public InputControlBuilderBase(string propertyName) : base(propertyName)
         {
         }
 
-        /// <summary>
-        /// Configure form control input type
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public TBuilder WithInputType(string type)
+        public override FormControl Build(ComponentInfo componentInfo)
         {
-            _type = type;
-            return (TBuilder)this;
+            var inputFormControl = new T();
+            return Build(componentInfo, inputFormControl);
         }
     }
 }

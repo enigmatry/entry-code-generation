@@ -19,6 +19,7 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         public bool Visible { get; set; }
         public bool Readonly { get; set; }
         public string? ClassName { get; set; } = String.Empty;
+        public virtual string? Type { get; set; }
         public FormControlAppearance? Appearance { get; set; }
         public FormControlFloatLabel? FloatLabel { get; set; }
         public IList<IFormlyValidationRule> ValidationRules { get; private set; } = new List<IFormlyValidationRule>();

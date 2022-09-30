@@ -50,6 +50,8 @@ export class FormGeneratedComponent implements OnInit, OnDestroy {
                 @Input() formStatusOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: 'displayName' };
                 @Input() mockRadioOptions: any[] = [{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
                 @Input() mockRadioOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
+                @Input() mockMultiCheckboxOptions: any[] = [{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
+                @Input() mockMultiCheckboxOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
             private categoryIdOptions$ = new BehaviorSubject<any[]>([]);
                 @Input()
                 get categoryIdOptions(): any[] { return this.categoryIdOptions$.value; }
@@ -291,6 +293,28 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
             options: of(this.mockRadioOptions).pipe(map(opts => sortOptions(opts, this.mockRadioOptionsConfiguration.valueProperty, this.mockRadioOptionsConfiguration.sortProperty, this._localeId))),
             valueProp: this.mockRadioOptionsConfiguration.valueProperty,
             labelProp: this.mockRadioOptionsConfiguration.labelProperty,
+        hidden: !true,
+            typeFormatDef: undefined
+        },
+        },
+        {
+        key: 'mockMultiCheckbox',
+        type: this.resolveFieldType('multicheckbox', false),
+        className: '',
+        hideExpression: this.fieldsHideExpressions?.mockMultiCheckbox ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.mockMultiCheckbox ? this.fieldsDisableExpressions.mockMultiCheckbox(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.mockMultiCheckbox ? this.fieldsRequiredExpressions.mockMultiCheckbox(model) : false),
+        'model.mockMultiCheckbox': (model) => (this.fieldsPropertyExpressions?.mockMultiCheckbox ? this.fieldsPropertyExpressions.mockMultiCheckbox(model) : model.mockMultiCheckbox),
+        },
+        templateOptions: {
+        label: $localize `:@@test.form.mock-multi-checkbox.label:MultiCheckbox`,
+        placeholder: $localize `:@@test.form.mock-multi-checkbox.placeholder:MultiCheckbox`,
+        description: '',
+        type:'array',
+            options: of(this.mockMultiCheckboxOptions).pipe(map(opts => sortOptions(opts, this.mockMultiCheckboxOptionsConfiguration.valueProperty, this.mockMultiCheckboxOptionsConfiguration.sortProperty, this._localeId))),
+            valueProp: this.mockMultiCheckboxOptionsConfiguration.valueProperty,
+            labelProp: this.mockMultiCheckboxOptionsConfiguration.labelProperty,
         hidden: !true,
             typeFormatDef: undefined
         },

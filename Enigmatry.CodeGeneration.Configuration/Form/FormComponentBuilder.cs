@@ -27,15 +27,15 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
             return _formGroup.FormControl(propertyExpression);
         }
 
-        public InputFormControlBuilder InputFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+        public InputControlBuilderBase<InputFormControl> InputFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
         {
             return _formGroup.InputFormControl(propertyExpression);
         }
-        public EmailFormControlBuilder EmailFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+        public InputControlBuilderBase<EmailFormControl> EmailFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
         {
             return _formGroup.EmailFormControl(propertyExpression);
         }
-        public PasswordFormControlBuilder PasswordFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+        public InputControlBuilderBase<PasswordFormControl> PasswordFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
         {
             return _formGroup.PasswordFormControl(propertyExpression);
         }
@@ -63,6 +63,11 @@ namespace Enigmatry.CodeGeneration.Configuration.Form
         public RadioGroupFormControlBuilder RadioGroupFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
         {
             return _formGroup.RadioGroupFormControl(propertyExpression);
+        }
+
+        public MultiCheckboxFormControlBuilder MultiCheckboxFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+        {
+            return _formGroup.MultiCheckboxFormControl(propertyExpression);
         }
 
         public AutocompleteFormControlBuilder AutocompleteFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)

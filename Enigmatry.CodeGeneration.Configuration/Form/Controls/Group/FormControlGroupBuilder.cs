@@ -33,19 +33,19 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
             return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new InferredFormControlBuilder(propertyInfo));
         }
 
-        public InputFormControlBuilder InputFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+        public InputControlBuilderBase<InputFormControl> InputFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
         {
-            return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new InputFormControlBuilder(propertyInfo));
+            return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new InputControlBuilderBase<InputFormControl>(propertyInfo));
         }
 
-        public EmailFormControlBuilder EmailFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+        public InputControlBuilderBase<EmailFormControl> EmailFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
         {
-            return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new EmailFormControlBuilder(propertyInfo));
+            return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new InputControlBuilderBase<EmailFormControl>(propertyInfo));
         }
 
-        public PasswordFormControlBuilder PasswordFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+        public InputControlBuilderBase<PasswordFormControl> PasswordFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
         {
-            return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new PasswordFormControlBuilder(propertyInfo));
+            return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new InputControlBuilderBase<PasswordFormControl>(propertyInfo));
         }
 
         public CheckboxFormControlBuilder CheckboxFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
@@ -71,6 +71,11 @@ namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
         public RadioGroupFormControlBuilder RadioGroupFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
         {
             return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new RadioGroupFormControlBuilder(propertyInfo));
+        }
+        
+        public MultiCheckboxFormControlBuilder MultiCheckboxFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+        {
+            return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new MultiCheckboxFormControlBuilder(propertyInfo));
         }
 
         public AutocompleteFormControlBuilder AutocompleteFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)

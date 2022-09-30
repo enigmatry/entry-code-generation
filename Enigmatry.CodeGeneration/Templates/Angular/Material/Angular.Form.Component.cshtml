@@ -74,9 +74,9 @@ import { map, throttleTime } from 'rxjs/operators';
         @:description: @Html.Localize(control.Hint, _options.EnableI18N),
         @Html.Appearance(control.Appearance)
         @Html.FloatLabel(control.FloatLabel)
-        @if (control is InputControlBase input)
+        @if (!String.IsNullOrWhiteSpace(control.Type))
         {
-            @(String.IsNullOrWhiteSpace(input.Type) ? Html.Raw(String.Empty) : Html.Raw($"type: '{input.Type}',\r\n"))
+            @:type: '@Html.Raw(control.Type)',
         }
         @if (control is ButtonFormControl button)
         {
