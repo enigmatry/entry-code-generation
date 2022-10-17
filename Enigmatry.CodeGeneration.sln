@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29519.181
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32602.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C1018A9E-9611-4FFA-8D47-1C4E5601DB86}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,6 +17,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enigmatry.CodeGeneration.Console", "Enigmatry.CodeGeneration.Console\Enigmatry.CodeGeneration.Console.csproj", "{7F28AB36-EADC-48E8-86E3-D33E1B7C95F8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enigmatry.CodeGeneration.Tests", "Enigmatry.CodeGeneration.Tests\Enigmatry.CodeGeneration.Tests.csproj", "{6B06C3AF-992E-4DC7-ADA9-2F49A796B6BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enigmatry.CodeGeneration.Configuration.Tests", "Enigmatry.CodeGeneration.Configuration.Tests\Enigmatry.CodeGeneration.Configuration.Tests.csproj", "{C5BD5F95-6BF8-4132-8AC0-0AF7E119CB5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +42,10 @@ Global
 		{6B06C3AF-992E-4DC7-ADA9-2F49A796B6BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B06C3AF-992E-4DC7-ADA9-2F49A796B6BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B06C3AF-992E-4DC7-ADA9-2F49A796B6BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5BD5F95-6BF8-4132-8AC0-0AF7E119CB5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5BD5F95-6BF8-4132-8AC0-0AF7E119CB5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5BD5F95-6BF8-4132-8AC0-0AF7E119CB5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5BD5F95-6BF8-4132-8AC0-0AF7E119CB5F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
