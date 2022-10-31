@@ -32,6 +32,7 @@ export class @Model.AngularComponentName() implements OnInit {
   @@Input() rowSelectable = @Model.Row.IsSelectable.ToString().ToLower();
   @@Input() multiSelectable = @((Model.Row.Selection == RowSelectionType.Multiple).ToString().ToLower());
   @@Input() showSelectAllCheckbox = @Model.Row.ShowSelectAllOption.ToString().ToLower();
+  @@Input() rowSelected: @(Html.Raw(Model.ComponentInfo.ModelType))[] = [];
 
   @@Input() headerTemplate: TemplateRef@(Html.Raw("<any>")) | CellTemplate;
   @@Input() cellTemplate: TemplateRef@(Html.Raw("<any>")) | CellTemplate;

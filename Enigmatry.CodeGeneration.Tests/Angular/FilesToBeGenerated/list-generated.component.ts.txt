@@ -34,6 +34,7 @@ export class ListGeneratedComponent implements OnInit {
   @Input() rowSelectable = false;
   @Input() multiSelectable = false;
   @Input() showSelectAllCheckbox = true;
+  @Input() rowSelected: ListMockItem[] = [];
 
   @Input() headerTemplate: TemplateRef<any> | CellTemplate;
   @Input() cellTemplate: TemplateRef<any> | CellTemplate;
