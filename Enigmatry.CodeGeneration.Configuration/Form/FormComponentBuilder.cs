@@ -1,5 +1,5 @@
-﻿using Enigmatry.BuildingBlocks.Validation;
-using Enigmatry.BuildingBlocks.Validation.ValidationRules;
+﻿using Enigmatry.Entry.Validation;
+using Enigmatry.Entry.Validation.ValidationRules;
 using Enigmatry.CodeGeneration.Configuration.Builder;
 using Enigmatry.CodeGeneration.Configuration.Form.Controls;
 using Enigmatry.CodeGeneration.Configuration.Form.Controls.Array;

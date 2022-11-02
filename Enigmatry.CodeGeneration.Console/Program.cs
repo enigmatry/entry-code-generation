@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Enigmatry.BuildingBlocks.TemplatingEngine;
+using Enigmatry.Entry.TemplatingEngine;
 using Enigmatry.CodeGeneration.Angular;
 using Enigmatry.CodeGeneration.Console.Intro;
 using Enigmatry.CodeGeneration.Rendering;

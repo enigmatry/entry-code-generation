@@ -1,4 +1,4 @@
-﻿using Enigmatry.BuildingBlocks.Validation.ValidationRules;
+﻿using Enigmatry.Entry.Validation.ValidationRules;
 using Enigmatry.CodeGeneration.Configuration.Form.Controls.Validators;
 using Enigmatry.CodeGeneration.Configuration.Formatters;
 using Humanizer;

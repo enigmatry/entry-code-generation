@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Enigmatry.BuildingBlocks.TemplatingEngine;
+using Enigmatry.Entry.TemplatingEngine;
 using JetBrains.Annotations;
 
 namespace Enigmatry.CodeGeneration.Rendering

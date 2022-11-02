@@ -1,4 +1,4 @@
-﻿using Enigmatry.BuildingBlocks.Validation;
+﻿using Enigmatry.Entry.Validation;
 using Enigmatry.CodeGeneration.Configuration.Form;
 using FluentAssertions;
 using JetBrains.Annotations;
