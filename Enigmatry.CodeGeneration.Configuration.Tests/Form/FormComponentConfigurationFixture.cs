@@ -1,5 +1,5 @@
-﻿using Enigmatry.Entry.Validation;
-using Enigmatry.CodeGeneration.Configuration.Form;
+﻿using Enigmatry.CodeGeneration.Configuration.Form;
+using Enigmatry.CodeGeneration.Validation;
 using FluentAssertions;
 using JetBrains.Annotations;
 using NUnit.Framework;

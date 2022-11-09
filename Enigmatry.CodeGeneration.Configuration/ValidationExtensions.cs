@@ -1,4 +1,4 @@
-﻿using Enigmatry.Entry.Validation.ValidationRules;
+﻿using Enigmatry.CodeGeneration.Validation.ValidationRules;
 using System.Collections.Generic;
 using System.Linq;
 

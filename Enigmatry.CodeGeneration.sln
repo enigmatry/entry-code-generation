@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C1018A9E-9611-4FFA-8D47-1C4E5601DB86}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		Directory.Packages.props = Directory.Packages.props
 		Enigmatry.CodeGeneration.sln.DotSettings = Enigmatry.CodeGeneration.sln.DotSettings
 		nuget.config = nuget.config
 	EndProjectSection
@@ -18,7 +19,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enigmatry.CodeGeneration.Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enigmatry.CodeGeneration.Tests", "Enigmatry.CodeGeneration.Tests\Enigmatry.CodeGeneration.Tests.csproj", "{6B06C3AF-992E-4DC7-ADA9-2F49A796B6BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enigmatry.CodeGeneration.Configuration.Tests", "Enigmatry.CodeGeneration.Configuration.Tests\Enigmatry.CodeGeneration.Configuration.Tests.csproj", "{C5BD5F95-6BF8-4132-8AC0-0AF7E119CB5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enigmatry.CodeGeneration.Configuration.Tests", "Enigmatry.CodeGeneration.Configuration.Tests\Enigmatry.CodeGeneration.Configuration.Tests.csproj", "{C5BD5F95-6BF8-4132-8AC0-0AF7E119CB5F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enigmatry.CodeGeneration.Validation", "Enigmatry.CodeGeneration.Validation\Enigmatry.CodeGeneration.Validation.csproj", "{C62B1D17-622D-4844-A83D-1A1587894D4D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enigmatry.CodeGeneration.Validation.Tests", "Enigmatry.CodeGeneration.Validation.Tests\Enigmatry.CodeGeneration.Validation.Tests.csproj", "{539916F1-F50D-4185-990E-AECB3EDEF82F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,6 +51,14 @@ Global
 		{C5BD5F95-6BF8-4132-8AC0-0AF7E119CB5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5BD5F95-6BF8-4132-8AC0-0AF7E119CB5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5BD5F95-6BF8-4132-8AC0-0AF7E119CB5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C62B1D17-622D-4844-A83D-1A1587894D4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C62B1D17-622D-4844-A83D-1A1587894D4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C62B1D17-622D-4844-A83D-1A1587894D4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C62B1D17-622D-4844-A83D-1A1587894D4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{539916F1-F50D-4185-990E-AECB3EDEF82F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{539916F1-F50D-4185-990E-AECB3EDEF82F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{539916F1-F50D-4185-990E-AECB3EDEF82F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{539916F1-F50D-4185-990E-AECB3EDEF82F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

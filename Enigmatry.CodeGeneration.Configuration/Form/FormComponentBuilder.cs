@@ -1,13 +1,14 @@
-﻿using Enigmatry.Entry.Validation;
-using Enigmatry.Entry.Validation.ValidationRules;
-using Enigmatry.CodeGeneration.Configuration.Builder;
+﻿using Enigmatry.CodeGeneration.Configuration.Builder;
 using Enigmatry.CodeGeneration.Configuration.Form.Controls;
 using Enigmatry.CodeGeneration.Configuration.Form.Controls.Array;
+using Enigmatry.CodeGeneration.Validation;
+using Enigmatry.CodeGeneration.Validation.ValidationRules;
 using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+
 
 namespace Enigmatry.CodeGeneration.Configuration.Form
 {

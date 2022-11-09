@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using Enigmatry.Entry.Validation;
+using Enigmatry.CodeGeneration.Validation;
 
 namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
 {

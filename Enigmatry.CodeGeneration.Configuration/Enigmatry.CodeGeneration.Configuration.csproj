@@ -22,9 +22,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Enigmatry.Entry.Validation" Version="1.1.332" />
-        <PackageReference Include="Humanizer.Core" Version="2.14.1" />
-        <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" />
+        <PackageReference Include="Humanizer.Core" />
+        <PackageReference Include="JetBrains.Annotations" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Enigmatry.CodeGeneration.Validation\Enigmatry.CodeGeneration.Validation.csproj" />
     </ItemGroup>
 
 </Project>
