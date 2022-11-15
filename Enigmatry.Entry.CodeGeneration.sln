@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enigmatry.Entry.CodeGenerat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enigmatry.Entry.CodeGeneration", "Enigmatry.Entry.CodeGeneration\Enigmatry.Entry.CodeGeneration.csproj", "{8AF96177-FBC2-4D95-B6D3-73B72A6A66C1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enigmatry.Entry.CodeGeneration.Console", "Enigmatry.Entry.CodeGeneration.Console\Enigmatry.Entry.CodeGeneration.Console.csproj", "{7F28AB36-EADC-48E8-86E3-D33E1B7C95F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enigmatry.Entry.CodeGeneration.Tool", "Enigmatry.Entry.CodeGeneration.Tool\Enigmatry.Entry.CodeGeneration.Tool.csproj", "{7F28AB36-EADC-48E8-86E3-D33E1B7C95F8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enigmatry.Entry.CodeGeneration.Tests", "Enigmatry.Entry.CodeGeneration.Tests\Enigmatry.Entry.CodeGeneration.Tests.csproj", "{6B06C3AF-992E-4DC7-ADA9-2F49A796B6BE}"
 EndProject
