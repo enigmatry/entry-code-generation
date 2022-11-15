@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Enigmatry.CodeGeneration\Enigmatry.CodeGeneration.csproj" />
+    <ProjectReference Include="..\Enigmatry.Entry.CodeGeneration\Enigmatry.Entry.CodeGeneration.csproj" />
   </ItemGroup>
 
   <ItemGroup>

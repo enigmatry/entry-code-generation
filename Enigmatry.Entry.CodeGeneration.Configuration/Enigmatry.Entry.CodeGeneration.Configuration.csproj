@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
         <Nullable>enable</Nullable>
         <Authors>msl@enigmatry.com, mmr@enigmatry.com</Authors>
         <Company>enigmatry.com</Company>
@@ -22,9 +22,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Enigmatry.BuildingBlocks.Validation" Version="1.1.107" />
-        <PackageReference Include="Humanizer.Core" Version="2.10.1" />
-        <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" />
+        <PackageReference Include="Humanizer.Core" />
+        <PackageReference Include="JetBrains.Annotations" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Enigmatry.Entry.CodeGeneration.Validation\Enigmatry.Entry.CodeGeneration.Validation.csproj" />
     </ItemGroup>
 
 </Project>

@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Enigmatry.CodeGeneration.Validation\Enigmatry.CodeGeneration.Validation.csproj" />
+    <ProjectReference Include="..\Enigmatry.Entry.CodeGeneration.Validation\Enigmatry.Entry.CodeGeneration.Validation.csproj" />
   </ItemGroup>
 
 </Project>

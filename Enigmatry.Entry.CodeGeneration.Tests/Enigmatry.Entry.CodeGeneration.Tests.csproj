@@ -57,8 +57,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Enigmatry.CodeGeneration.Console\Enigmatry.CodeGeneration.Console.csproj" />
-    <ProjectReference Include="..\Enigmatry.CodeGeneration\Enigmatry.CodeGeneration.csproj" />
+    <ProjectReference Include="..\Enigmatry.Entry.CodeGeneration.Console\Enigmatry.Entry.CodeGeneration.Console.csproj" />
+    <ProjectReference Include="..\Enigmatry.Entry.CodeGeneration\Enigmatry.Entry.CodeGeneration.csproj" />
   </ItemGroup>
 
 </Project>

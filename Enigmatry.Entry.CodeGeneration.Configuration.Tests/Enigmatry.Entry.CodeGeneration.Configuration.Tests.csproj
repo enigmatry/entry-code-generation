@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Enigmatry.CodeGeneration.Configuration\Enigmatry.CodeGeneration.Configuration.csproj" />
+    <ProjectReference Include="..\Enigmatry.Entry.CodeGeneration.Configuration\Enigmatry.Entry.CodeGeneration.Configuration.csproj" />
   </ItemGroup>
 
 </Project>
