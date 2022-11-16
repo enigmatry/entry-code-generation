@@ -12,11 +12,11 @@ namespace Enigmatry.Entry.CodeGeneration.Tools.Intro
                     IntroLogoNames.Italic1,
                     new List<IntroLogoLine>()
                     {
-                        new IntroLogoLine(@" █▀▀ █▄░█ █ █▀▀ █▀▄▀█ ▄▀█ ▀█▀ █▀█ █▄█", ConsoleColor.DarkCyan),
-                        new IntroLogoLine(@" ██▄ █░▀█ █ █▄█ █░▀░█ █▀█ ░█░ █▀▄ ░█░", ConsoleColor.DarkCyan),
-                        new IntroLogoLine(@"    ______          __        ______                           __            ", ConsoleColor.Yellow),
-                        new IntroLogoLine(@"   / ____/___  ____/ /__     / ____/__  ____  ___  _________ _/ /_____  _____", ConsoleColor.Yellow),
-                        new IntroLogoLine(@"  / /   / __ \/ __  / _ \   / / __/ _ \/ __ \/ _ \/ ___/ __ `/ __/ __ \/ ___/", ConsoleColor.Yellow),
+                        new IntroLogoLine(@" █▀▀ █▄░█ ▀█▀ █▀█ █▄█", ConsoleColor.DarkCyan),
+                        new IntroLogoLine(@" ██▄ █░▀█ ░█░ █▀▄ ░█░", ConsoleColor.DarkCyan),
+                        new IntroLogoLine(@"   ______          __        ______                           __            ", ConsoleColor.Yellow),
+                        new IntroLogoLine(@"  / ____/___  ____/ /__     / ____/__  ____  ___  _________ _/ /_____  _____", ConsoleColor.Yellow),
+                        new IntroLogoLine(@" / /   / __ \/ __  / _ \   / / __/ _ \/ __ \/ _ \/ ___/ __ `/ __/ __ \/ ___/", ConsoleColor.Yellow),
                         new IntroLogoLine(@" \____/\____/\__,_/\___/   \____/\___/_/ /_/\___/_/   \__,_/\__/\____/_/     ", ConsoleColor.Yellow),
                     }
                 },
@@ -24,8 +24,8 @@ namespace Enigmatry.Entry.CodeGeneration.Tools.Intro
                     IntroLogoNames.Speed1,
                     new List<IntroLogoLine>()
                     {
-                        new IntroLogoLine(@" █▀▀ █▄░█ █ █▀▀ █▀▄▀█ ▄▀█ ▀█▀ █▀█ █▄█", ConsoleColor.DarkCyan),
-                        new IntroLogoLine(@" ██▄ █░▀█ █ █▄█ █░▀░█ █▀█ ░█░ █▀▄ ░█░", ConsoleColor.DarkCyan),
+                        new IntroLogoLine(@" █▀▀ █▄░█ ▀█▀ █▀█ █▄█", ConsoleColor.DarkCyan),
+                        new IntroLogoLine(@" ██▄ █░▀█ ░█░ █▀▄ ░█░", ConsoleColor.DarkCyan),
                         new IntroLogoLine(@" _________     _________          _________                              _____              ", ConsoleColor.Yellow),
                         new IntroLogoLine(@" __  ____/___________  /____      __  ____/_____________________________ __  /______________", ConsoleColor.Yellow),
                         new IntroLogoLine(@" _  /    _  __ \  __  /_  _ \     _  / __ _  _ \_  __ \  _ \_  ___/  __ `/  __/  __ \_  ___/", ConsoleColor.Yellow),
@@ -37,8 +37,8 @@ namespace Enigmatry.Entry.CodeGeneration.Tools.Intro
                     IntroLogoNames.Isometric1,
                     new List<IntroLogoLine>()
                     {
-                        new IntroLogoLine(@" █▀▀ █▄░█ █ █▀▀ █▀▄▀█ ▄▀█ ▀█▀ █▀█ █▄█", ConsoleColor.DarkCyan),
-                        new IntroLogoLine(@" ██▄ █░▀█ █ █▄█ █░▀░█ █▀█ ░█░ █▀▄ ░█░  ", ConsoleColor.DarkCyan, false),
+                        new IntroLogoLine(@" █▀▀ █▄░█ ▀█▀ █▀█ █▄█", ConsoleColor.DarkCyan),
+                        new IntroLogoLine(@" ██▄ █░▀█ ░█░ █▀▄ ░█░  ", ConsoleColor.DarkCyan, false),
                         new IntroLogoLine(@" THE WEEKEND EDITION ").WithColors(ConsoleColor.White, ConsoleColor.DarkGreen),
                         new IntroLogoLine(@"                  __                                                            __                   ").WithColors(ConsoleColor.Green),
                         new IntroLogoLine(@"                 /\ \                                                          /\ \__                ").WithColors(ConsoleColor.Green),
@@ -55,8 +55,8 @@ namespace Enigmatry.Entry.CodeGeneration.Tools.Intro
                     IntroLogoNames.Bloodbath1,
                     new List<IntroLogoLine>()
                     {
-                        new IntroLogoLine(@" █▀▀ █▄░█ █ █▀▀ █▀▄▀█ ▄▀█ ▀█▀ █▀█ █▄█", ConsoleColor.DarkCyan),
-                        new IntroLogoLine(@" ██▄ █░▀█ █ █▄█ █░▀░█ █▀█ ░█░ █▀▄ ░█░  ", ConsoleColor.DarkCyan, false),
+                        new IntroLogoLine(@" █▀▀ █▄░█ ▀█▀ █▀█ █▄█", ConsoleColor.DarkCyan),
+                        new IntroLogoLine(@" ██▄ █░▀█ ░█░ █▀▄ ░█░  ", ConsoleColor.DarkCyan, false),
                         new IntroLogoLine(@" FRIDAY THE 13th EDITION ").WithColors(ConsoleColor.White, ConsoleColor.DarkRed),
                         new IntroLogoLine(@"", ConsoleColor.Red),
                         new IntroLogoLine(@"  ▄████▄   ▒█████  ▓█████▄ ▓█████      ▄████ ▓█████  ███▄    █ ▓█████  ██▀███   ▄▄▄     ▄▄▄█████▓ ▒█████   ██▀███  ", ConsoleColor.Red),
