@@ -2,7 +2,7 @@
 using System.Linq;
 using Humanizer;
 
-namespace Enigmatry.CodeGeneration.Configuration.List.Model
+namespace Enigmatry.Entry.CodeGeneration.Configuration.List.Model
 {
     public class RowInfoBuilder
     {

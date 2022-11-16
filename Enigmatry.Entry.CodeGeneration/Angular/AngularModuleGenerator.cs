@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Enigmatry.CodeGeneration.Configuration;
-using Enigmatry.CodeGeneration.Rendering;
+using Enigmatry.Entry.CodeGeneration.Configuration;
+using Enigmatry.Entry.CodeGeneration.Rendering;
 using Humanizer;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 
-namespace Enigmatry.CodeGeneration.Angular
+namespace Enigmatry.Entry.CodeGeneration.Angular
 {
     [UsedImplicitly]
     public class AngularModuleGenerator : IModuleGenerator

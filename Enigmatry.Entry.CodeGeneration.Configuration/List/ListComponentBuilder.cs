@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Enigmatry.CodeGeneration.Configuration.Builder;
-using Enigmatry.CodeGeneration.Configuration.List.Model;
+using Enigmatry.Entry.CodeGeneration.Configuration.Builder;
+using Enigmatry.Entry.CodeGeneration.Configuration.List.Model;
 using JetBrains.Annotations;
 
-namespace Enigmatry.CodeGeneration.Configuration.List
+namespace Enigmatry.Entry.CodeGeneration.Configuration.List
 {
     [UsedImplicitly]
     public class ListComponentBuilder<T> : BaseComponentBuilder<ListComponentModel>

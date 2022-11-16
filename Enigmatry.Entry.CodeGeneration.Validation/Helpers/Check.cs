@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Enigmatry.CodeGeneration.Validation.Helpers
+namespace Enigmatry.Entry.CodeGeneration.Validation.Helpers
 {
     internal static class Check
     {

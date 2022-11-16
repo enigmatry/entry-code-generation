@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Enigmatry.CodeGeneration.Configuration.Formatters;
-using Enigmatry.CodeGeneration.Configuration.List;
+using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
+using Enigmatry.Entry.CodeGeneration.Configuration.List;
 
-namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
+namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.Mocks
 {
     public class ListMockConfiguration : IListComponentConfiguration<ListMock.Item>
     {

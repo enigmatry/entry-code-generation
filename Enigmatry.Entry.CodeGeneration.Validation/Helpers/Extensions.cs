@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Enigmatry.CodeGeneration.Validation.Helpers
+namespace Enigmatry.Entry.CodeGeneration.Validation.Helpers
 {
     internal static class Extensions
     {

@@ -1,12 +1,12 @@
 ﻿using System.Globalization;
 using System.Text.RegularExpressions;
-using Enigmatry.CodeGeneration.Validation.PropertyValidations;
-using Enigmatry.CodeGeneration.Validation.ValidationRules;
+using Enigmatry.Entry.CodeGeneration.Validation.PropertyValidations;
+using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 using FluentAssertions;
 using Humanizer;
 using NUnit.Framework;
 
-namespace Enigmatry.CodeGeneration.Validation.Tests;
+namespace Enigmatry.Entry.CodeGeneration.Validation.Tests;
 
 [Category("unit")]
 public class InitialPropertyValidationBuilderExtensionsFixtures

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Enigmatry.Entry.TemplatingEngine;
 using JetBrains.Annotations;
 
-namespace Enigmatry.CodeGeneration.Rendering
+namespace Enigmatry.Entry.CodeGeneration.Rendering
 {
     [UsedImplicitly]
     public class TemplateRenderer : ITemplateRenderer

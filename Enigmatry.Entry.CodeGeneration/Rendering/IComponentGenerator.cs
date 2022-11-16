@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Enigmatry.CodeGeneration.Configuration;
+using Enigmatry.Entry.CodeGeneration.Configuration;
 
-namespace Enigmatry.CodeGeneration.Rendering
+namespace Enigmatry.Entry.CodeGeneration.Rendering
 {
     public interface IComponentGenerator
     {

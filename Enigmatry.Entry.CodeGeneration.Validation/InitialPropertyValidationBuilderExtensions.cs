@@ -1,10 +1,10 @@
-﻿using Enigmatry.CodeGeneration.Validation.Helpers;
-using Enigmatry.CodeGeneration.Validation.PropertyValidations;
-using Enigmatry.CodeGeneration.Validation.ValidationRules;
-using System;
+﻿using System;
 using System.Text.RegularExpressions;
+using Enigmatry.Entry.CodeGeneration.Validation.Helpers;
+using Enigmatry.Entry.CodeGeneration.Validation.PropertyValidations;
+using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 
-namespace Enigmatry.CodeGeneration.Validation
+namespace Enigmatry.Entry.CodeGeneration.Validation
 {
     public static class InitialPropertyValidationBuilderExtensions
     {

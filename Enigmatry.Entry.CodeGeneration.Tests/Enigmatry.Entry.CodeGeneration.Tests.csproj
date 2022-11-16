@@ -50,14 +50,14 @@
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="NUnit" />
-    <PackageReference Include="NUnit3TestAdapter" >
+    <PackageReference Include="NUnit3TestAdapter">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Enigmatry.Entry.CodeGeneration.Console\Enigmatry.Entry.CodeGeneration.Console.csproj" />
+    <ProjectReference Include="..\Enigmatry.Entry.CodeGeneration.Tools\Enigmatry.Entry.CodeGeneration.Tools.csproj" />
     <ProjectReference Include="..\Enigmatry.Entry.CodeGeneration\Enigmatry.Entry.CodeGeneration.csproj" />
   </ItemGroup>
 

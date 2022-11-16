@@ -1,8 +1,8 @@
-﻿using Enigmatry.CodeGeneration.Validation.ValidationRules;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 
-namespace Enigmatry.CodeGeneration.Configuration
+namespace Enigmatry.Entry.CodeGeneration.Configuration
 {
     public static class ValidationExtensions
     {

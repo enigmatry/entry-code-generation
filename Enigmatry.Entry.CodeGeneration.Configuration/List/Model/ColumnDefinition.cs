@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Enigmatry.CodeGeneration.Configuration.Formatters;
+using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
 
-namespace Enigmatry.CodeGeneration.Configuration.List.Model
+namespace Enigmatry.Entry.CodeGeneration.Configuration.List.Model
 {
     public class ColumnDefinition
     {

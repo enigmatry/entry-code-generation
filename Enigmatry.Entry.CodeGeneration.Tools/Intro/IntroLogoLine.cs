@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Enigmatry.CodeGeneration.Console.Intro
+namespace Enigmatry.Entry.CodeGeneration.Tools.Intro
 {
     internal class IntroLogoLine : IntroContent
     {

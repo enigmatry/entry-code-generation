@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Enigmatry.CodeGeneration.Configuration.Form.Controls;
-using Enigmatry.CodeGeneration.Validation.ValidationRules;
+using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 
-namespace Enigmatry.CodeGeneration.Configuration.Form
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Form
 {
     public class FormComponentModel : IComponentModel
     {

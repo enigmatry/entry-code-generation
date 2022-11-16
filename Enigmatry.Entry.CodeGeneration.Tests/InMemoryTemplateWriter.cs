@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Enigmatry.CodeGeneration.Rendering;
+using Enigmatry.Entry.CodeGeneration.Rendering;
 
-namespace Enigmatry.CodeGeneration.Tests
+namespace Enigmatry.Entry.CodeGeneration.Tests
 {
     public class InMemoryTemplateWriter : ITemplateWriter
     {

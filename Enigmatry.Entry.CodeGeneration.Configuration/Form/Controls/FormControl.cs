@@ -1,12 +1,12 @@
-﻿using Enigmatry.CodeGeneration.Configuration.Form.Controls.Validators;
-using Enigmatry.CodeGeneration.Configuration.Formatters;
-using Humanizer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Enigmatry.CodeGeneration.Validation.ValidationRules;
+using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Validators;
+using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
+using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
+using Humanizer;
 
-namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
 {
     public abstract class FormControl
     {

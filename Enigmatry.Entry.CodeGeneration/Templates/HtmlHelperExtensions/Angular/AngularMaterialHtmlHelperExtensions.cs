@@ -1,9 +1,9 @@
-﻿using Enigmatry.CodeGeneration.Configuration;
-using Enigmatry.CodeGeneration.Configuration.Form.Controls;
+﻿using Enigmatry.Entry.CodeGeneration.Configuration;
+using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
+namespace Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 {
     public static class AngularMaterialHtmlHelperExtensions
     {

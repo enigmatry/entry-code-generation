@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions
+namespace Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions
 {
     public static class DisclaimerHtmlHelperExtensions
     {

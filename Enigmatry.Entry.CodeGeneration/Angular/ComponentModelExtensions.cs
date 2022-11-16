@@ -1,7 +1,7 @@
-﻿using Enigmatry.CodeGeneration.Configuration;
+﻿using Enigmatry.Entry.CodeGeneration.Configuration;
 using Humanizer;
 
-namespace Enigmatry.CodeGeneration.Angular
+namespace Enigmatry.Entry.CodeGeneration.Angular
 {
     public static class ComponentModelExtensions
     {

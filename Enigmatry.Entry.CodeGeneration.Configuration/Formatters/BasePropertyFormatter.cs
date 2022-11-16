@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Enigmatry.CodeGeneration.Configuration.Formatters
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Formatters
 {
     public abstract class BasePropertyFormatter : IPropertyFormatter
     {

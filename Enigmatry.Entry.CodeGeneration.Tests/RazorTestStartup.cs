@@ -1,8 +1,8 @@
-﻿using Enigmatry.CodeGeneration.Console;
+﻿using Enigmatry.Entry.CodeGeneration.Tools;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
-namespace Enigmatry.CodeGeneration.Tests
+namespace Enigmatry.Entry.CodeGeneration.Tests
 {
     // only needed so that startup is in the same assembly as the host
     // this way we avoid Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation.CompilationFailedException in the tests

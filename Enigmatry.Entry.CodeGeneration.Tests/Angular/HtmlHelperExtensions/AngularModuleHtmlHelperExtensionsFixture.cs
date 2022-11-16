@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Text.Encodings.Web;
-using Enigmatry.CodeGeneration.Angular;
-using Enigmatry.CodeGeneration.Configuration;
-using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions;
+using Enigmatry.Entry.CodeGeneration.Angular;
+using Enigmatry.Entry.CodeGeneration.Configuration;
+using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Enigmatry.CodeGeneration.Tests.Angular.HtmlHelperExtensions
+namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.HtmlHelperExtensions
 {
     public class AngularModuleHtmlHelperExtensionsFixture : CodeGenerationFixtureBase
     {

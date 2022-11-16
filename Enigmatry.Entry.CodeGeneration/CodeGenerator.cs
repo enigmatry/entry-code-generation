@@ -1,12 +1,12 @@
-﻿using Enigmatry.CodeGeneration.Configuration;
-using Enigmatry.CodeGeneration.Rendering;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Enigmatry.Entry.CodeGeneration.Configuration;
+using Enigmatry.Entry.CodeGeneration.Rendering;
+using Microsoft.Extensions.Logging;
 
-namespace Enigmatry.CodeGeneration
+namespace Enigmatry.Entry.CodeGeneration
 {
     public class CodeGenerator
     {

@@ -3,7 +3,7 @@ using FluentAssertions;
 using Humanizer;
 using NUnit.Framework;
 
-namespace Enigmatry.CodeGeneration.Validation.Tests;
+namespace Enigmatry.Entry.CodeGeneration.Validation.Tests;
 
 [Category("unit")]
 public class ValidationConfigurationFixture

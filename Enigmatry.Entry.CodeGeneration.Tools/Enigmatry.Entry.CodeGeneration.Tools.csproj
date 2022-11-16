@@ -5,7 +5,7 @@
     <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
     <Authors>msl@enigmatry.com, mmr@enigmatry.com</Authors>
     <Company>enigmatry.com</Company>
-    <Product>Enigmatry.CodeGeneration.Console</Product>
+    <Product>Enigmatry.Entry.CodeGeneration.Console</Product>
     <Description>Console runner for generating frontend code</Description>
     <RepositoryUrl>https://git.enigmatry.com/Enigmatry/enigmatry-blueprint-code-generation.git</RepositoryUrl>
     <PackageIcon>icon-192x192.png</PackageIcon>

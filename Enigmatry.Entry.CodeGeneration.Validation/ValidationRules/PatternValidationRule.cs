@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace Enigmatry.CodeGeneration.Validation.ValidationRules
+namespace Enigmatry.Entry.CodeGeneration.Validation.ValidationRules
 {
     public class PatternValidationRule : ValidationRule<Regex>
     {

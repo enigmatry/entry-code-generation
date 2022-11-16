@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
+namespace Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 {
     public static class AngularFormlyTemplateOptionsHtmlHelperExtensions
     {

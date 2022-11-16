@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Enigmatry.CodeGeneration.Console.Intro
+namespace Enigmatry.Entry.CodeGeneration.Tools.Intro
 {
     internal static class IntroLogoLines
     {
@@ -17,7 +17,6 @@ namespace Enigmatry.CodeGeneration.Console.Intro
                         new IntroLogoLine(@"    ______          __        ______                           __            ", ConsoleColor.Yellow),
                         new IntroLogoLine(@"   / ____/___  ____/ /__     / ____/__  ____  ___  _________ _/ /_____  _____", ConsoleColor.Yellow),
                         new IntroLogoLine(@"  / /   / __ \/ __  / _ \   / / __/ _ \/ __ \/ _ \/ ___/ __ `/ __/ __ \/ ___/", ConsoleColor.Yellow),
-                        new IntroLogoLine(@" / /___/ /_/ / /_/ /  __/  / /_/ /  __/ / / /  __/ /  / /_/ / /_/ /_/ / /    ", ConsoleColor.Yellow),
                         new IntroLogoLine(@" \____/\____/\__,_/\___/   \____/\___/_/ /_/\___/_/   \__,_/\__/\____/_/     ", ConsoleColor.Yellow),
                     }
                 },

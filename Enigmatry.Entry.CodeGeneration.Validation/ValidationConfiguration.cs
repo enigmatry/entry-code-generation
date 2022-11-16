@@ -1,11 +1,11 @@
-﻿using Enigmatry.CodeGeneration.Validation.PropertyValidations;
-using Enigmatry.CodeGeneration.Validation.ValidationRules;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Enigmatry.Entry.CodeGeneration.Validation.PropertyValidations;
+using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 
-namespace Enigmatry.CodeGeneration.Validation
+namespace Enigmatry.Entry.CodeGeneration.Validation
 {
     public abstract class ValidationConfiguration<T> : IHasFormlyValidationRules where T : class
     {

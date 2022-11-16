@@ -1,4 +1,4 @@
-﻿namespace Enigmatry.CodeGeneration.Rendering
+﻿namespace Enigmatry.Entry.CodeGeneration.Rendering
 {
     public interface ITemplateWriterAppender
     {

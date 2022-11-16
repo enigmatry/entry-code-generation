@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Enigmatry.Entry.CodeGeneration.Tools": {
+      "commandName": "Project",
+      "commandLineArgs": "Enigmatry.Entry.CodeGeneration.Tools --source-assembly D:\\Enigmatry\\enigmatry-blueprint-template\\Enigmatry.Blueprint.CodeGeneration.Setup\\bin\\Debug\\net6.0\\Enigmatry.Blueprint.CodeGeneration.Setup.dll --destination-directory D:\\Enigmatry\\enigmatry-blueprint-template\\enigmatry-blueprint-app\\src\\app\\features --enable-i18n true"
+    }
+  }
+}

@@ -1,10 +1,10 @@
-﻿using Enigmatry.CodeGeneration.Validation.ValidationRules;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
+using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 
-namespace Enigmatry.CodeGeneration.Validation.PropertyValidations
+namespace Enigmatry.Entry.CodeGeneration.Validation.PropertyValidations
 {
     public interface IPropertyValidation<T>
     {

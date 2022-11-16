@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace Enigmatry.CodeGeneration.Validation.ValidationRules
+namespace Enigmatry.Entry.CodeGeneration.Validation.ValidationRules
 {
     public class EmailAddressValidationRule : PatternValidationRule
     {

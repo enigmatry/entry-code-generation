@@ -1,12 +1,12 @@
-﻿using Enigmatry.CodeGeneration.Configuration.Form;
-using Enigmatry.CodeGeneration.Configuration.Form.Controls;
-using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
-using Enigmatry.CodeGeneration.Tests.Angular.Mocks;
+﻿using System.Linq;
+using Enigmatry.Entry.CodeGeneration.Configuration.Form;
+using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
+using Enigmatry.Entry.CodeGeneration.Tests.Angular.Mocks;
 using Humanizer;
 using NUnit.Framework;
-using System.Linq;
 
-namespace Enigmatry.CodeGeneration.Tests.Angular.HtmlHelperExtensions
+namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.HtmlHelperExtensions
 {
     public class AngularFormlyTemplateOptionsHtmlHelperExtensionsFixture : CodeGenerationFixtureBase
     {

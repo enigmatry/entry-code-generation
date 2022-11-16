@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
 {
     public abstract class SelectControlBuilderBase<TControl, TBuilder> : BaseControlBuilder<TControl, TBuilder> where TControl : SelectControlBase
         where TBuilder : SelectControlBuilderBase<TControl, TBuilder>

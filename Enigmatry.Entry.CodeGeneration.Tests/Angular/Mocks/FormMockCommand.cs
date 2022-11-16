@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
+namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.Mocks
 {
     public class FormMockCommand
     {

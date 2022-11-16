@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Enigmatry.CodeGeneration.Configuration.Builder;
-using Enigmatry.CodeGeneration.Configuration.Formatters;
+using Enigmatry.Entry.CodeGeneration.Configuration.Builder;
+using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
 using Humanizer;
 
-namespace Enigmatry.CodeGeneration.Configuration.List.Model
+namespace Enigmatry.Entry.CodeGeneration.Configuration.List.Model
 {
     public class ColumnDefinitionBuilder
     {

@@ -1,9 +1,9 @@
-﻿using Humanizer;
-using System;
+﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
+using Humanizer;
 
-namespace Enigmatry.CodeGeneration.Validation.ValidationRules
+namespace Enigmatry.Entry.CodeGeneration.Validation.ValidationRules
 {
     public abstract class ValidationRule<TRule> : IValidationRule
     {

@@ -1,12 +1,12 @@
 ﻿using System.Text;
-using Enigmatry.CodeGeneration.Angular;
-using Enigmatry.CodeGeneration.Configuration;
-using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript;
+using Enigmatry.Entry.CodeGeneration.Angular;
+using Enigmatry.Entry.CodeGeneration.Configuration;
+using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 // ReSharper disable once CheckNamespace
-namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions
+namespace Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions
 {
     public static class AngularModuleHtmlHelperExtensions
     {

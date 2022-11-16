@@ -1,4 +1,4 @@
-﻿namespace Enigmatry.CodeGeneration.Validation.PropertyValidations
+﻿namespace Enigmatry.Entry.CodeGeneration.Validation.PropertyValidations
 {
     public interface IInitialPropertyValidationBuilder<T, TProperty> : IBasePropertyValidationBuilder<T, TProperty> { }
 

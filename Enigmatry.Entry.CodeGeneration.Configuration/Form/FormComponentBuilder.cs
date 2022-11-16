@@ -1,16 +1,15 @@
-﻿using Enigmatry.CodeGeneration.Configuration.Builder;
-using Enigmatry.CodeGeneration.Configuration.Form.Controls;
-using Enigmatry.CodeGeneration.Configuration.Form.Controls.Array;
-using Enigmatry.CodeGeneration.Validation;
-using Enigmatry.CodeGeneration.Validation.ValidationRules;
-using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Enigmatry.Entry.CodeGeneration.Configuration.Builder;
+using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Array;
+using Enigmatry.Entry.CodeGeneration.Validation;
+using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
+using JetBrains.Annotations;
 
-
-namespace Enigmatry.CodeGeneration.Configuration.Form
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Form
 {
     [UsedImplicitly]
     public class FormComponentBuilder<T> : BaseComponentBuilder<FormComponentModel>

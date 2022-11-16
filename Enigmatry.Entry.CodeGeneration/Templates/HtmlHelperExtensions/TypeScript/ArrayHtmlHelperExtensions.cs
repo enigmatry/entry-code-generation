@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
+namespace Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
 {
     public static class ArrayHtmlHelperExtensions
     {

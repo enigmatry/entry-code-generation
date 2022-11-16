@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Enigmatry.CodeGeneration.Validation.ValidationRules
+namespace Enigmatry.Entry.CodeGeneration.Validation.ValidationRules
 {
     public interface IBaseValidationRule
     {

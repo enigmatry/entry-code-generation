@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
 {
     public class TextareaFormControlBuilder : BaseControlBuilder<TextareaFormControl, TextareaFormControlBuilder>
     {

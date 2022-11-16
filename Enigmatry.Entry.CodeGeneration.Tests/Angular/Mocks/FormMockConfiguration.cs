@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Enigmatry.CodeGeneration.Configuration;
-using Enigmatry.CodeGeneration.Configuration.Form;
-using Enigmatry.CodeGeneration.Configuration.Form.Controls;
+using Enigmatry.Entry.CodeGeneration.Configuration;
+using Enigmatry.Entry.CodeGeneration.Configuration.Form;
+using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 
-namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
+namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.Mocks
 {
     public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
     {

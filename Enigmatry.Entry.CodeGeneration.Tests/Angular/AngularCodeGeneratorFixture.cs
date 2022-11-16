@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-using Enigmatry.CodeGeneration.Rendering;
+using Enigmatry.Entry.CodeGeneration.Rendering;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Enigmatry.CodeGeneration.Tests.Angular
+namespace Enigmatry.Entry.CodeGeneration.Tests.Angular
 {
     public class AngularCodeGeneratorFixture : CodeGenerationFixtureBase
     {

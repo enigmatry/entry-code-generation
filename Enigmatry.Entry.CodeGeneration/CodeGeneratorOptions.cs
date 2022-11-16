@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Enigmatry.CodeGeneration
+namespace Enigmatry.Entry.CodeGeneration
 {
     public class CodeGeneratorOptions
     {

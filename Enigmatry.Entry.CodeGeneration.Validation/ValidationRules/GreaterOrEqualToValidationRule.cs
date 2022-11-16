@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Enigmatry.CodeGeneration.Validation.ValidationRules
+namespace Enigmatry.Entry.CodeGeneration.Validation.ValidationRules
 {
     public class GreaterOrEqualToValidationRule<T> : NumbericValidationRule<T>
         where T : struct, IComparable, IComparable<T>, IConvertible, IEquatable<T>, IFormattable

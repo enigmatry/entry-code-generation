@@ -1,4 +1,4 @@
-﻿namespace Enigmatry.CodeGeneration
+﻿namespace Enigmatry.Entry.CodeGeneration
 {
     public enum Framework
     {

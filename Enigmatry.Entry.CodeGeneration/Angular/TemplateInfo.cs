@@ -1,4 +1,4 @@
-﻿namespace Enigmatry.CodeGeneration.Angular
+﻿namespace Enigmatry.Entry.CodeGeneration.Angular
 {
     public class TemplateInfo
     {

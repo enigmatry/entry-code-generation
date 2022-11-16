@@ -1,4 +1,4 @@
-﻿namespace Enigmatry.CodeGeneration.Configuration.Form.Controls.Datepicker
+﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
 {
     public class DatepickerFormControl : FormControl
     {

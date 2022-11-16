@@ -1,4 +1,4 @@
-﻿namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
+﻿namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.Mocks
 {
     public enum EnumMock
     {

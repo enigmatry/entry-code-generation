@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Enigmatry.CodeGeneration.Configuration.Form.Controls.Array
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Array
 {
     public class ArrayFormControlBuilder<T> : BaseControlBuilder<ArrayFormControl, ArrayFormControlBuilder<T>>
     {

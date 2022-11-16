@@ -1,7 +1,7 @@
-﻿using Enigmatry.CodeGeneration.Validation.ValidationRules;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 
-namespace Enigmatry.CodeGeneration.Validation
+namespace Enigmatry.Entry.CodeGeneration.Validation
 {
     public interface IHasFormlyValidationRules
     {

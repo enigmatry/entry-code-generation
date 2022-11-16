@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Enigmatry.CodeGeneration.Configuration.Formatters;
+using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
 
 // ReSharper disable once CheckNamespace
-namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
+namespace Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 {
     public static class AngularFormattingHtmlHelperExtensions
     {

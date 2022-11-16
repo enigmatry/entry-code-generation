@@ -1,15 +1,15 @@
-﻿using Enigmatry.CodeGeneration.Configuration;
-using Enigmatry.CodeGeneration.Configuration.Form;
-using Enigmatry.CodeGeneration.Configuration.Form.Controls;
-using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Enigmatry.Entry.CodeGeneration.Configuration;
+using Enigmatry.Entry.CodeGeneration.Configuration.Form;
+using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript;
 using Humanizer;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
+namespace Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 {
     public static class AngularFormlyValidationHtmlHelperExtensions
     {

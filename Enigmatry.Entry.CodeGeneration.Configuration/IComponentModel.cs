@@ -1,4 +1,4 @@
-﻿namespace Enigmatry.CodeGeneration.Configuration
+﻿namespace Enigmatry.Entry.CodeGeneration.Configuration
 {
     public interface IComponentModel
     {

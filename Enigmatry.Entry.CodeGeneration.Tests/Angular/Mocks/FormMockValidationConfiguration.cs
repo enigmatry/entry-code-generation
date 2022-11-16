@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
-using Enigmatry.CodeGeneration.Validation;
+using Enigmatry.Entry.CodeGeneration.Validation;
 
-namespace Enigmatry.CodeGeneration.Tests.Angular.Mocks
+namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.Mocks
 {
     public class FormMockValidationConfiguration : ValidationConfiguration<FormMock>
     {

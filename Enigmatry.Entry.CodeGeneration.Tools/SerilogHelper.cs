@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
 
-namespace Enigmatry.CodeGeneration.Console
+namespace Enigmatry.Entry.CodeGeneration.Tools
 {
     public static class SerilogHelper
     {

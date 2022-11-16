@@ -1,4 +1,4 @@
-﻿namespace Enigmatry.CodeGeneration.Validation.Tests;
+﻿namespace Enigmatry.Entry.CodeGeneration.Validation.Tests;
 
 internal class ValidationMockModel
 {

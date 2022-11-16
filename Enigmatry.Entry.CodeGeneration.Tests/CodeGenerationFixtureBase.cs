@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
-using Enigmatry.CodeGeneration.Angular;
-using Enigmatry.CodeGeneration.Rendering;
+using Enigmatry.Entry.CodeGeneration.Angular;
+using Enigmatry.Entry.CodeGeneration.Rendering;
 using Enigmatry.Entry.TemplatingEngine;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NUnit.Framework;
 
-namespace Enigmatry.CodeGeneration.Tests
+namespace Enigmatry.Entry.CodeGeneration.Tests
 {
     public abstract class CodeGenerationFixtureBase
     {

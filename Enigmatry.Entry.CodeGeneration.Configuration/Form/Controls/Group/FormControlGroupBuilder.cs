@@ -1,12 +1,12 @@
-﻿using Enigmatry.CodeGeneration.Configuration.Form.Controls.Array;
-using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Array;
+using JetBrains.Annotations;
 
-namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
 {
     [UsedImplicitly]
     public class FormControlGroupBuilder<T> : BaseControlBuilder<FormControlGroup, FormControlGroupBuilder<T>>

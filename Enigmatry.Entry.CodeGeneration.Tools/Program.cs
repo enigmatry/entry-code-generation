@@ -5,16 +5,16 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Enigmatry.Entry.CodeGeneration.Angular;
+using Enigmatry.Entry.CodeGeneration.Rendering;
+using Enigmatry.Entry.CodeGeneration.Tools.Intro;
 using Enigmatry.Entry.TemplatingEngine;
-using Enigmatry.CodeGeneration.Angular;
-using Enigmatry.CodeGeneration.Console.Intro;
-using Enigmatry.CodeGeneration.Rendering;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
-namespace Enigmatry.CodeGeneration.Console
+namespace Enigmatry.Entry.CodeGeneration.Tools
 {
     internal class Program
     {

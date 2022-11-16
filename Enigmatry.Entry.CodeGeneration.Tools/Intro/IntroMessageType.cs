@@ -1,4 +1,4 @@
-﻿namespace Enigmatry.CodeGeneration.Console.Intro
+﻿namespace Enigmatry.Entry.CodeGeneration.Tools.Intro
 {
     /// <summary>
     /// Used to determine priority of message printing, in case when multiple messages have printing condition fulfilled.

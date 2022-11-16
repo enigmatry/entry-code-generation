@@ -1,10 +1,10 @@
-﻿@using Enigmatry.CodeGeneration;
-@using Enigmatry.CodeGeneration.Angular;
-@using Enigmatry.CodeGeneration.Configuration.Form.Controls
-@using Enigmatry.CodeGeneration.Configuration.Form.Controls.Array
-@using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
-@using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
-@model Enigmatry.CodeGeneration.Configuration.Form.FormComponentModel;
+﻿@using Enigmatry.Entry.CodeGeneration
+@using Enigmatry.Entry.CodeGeneration.Angular
+@using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
+@using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Array
+@using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
+@using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
+@model Enigmatry.Entry.CodeGeneration.Configuration.Form.FormComponentModel;
 @inject CodeGeneratorOptions _options;
 import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, OnDestroy, Optional, Output, TemplateRef } from '@@angular/core';
 import { FormGroup } from '@@angular/forms';

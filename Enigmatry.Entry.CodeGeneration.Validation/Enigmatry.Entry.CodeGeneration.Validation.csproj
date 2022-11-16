@@ -7,7 +7,7 @@
     <IsPackable>false</IsPackable>
     <Authors>mmr</Authors>
     <Company>Enigmatry</Company>
-    <Product>Enigmatry.CodeGeneration.Validation</Product>
+    <Product>Enigmatry.Entry.CodeGeneration.Validation</Product>
     <Description>Validation configurations to be used in form generator</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
   </PropertyGroup>

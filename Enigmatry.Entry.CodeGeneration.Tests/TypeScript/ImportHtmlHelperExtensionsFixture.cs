@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text.Encodings.Web;
-using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript;
+using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript;
 using NUnit.Framework;
 
-namespace Enigmatry.CodeGeneration.Tests.TypeScript
+namespace Enigmatry.Entry.CodeGeneration.Tests.TypeScript
 {
     public class ImportHtmlHelperExtensionsFixture : CodeGenerationFixtureBase
     {

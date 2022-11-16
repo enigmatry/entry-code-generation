@@ -1,10 +1,10 @@
-﻿using Enigmatry.CodeGeneration.Validation.Helpers;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
+using Enigmatry.Entry.CodeGeneration.Validation.Helpers;
 
-namespace Enigmatry.CodeGeneration.Validation.ValidationRules
+namespace Enigmatry.Entry.CodeGeneration.Validation.ValidationRules
 {
     public abstract class NumbericValidationRule<T> : ValidationRule<T>
         where T : struct, IComparable, IComparable<T>, IConvertible, IEquatable<T>, IFormattable

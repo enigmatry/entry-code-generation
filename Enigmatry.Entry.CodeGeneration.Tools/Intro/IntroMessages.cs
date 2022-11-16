@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Enigmatry.CodeGeneration.Console.Intro
+namespace Enigmatry.Entry.CodeGeneration.Tools.Intro
 {
     internal static class IntroMessages
     {

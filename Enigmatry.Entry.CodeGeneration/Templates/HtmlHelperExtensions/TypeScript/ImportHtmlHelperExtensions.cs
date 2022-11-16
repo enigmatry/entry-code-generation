@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Enigmatry.CodeGeneration.Configuration;
+using Enigmatry.Entry.CodeGeneration.Configuration;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 // ReSharper disable PossibleMultipleEnumeration
-namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
+namespace Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
 {
     public static class ImportHtmlHelperExtensions
     {

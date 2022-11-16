@@ -1,9 +1,9 @@
-﻿@using Enigmatry.CodeGeneration
-@using Enigmatry.CodeGeneration.Angular
-@using Enigmatry.CodeGeneration.Configuration.List.Model
-@using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
-@using Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
-@model Enigmatry.CodeGeneration.Configuration.List.ListComponentModel;
+﻿@using Enigmatry.Entry.CodeGeneration
+@using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
+@using Enigmatry.Entry.CodeGeneration.Angular
+@using Enigmatry.Entry.CodeGeneration.Configuration.List.Model
+@using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
+@model Enigmatry.Entry.CodeGeneration.Configuration.List.ListComponentModel;
 @inject CodeGeneratorOptions _options;
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@@angular/core';
 import { CellTemplate, ColumnDef, ContextMenuItem, RowClassFormatter, RowContextMenuFormatter } from '@@enigmatry/angular-building-blocks/enigmatry-grid';

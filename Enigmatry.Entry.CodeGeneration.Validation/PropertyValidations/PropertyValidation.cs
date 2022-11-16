@@ -1,12 +1,12 @@
-﻿using Enigmatry.CodeGeneration.Validation.Helpers;
-using Enigmatry.CodeGeneration.Validation.ValidationRules;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Enigmatry.Entry.CodeGeneration.Validation.Helpers;
+using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 
-namespace Enigmatry.CodeGeneration.Validation.PropertyValidations
+namespace Enigmatry.Entry.CodeGeneration.Validation.PropertyValidations
 {
     public class PropertyValidation<T, TProperty> : IPropertyValidation<T, TProperty>
     {

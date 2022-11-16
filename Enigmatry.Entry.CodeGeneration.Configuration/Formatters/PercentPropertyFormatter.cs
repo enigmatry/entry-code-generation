@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Enigmatry.CodeGeneration.Configuration.Formatters
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Formatters
 {
     public class PercentPropertyFormatter : BasePropertyFormatter
     {

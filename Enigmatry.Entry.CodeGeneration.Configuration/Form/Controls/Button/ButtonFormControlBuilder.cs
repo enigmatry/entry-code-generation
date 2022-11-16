@@ -1,7 +1,7 @@
-﻿using Humanizer;
-using System.Reflection;
+﻿using System.Reflection;
+using Humanizer;
 
-namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
 {
     public class ButtonFormControlBuilder: BaseControlBuilder<ButtonFormControl, ButtonFormControlBuilder>
     {

@@ -1,8 +1,8 @@
-﻿using Enigmatry.CodeGeneration.Validation.Helpers;
+﻿using System;
+using Enigmatry.Entry.CodeGeneration.Validation.Helpers;
 using Humanizer;
-using System;
 
-namespace Enigmatry.CodeGeneration.Validation.PropertyValidations
+namespace Enigmatry.Entry.CodeGeneration.Validation.PropertyValidations
 {
     public interface IPropertyValidationBuilder<T, TProperty> : IInitialPropertyValidationBuilder<T, TProperty>
     {

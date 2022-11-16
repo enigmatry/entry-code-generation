@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Reflection.Metadata;
 
-namespace Enigmatry.CodeGeneration.Console.Intro
+namespace Enigmatry.Entry.CodeGeneration.Tools.Intro
 {
     internal class IntroMessage : IntroContent
     {

@@ -1,8 +1,7 @@
-﻿using Enigmatry.CodeGeneration.Configuration.Form.Controls.Datepicker;
-using System;
+﻿using System;
 using System.Reflection;
 
-namespace Enigmatry.CodeGeneration.Configuration.Form.Controls
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
 {
     public class InferredFormControlBuilder : BaseControlBuilder<FormControl, InferredFormControlBuilder>
     {

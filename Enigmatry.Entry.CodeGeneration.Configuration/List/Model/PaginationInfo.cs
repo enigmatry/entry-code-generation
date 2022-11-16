@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Enigmatry.CodeGeneration.Configuration.List.Model
+namespace Enigmatry.Entry.CodeGeneration.Configuration.List.Model
 {
     public class PaginationInfo
     {

@@ -1,13 +1,13 @@
-﻿using Enigmatry.CodeGeneration.Configuration;
-using Enigmatry.CodeGeneration.Configuration.List.Model;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Enigmatry.Entry.CodeGeneration.Configuration;
+using Enigmatry.Entry.CodeGeneration.Configuration.List.Model;
 using Humanizer;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace Enigmatry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
+namespace Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 {
     public static class EnigmatryGridHtmlHelperExtensions
     {
