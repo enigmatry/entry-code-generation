@@ -9,8 +9,18 @@
     <Company>Enigmatry</Company>
     <Product>Enigmatry.Entry.CodeGeneration.Validation</Product>
     <Description>Validation configurations to be used in form generator</Description>
+    <RepositoryUrl>https://enigmatry@dev.azure.com/enigmatry/Enigmatry%20Code%20Generation/_git/enigmatry-code-generation</RepositoryUrl>
+    <PackageIcon>icon-192x192.png</PackageIcon>
+    <IsPackable>true</IsPackable>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\icon-192x192.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Humanizer.Core" />
