@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net6.0</TargetFrameworks>
     <Authors>msl@enigmatry.com, mmr@enigmatry.com</Authors>
     <Company>enigmatry.com</Company>
     <Product>Enigmatry.Entry.CodeGeneration.Tools</Product>
