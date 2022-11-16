@@ -7,11 +7,11 @@
     <Company>enigmatry.com</Company>
     <Product>Enigmatry.Entry.CodeGeneration.Console</Product>
     <Description>Console runner for generating frontend code</Description>
-    <RepositoryUrl>https://git.enigmatry.com/Enigmatry/enigmatry-blueprint-code-generation.git</RepositoryUrl>
+    <RepositoryUrl>https://enigmatry@dev.azure.com/enigmatry/Enigmatry%20Code%20Generation/_git/enigmatry-code-generation</RepositoryUrl>
     <PackageIcon>icon-192x192.png</PackageIcon>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackAsTool>true</PackAsTool>
-    <ToolCommandName>enigmatry-codegen</ToolCommandName>
+    <ToolCommandName>entry-codegen</ToolCommandName>
   </PropertyGroup>
 
   <ItemGroup>
