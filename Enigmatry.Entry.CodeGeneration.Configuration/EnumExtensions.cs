@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Reflection;
 
-namespace Enigmatry.CodeGeneration.Configuration
+namespace Enigmatry.Entry.CodeGeneration.Configuration
 {
     public static class EnumExtensions
     {

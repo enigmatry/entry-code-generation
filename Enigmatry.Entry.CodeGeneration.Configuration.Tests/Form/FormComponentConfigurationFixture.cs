@@ -1,10 +1,10 @@
-﻿using Enigmatry.CodeGeneration.Configuration.Form;
-using Enigmatry.CodeGeneration.Validation;
+﻿using Enigmatry.Entry.CodeGeneration.Configuration.Form;
+using Enigmatry.Entry.CodeGeneration.Validation;
 using FluentAssertions;
 using JetBrains.Annotations;
 using NUnit.Framework;
 
-namespace Enigmatry.CodeGeneration.Configuration.Tests.Form;
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Tests.Form;
 
 [Category("unit")]
 public class FormComponentConfigurationFixture
@@ -31,16 +31,14 @@ public class FormComponentConfigurationFixture
 
         formComponent.FormControls.Count.Should().Be(5);
 
-        var titleFormControl = formComponent.FormControls
-            .Single(x => x.PropertyName == nameof(ProjectDetails.Title).ToLowerInvariant());
+        var titleFormControl = formComponent.FormControls.Single(x => x.PropertyName == nameof(ProjectDetails.Title).ToLowerInvariant());
 
         titleFormControl.ValidationRules.Count.Should().Be(1);
         titleFormControl.ValidationRules.Single()
             .FormlyRuleName
             .Should().Be("maxLength");
 
-        var detailsFormControl = formComponent.FormControls
-            .Single(x => x.PropertyName == nameof(ProjectDetails.Description).ToLowerInvariant());
+        var detailsFormControl = formComponent.FormControls.Single(x => x.PropertyName == nameof(ProjectDetails.Description).ToLowerInvariant());
         detailsFormControl.ValidationRules.Count.Should().Be(1);
         detailsFormControl.ValidationRules.Single()
             .FormlyRuleName

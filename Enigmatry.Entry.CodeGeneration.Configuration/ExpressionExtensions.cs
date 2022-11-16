@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Enigmatry.CodeGeneration.Configuration
+namespace Enigmatry.Entry.CodeGeneration.Configuration
 {
     public static class ExpressionExtensions
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Enigmatry.CodeGeneration.Configuration.Builder
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Builder
 {
     public class RoutingInfoBuilder : IBuilder<RoutingInfo>
     {

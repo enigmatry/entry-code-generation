@@ -1,8 +1,8 @@
-﻿using Enigmatry.CodeGeneration.Configuration.List;
+﻿using Enigmatry.Entry.CodeGeneration.Configuration.List;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Enigmatry.CodeGeneration.Configuration.Tests.List;
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Tests.List;
 
 [Category("unit")]
 public class ListComponentBuilderFixture

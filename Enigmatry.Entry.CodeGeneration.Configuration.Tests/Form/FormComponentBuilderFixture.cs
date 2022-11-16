@@ -1,8 +1,8 @@
-﻿using Enigmatry.CodeGeneration.Configuration.Form;
+﻿using Enigmatry.Entry.CodeGeneration.Configuration.Form;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Enigmatry.CodeGeneration.Configuration.Tests.Form;
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Tests.Form;
 
 [Category("unit")]
 public class FormComponentBuilderFixture

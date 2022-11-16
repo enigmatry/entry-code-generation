@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Enigmatry.CodeGeneration.Configuration.Builder
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Builder
 {
     public abstract class BaseComponentBuilder<T> : IComponentBuilder<T> where T : IComponentModel
     {

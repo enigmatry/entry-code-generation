@@ -5,9 +5,9 @@
         <Nullable>enable</Nullable>
         <Authors>msl@enigmatry.com, mmr@enigmatry.com</Authors>
         <Company>enigmatry.com</Company>
-        <Product>Enigmatry.CodeGeneration.Configuration</Product>
+        <Product>Enigmatry.Entry.CodeGeneration.Configuration</Product>
         <Description>Package for generating frontend code</Description>
-        <RepositoryUrl>https://git.enigmatry.com/Enigmatry/enigmatry-blueprint-code-generation.git</RepositoryUrl>
+        <RepositoryUrl>https://enigmatry@dev.azure.com/enigmatry/Enigmatry%20Code%20Generation/_git/enigmatry-code-generation</RepositoryUrl>
         <PackageIcon>icon-192x192.png</PackageIcon>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <IsPackable>true</IsPackable>

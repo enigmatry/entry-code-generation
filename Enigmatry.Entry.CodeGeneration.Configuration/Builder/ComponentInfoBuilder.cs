@@ -1,7 +1,7 @@
 ﻿using System;
 using Humanizer;
 
-namespace Enigmatry.CodeGeneration.Configuration.Builder
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Builder
 {
     public class ComponentInfoBuilder : IBuilder<ComponentInfo>
     {

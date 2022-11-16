@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Enigmatry.CodeGeneration.Configuration.Form;
-using Enigmatry.CodeGeneration.Configuration.Form.Controls;
+using Enigmatry.Entry.CodeGeneration.Configuration.Form;
+using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 
-namespace Enigmatry.CodeGeneration.Configuration
+namespace Enigmatry.Entry.CodeGeneration.Configuration
 {
     public class FeatureModule : IFeatureModule
     {

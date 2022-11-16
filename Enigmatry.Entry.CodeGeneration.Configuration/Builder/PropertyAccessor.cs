@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
-using Enigmatry.CodeGeneration.Configuration.Formatters;
+using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
 using Humanizer;
 
-namespace Enigmatry.CodeGeneration.Configuration.Builder
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Builder
 {
     public class PropertyAccessor
     {

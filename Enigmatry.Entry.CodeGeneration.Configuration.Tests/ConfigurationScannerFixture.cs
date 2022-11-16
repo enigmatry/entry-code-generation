@@ -1,8 +1,8 @@
-﻿using Enigmatry.CodeGeneration.Configuration.List;
+﻿using Enigmatry.Entry.CodeGeneration.Configuration.List;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Enigmatry.CodeGeneration.Configuration.Tests;
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Tests;
 
 [Category("unit")]
 public class ConfigurationScannerFixture

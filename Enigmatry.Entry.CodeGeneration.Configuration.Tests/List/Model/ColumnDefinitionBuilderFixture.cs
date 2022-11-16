@@ -1,9 +1,9 @@
-﻿using Enigmatry.CodeGeneration.Configuration.Formatters;
-using Enigmatry.CodeGeneration.Configuration.List.Model;
+﻿using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
+using Enigmatry.Entry.CodeGeneration.Configuration.List.Model;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Enigmatry.CodeGeneration.Configuration.Tests.List.Model;
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Tests.List.Model;
 
 [Category("unit")]
 public class ColumnDefinitionBuilderFixture

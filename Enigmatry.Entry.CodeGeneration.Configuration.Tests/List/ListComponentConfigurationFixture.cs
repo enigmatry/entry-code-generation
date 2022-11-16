@@ -1,9 +1,9 @@
-﻿using Enigmatry.CodeGeneration.Configuration.Formatters;
-using Enigmatry.CodeGeneration.Configuration.List;
+﻿using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
+using Enigmatry.Entry.CodeGeneration.Configuration.List;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Enigmatry.CodeGeneration.Configuration.Tests.List;
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Tests.List;
 
 [Category("unit")]
 public class ListComponentConfigurationFixture
@@ -23,13 +23,11 @@ public class ListComponentConfigurationFixture
         componentModel.Columns.Count.Should().Be(5);
         componentModel.VisibleColumns.Count().Should().Be(4);
 
-        componentModel.Columns
-            .Where(x => x.Property == "startDate" || x.Property == "endDate")
+        componentModel.Columns.Where(x => x.Property == "startDate" || x.Property == "endDate")
             .All(x => x.Formatter.GetType() == typeof(DatePropertyFormatter))
             .Should().BeTrue();
 
-        componentModel.Columns
-            .Where(x => x.Property == "budget")
+        componentModel.Columns.Where(x => x.Property == "budget")
             .All(x => x.Formatter.GetType() == typeof(DecimalPropertyFormatter))
             .Should().BeTrue();
     }
