@@ -39,7 +39,7 @@ namespace Enigmatry.Entry.CodeGeneration.Tools.Intro
                     {
                         new IntroLogoLine(@" █▀▀ █▄░█ ▀█▀ █▀█ █▄█", ConsoleColor.DarkCyan),
                         new IntroLogoLine(@" ██▄ █░▀█ ░█░ █▀▄ ░█░  ", ConsoleColor.DarkCyan, false),
-                        new IntroLogoLine(@" THE WEEKEND EDITION ").WithColors(ConsoleColor.White, ConsoleColor.DarkGreen),
+                        new IntroLogoLine(@" THE WEEKEND EDITION ").WithColors(ConsoleColor.Green),
                         new IntroLogoLine(@"                  __                                                            __                   ").WithColors(ConsoleColor.Green),
                         new IntroLogoLine(@"                 /\ \                                                          /\ \__                ").WithColors(ConsoleColor.Green),
                         new IntroLogoLine(@"   ___    ___    \_\ \     __          __      __    ___      __   _ __    __  \ \ ,_\   ___   _ __  ").WithColors(ConsoleColor.Green),
@@ -57,7 +57,7 @@ namespace Enigmatry.Entry.CodeGeneration.Tools.Intro
                     {
                         new IntroLogoLine(@" █▀▀ █▄░█ ▀█▀ █▀█ █▄█", ConsoleColor.DarkCyan),
                         new IntroLogoLine(@" ██▄ █░▀█ ░█░ █▀▄ ░█░  ", ConsoleColor.DarkCyan, false),
-                        new IntroLogoLine(@" FRIDAY THE 13th EDITION ").WithColors(ConsoleColor.White, ConsoleColor.DarkRed),
+                        new IntroLogoLine(@" FRIDAY THE 13th EDITION ").WithColors(ConsoleColor.Red),
                         new IntroLogoLine(@"", ConsoleColor.Red),
                         new IntroLogoLine(@"  ▄████▄   ▒█████  ▓█████▄ ▓█████      ▄████ ▓█████  ███▄    █ ▓█████  ██▀███   ▄▄▄     ▄▄▄█████▓ ▒█████   ██▀███  ", ConsoleColor.Red),
                         new IntroLogoLine(@" ▒██▀ ▀█  ▒██▒  ██▒▒██▀ ██▌▓█   ▀     ██▒ ▀█▒▓█   ▀  ██ ▀█   █ ▓█   ▀ ▓██ ▒ ██▒▒████▄   ▓  ██▒ ▓▒▒██▒  ██▒▓██ ▒ ██▒", ConsoleColor.Red),

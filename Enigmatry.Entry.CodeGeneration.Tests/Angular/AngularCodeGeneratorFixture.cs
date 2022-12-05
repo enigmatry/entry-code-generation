@@ -57,7 +57,9 @@ namespace Enigmatry.Entry.CodeGeneration.Tests.Angular
 
                 System.Console.WriteLine($"Validation against {fileName} file!");
 
-                Uglify(generatedContent).Should().BeEquivalentTo(Uglify(expectedContent));
+                Uglify(generatedContent)
+                    .Should()
+                    .BeEquivalentTo(Uglify(expectedContent), fileName);
             }
         }
 

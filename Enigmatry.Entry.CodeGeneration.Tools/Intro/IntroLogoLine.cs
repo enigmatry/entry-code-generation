@@ -55,7 +55,7 @@ namespace Enigmatry.Entry.CodeGeneration.Tools.Intro
             return this;
         }
 
-        public IntroLogoLine WithColors(ConsoleColor foregroundColor, ConsoleColor backgroundColor = ConsoleColor.Black) =>
-            WithForegroundColor(foregroundColor).WithBackgroundColor(backgroundColor);
+        public IntroLogoLine WithColors(ConsoleColor foregroundColor) =>
+            WithForegroundColor(foregroundColor);
     }
 }

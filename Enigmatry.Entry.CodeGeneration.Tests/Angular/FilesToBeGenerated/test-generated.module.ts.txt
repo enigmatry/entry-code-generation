@@ -16,13 +16,13 @@ import { EnigmatryGridModule } from '@enigmatry/angular-building-blocks/enigmatr
     import { MatAutocompleteModule } from '@angular/material/autocomplete';
     import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
 
-import { FormGeneratedComponent } from './form/form-generated.component';
-import { ListGeneratedComponent } from './list/list-generated.component';
+import { MockEditGeneratedComponent } from './mock-edit/mock-edit-generated.component';
+import { MockListGeneratedComponent } from './mock-list/mock-list-generated.component';
 
 import { CustomValidatorsService, customValidatorsFactory } from 'src/app/shared/custom-path';
 
 @NgModule({
-    declarations: [FormGeneratedComponent, ListGeneratedComponent],
+    declarations: [MockEditGeneratedComponent, MockListGeneratedComponent],
     imports: [
     CommonModule,
     SharedModule,
@@ -41,7 +41,7 @@ import { CustomValidatorsService, customValidatorsFactory } from 'src/app/shared
         FormlyMaterialModule,
         FormlyMatDatepickerModule,
     ],
-    exports: [FormGeneratedComponent, ListGeneratedComponent],
+    exports: [MockEditGeneratedComponent, MockListGeneratedComponent],
     providers: [
 CustomValidatorsService,
 { provide: FORMLY_CONFIG, multi: true, useFactory: customValidatorsFactory, deps: [ CustomValidatorsService ] }    ]

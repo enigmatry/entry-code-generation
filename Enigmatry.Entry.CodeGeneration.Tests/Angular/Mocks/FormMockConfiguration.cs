@@ -12,7 +12,7 @@ namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.Mocks
         {
             builder
                 .Component()
-                .HasName("Form")
+                .HasName("MockEdit")
                 .BelongsToFeature("Test")
                 .OrderBy(OrderByType.Configuration);
             

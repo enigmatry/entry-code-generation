@@ -6,12 +6,11 @@ namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.Mocks
 {
     public class ListMockConfiguration : IListComponentConfiguration<ListMock.Item>
     {
-
         public void Configure(ListComponentBuilder<ListMock.Item> builder)
         {
             builder
                 .Component()
-                .HasName("List")
+                .HasName("MockList")
                 .BelongsToFeature("Test");
 
             builder

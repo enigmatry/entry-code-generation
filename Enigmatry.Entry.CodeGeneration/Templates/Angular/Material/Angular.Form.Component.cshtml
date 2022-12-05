@@ -43,7 +43,7 @@ import { map, throttleTime } from 'rxjs/operators';
         @:{
         @:key: '@control.PropertyName',
         @:type: this.resolveFieldType('@Html.Raw(control.FormlyType)', @control.Readonly.ToString().ToLower()),
-        @:className: '@Html.Raw(control.ClassName)',
+        @Html.FieldCssClass(control)
         @if (control.DefaultValue != null)
         {
         @:defaultValue: '@Html.Raw(control.DefaultValue)',
@@ -144,7 +144,7 @@ import { map, throttleTime } from 'rxjs/operators';
 
         @:{
         @:type: this.resolveFieldType('@Html.Raw(type)', @controlGroup.Readonly.ToString().ToLower()),
-        @:fieldGroupClassName: '@Html.Raw(controlGroup.ClassName)',
+        @Html.GroupCssClass(controlGroup)
         CreateCustomWrappers(controlGroup);
         @:templateOptions: {
         @:label: @Html.Localize(controlGroup.Label, _options.EnableI18N),

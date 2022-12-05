@@ -96,11 +96,11 @@ namespace Enigmatry.Entry.CodeGeneration.Tools.Intro
                 new IntroMessage("Executing order 66 ...").WithColors(ConsoleColor.Red),
                 new IntroMessage("Sexy times").WithColors(ConsoleColor.Red),
                 new IntroMessage("Go fish!").WithColors(ConsoleColor.Blue),
-                new IntroMessage(" Bring out the Gimp. ").WithColors(ConsoleColor.Black, ConsoleColor.DarkYellow),
-                new IntroMessage(" Zed's dead, baby. Zed's dead. ").WithColors(ConsoleColor.Black, ConsoleColor.DarkYellow),
-                new IntroMessage(" There is no spoon. ").WithColors(ConsoleColor.Black, ConsoleColor.DarkGreen),
-                new IntroMessage(" Follow the white rabbit. ").WithColors(ConsoleColor.Black, ConsoleColor.DarkGreen),
-                new IntroMessage(" We can't stop here, this is bat country. ").WithColors(ConsoleColor.Black, ConsoleColor.DarkMagenta),
+                new IntroMessage(" Bring out the Gimp. ").WithColors(ConsoleColor.Yellow),
+                new IntroMessage(" Zed's dead, baby. Zed's dead. ").WithColors(ConsoleColor.Yellow),
+                new IntroMessage(" There is no spoon. ").WithColors(ConsoleColor.Green),
+                new IntroMessage(" Follow the white rabbit. ").WithColors(ConsoleColor.Green),
+                new IntroMessage(" We can't stop here, this is bat country. ").WithColors(ConsoleColor.Magenta),
                 new IntroMessage("Good morning! Did you sleep well?")
                     .WithCondition(() => DateTime.Now.IsMorning()),
                 new IntroMessage("Don't forget to eat your breakfast")
@@ -125,7 +125,7 @@ namespace Enigmatry.Entry.CodeGeneration.Tools.Intro
                     .WithCondition(() => DateTime.Now.IsFriday()),
                 new IntroMessage("BLUE MONDAY :'(").WithColors(ConsoleColor.Cyan)
                     .WithCondition(() => DateTime.Now.IsMonday()),
-                new IntroMessage(" I don't care if Monday's blue ... ").WithColors(ConsoleColor.Black, ConsoleColor.DarkCyan)
+                new IntroMessage(" I don't care if Monday's blue ... ").WithColors(ConsoleColor.Cyan)
                     .WithCondition(() => DateTime.Now.IsMonday()),
                 new IntroMessage("I hate Mondays")
                     .WithCondition(() => DateTime.Now.IsMonday()),

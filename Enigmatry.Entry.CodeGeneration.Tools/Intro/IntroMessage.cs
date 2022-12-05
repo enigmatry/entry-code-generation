@@ -74,7 +74,7 @@ namespace Enigmatry.Entry.CodeGeneration.Tools.Intro
             return this;
         }
 
-        public IntroMessage WithColors(ConsoleColor foregroundColor, ConsoleColor backgroundColor = ConsoleColor.Black) =>
-            WithForegroundColor(foregroundColor).WithBackgroundColor(backgroundColor);
+        public IntroMessage WithColors(ConsoleColor foregroundColor) =>
+            WithForegroundColor(foregroundColor);
     }
 }

@@ -10,32 +10,32 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Angular\FilesToBeGenerated\form-generated.component.html.txt" />
-    <None Remove="Angular\FilesToBeGenerated\form-generated.component.scss.txt" />
-    <None Remove="Angular\FilesToBeGenerated\form-generated.component.ts.txt" />
-    <None Remove="Angular\FilesToBeGenerated\list-generated.component.html.txt" />
-    <None Remove="Angular\FilesToBeGenerated\list-generated.component.scss.txt" />
-    <None Remove="Angular\FilesToBeGenerated\list-generated.component.ts.txt" />
+    <None Remove="Angular\FilesToBeGenerated\mock-edit-generated.component.html.txt" />
+    <None Remove="Angular\FilesToBeGenerated\mock-edit-generated.component.scss.txt" />
+    <None Remove="Angular\FilesToBeGenerated\mock-edit-generated.component.ts.txt" />
+    <None Remove="Angular\FilesToBeGenerated\mock-list-generated.component.html.txt" />
+    <None Remove="Angular\FilesToBeGenerated\mock-list-generated.component.scss.txt" />
+    <None Remove="Angular\FilesToBeGenerated\mock-list-generated.component.ts.txt" />
     <None Remove="Angular\FilesToBeGenerated\test-generated.module.ts.txt" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Angular\FilesToBeGenerated\form-generated.component.html.txt">
+    <EmbeddedResource Include="Angular\FilesToBeGenerated\mock-edit-generated.component.html.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Angular\FilesToBeGenerated\form-generated.component.scss.txt">
+    <EmbeddedResource Include="Angular\FilesToBeGenerated\mock-edit-generated.component.scss.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Angular\FilesToBeGenerated\form-generated.component.ts.txt">
+    <EmbeddedResource Include="Angular\FilesToBeGenerated\mock-edit-generated.component.ts.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Angular\FilesToBeGenerated\list-generated.component.html.txt">
+    <EmbeddedResource Include="Angular\FilesToBeGenerated\mock-list-generated.component.html.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Angular\FilesToBeGenerated\list-generated.component.scss.txt">
+    <EmbeddedResource Include="Angular\FilesToBeGenerated\mock-list-generated.component.scss.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Angular\FilesToBeGenerated\list-generated.component.ts.txt">
+    <EmbeddedResource Include="Angular\FilesToBeGenerated\mock-list-generated.component.ts.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Angular\FilesToBeGenerated\test-generated.module.ts.txt">

@@ -1,5 +1,7 @@
 
-<enigmatry-grid [columns]="columns" 
+<enigmatry-grid 
+                class="entry-mock-list-table entry-table"
+                [columns]="columns" 
                 [data]="data" 
                 [showPaginator]="showPaginator"
                 [showFirstLastButtons]="showFirstLastButtons"
@@ -20,6 +22,7 @@
                 [contextMenuItems]="contextMenuItems"
                 [rowContextMenuFormatter]="rowContextMenuFormatter"
                 [rowClassFormatter]="rowClassFormatter"
+                [rowSelectionFormatter]="rowSelectionFormatter"
                 (pageChange)="pageChange.emit($event)"
                 (sortChange)="sortChange.emit($event)"
                 (rowSelectionChange)="selectionChange.emit($event)"

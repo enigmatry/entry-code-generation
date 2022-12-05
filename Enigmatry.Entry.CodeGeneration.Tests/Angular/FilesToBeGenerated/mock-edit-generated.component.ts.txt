@@ -17,11 +17,11 @@ import { map, throttleTime } from 'rxjs/operators';
 
 
 @Component({
-  selector: 'app-g-form',
-  templateUrl: './form-generated.component.html',
-  styleUrls: ['./form-generated.component.scss']
+  selector: 'app-g-mock-edit',
+  templateUrl: './mock-edit-generated.component.html',
+  styleUrls: ['./mock-edit-generated.component.scss']
 })
-export class FormGeneratedComponent implements OnInit, OnDestroy {
+export class MockEditGeneratedComponent implements OnInit, OnDestroy {
 
   @Input() model: IFormMock = {} as IFormMock;
   @Input() set isReadonly(value: boolean) {
@@ -99,7 +99,7 @@ export class FormGeneratedComponent implements OnInit, OnDestroy {
         {
         key: 'resetFormBtn',
         type: this.resolveFieldType('button', false),
-        className: 'primary-button',
+        className: 'entry-reset-form-btn-field entry-button primary-button',
         hideExpression: this.fieldsHideExpressions?.resetFormBtn ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.resetFormBtn ? this.fieldsDisableExpressions.resetFormBtn(model) : false)),
@@ -110,18 +110,18 @@ export class FormGeneratedComponent implements OnInit, OnDestroy {
         label: '',
         placeholder: '',
         description: '',
-            text: $localize `:@@test.form.reset-form-btn.text:Reset`,
+            text: $localize `:@@test.mock-edit.reset-form-btn.text:Reset`,
             onClick: ($event: any) => this.buttonClick.emit('resetFormBtn'),
         hidden: !true,
         },
         },
         {
         type: this.resolveFieldType('group-type', false),
-        fieldGroupClassName: '',
+        fieldGroupClassName: 'entry-field-group',
                 wrappers: ['group-wrapper'],
         templateOptions: {
-        label: $localize `:@@test.form.group-name.label:Group name`,
-        placeholder: $localize `:@@test.form.group-name.placeholder:Group name`,
+        label: $localize `:@@test.mock-edit.group-name.label:Group name`,
+        placeholder: $localize `:@@test.mock-edit.group-name.placeholder:Group name`,
         disabled: this.isReadonly || false,
         description: ''
         },
@@ -129,7 +129,7 @@ export class FormGeneratedComponent implements OnInit, OnDestroy {
         {
         key: 'name',
         type: this.resolveFieldType('input', false),
-        className: '',
+        className: 'entry-name-field entry-input',
         hideExpression: this.fieldsHideExpressions?.name ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.name ? this.fieldsDisableExpressions.name(model) : false)),
@@ -138,13 +138,13 @@ export class FormGeneratedComponent implements OnInit, OnDestroy {
         },
                 wrappers: ['form-field', 'tooltip'],
         templateOptions: {
-        label: $localize `:@@test.form.name.label:Name`,
-        placeholder: $localize `:@@test.form.name.placeholder:Some / Name`,
+        label: $localize `:@@test.mock-edit.name.label:Name`,
+        placeholder: $localize `:@@test.mock-edit.name.placeholder:Some / Name`,
         description: '',
 appearance: 'outline',
 floatLabel: 'always',
         hidden: !true,
-            tooltipText: $localize `:@@test.form.name.tooltip:Tooltip text`,
+            tooltipText: $localize `:@@test.mock-edit.name.tooltip:Tooltip text`,
             required: true,
 maxLength: 50,
 pattern: /[A-Z]/,
@@ -163,7 +163,7 @@ modelOptions: { updateOn: 'blur' },
         {
         key: 'description',
         type: this.resolveFieldType('textarea', false),
-        className: '',
+        className: 'entry-description-field entry-textarea',
         hideExpression: this.fieldsHideExpressions?.description ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.description ? this.fieldsDisableExpressions.description(model) : false)),
@@ -171,8 +171,8 @@ modelOptions: { updateOn: 'blur' },
         'model.description': (model) => (this.fieldsPropertyExpressions?.description ? this.fieldsPropertyExpressions.description(model) : model.description),
         },
         templateOptions: {
-        label: $localize `:@@test.form.description.label:Some Description`,
-        placeholder: $localize `:@@test.form.description.placeholder:Some Description`,
+        label: $localize `:@@test.mock-edit.description.label:Some Description`,
+        placeholder: $localize `:@@test.mock-edit.description.placeholder:Some Description`,
         description: '',
             rows: 2,
             cols: 0,
@@ -188,7 +188,7 @@ modelOptions: { updateOn: 'blur' },
         {
         key: 'date',
         type: this.resolveFieldType('datepicker', true),
-        className: '',
+        className: 'entry-date-field entry-datepicker',
         hideExpression: this.fieldsHideExpressions?.date ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.date ? this.fieldsDisableExpressions.date(model) : true)),
@@ -197,8 +197,8 @@ modelOptions: { updateOn: 'blur' },
         },
                 wrappers: ['tooltip', 'form-field'],
         templateOptions: {
-        label: $localize `:@@test.form.date.label:Date`,
-        placeholder: $localize `:@@test.form.date.placeholder:Date`,
+        label: $localize `:@@test.mock-edit.date.label:Date`,
+        placeholder: $localize `:@@test.mock-edit.date.placeholder:Date`,
         description: '',
         hidden: !true,
             typeFormatDef: { name: 'date' }
@@ -208,7 +208,7 @@ modelOptions: { updateOn: 'blur' },
         {
         key: 'money',
         type: this.resolveFieldType('input', false),
-        className: '',
+        className: 'entry-money-field entry-input',
         hideExpression: this.fieldsHideExpressions?.money ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.money ? this.fieldsDisableExpressions.money(model) : false)),
@@ -216,8 +216,8 @@ modelOptions: { updateOn: 'blur' },
         'model.money': (model) => (this.fieldsPropertyExpressions?.money ? this.fieldsPropertyExpressions.money(model) : model.money),
         },
         templateOptions: {
-        label: $localize `:@@test.form.money.label:Money`,
-        placeholder: $localize `:@@test.form.money.placeholder:Money`,
+        label: $localize `:@@test.mock-edit.money.label:Money`,
+        placeholder: $localize `:@@test.mock-edit.money.placeholder:Money`,
         description: '',
         hidden: !true,
             type: 'number',
@@ -229,7 +229,7 @@ max: 999.99 - 0.1,
         {
         key: 'amount',
         type: this.resolveFieldType('input', false),
-        className: '',
+        className: 'entry-amount-field entry-input',
         hideExpression: this.fieldsHideExpressions?.amount ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.amount ? this.fieldsDisableExpressions.amount(model) : false)),
@@ -237,8 +237,8 @@ max: 999.99 - 0.1,
         'model.amount': (model) => (this.fieldsPropertyExpressions?.amount ? this.fieldsPropertyExpressions.amount(model) : model.amount),
         },
         templateOptions: {
-        label: $localize `:@@test.form.amount.label:Amount`,
-        placeholder: $localize `:@@test.form.amount.placeholder:Amount`,
+        label: $localize `:@@test.mock-edit.amount.label:Amount`,
+        placeholder: $localize `:@@test.mock-edit.amount.placeholder:Amount`,
         description: '',
         hidden: !true,
             required: true,
@@ -250,15 +250,15 @@ max: 100,
         },
             validation: {
             messages: {
-min: (err, field) => $localize `:@@test.form.amount.min:CUSTOM_VALIDATION_MESSAGE`,
-max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAGE`
+min: (err, field) => $localize `:@@test.mock-edit.amount.min:CUSTOM_VALIDATION_MESSAGE`,
+max: (err, field) => $localize `:@@test.mock-edit.amount.max:CUSTOM_VALIDATION_MESSAGE`
             }
             },
         },
         {
         key: 'formStatus',
         type: this.resolveFieldType('select', false),
-        className: '',
+        className: 'entry-form-status-field entry-select',
         hideExpression: this.fieldsHideExpressions?.formStatus ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.formStatus ? this.fieldsDisableExpressions.formStatus(model) : false)),
@@ -266,8 +266,8 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
         'model.formStatus': (model) => (this.fieldsPropertyExpressions?.formStatus ? this.fieldsPropertyExpressions.formStatus(model) : model.formStatus),
         },
         templateOptions: {
-        label: $localize `:@@test.form.form-status.label:Form status`,
-        placeholder: $localize `:@@test.form.form-status.placeholder:Form status`,
+        label: $localize `:@@test.mock-edit.form-status.label:Form status`,
+        placeholder: $localize `:@@test.mock-edit.form-status.placeholder:Form status`,
         description: '',
             options: of(this.formStatusOptions).pipe(map(opts => sortOptions(opts, this.formStatusOptionsConfiguration.valueProperty, this.formStatusOptionsConfiguration.sortProperty, this._localeId))),
             valueProp: this.formStatusOptionsConfiguration.valueProperty,
@@ -279,7 +279,7 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
         {
         key: 'mockRadio',
         type: this.resolveFieldType('radio', false),
-        className: '',
+        className: 'entry-mock-radio-field entry-radio',
         hideExpression: this.fieldsHideExpressions?.mockRadio ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.mockRadio ? this.fieldsDisableExpressions.mockRadio(model) : false)),
@@ -287,8 +287,8 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
         'model.mockRadio': (model) => (this.fieldsPropertyExpressions?.mockRadio ? this.fieldsPropertyExpressions.mockRadio(model) : model.mockRadio),
         },
         templateOptions: {
-        label: $localize `:@@test.form.mock-radio.label:Radio`,
-        placeholder: $localize `:@@test.form.mock-radio.placeholder:Radio`,
+        label: $localize `:@@test.mock-edit.mock-radio.label:Radio`,
+        placeholder: $localize `:@@test.mock-edit.mock-radio.placeholder:Radio`,
         description: '',
             options: of(this.mockRadioOptions).pipe(map(opts => sortOptions(opts, this.mockRadioOptionsConfiguration.valueProperty, this.mockRadioOptionsConfiguration.sortProperty, this._localeId))),
             valueProp: this.mockRadioOptionsConfiguration.valueProperty,
@@ -300,7 +300,7 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
         {
         key: 'mockMultiCheckbox',
         type: this.resolveFieldType('multicheckbox', false),
-        className: '',
+        className: 'entry-mock-multi-checkbox-field entry-multicheckbox',
         hideExpression: this.fieldsHideExpressions?.mockMultiCheckbox ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.mockMultiCheckbox ? this.fieldsDisableExpressions.mockMultiCheckbox(model) : false)),
@@ -308,8 +308,8 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
         'model.mockMultiCheckbox': (model) => (this.fieldsPropertyExpressions?.mockMultiCheckbox ? this.fieldsPropertyExpressions.mockMultiCheckbox(model) : model.mockMultiCheckbox),
         },
         templateOptions: {
-        label: $localize `:@@test.form.mock-multi-checkbox.label:MultiCheckbox`,
-        placeholder: $localize `:@@test.form.mock-multi-checkbox.placeholder:MultiCheckbox`,
+        label: $localize `:@@test.mock-edit.mock-multi-checkbox.label:MultiCheckbox`,
+        placeholder: $localize `:@@test.mock-edit.mock-multi-checkbox.placeholder:MultiCheckbox`,
         description: '',
         type:'array',
             options: of(this.mockMultiCheckboxOptions).pipe(map(opts => sortOptions(opts, this.mockMultiCheckboxOptionsConfiguration.valueProperty, this.mockMultiCheckboxOptionsConfiguration.sortProperty, this._localeId))),
@@ -322,7 +322,7 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
         {
         key: 'categoryId',
         type: this.resolveFieldType('select', false),
-        className: '',
+        className: 'entry-category-id-field entry-select',
         hideExpression: this.fieldsHideExpressions?.categoryId ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.categoryId ? this.fieldsDisableExpressions.categoryId(model) : false)),
@@ -330,8 +330,8 @@ max: (err, field) => $localize `:@@test.form.amount.max:CUSTOM_VALIDATION_MESSAG
         'model.categoryId': (model) => (this.fieldsPropertyExpressions?.categoryId ? this.fieldsPropertyExpressions.categoryId(model) : model.categoryId),
         },
         templateOptions: {
-        label: $localize `:@@test.form.category-id.label:Category`,
-        placeholder: $localize `:@@test.form.category-id.placeholder:Category`,
+        label: $localize `:@@test.mock-edit.category-id.label:Category`,
+        placeholder: $localize `:@@test.mock-edit.category-id.placeholder:Category`,
         description: '',
             options: this.categoryIdOptions$.pipe(map(opts => sortOptions(opts, this.categoryIdOptionsConfiguration.valueProperty, this.categoryIdOptionsConfiguration.sortProperty, this._localeId))),
             valueProp: this.categoryIdOptionsConfiguration.valueProperty,
@@ -344,7 +344,7 @@ metadata: { entityType: 'Category', filter: 'category_name' },
         {
         key: 'types',
         type: this.resolveFieldType('select', false),
-        className: '',
+        className: 'entry-types-field entry-select',
         hideExpression: this.fieldsHideExpressions?.types ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.types ? this.fieldsDisableExpressions.types(model) : false)),
@@ -352,8 +352,8 @@ metadata: { entityType: 'Category', filter: 'category_name' },
         'model.types': (model) => (this.fieldsPropertyExpressions?.types ? this.fieldsPropertyExpressions.types(model) : model.types),
         },
         templateOptions: {
-        label: $localize `:@@test.form.types.label:Types`,
-        placeholder: $localize `:@@test.form.types.placeholder:Types`,
+        label: $localize `:@@test.mock-edit.types.label:Types`,
+        placeholder: $localize `:@@test.mock-edit.types.placeholder:Types`,
         description: '',
             options: this.typesOptions$.pipe(map(opts => sortOptions(opts, this.typesOptionsConfiguration.valueProperty, this.typesOptionsConfiguration.sortProperty, this._localeId))),
             valueProp: this.typesOptionsConfiguration.valueProperty,
@@ -367,7 +367,7 @@ metadata: { entityType: 'Category', filter: 'category_name' },
         {
         key: 'password',
         type: this.resolveFieldType('input', false),
-        className: '',
+        className: 'entry-password-field entry-input',
         hideExpression: this.fieldsHideExpressions?.password ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.password ? this.fieldsDisableExpressions.password(model) : false)),
@@ -375,8 +375,8 @@ metadata: { entityType: 'Category', filter: 'category_name' },
         'model.password': (model) => (this.fieldsPropertyExpressions?.password ? this.fieldsPropertyExpressions.password(model) : model.password),
         },
         templateOptions: {
-        label: $localize `:@@test.form.password.label:Password`,
-        placeholder: $localize `:@@test.form.password.placeholder:Password`,
+        label: $localize `:@@test.mock-edit.password.label:Password`,
+        placeholder: $localize `:@@test.mock-edit.password.placeholder:Password`,
         description: '',
         type: 'password',
         hidden: !true,
@@ -386,7 +386,7 @@ metadata: { entityType: 'Category', filter: 'category_name' },
         {
         key: 'addresses',
         type: this.resolveFieldType('array-field', false),
-        className: '',
+        className: 'entry-addresses-field entry-array-field',
         hideExpression: this.fieldsHideExpressions?.addresses ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.addresses ? this.fieldsDisableExpressions.addresses(model) : false)),
@@ -395,8 +395,8 @@ metadata: { entityType: 'Category', filter: 'category_name' },
         },
                 wrappers: ['array-wrapper'],
         templateOptions: {
-        label: $localize `:@@test.form.addresses.label:Addresses`,
-        placeholder: $localize `:@@test.form.addresses.placeholder:Addresses`,
+        label: $localize `:@@test.mock-edit.addresses.label:Addresses`,
+        placeholder: $localize `:@@test.mock-edit.addresses.placeholder:Addresses`,
         description: '',
         hidden: !true,
             typeFormatDef: undefined
@@ -404,7 +404,7 @@ metadata: { entityType: 'Category', filter: 'category_name' },
             fieldArray:
         {
         type: this.resolveFieldType('', false),
-        fieldGroupClassName: '',
+        fieldGroupClassName: 'entry-field-group',
                 wrappers: ['group-wrapper'],
         templateOptions: {
         label: '',
@@ -417,7 +417,7 @@ metadata: { entityType: 'Category', filter: 'category_name' },
         {
         key: 'city',
         type: this.resolveFieldType('input', false),
-        className: '',
+        className: 'entry-city-field entry-input',
         defaultValue: 'Amsterdam',
         hideExpression: this.fieldsHideExpressions?.city ?? false,
         expressionProperties: {
@@ -426,8 +426,8 @@ metadata: { entityType: 'Category', filter: 'category_name' },
         'model.city': (model) => (this.fieldsPropertyExpressions?.city ? this.fieldsPropertyExpressions.city(model) : model.city),
         },
         templateOptions: {
-        label: $localize `:@@test.form.city.label:City`,
-        placeholder: $localize `:@@test.form.city.placeholder:City`,
+        label: $localize `:@@test.mock-edit.city.label:City`,
+        placeholder: $localize `:@@test.mock-edit.city.placeholder:City`,
         description: '',
         hidden: !true,
             typeFormatDef: undefined
@@ -436,7 +436,7 @@ metadata: { entityType: 'Category', filter: 'category_name' },
         {
         key: 'street',
         type: this.resolveFieldType('input', false),
-        className: '',
+        className: 'entry-street-field entry-input',
         hideExpression: this.fieldsHideExpressions?.street ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.street ? this.fieldsDisableExpressions.street(model) : false)),
@@ -444,8 +444,8 @@ metadata: { entityType: 'Category', filter: 'category_name' },
         'model.street': (model) => (this.fieldsPropertyExpressions?.street ? this.fieldsPropertyExpressions.street(model) : model.street),
         },
         templateOptions: {
-        label: $localize `:@@test.form.street.label:Street`,
-        placeholder: $localize `:@@test.form.street.placeholder:Street`,
+        label: $localize `:@@test.mock-edit.street.label:Street`,
+        placeholder: $localize `:@@test.mock-edit.street.placeholder:Street`,
         description: '',
         hidden: !true,
             typeFormatDef: undefined
@@ -454,7 +454,7 @@ metadata: { entityType: 'Category', filter: 'category_name' },
         {
         key: 'houseNumber',
         type: this.resolveFieldType('input', false),
-        className: '',
+        className: 'entry-house-number-field entry-input',
         hideExpression: this.fieldsHideExpressions?.houseNumber ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.houseNumber ? this.fieldsDisableExpressions.houseNumber(model) : false)),
@@ -462,8 +462,8 @@ metadata: { entityType: 'Category', filter: 'category_name' },
         'model.houseNumber': (model) => (this.fieldsPropertyExpressions?.houseNumber ? this.fieldsPropertyExpressions.houseNumber(model) : model.houseNumber),
         },
         templateOptions: {
-        label: $localize `:@@test.form.house-number.label:House number`,
-        placeholder: $localize `:@@test.form.house-number.placeholder:House number`,
+        label: $localize `:@@test.mock-edit.house-number.label:House number`,
+        placeholder: $localize `:@@test.mock-edit.house-number.placeholder:House number`,
         description: '',
         hidden: !true,
             typeFormatDef: undefined
@@ -472,7 +472,7 @@ metadata: { entityType: 'Category', filter: 'category_name' },
         {
         key: 'verified',
         type: this.resolveFieldType('checkbox', true),
-        className: '',
+        className: 'entry-verified-field entry-checkbox',
         hideExpression: this.fieldsHideExpressions?.verified ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.verified ? this.fieldsDisableExpressions.verified(model) : true)),
@@ -480,8 +480,8 @@ metadata: { entityType: 'Category', filter: 'category_name' },
         'model.verified': (model) => (this.fieldsPropertyExpressions?.verified ? this.fieldsPropertyExpressions.verified(model) : model.verified),
         },
         templateOptions: {
-        label: $localize `:@@test.form.verified.label:Verified`,
-        placeholder: $localize `:@@test.form.verified.placeholder:Verified`,
+        label: $localize `:@@test.mock-edit.verified.label:Verified`,
+        placeholder: $localize `:@@test.mock-edit.verified.placeholder:Verified`,
         description: '',
         hidden: !true,
             typeFormatDef: { name: 'boolean' }
@@ -495,7 +495,7 @@ metadata: { entityType: 'Category', filter: 'category_name' },
         {
         key: 'email1',
         type: this.resolveFieldType('input', false),
-        className: '',
+        className: 'entry-email1-field entry-input',
         hideExpression: this.fieldsHideExpressions?.email1 ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.email1 ? this.fieldsDisableExpressions.email1(model) : false)),
@@ -503,8 +503,8 @@ metadata: { entityType: 'Category', filter: 'category_name' },
         'model.email1': (model) => (this.fieldsPropertyExpressions?.email1 ? this.fieldsPropertyExpressions.email1(model) : model.email1),
         },
         templateOptions: {
-        label: $localize `:@@test.form.email1.label:Email 1`,
-        placeholder: $localize `:@@test.form.email1.placeholder:Email 1`,
+        label: $localize `:@@test.mock-edit.email1.label:Email 1`,
+        placeholder: $localize `:@@test.mock-edit.email1.placeholder:Email 1`,
         description: '',
         hidden: !true,
             pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
@@ -514,14 +514,14 @@ maxLength: 50,
         },
             validation: {
             messages: {
-pattern: (err, field) => $localize `:@@test.form.email1.pattern:CUSTOM_VALIDATION_MESSAGE`
+pattern: (err, field) => $localize `:@@test.mock-edit.email1.pattern:CUSTOM_VALIDATION_MESSAGE`
             }
             },
         },
         {
         key: 'email2',
         type: this.resolveFieldType('input', false),
-        className: '',
+        className: 'entry-email2-field entry-input',
         hideExpression: this.fieldsHideExpressions?.email2 ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.email2 ? this.fieldsDisableExpressions.email2(model) : false)),
@@ -529,8 +529,8 @@ pattern: (err, field) => $localize `:@@test.form.email1.pattern:CUSTOM_VALIDATIO
         'model.email2': (model) => (this.fieldsPropertyExpressions?.email2 ? this.fieldsPropertyExpressions.email2(model) : model.email2),
         },
         templateOptions: {
-        label: $localize `:@@test.form.email2.label:Email 2`,
-        placeholder: $localize `:@@test.form.email2.placeholder:Email 2`,
+        label: $localize `:@@test.mock-edit.email2.label:Email 2`,
+        placeholder: $localize `:@@test.mock-edit.email2.placeholder:Email 2`,
         description: '',
         hidden: !true,
             pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
