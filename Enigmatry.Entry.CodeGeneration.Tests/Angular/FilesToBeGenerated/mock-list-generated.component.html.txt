@@ -1,5 +1,5 @@
 
-<enigmatry-grid 
+<entry-table 
                 class="entry-mock-list-table entry-table"
                 [columns]="columns" 
                 [data]="data" 
@@ -28,7 +28,7 @@
                 (rowSelectionChange)="selectionChange.emit($event)"
                 (contextMenuItemSelected)="contextMenuItemSelected.emit($event)"
                 (rowClick)="rowClick.emit($event)">
-</enigmatry-grid>
+</entry-table>
 
 <ng-template #nameTpl let-row let-index="index" let-col="colDef">
     <custom-cell [rowData]="row" [colDef]="col"></custom-cell>
