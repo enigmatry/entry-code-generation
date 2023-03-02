@@ -8,7 +8,7 @@
 import { NgModule } from '@@angular/core';
 import { CommonModule } from '@@angular/common';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { EnigmatryGridModule } from '@@enigmatry/angular-building-blocks/enigmatry-grid';
+import { EntryTableModule } from '@@enigmatry/entry-table';
 @if (Model.HasFormComponents)
 {
     @:import { FormlyModule, FORMLY_CONFIG } from '@@ngx-formly/core';
@@ -25,7 +25,7 @@ import { EnigmatryGridModule } from '@@enigmatry/angular-building-blocks/enigmat
     imports: [
     CommonModule,
     SharedModule,
-    EnigmatryGridModule,
+    EntryTableModule,
     @if (Model.HasFormComponents)
     {
         @:MatAutocompleteModule,

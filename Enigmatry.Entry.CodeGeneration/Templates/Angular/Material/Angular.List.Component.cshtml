@@ -6,8 +6,7 @@
 @model Enigmatry.Entry.CodeGeneration.Configuration.List.ListComponentModel;
 @inject CodeGeneratorOptions _options;
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@@angular/core';
-import { CellTemplate, ColumnDef, ContextMenuItem, RowClassFormatter, RowContextMenuFormatter, RowSelectionFormatter } from '@@enigmatry/angular-building-blocks/enigmatry-grid';
-import { PagedData, PageEvent, SortDirection, SortEvent } from '@@enigmatry/angular-building-blocks/pagination';
+import { PagedData, SortDirection, CellTemplate, ContextMenuItem, RowContextMenuFormatter, RowClassFormatter, RowSelectionFormatter, ColumnDef, PageEvent, SortEvent } from '@@enigmatry/entry-table';
 
 import { @(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPath';
 
