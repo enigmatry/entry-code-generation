@@ -5,11 +5,11 @@
 @using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 @using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
 @model Enigmatry.Entry.CodeGeneration.Configuration.Form.FormComponentModel;
-@inject CodeGeneratorOptions _options;
+@inject CodeGeneratorOptions Options;
 import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, OnDestroy, Optional, Output, TemplateRef } from '@@angular/core';
 import { FormGroup } from '@@angular/forms';
 import { FormlyFieldConfig } from '@@ngx-formly/core';
-import { I@(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPath';
+import { I@(Model.ComponentInfo.ModelType) } from '@Options.ApiClientTsImportPath';
 import { IFieldExpressionDictionary, IFieldPropertyExpressionDictionary, SelectConfiguration, ENTRY_FIELD_TYPE_RESOLVER, FieldTypeResolver, sortOptions } from '@@enigmatry/entry-form';
 import { BehaviorSubject, of, Subject, Subscription } from 'rxjs';
 import { map, throttleTime } from 'rxjs/operators';
@@ -69,9 +69,9 @@ import { map, throttleTime } from 'rxjs/operators';
     void CreateFieldTemplateOptions(FormControl control)
     {
         @:templateOptions: {
-        @:label: @Html.Localize(control.Label, _options.EnableI18N),
-        @:placeholder: @Html.Localize(control.Placeholder, _options.EnableI18N),
-        @:description: @Html.Localize(control.Hint, _options.EnableI18N),
+        @:label: @Html.Localize(control.Label, Options.EnableI18N),
+        @:placeholder: @Html.Localize(control.Placeholder, Options.EnableI18N),
+        @:description: @Html.Localize(control.Hint, Options.EnableI18N),
         @Html.Appearance(control.Appearance)
         @Html.FloatLabel(control.FloatLabel)
         @if (!String.IsNullOrWhiteSpace(control.Type))
@@ -80,7 +80,7 @@ import { map, throttleTime } from 'rxjs/operators';
         }
         @if (control is ButtonFormControl button)
         {
-            @:text: @Html.Localize(button.Text, _options.EnableI18N),
+            @:text: @Html.Localize(button.Text, Options.EnableI18N),
             @:onClick: ($event: any) => this.buttonClick.emit('@control.PropertyName'),
         }
         @if (control is SelectControlBase select)
@@ -92,7 +92,7 @@ import { map, throttleTime } from 'rxjs/operators';
         @if (control is MultiSelectFormControl multiSelect)
         {
             @:multiple: true,
-            @:selectAllOption: @Html.Localize(multiSelect.Options.SelectAllOption?.DisplayName, _options.EnableI18N),
+            @:selectAllOption: @Html.Localize(multiSelect.Options.SelectAllOption?.DisplayName, Options.EnableI18N),
         }
         @if (control is TextareaFormControl textarea)
         {
@@ -105,7 +105,7 @@ import { map, throttleTime } from 'rxjs/operators';
         @:hidden: !@control.Visible.ToString().ToLower(),
         @if (control.Tooltip.HasContent())
         {
-            @:tooltipText: @Html.Localize(control.Tooltip, _options.EnableI18N),
+            @:tooltipText: @Html.Localize(control.Tooltip, Options.EnableI18N),
         }
         @if (control.ValidationRules.Any())
         {
@@ -128,7 +128,7 @@ import { map, throttleTime } from 'rxjs/operators';
         {
             @:validation: {
             @:messages: {
-            @Html.AddCustomValidationMessages(control, _options.EnableI18N)
+            @Html.AddCustomValidationMessages(control, Options.EnableI18N)
             @:}
             @:},
         }
@@ -147,10 +147,10 @@ import { map, throttleTime } from 'rxjs/operators';
         @Html.GroupCssClass(controlGroup)
         CreateCustomWrappers(controlGroup);
         @:templateOptions: {
-        @:label: @Html.Localize(controlGroup.Label, _options.EnableI18N),
-        @:placeholder: @Html.Localize(controlGroup.Placeholder, _options.EnableI18N),
+        @:label: @Html.Localize(controlGroup.Label, Options.EnableI18N),
+        @:placeholder: @Html.Localize(controlGroup.Placeholder, Options.EnableI18N),
         @:disabled: this.isReadonly || @controlGroup.Readonly.ToString().ToLower(),
-        @:description: @Html.Localize(controlGroup.Hint, _options.EnableI18N)
+        @:description: @Html.Localize(controlGroup.Hint, Options.EnableI18N)
         @:},
         @:fieldGroup:[
         RenderControls(controlGroup.FormControls);
@@ -178,7 +178,7 @@ import { map, throttleTime } from 'rxjs/operators';
             }
             else
             {
-                @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => $"{{ value: {option.Value ?? "null"}, displayName: {(@Html.Localize(option.DisplayName, _options.EnableI18N))} }}");
+                @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => $"{{ value: {option.Value ?? "null"}, displayName: {(@Html.Localize(option.DisplayName, Options.EnableI18N))} }}");
             }
 
             if (select.Options.HasCustomValueAndDisplayKeys)
@@ -209,7 +209,7 @@ import { map, throttleTime } from 'rxjs/operators';
 }
 
 @@Component({
-  selector: '@Model.AngularComponentSelector(_options.GeneratedComponentPrefix)',
+  selector: '@Model.AngularComponentSelector(Options.GeneratedComponentPrefix)',
   templateUrl: './@(Model.AngularComponentFileName()).html',
   styleUrls: ['./@(Model.AngularComponentFileName()).scss']
 })
@@ -243,7 +243,7 @@ export class @Model.AngularComponentName() implements OnInit, OnDestroy {
   _isReadonly: boolean;
   form = new FormGroup({});
   fields: FormlyFieldConfig[] = [];
-  private _submitClicks = new Subject<void>();
+  private _submitClicks = new Subject@(Html.Raw("<void>"))();
   private _submitClicksSubscription: Subscription;
 
   constructor(
