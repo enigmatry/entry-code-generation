@@ -41,6 +41,7 @@ export class MockEditGeneratedComponent implements OnInit, OnDestroy {
   @Input() fieldsDisableExpressions: IFieldExpressionDictionary<IFormMock> | undefined = undefined;
   @Input() fieldsRequiredExpressions: IFieldExpressionDictionary<IFormMock> | undefined = undefined;
   @Input() fieldsPropertyExpressions: IFieldPropertyExpressionDictionary<IFormMock> | undefined = undefined;
+  @Input() fieldsLabelExpressions: IFieldPropertyExpressionDictionary<IFormMock> | undefined = undefined;
 
   @Output() save = new EventEmitter<IFormMock>();
   @Output() cancel = new EventEmitter<void>();
@@ -104,6 +105,7 @@ className: `entry-reset-form-btn-field entry-button primary-button`,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.resetFormBtn ? this.fieldsDisableExpressions.resetFormBtn(model) : false)),
         'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.resetFormBtn ? this.fieldsRequiredExpressions.resetFormBtn(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.resetFormBtn ? this.fieldsLabelExpressions.resetFormBtn(model) : ''),
         'model.resetFormBtn': (model) => (this.fieldsPropertyExpressions?.resetFormBtn ? this.fieldsPropertyExpressions.resetFormBtn(model) : model.resetFormBtn),
         },
         templateOptions: {
@@ -134,6 +136,7 @@ className: `entry-name-field entry-input`,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.name ? this.fieldsDisableExpressions.name(model) : false)),
         'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.name ? this.fieldsRequiredExpressions.name(model) : true),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.name ? this.fieldsLabelExpressions.name(model) : $localize `:@@test.mock-edit.name.label:Name`),
         'model.name': (model) => (this.fieldsPropertyExpressions?.name ? this.fieldsPropertyExpressions.name(model) : model.name),
         },
                 wrappers: ['form-field', 'tooltip'],
@@ -168,6 +171,7 @@ className: `entry-description-field entry-textarea`,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.description ? this.fieldsDisableExpressions.description(model) : false)),
         'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.description ? this.fieldsRequiredExpressions.description(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.description ? this.fieldsLabelExpressions.description(model) : $localize `:@@test.mock-edit.description.label:Some Description`),
         'model.description': (model) => (this.fieldsPropertyExpressions?.description ? this.fieldsPropertyExpressions.description(model) : model.description),
         },
         templateOptions: {
@@ -193,6 +197,7 @@ className: `entry-date-field entry-datepicker`,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.date ? this.fieldsDisableExpressions.date(model) : true)),
         'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.date ? this.fieldsRequiredExpressions.date(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.date ? this.fieldsLabelExpressions.date(model) : $localize `:@@test.mock-edit.date.label:Date`),
         'model.date': (model) => (this.fieldsPropertyExpressions?.date ? this.fieldsPropertyExpressions.date(model) : model.date),
         },
                 wrappers: ['tooltip', 'form-field'],
@@ -213,6 +218,7 @@ className: `entry-money-field entry-input`,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.money ? this.fieldsDisableExpressions.money(model) : false)),
         'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.money ? this.fieldsRequiredExpressions.money(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.money ? this.fieldsLabelExpressions.money(model) : $localize `:@@test.mock-edit.money.label:Money`),
         'model.money': (model) => (this.fieldsPropertyExpressions?.money ? this.fieldsPropertyExpressions.money(model) : model.money),
         },
         templateOptions: {
@@ -234,6 +240,7 @@ className: `entry-amount-field entry-input`,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.amount ? this.fieldsDisableExpressions.amount(model) : false)),
         'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.amount ? this.fieldsRequiredExpressions.amount(model) : true),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.amount ? this.fieldsLabelExpressions.amount(model) : $localize `:@@test.mock-edit.amount.label:Amount`),
         'model.amount': (model) => (this.fieldsPropertyExpressions?.amount ? this.fieldsPropertyExpressions.amount(model) : model.amount),
         },
         templateOptions: {
@@ -263,6 +270,7 @@ className: `entry-form-status-field entry-select`,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.formStatus ? this.fieldsDisableExpressions.formStatus(model) : false)),
         'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.formStatus ? this.fieldsRequiredExpressions.formStatus(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.formStatus ? this.fieldsLabelExpressions.formStatus(model) : $localize `:@@test.mock-edit.form-status.label:Form status`),
         'model.formStatus': (model) => (this.fieldsPropertyExpressions?.formStatus ? this.fieldsPropertyExpressions.formStatus(model) : model.formStatus),
         },
         templateOptions: {
@@ -284,6 +292,7 @@ className: `entry-mock-radio-field entry-radio`,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.mockRadio ? this.fieldsDisableExpressions.mockRadio(model) : false)),
         'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.mockRadio ? this.fieldsRequiredExpressions.mockRadio(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.mockRadio ? this.fieldsLabelExpressions.mockRadio(model) : $localize `:@@test.mock-edit.mock-radio.label:Radio`),
         'model.mockRadio': (model) => (this.fieldsPropertyExpressions?.mockRadio ? this.fieldsPropertyExpressions.mockRadio(model) : model.mockRadio),
         },
         templateOptions: {
@@ -305,6 +314,7 @@ className: `entry-mock-multi-checkbox-field entry-multicheckbox`,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.mockMultiCheckbox ? this.fieldsDisableExpressions.mockMultiCheckbox(model) : false)),
         'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.mockMultiCheckbox ? this.fieldsRequiredExpressions.mockMultiCheckbox(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.mockMultiCheckbox ? this.fieldsLabelExpressions.mockMultiCheckbox(model) : $localize `:@@test.mock-edit.mock-multi-checkbox.label:MultiCheckbox`),
         'model.mockMultiCheckbox': (model) => (this.fieldsPropertyExpressions?.mockMultiCheckbox ? this.fieldsPropertyExpressions.mockMultiCheckbox(model) : model.mockMultiCheckbox),
         },
         templateOptions: {
@@ -327,6 +337,7 @@ className: `entry-category-id-field entry-select`,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.categoryId ? this.fieldsDisableExpressions.categoryId(model) : false)),
         'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.categoryId ? this.fieldsRequiredExpressions.categoryId(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.categoryId ? this.fieldsLabelExpressions.categoryId(model) : $localize `:@@test.mock-edit.category-id.label:Category`),
         'model.categoryId': (model) => (this.fieldsPropertyExpressions?.categoryId ? this.fieldsPropertyExpressions.categoryId(model) : model.categoryId),
         },
         templateOptions: {
@@ -349,6 +360,7 @@ className: `entry-types-field entry-select`,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.types ? this.fieldsDisableExpressions.types(model) : false)),
         'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.types ? this.fieldsRequiredExpressions.types(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.types ? this.fieldsLabelExpressions.types(model) : $localize `:@@test.mock-edit.types.label:Types`),
         'model.types': (model) => (this.fieldsPropertyExpressions?.types ? this.fieldsPropertyExpressions.types(model) : model.types),
         },
         templateOptions: {
@@ -372,6 +384,7 @@ className: `entry-password-field entry-input`,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.password ? this.fieldsDisableExpressions.password(model) : false)),
         'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.password ? this.fieldsRequiredExpressions.password(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.password ? this.fieldsLabelExpressions.password(model) : $localize `:@@test.mock-edit.password.label:Password`),
         'model.password': (model) => (this.fieldsPropertyExpressions?.password ? this.fieldsPropertyExpressions.password(model) : model.password),
         },
         templateOptions: {
@@ -391,6 +404,7 @@ className: `entry-addresses-field entry-array-field`,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.addresses ? this.fieldsDisableExpressions.addresses(model) : false)),
         'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.addresses ? this.fieldsRequiredExpressions.addresses(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.addresses ? this.fieldsLabelExpressions.addresses(model) : $localize `:@@test.mock-edit.addresses.label:Addresses`),
         'model.addresses': (model) => (this.fieldsPropertyExpressions?.addresses ? this.fieldsPropertyExpressions.addresses(model) : model.addresses),
         },
                 wrappers: ['array-wrapper'],
@@ -423,6 +437,7 @@ className: `entry-city-field entry-input`,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.city ? this.fieldsDisableExpressions.city(model) : false)),
         'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.city ? this.fieldsRequiredExpressions.city(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.city ? this.fieldsLabelExpressions.city(model) : $localize `:@@test.mock-edit.city.label:City`),
         'model.city': (model) => (this.fieldsPropertyExpressions?.city ? this.fieldsPropertyExpressions.city(model) : model.city),
         },
         templateOptions: {
@@ -441,6 +456,7 @@ className: `entry-street-field entry-input`,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.street ? this.fieldsDisableExpressions.street(model) : false)),
         'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.street ? this.fieldsRequiredExpressions.street(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.street ? this.fieldsLabelExpressions.street(model) : $localize `:@@test.mock-edit.street.label:Street`),
         'model.street': (model) => (this.fieldsPropertyExpressions?.street ? this.fieldsPropertyExpressions.street(model) : model.street),
         },
         templateOptions: {
@@ -459,6 +475,7 @@ className: `entry-house-number-field entry-input`,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.houseNumber ? this.fieldsDisableExpressions.houseNumber(model) : false)),
         'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.houseNumber ? this.fieldsRequiredExpressions.houseNumber(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.houseNumber ? this.fieldsLabelExpressions.houseNumber(model) : $localize `:@@test.mock-edit.house-number.label:House number`),
         'model.houseNumber': (model) => (this.fieldsPropertyExpressions?.houseNumber ? this.fieldsPropertyExpressions.houseNumber(model) : model.houseNumber),
         },
         templateOptions: {
@@ -477,6 +494,7 @@ className: `entry-verified-field entry-checkbox`,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.verified ? this.fieldsDisableExpressions.verified(model) : true)),
         'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.verified ? this.fieldsRequiredExpressions.verified(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.verified ? this.fieldsLabelExpressions.verified(model) : $localize `:@@test.mock-edit.verified.label:Verified`),
         'model.verified': (model) => (this.fieldsPropertyExpressions?.verified ? this.fieldsPropertyExpressions.verified(model) : model.verified),
         },
         templateOptions: {
@@ -500,6 +518,7 @@ className: `entry-email1-field entry-input`,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.email1 ? this.fieldsDisableExpressions.email1(model) : false)),
         'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.email1 ? this.fieldsRequiredExpressions.email1(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.email1 ? this.fieldsLabelExpressions.email1(model) : $localize `:@@test.mock-edit.email1.label:Email 1`),
         'model.email1': (model) => (this.fieldsPropertyExpressions?.email1 ? this.fieldsPropertyExpressions.email1(model) : model.email1),
         },
         templateOptions: {
@@ -526,6 +545,7 @@ className: `entry-email2-field entry-input`,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.email2 ? this.fieldsDisableExpressions.email2(model) : false)),
         'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.email2 ? this.fieldsRequiredExpressions.email2(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.email2 ? this.fieldsLabelExpressions.email2(model) : $localize `:@@test.mock-edit.email2.label:Email 2`),
         'model.email2': (model) => (this.fieldsPropertyExpressions?.email2 ? this.fieldsPropertyExpressions.email2(model) : model.email2),
         },
         templateOptions: {
