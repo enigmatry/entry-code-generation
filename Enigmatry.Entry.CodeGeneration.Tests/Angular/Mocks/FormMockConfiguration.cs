@@ -29,7 +29,8 @@ namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.Mocks
             var formGroup = builder
                 .FormControlGroup("Group Name")
                 .CreateUiSection("group-type")
-                .WithCustomWrapper("group-wrapper");
+                .WithCustomWrapper("group-wrapper")
+                .WithClassName("group-wrapper-readonly", ApplyWhen.FormIsReadonly);
 
             formGroup
                 .FormControl(x => x.Name)
