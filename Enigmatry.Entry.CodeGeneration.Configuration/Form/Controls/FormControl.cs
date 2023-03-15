@@ -18,7 +18,7 @@ namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
         public I18NString Tooltip { get; set; } = I18NString.Empty;
         public bool Visible { get; set; }
         public bool Readonly { get; set; }
-        public OptionallyAppliedValue<string>? ClassName { get; set; }
+        public OptionallyAppliedValues<string> ClassNames { get; set; } = new();
         public virtual string? Type { get; set; }
         public FormControlAppearance? Appearance { get; set; }
         public FormControlFloatLabel? FloatLabel { get; set; }
