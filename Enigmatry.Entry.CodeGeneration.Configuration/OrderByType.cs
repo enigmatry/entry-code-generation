@@ -1,8 +1,7 @@
-﻿namespace Enigmatry.Entry.CodeGeneration.Configuration
+﻿namespace Enigmatry.Entry.CodeGeneration.Configuration;
+
+public enum OrderByType
 {
-    public enum OrderByType
-    {
-        Model,
-        Configuration
-    }
+    Model,
+    Configuration
 }

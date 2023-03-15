@@ -1,13 +1,12 @@
-﻿namespace Enigmatry.Entry.CodeGeneration.Rendering
+﻿namespace Enigmatry.Entry.CodeGeneration.Rendering;
+
+public interface ITemplateWriterAppender
 {
-    public interface ITemplateWriterAppender
-    {
-        bool AppendAtStart(string path);
+    bool AppendAtStart(string path);
 
-        bool AppendAtEnd(string path);
+    bool AppendAtEnd(string path);
 
-        string TextToAppendAtStart();
+    string TextToAppendAtStart();
 
-        string TextToAppendAtEnd();
-    }
+    string TextToAppendAtEnd();
 }

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Enigmatry.Entry.CodeGeneration.Tools.Intro
+namespace Enigmatry.Entry.CodeGeneration.Tools.Intro;
+
+internal static class IntroMessages
 {
-    internal static class IntroMessages
-    {
-        public static List<IntroMessage> GetRegular() =>
-            new List<IntroMessage>
+    public static List<IntroMessage> GetRegular() =>
+        new List<IntroMessage>
             {
                 new IntroMessage("Hello world!"),
                 new IntroMessage("Nice day, isn't it?"),
@@ -134,8 +134,8 @@ namespace Enigmatry.Entry.CodeGeneration.Tools.Intro
             }
             .Where(message => message.SatisfiesCondition).ToList();
 
-        public static List<IntroMessage> GetImportant() =>
-            new List<IntroMessage>
+    public static List<IntroMessage> GetImportant() =>
+        new List<IntroMessage>
             {
                 new IntroMessage("Happy Programmers' Day to You!")
                     .WithCondition(() => DateTime.Now.IsDayOfYear(256)),
@@ -181,8 +181,8 @@ namespace Enigmatry.Entry.CodeGeneration.Tools.Intro
             .Select(message => message.WithType(IntroMessageType.Important))
             .Where(message => message.SatisfiesCondition).ToList();
 
-        public static List<IntroMessage> GetVeryImportant() =>
-            new List<IntroMessage>
+    public static List<IntroMessage> GetVeryImportant() =>
+        new List<IntroMessage>
             {
                 new IntroMessage("Happy New Year's Eve!!!").WithColors(ConsoleColor.Red)
                     .WithCondition(() => DateTime.Now.IsLastDayOfYear()),
@@ -201,5 +201,4 @@ namespace Enigmatry.Entry.CodeGeneration.Tools.Intro
             }
             .Select(message => message.WithType(IntroMessageType.VeryImportant))
             .Where(message => message.SatisfiesCondition).ToList();
-    }
 }

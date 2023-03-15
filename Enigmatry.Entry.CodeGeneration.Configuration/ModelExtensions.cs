@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Enigmatry.Entry.CodeGeneration.Configuration
+namespace Enigmatry.Entry.CodeGeneration.Configuration;
+
+public static class ModelExtensions
 {
-    public static class ModelExtensions
+    public static IEnumerable<IFeatureModule> GroupByFeature(this IEnumerable<IComponentModel> components)
     {
-        public static IEnumerable<IFeatureModule> GroupByFeature(this IEnumerable<IComponentModel> components)
-        {
-            return components.GroupBy(component => component.ComponentInfo.Feature.Name)
-                .Select(grouping => new FeatureModule(grouping));
-        }
+        return components.GroupBy(component => component.ComponentInfo.Feature.Name)
+            .Select(grouping => new FeatureModule(grouping));
     }
 }

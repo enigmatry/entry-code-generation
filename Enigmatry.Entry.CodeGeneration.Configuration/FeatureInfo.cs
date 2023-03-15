@@ -2,22 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Enigmatry.Entry.CodeGeneration.Configuration
+namespace Enigmatry.Entry.CodeGeneration.Configuration;
+
+public class FeatureInfo
 {
-    public class FeatureInfo
+    public string Name { get; }
+    public IEnumerable<ModuleImport> Imports { get; }
+
+    public FeatureInfo(string name, IEnumerable<ModuleImport> imports)
     {
-        public string Name { get; }
-        public IEnumerable<ModuleImport> Imports { get; }
+        Name = name;
+        Imports = imports;
+    }
 
-        public FeatureInfo(string name, IEnumerable<ModuleImport> imports)
-        {
-            Name = name;
-            Imports = imports;
-        }
-
-        public static FeatureInfo None()
-        {
-            return new FeatureInfo(String.Empty, Enumerable.Empty<ModuleImport>());
-        }
+    public static FeatureInfo None()
+    {
+        return new FeatureInfo(String.Empty, Enumerable.Empty<ModuleImport>());
     }
 }

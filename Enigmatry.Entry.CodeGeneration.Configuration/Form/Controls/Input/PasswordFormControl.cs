@@ -1,7 +1,6 @@
-﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
+﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+
+public class PasswordFormControl : InputControlBase
 {
-    public class PasswordFormControl : InputControlBase
-    {
-        public override string Type => "password";
-    }
+    public override string Type => "password";
 }

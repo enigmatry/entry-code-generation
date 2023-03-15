@@ -1,13 +1,12 @@
-﻿namespace Enigmatry.Entry.CodeGeneration
-{
-    public enum Framework
-    {
-        Angular
-    }
+﻿namespace Enigmatry.Entry.CodeGeneration;
 
-    public enum UiLibrary
-    {
-        Material,
-        Bootstrap
-    }
+public enum Framework
+{
+    Angular
+}
+
+public enum UiLibrary
+{
+    Material,
+    Bootstrap
 }

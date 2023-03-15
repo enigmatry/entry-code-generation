@@ -1,20 +1,19 @@
 ﻿using System;
 
-namespace Enigmatry.Entry.CodeGeneration.Configuration
+namespace Enigmatry.Entry.CodeGeneration.Configuration;
+
+public class ApiClientInfo
 {
-    public class ApiClientInfo
+    public string ApiClientName { get; set; }
+    public bool HasApiClient => ApiClientName.HasContent();
+
+    public ApiClientInfo(string apiClientName)
     {
-        public string ApiClientName { get; set; }
-        public bool HasApiClient => ApiClientName.HasContent();
+        ApiClientName = apiClientName;
+    }
 
-        public ApiClientInfo(string apiClientName)
-        {
-            ApiClientName = apiClientName;
-        }
-
-        public static ApiClientInfo NoApiClient()
-        {
-            return new ApiClientInfo(String.Empty);
-        }
+    public static ApiClientInfo NoApiClient()
+    {
+        return new ApiClientInfo(String.Empty);
     }
 }

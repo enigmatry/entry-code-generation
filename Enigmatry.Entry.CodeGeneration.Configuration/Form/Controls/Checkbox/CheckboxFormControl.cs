@@ -1,7 +1,6 @@
-﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
+﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+
+public class CheckboxFormControl : FormControl
 {
-    public class CheckboxFormControl : FormControl
-    {
-        public override string FormlyType => "checkbox";
-    }
+    public override string FormlyType => "checkbox";
 }

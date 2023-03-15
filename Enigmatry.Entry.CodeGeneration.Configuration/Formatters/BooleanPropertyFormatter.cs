@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Enigmatry.Entry.CodeGeneration.Configuration.Formatters
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
+
+public class BooleanPropertyFormatter : BasePropertyFormatter
 {
-    public class BooleanPropertyFormatter : BasePropertyFormatter
-    {
-        public override IList<Type> SupportedInputTypes() => new List<Type> {typeof(bool)};
+    public override IList<Type> SupportedInputTypes() => new List<Type> {typeof(bool)};
 
-        public override string JsFormatterName => "boolean";
+    public override string JsFormatterName => "boolean";
 
-        public override string ToJsObject() => $"{{ name: \'{JsFormatterName}\' }}";
-    }
+    public override string ToJsObject() => $"{{ name: \'{JsFormatterName}\' }}";
 }

@@ -1,21 +1,20 @@
 ﻿using System.Reflection;
 
-namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+
+public class MultiCheckboxFormControlBuilder : SelectControlBuilderBase<MultiCheckboxFormControl, MultiCheckboxFormControlBuilder>
 {
-    public class MultiCheckboxFormControlBuilder : SelectControlBuilderBase<MultiCheckboxFormControl, MultiCheckboxFormControlBuilder>
+    public MultiCheckboxFormControlBuilder(PropertyInfo propertyInfo) : base(propertyInfo)
     {
-        public MultiCheckboxFormControlBuilder(PropertyInfo propertyInfo) : base(propertyInfo)
-        {
-        }
+    }
 
-        public MultiCheckboxFormControlBuilder(string propertyName) : base(propertyName)
-        {
-        }
+    public MultiCheckboxFormControlBuilder(string propertyName) : base(propertyName)
+    {
+    }
 
-        public override FormControl Build(ComponentInfo componentInfo)
-        {
-            var multiCheckboxFormControl = new MultiCheckboxFormControl() { Options = _optionsBuilder.Build() };
-            return Build(componentInfo, multiCheckboxFormControl);
-        }
+    public override FormControl Build(ComponentInfo componentInfo)
+    {
+        var multiCheckboxFormControl = new MultiCheckboxFormControl() { Options = _optionsBuilder.Build() };
+        return Build(componentInfo, multiCheckboxFormControl);
     }
 }

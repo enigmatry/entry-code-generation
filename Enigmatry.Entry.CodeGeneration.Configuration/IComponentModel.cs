@@ -1,7 +1,6 @@
-﻿namespace Enigmatry.Entry.CodeGeneration.Configuration
+﻿namespace Enigmatry.Entry.CodeGeneration.Configuration;
+
+public interface IComponentModel
 {
-    public interface IComponentModel
-    {
-        ComponentInfo ComponentInfo { get; }
-    }
+    ComponentInfo ComponentInfo { get; }
 }
