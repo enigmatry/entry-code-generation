@@ -1,7 +1,6 @@
-﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
+﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+
+public class MultiSelectFormControl : SelectControlBase
 {
-    public class MultiSelectFormControl : SelectControlBase
-    {
-        public override string FormlyType => "select";
-    }
+    public override string FormlyType => "select";
 }

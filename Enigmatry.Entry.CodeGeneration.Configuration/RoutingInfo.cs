@@ -1,20 +1,19 @@
 ﻿using System;
 
-namespace Enigmatry.Entry.CodeGeneration.Configuration
+namespace Enigmatry.Entry.CodeGeneration.Configuration;
+
+public class RoutingInfo
 {
-    public class RoutingInfo
+    public string Path { get; set; }
+    public bool IsRoutingEnabled { get; set; } = true;
+
+    public RoutingInfo(string path)
     {
-        public string Path { get; set; }
-        public bool IsRoutingEnabled { get; set; } = true;
+        Path = path;
+    }
 
-        public RoutingInfo(string path)
-        {
-            Path = path;
-        }
-
-        public static RoutingInfo NoRouting()
-        {
-            return new RoutingInfo(String.Empty) {IsRoutingEnabled = false};
-        }
+    public static RoutingInfo NoRouting()
+    {
+        return new RoutingInfo(String.Empty) {IsRoutingEnabled = false};
     }
 }

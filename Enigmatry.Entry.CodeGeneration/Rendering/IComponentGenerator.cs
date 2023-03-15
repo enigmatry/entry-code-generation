@@ -1,10 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Enigmatry.Entry.CodeGeneration.Configuration;
 
-namespace Enigmatry.Entry.CodeGeneration.Rendering
+namespace Enigmatry.Entry.CodeGeneration.Rendering;
+
+public interface IComponentGenerator
 {
-    public interface IComponentGenerator
-    {
-        Task GenerateAsync(string outputDir, IComponentModel component);
-    }
+    Task GenerateAsync(string outputDir, IComponentModel component);
 }

@@ -1,9 +1,8 @@
-﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.List.Model
+﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.List.Model;
+
+public enum RowSelectionType
 {
-    public enum RowSelectionType
-    {
-        None,
-        Single,
-        Multiple
-    }
+    None,
+    Single,
+    Multiple
 }

@@ -1,7 +1,6 @@
-﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
+﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+
+public class EmailFormControl : InputControlBase
 {
-    public class EmailFormControl : InputControlBase
-    {
-        public override string Type => "email";
-    }
+    public override string Type => "email";
 }

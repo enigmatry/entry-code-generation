@@ -1,7 +1,6 @@
-﻿namespace Enigmatry.Entry.CodeGeneration.Configuration
+﻿namespace Enigmatry.Entry.CodeGeneration.Configuration;
+
+public interface IBuilder<out T>
 {
-    public interface IBuilder<out T>
-    {
-        T Build();
-    }
+    T Build();
 }

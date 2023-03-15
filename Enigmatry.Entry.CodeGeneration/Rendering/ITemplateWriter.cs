@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Enigmatry.Entry.CodeGeneration.Rendering
+namespace Enigmatry.Entry.CodeGeneration.Rendering;
+
+public interface ITemplateWriter
 {
-    public interface ITemplateWriter
-    {
-        Task WriteToFileAsync(string path, string contents);
-    }
+    Task WriteToFileAsync(string path, string contents);
 }

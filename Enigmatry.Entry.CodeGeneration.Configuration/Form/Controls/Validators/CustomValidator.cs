@@ -1,14 +1,13 @@
 ﻿using System;
 
-namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Validators
-{
-    public class CustomValidator
-    {
-        public string Name { get; } = String.Empty;
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Validators;
 
-        public CustomValidator(string name)
-        {
-            Name = name;
-        }
+public class CustomValidator
+{
+    public string Name { get; } = String.Empty;
+
+    public CustomValidator(string name)
+    {
+        Name = name;
     }
 }

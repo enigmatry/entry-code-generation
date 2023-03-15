@@ -2,34 +2,33 @@
 using Enigmatry.Entry.CodeGeneration.Validation.Helpers;
 using Humanizer;
 
-namespace Enigmatry.Entry.CodeGeneration.Validation.PropertyValidations
+namespace Enigmatry.Entry.CodeGeneration.Validation.PropertyValidations;
+
+public interface IPropertyValidationBuilder<T, TProperty> : IInitialPropertyValidationBuilder<T, TProperty>
 {
-    public interface IPropertyValidationBuilder<T, TProperty> : IInitialPropertyValidationBuilder<T, TProperty>
-    {
-        public IPropertyValidationBuilder<T, TProperty> WithMessage(string message, string messageTranlsationId = "");
-    }
+    public IPropertyValidationBuilder<T, TProperty> WithMessage(string message, string messageTranlsationId = "");
+}
 
-    public class PropertyValidationBuilder<T, TProperty> : BasePropertyValidationBuilder<T, TProperty>, IPropertyValidationBuilder<T, TProperty>
-    {
-        public PropertyValidationBuilder(IPropertyValidation<T, TProperty> propertyRule) : base(propertyRule) { }
+public class PropertyValidationBuilder<T, TProperty> : BasePropertyValidationBuilder<T, TProperty>, IPropertyValidationBuilder<T, TProperty>
+{
+    public PropertyValidationBuilder(IPropertyValidation<T, TProperty> propertyRule) : base(propertyRule) { }
 
-        public IPropertyValidationBuilder<T, TProperty> WithMessage(string message, string messageTranlsationId = "")
+    public IPropertyValidationBuilder<T, TProperty> WithMessage(string message, string messageTranlsationId = "")
+    {
+        if (CurrentValidationRule == null)
         {
-            if (CurrentValidationRule == null)
-            {
-                throw new NullReferenceException("Current validation rule not selected");
-            }
-
-            Check.IfEmpty(message, $"{CurrentValidationRule.PropertyName.Pascalize()} validation message cannot be empty.");
-
-            CurrentValidationRule.SetCustomMessage(message);
-
-            if (!String.IsNullOrWhiteSpace(messageTranlsationId))
-            {
-                CurrentValidationRule.SetMessageTranslationId(messageTranlsationId);
-            }
-
-            return this;
+            throw new NullReferenceException("Current validation rule not selected");
         }
+
+        Check.IfEmpty(message, $"{CurrentValidationRule.PropertyName.Pascalize()} validation message cannot be empty.");
+
+        CurrentValidationRule.SetCustomMessage(message);
+
+        if (!String.IsNullOrWhiteSpace(messageTranlsationId))
+        {
+            CurrentValidationRule.SetMessageTranslationId(messageTranlsationId);
+        }
+
+        return this;
     }
 }

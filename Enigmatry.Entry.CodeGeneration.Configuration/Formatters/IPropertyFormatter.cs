@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Enigmatry.Entry.CodeGeneration.Configuration.Formatters
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
+
+public interface IPropertyFormatter
 {
-    public interface IPropertyFormatter
-    {
-        public bool ValidateInputType(Type inputType);
+    public bool ValidateInputType(Type inputType);
 
-        IList<Type> SupportedInputTypes();
+    IList<Type> SupportedInputTypes();
 
-        public string JsFormatterName { get; }
+    public string JsFormatterName { get; }
 
-        public string ToJsObject();
-    }
+    public string ToJsObject();
 }
