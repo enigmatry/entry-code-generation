@@ -1,5 +1,4 @@
-﻿using Enigmatry.Entry.CodeGeneration.Configuration;
-using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+﻿using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 using Humanizer;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,9 +11,9 @@ namespace Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
         {
             string classNameValue = $"entry-{control.PropertyName.Kebaberize()}-field entry-{control.FormlyType.Kebaberize()}";
 
-            if (control.ClassName != null && control.ClassName.Value.HasContent())
+            foreach (var className in control.ClassNames.Values)
             {
-                classNameValue += $" {ApplyOptionally(control.ClassName)}";
+                classNameValue += $" {ApplyOptionally(className)}";
             }
 
             return html.Raw($"className: `{classNameValue}`,\r\n");
@@ -24,9 +23,9 @@ namespace Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
         {
             string classNameValue = "entry-field-group";
 
-            if (controlGroup.ClassName != null && controlGroup.ClassName.Value.HasContent())
+            foreach (var className in controlGroup.ClassNames.Values)
             {
-                classNameValue += $" {ApplyOptionally(controlGroup.ClassName)}";
+                classNameValue += $" {ApplyOptionally(className)}";
             }
 
             return html.Raw($"fieldGroupClassName: `{classNameValue}`,\r\n");

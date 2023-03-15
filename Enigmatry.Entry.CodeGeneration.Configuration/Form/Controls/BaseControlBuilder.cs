@@ -22,11 +22,11 @@ namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
         protected string? _labelTranslationId;
         protected string? _placeholderTranslationId;
         protected string? _hintTranslationId;
-        protected OptionallyAppliedValue<string>? _className;
+        protected OptionallyAppliedValues<string> _classNames = new();
         protected FormControlAppearance? _appearance;
         protected FormControlFloatLabel? _floatLabel;
-        protected List<CustomValidator> _validators = new List<CustomValidator>();
-        protected List<string> _customWrappers = new List<string>();
+        protected List<CustomValidator> _validators = new();
+        protected List<string> _customWrappers = new();
         protected string? _tooltipText;
         protected string? _tooltipTranslationId;
         protected IPropertyFormatter? _formatter;
@@ -168,7 +168,7 @@ namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
         /// <returns></returns>
         public TBuilder WithClassName(string className, ApplyWhen applyWhen = ApplyWhen.Always)
         {
-            _className = new OptionallyAppliedValue<string>(className, applyWhen);
+            _classNames.Add(new OptionallyAppliedValue<string>(className, applyWhen));
             return (TBuilder)this;
         }
 
@@ -328,7 +328,7 @@ namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
             control.Visible = _isVisible;
             control.Readonly = _isReadonly;
             control.Validators = _validators;
-            control.ClassName = _className;
+            control.ClassNames = _classNames;
             control.Appearance = _appearance;
             control.FloatLabel = _floatLabel;
             control.Tooltip = new I18NString(tooltipTranslationId, tooltip);
