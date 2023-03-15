@@ -274,5 +274,10 @@ export class @Model.AngularComponentName() implements OnInit, OnDestroy {
     return [
 @{ RenderControls(Model.FormControls); }
     ];
+}
+
+  private applyOptionally@(Html.Raw("<T>"))(value: T, apply: boolean): T | undefined {
+    return apply ? value : undefined;
   }
+
 }

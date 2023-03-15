@@ -23,16 +23,16 @@ namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.HtmlHelperExtensions
             _formComponent = builder.Build();
         }
 
-        [TestCase(nameof(FormMock.Name), ExpectedResult = "className: 'entry-name-field entry-input',\r\n")]
-        [TestCase(nameof(FormMock.Description), ExpectedResult = "className: 'entry-description-field entry-textarea',\r\n")]
-        [TestCase(nameof(FormMock.Date), ExpectedResult = "className: 'entry-date-field entry-datepicker',\r\n")]
-        [TestCase(nameof(FormMock.CategoryId), ExpectedResult = "className: 'entry-category-id-field entry-select',\r\n")]
-        [TestCase(nameof(FormMock.Money), ExpectedResult = "className: 'entry-money-field entry-input',\r\n")]
-        [TestCase(nameof(FormMock.Amount), ExpectedResult = "className: 'entry-amount-field entry-input',\r\n")]
-        [TestCase(nameof(FormMock.FormStatus), ExpectedResult = "className: 'entry-form-status-field entry-select',\r\n")]
-        [TestCase(nameof(FormMock.MockRadio), ExpectedResult = "className: 'entry-mock-radio-field entry-radio',\r\n")]
-        [TestCase(nameof(FormMock.Types), ExpectedResult = "className: 'entry-types-field entry-select',\r\n")]
-        [TestCase(nameof(FormMock.MockMultiCheckbox), ExpectedResult = "className: 'entry-mock-multi-checkbox-field entry-multicheckbox',\r\n")]
+        [TestCase(nameof(FormMock.Name), ExpectedResult = "className: `entry-name-field entry-input`,\r\n")]
+        [TestCase(nameof(FormMock.Description), ExpectedResult = "className: `entry-description-field entry-textarea`,\r\n")]
+        [TestCase(nameof(FormMock.Date), ExpectedResult = "className: `entry-date-field entry-datepicker`,\r\n")]
+        [TestCase(nameof(FormMock.CategoryId), ExpectedResult = "className: `entry-category-id-field entry-select`,\r\n")]
+        [TestCase(nameof(FormMock.Money), ExpectedResult = "className: `entry-money-field entry-input`,\r\n")]
+        [TestCase(nameof(FormMock.Amount), ExpectedResult = "className: `entry-amount-field entry-input`,\r\n")]
+        [TestCase(nameof(FormMock.FormStatus), ExpectedResult = "className: `entry-form-status-field entry-select`,\r\n")]
+        [TestCase(nameof(FormMock.MockRadio), ExpectedResult = "className: `entry-mock-radio-field entry-radio`,\r\n")]
+        [TestCase(nameof(FormMock.Types), ExpectedResult = "className: `entry-types-field entry-select`,\r\n")]
+        [TestCase(nameof(FormMock.MockMultiCheckbox), ExpectedResult = "className: `entry-mock-multi-checkbox-field entry-multicheckbox`,\r\n")]
         public string FieldCssClass(string propertyName)
         {
             var formControl = _formComponent
@@ -41,7 +41,7 @@ namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.HtmlHelperExtensions
             return _htmlHelper.FieldCssClass(formControl)?.ToString() ?? "";
         }
 
-        [TestCase(ExpectedResult = "fieldGroupClassName: 'entry-field-group',\r\n")]
+        [TestCase(ExpectedResult = "fieldGroupClassName: `entry-field-group ${this.applyOptionally('group-wrapper-readonly', this.isReadonly)}`,\r\n")]
         public string GroupCssClass()
         {
             var formControlGroup = _formComponent

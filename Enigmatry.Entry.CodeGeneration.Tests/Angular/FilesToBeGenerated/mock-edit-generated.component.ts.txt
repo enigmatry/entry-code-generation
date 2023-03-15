@@ -99,7 +99,7 @@ export class MockEditGeneratedComponent implements OnInit, OnDestroy {
         {
         key: 'resetFormBtn',
         type: this.resolveFieldType('button', false),
-className: 'entry-reset-form-btn-field entry-button primary-button',
+className: `entry-reset-form-btn-field entry-button primary-button`,
         hideExpression: this.fieldsHideExpressions?.resetFormBtn ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.resetFormBtn ? this.fieldsDisableExpressions.resetFormBtn(model) : false)),
@@ -117,7 +117,7 @@ className: 'entry-reset-form-btn-field entry-button primary-button',
         },
         {
         type: this.resolveFieldType('group-type', false),
-fieldGroupClassName: 'entry-field-group',
+fieldGroupClassName: `entry-field-group ${this.applyOptionally('group-wrapper-readonly', this.isReadonly)}`,
                 wrappers: ['group-wrapper'],
         templateOptions: {
         label: $localize `:@@test.mock-edit.group-name.label:Group name`,
@@ -129,7 +129,7 @@ fieldGroupClassName: 'entry-field-group',
         {
         key: 'name',
         type: this.resolveFieldType('input', false),
-className: 'entry-name-field entry-input',
+className: `entry-name-field entry-input`,
         hideExpression: this.fieldsHideExpressions?.name ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.name ? this.fieldsDisableExpressions.name(model) : false)),
@@ -163,7 +163,7 @@ modelOptions: { updateOn: 'blur' },
         {
         key: 'description',
         type: this.resolveFieldType('textarea', false),
-className: 'entry-description-field entry-textarea',
+className: `entry-description-field entry-textarea`,
         hideExpression: this.fieldsHideExpressions?.description ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.description ? this.fieldsDisableExpressions.description(model) : false)),
@@ -188,7 +188,7 @@ modelOptions: { updateOn: 'blur' },
         {
         key: 'date',
         type: this.resolveFieldType('datepicker', true),
-className: 'entry-date-field entry-datepicker',
+className: `entry-date-field entry-datepicker`,
         hideExpression: this.fieldsHideExpressions?.date ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.date ? this.fieldsDisableExpressions.date(model) : true)),
@@ -208,7 +208,7 @@ modelOptions: { updateOn: 'blur' },
         {
         key: 'money',
         type: this.resolveFieldType('input', false),
-className: 'entry-money-field entry-input',
+className: `entry-money-field entry-input`,
         hideExpression: this.fieldsHideExpressions?.money ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.money ? this.fieldsDisableExpressions.money(model) : false)),
@@ -229,7 +229,7 @@ max: 999.99 - 0.1,
         {
         key: 'amount',
         type: this.resolveFieldType('input', false),
-className: 'entry-amount-field entry-input',
+className: `entry-amount-field entry-input`,
         hideExpression: this.fieldsHideExpressions?.amount ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.amount ? this.fieldsDisableExpressions.amount(model) : false)),
@@ -258,7 +258,7 @@ max: (err, field) => $localize `:@@test.mock-edit.amount.max:CUSTOM_VALIDATION_M
         {
         key: 'formStatus',
         type: this.resolveFieldType('select', false),
-className: 'entry-form-status-field entry-select',
+className: `entry-form-status-field entry-select`,
         hideExpression: this.fieldsHideExpressions?.formStatus ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.formStatus ? this.fieldsDisableExpressions.formStatus(model) : false)),
@@ -279,7 +279,7 @@ className: 'entry-form-status-field entry-select',
         {
         key: 'mockRadio',
         type: this.resolveFieldType('radio', false),
-className: 'entry-mock-radio-field entry-radio',
+className: `entry-mock-radio-field entry-radio`,
         hideExpression: this.fieldsHideExpressions?.mockRadio ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.mockRadio ? this.fieldsDisableExpressions.mockRadio(model) : false)),
@@ -300,7 +300,7 @@ className: 'entry-mock-radio-field entry-radio',
         {
         key: 'mockMultiCheckbox',
         type: this.resolveFieldType('multicheckbox', false),
-className: 'entry-mock-multi-checkbox-field entry-multicheckbox',
+className: `entry-mock-multi-checkbox-field entry-multicheckbox`,
         hideExpression: this.fieldsHideExpressions?.mockMultiCheckbox ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.mockMultiCheckbox ? this.fieldsDisableExpressions.mockMultiCheckbox(model) : false)),
@@ -322,7 +322,7 @@ className: 'entry-mock-multi-checkbox-field entry-multicheckbox',
         {
         key: 'categoryId',
         type: this.resolveFieldType('select', false),
-className: 'entry-category-id-field entry-select',
+className: `entry-category-id-field entry-select`,
         hideExpression: this.fieldsHideExpressions?.categoryId ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.categoryId ? this.fieldsDisableExpressions.categoryId(model) : false)),
@@ -344,7 +344,7 @@ metadata: { entityType: 'Category', filter: 'category_name' },
         {
         key: 'types',
         type: this.resolveFieldType('select', false),
-className: 'entry-types-field entry-select',
+className: `entry-types-field entry-select`,
         hideExpression: this.fieldsHideExpressions?.types ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.types ? this.fieldsDisableExpressions.types(model) : false)),
@@ -367,7 +367,7 @@ className: 'entry-types-field entry-select',
         {
         key: 'password',
         type: this.resolveFieldType('input', false),
-className: 'entry-password-field entry-input',
+className: `entry-password-field entry-input`,
         hideExpression: this.fieldsHideExpressions?.password ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.password ? this.fieldsDisableExpressions.password(model) : false)),
@@ -386,7 +386,7 @@ className: 'entry-password-field entry-input',
         {
         key: 'addresses',
         type: this.resolveFieldType('array-field', false),
-className: 'entry-addresses-field entry-array-field',
+className: `entry-addresses-field entry-array-field`,
         hideExpression: this.fieldsHideExpressions?.addresses ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.addresses ? this.fieldsDisableExpressions.addresses(model) : false)),
@@ -404,7 +404,7 @@ className: 'entry-addresses-field entry-array-field',
             fieldArray:
         {
         type: this.resolveFieldType('', false),
-fieldGroupClassName: 'entry-field-group',
+fieldGroupClassName: `entry-field-group`,
                 wrappers: ['group-wrapper'],
         templateOptions: {
         label: '',
@@ -417,7 +417,7 @@ fieldGroupClassName: 'entry-field-group',
         {
         key: 'city',
         type: this.resolveFieldType('input', false),
-className: 'entry-city-field entry-input',
+className: `entry-city-field entry-input`,
         defaultValue: 'Amsterdam',
         hideExpression: this.fieldsHideExpressions?.city ?? false,
         expressionProperties: {
@@ -436,7 +436,7 @@ className: 'entry-city-field entry-input',
         {
         key: 'street',
         type: this.resolveFieldType('input', false),
-className: 'entry-street-field entry-input',
+className: `entry-street-field entry-input`,
         hideExpression: this.fieldsHideExpressions?.street ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.street ? this.fieldsDisableExpressions.street(model) : false)),
@@ -454,7 +454,7 @@ className: 'entry-street-field entry-input',
         {
         key: 'houseNumber',
         type: this.resolveFieldType('input', false),
-className: 'entry-house-number-field entry-input',
+className: `entry-house-number-field entry-input`,
         hideExpression: this.fieldsHideExpressions?.houseNumber ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.houseNumber ? this.fieldsDisableExpressions.houseNumber(model) : false)),
@@ -472,7 +472,7 @@ className: 'entry-house-number-field entry-input',
         {
         key: 'verified',
         type: this.resolveFieldType('checkbox', true),
-className: 'entry-verified-field entry-checkbox',
+className: `entry-verified-field entry-checkbox`,
         hideExpression: this.fieldsHideExpressions?.verified ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.verified ? this.fieldsDisableExpressions.verified(model) : true)),
@@ -495,7 +495,7 @@ className: 'entry-verified-field entry-checkbox',
         {
         key: 'email1',
         type: this.resolveFieldType('input', false),
-className: 'entry-email1-field entry-input',
+className: `entry-email1-field entry-input`,
         hideExpression: this.fieldsHideExpressions?.email1 ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.email1 ? this.fieldsDisableExpressions.email1(model) : false)),
@@ -521,7 +521,7 @@ pattern: (err, field) => $localize `:@@test.mock-edit.email1.pattern:CUSTOM_VALI
         {
         key: 'email2',
         type: this.resolveFieldType('input', false),
-className: 'entry-email2-field entry-input',
+className: `entry-email2-field entry-input`,
         hideExpression: this.fieldsHideExpressions?.email2 ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.email2 ? this.fieldsDisableExpressions.email2(model) : false)),
@@ -545,5 +545,10 @@ pattern: (err, field) => $localize `:@@validators.pattern.emailAddress:Invalid e
             },
         },
     ];
+}
+
+  private applyOptionally<T>(value: T, apply: boolean): T | undefined {
+    return apply ? value : undefined;
   }
+
 }

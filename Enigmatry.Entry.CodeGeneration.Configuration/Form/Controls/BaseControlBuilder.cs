@@ -22,7 +22,7 @@ namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
         protected string? _labelTranslationId;
         protected string? _placeholderTranslationId;
         protected string? _hintTranslationId;
-        protected string? _className;
+        protected OptionallyAppliedValue<string>? _className;
         protected FormControlAppearance? _appearance;
         protected FormControlFloatLabel? _floatLabel;
         protected List<CustomValidator> _validators = new List<CustomValidator>();
@@ -164,10 +164,11 @@ namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
         /// Configure form control class name
         /// </summary>
         /// <param name="className"></param>
+        /// <param name="applyWhen"></param>
         /// <returns></returns>
-        public TBuilder WithClassName(string className)
+        public TBuilder WithClassName(string className, ApplyWhen applyWhen = ApplyWhen.Always)
         {
-            _className = className;
+            _className = new OptionallyAppliedValue<string>(className, applyWhen);
             return (TBuilder)this;
         }
 
