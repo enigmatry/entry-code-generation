@@ -27,15 +27,15 @@ public class FormComponentBuilder<T> : BaseComponentBuilder<FormComponentModel>
         return _formGroup.FormControl(propertyExpression);
     }
 
-    public InputControlBuilderBase<InputFormControl> InputFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+    public InputFormControlBuilder InputFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
     {
         return _formGroup.InputFormControl(propertyExpression);
     }
-    public InputControlBuilderBase<EmailFormControl> EmailFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+    public EmailFormControlBuilder EmailFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
     {
         return _formGroup.EmailFormControl(propertyExpression);
     }
-    public InputControlBuilderBase<PasswordFormControl> PasswordFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+    public PasswordFormControlBuilder PasswordFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
     {
         return _formGroup.PasswordFormControl(propertyExpression);
     }

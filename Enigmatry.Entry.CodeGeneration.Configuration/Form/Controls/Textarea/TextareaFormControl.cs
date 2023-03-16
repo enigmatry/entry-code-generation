@@ -1,6 +1,6 @@
 ﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 
-public class TextareaFormControl : FormControl
+public class TextareaFormControl : InputControlBase
 {
     public override string FormlyType => "textarea";
     public int Rows { get; set; }
