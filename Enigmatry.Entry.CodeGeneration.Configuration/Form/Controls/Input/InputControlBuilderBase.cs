@@ -6,13 +6,13 @@ public class InputControlBuilderBase<T, TBuilder> : BaseControlBuilder<T, TBuild
     where T : InputControlBase, new()
     where TBuilder : InputControlBuilderBase<T, TBuilder>
 {
-    protected bool _shouldAutocomplete = true;
+    private bool? _shouldAutocomplete;
 
-    public InputControlBuilderBase(PropertyInfo propertyInfo) : base(propertyInfo)
+    protected InputControlBuilderBase(PropertyInfo propertyInfo) : base(propertyInfo)
     {
     }
 
-    public InputControlBuilderBase(string propertyName) : base(propertyName)
+    protected InputControlBuilderBase(string propertyName) : base(propertyName)
     {
     }
 
@@ -29,8 +29,7 @@ public class InputControlBuilderBase<T, TBuilder> : BaseControlBuilder<T, TBuild
 
     public override FormControl Build(ComponentInfo componentInfo)
     {
-        var inputFormControl = new T();
-        inputFormControl.ShouldAutocomplete = _shouldAutocomplete;
+        var inputFormControl = new T { ShouldAutocomplete = _shouldAutocomplete };
         return Build(componentInfo, inputFormControl);
     }
 }

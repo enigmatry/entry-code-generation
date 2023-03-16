@@ -21,12 +21,6 @@ public static class AngularFormlyValidationHtmlHelperExtensions
         return html.Raw($"{String.Join(",\r\n", templateOptions)},\r\n");
     }
 
-    public static IHtmlContent AddAttributeTemplateOptions(this IHtmlHelper html, FormControl control)
-    {
-        // TODO: render attributes like autocomplete
-        return html.Raw(String.Empty);
-    }
-
     public static IHtmlContent AddAsyncValidators(this IHtmlHelper html, FormControl control) =>
         control.Validators.Any()
             ? html.Raw($"asyncValidators: {{ validation: [ {String.Join(", ", control.Validators.Select(x => $"'{x.Name.Camelize()}'"))} ] }},\r\n")
