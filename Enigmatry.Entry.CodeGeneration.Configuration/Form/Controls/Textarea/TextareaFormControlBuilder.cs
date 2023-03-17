@@ -2,7 +2,7 @@
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 
-public class TextareaFormControlBuilder : BaseControlBuilder<TextareaFormControl, TextareaFormControlBuilder>
+public class TextareaFormControlBuilder : InputControlBuilderBase<TextareaFormControl, TextareaFormControlBuilder>
 {
     private int _rows = 2;
     private int _cols;

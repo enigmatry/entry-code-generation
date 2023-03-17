@@ -103,7 +103,8 @@ import { map, throttleTime } from 'rxjs/operators';
             @:autosizeMinRows: @(textarea.AutoResizeMinRows),
             @:autosizeMaxRows: @(textarea.AutoResizeMaxRows),
         }
-        @:hidden: !@control.Visible.ToString().ToLower(),
+            @:@Html.AddAttributes(control)
+            @:hidden: !@control.Visible.ToString().ToLower(),
         @if (control.Tooltip.HasContent())
         {
             @:tooltipText: @Html.Localize(control.Tooltip, Options.EnableI18N),

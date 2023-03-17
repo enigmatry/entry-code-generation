@@ -33,19 +33,19 @@ public class FormControlGroupBuilder<T> : BaseControlBuilder<FormControlGroup, F
         return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new InferredFormControlBuilder(propertyInfo));
     }
 
-    public InputControlBuilderBase<InputFormControl> InputFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+    public InputFormControlBuilder InputFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
     {
-        return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new InputControlBuilderBase<InputFormControl>(propertyInfo));
+        return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new InputFormControlBuilder(propertyInfo));
     }
 
-    public InputControlBuilderBase<EmailFormControl> EmailFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+    public EmailFormControlBuilder EmailFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
     {
-        return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new InputControlBuilderBase<EmailFormControl>(propertyInfo));
+        return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new EmailFormControlBuilder(propertyInfo));
     }
 
-    public InputControlBuilderBase<PasswordFormControl> PasswordFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+    public PasswordFormControlBuilder PasswordFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
     {
-        return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new InputControlBuilderBase<PasswordFormControl>(propertyInfo));
+        return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new PasswordFormControlBuilder(propertyInfo));
     }
 
     public CheckboxFormControlBuilder CheckboxFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)

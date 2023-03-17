@@ -33,7 +33,7 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
             .WithClassName("group-wrapper-readonly", ApplyWhen.FormIsReadonly);
 
         formGroup
-            .FormControl(x => x.Name)
+            .InputFormControl(x => x.Name)
             .WithLabel("Name")
             .WithPlaceholder("Some / Name")
             .WithValidators("UniqueName", "IsEnsured")
@@ -41,7 +41,8 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
             .WithTooltipText("Tooltip text")
             .WithAppearance(FormControlAppearance.Outline)
             .WithFloatLabel(FormControlFloatLabel.Always)
-            .WithUpdateOn(ValueUpdateTrigger.OnBlur);
+            .WithUpdateOn(ValueUpdateTrigger.OnBlur)
+            .ShouldAutocomplete(false);
 
         formGroup
             .TextareaFormControl(x => x.Description)
