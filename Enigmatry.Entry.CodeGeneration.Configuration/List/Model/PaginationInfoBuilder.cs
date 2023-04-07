@@ -3,23 +3,26 @@
 namespace Enigmatry.Entry.CodeGeneration.Configuration.List.Model;
 
 /// <summary>
-/// The PaginationInfoBuilder class is used for configuring pagination settings for a table component.
-/// It provides methods to set various properties related to pagination, such as showing or hiding
-/// the paginator, configuring page size options, and displaying controls for navigating to the first
-/// and last pages. The methods in this class are designed to be chained together, allowing for a
-/// fluent and readable syntax when configuring table component pagination.
+/// The PaginationInfoBuilder class provides a fluent API for configuring pagination settings for a table component.
 /// </summary>
+/// <remarks>
+/// <para>
+/// It offers methods to set various properties related to pagination, such as showing or hiding
+/// the paginator, configuring page size options, and displaying controls for navigating to the first
+/// and last pages.
+/// </para>
 /// <example>
 /// An example of using the PaginationInfoBuilder to configure pagination for a table component:
 /// <code>
 /// builder.Pagination()
-/// .ShowPaginator(true)
-/// .ShowFirstLastPageButtons(false)
-/// .PageSize(10)
-/// .ShowPageSize(true)
-/// .PageSizeOptions(new int[] { 10, 50, 100 });
+///     .ShowPaginator(true)
+///     .ShowFirstLastPageButtons(false)
+///     .PageSize(10)
+///     .ShowPageSize(true)
+///     .PageSizeOptions(new int[] { 10, 50, 100 });
 /// </code>
 /// </example>
+/// </remarks>
 public class PaginationInfoBuilder : IBuilder<PaginationInfo>
 {
     private bool _showPaginator = true;

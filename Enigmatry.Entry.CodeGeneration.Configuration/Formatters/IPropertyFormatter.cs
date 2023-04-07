@@ -5,9 +5,11 @@ namespace Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
 
 /// <summary>
 /// The IPropertyFormatter interface defines the methods and properties required for creating custom property formatters.
-/// Property formatters are used for formatting column data in a table component. Implementing this interface allows you
-/// to define custom formatting logic for specific property types and control how the data is displayed in a column.
 /// </summary>
+/// <remarks>
+/// Property formatters are used for formatting e.g. column data in a table component or controls in a form component.
+/// Implementing this interface allows you to define custom formatting logic for specific property types and control how the data is displayed in a column.
+/// </remarks>
 public interface IPropertyFormatter
 {
     /// <summary>

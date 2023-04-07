@@ -6,11 +6,15 @@ namespace Enigmatry.Entry.CodeGeneration.Configuration.List.Model;
 
 /// <summary>
 /// The RowInfoBuilder class provides a fluent API for configuring row-specific settings for a table component.
-/// It offers methods to define the row selection type and to configure the row context menu.
-/// Use this builder when defining a table component to customize the behavior and appearance of table rows.
 /// </summary>
 /// <remarks>
+/// <para>
+/// It offers methods to define the row selection type and to configure the row context menu.<br/>
+/// Use this builder when defining a table component to customize the behavior and appearance of table rows.
+/// </para>
+/// <para>
 /// This builder is accessible through the <see cref="ListComponentBuilder{T}.Row">Row()</see> method of the <see cref="ListComponentBuilder{T}"/>.
+/// </para>
 /// </remarks>
 public class RowInfoBuilder
 {

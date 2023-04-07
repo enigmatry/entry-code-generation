@@ -8,21 +8,24 @@ using Humanizer;
 namespace Enigmatry.Entry.CodeGeneration.Configuration.List.Model;
 
 /// <summary>
-/// The ColumnDefinitionBuilder class is used for configuring individual columns in a table component.
-/// It provides methods to set various properties of the columns, such as header name, visibility,
-/// sorting, formatting, and more. The methods in this class are designed to be chained together,
-/// allowing for a fluent and readable syntax when configuring table columns.
+/// The ColumnDefinitionBuilder class provides a fluent API for configuring individual columns in a table component.
 /// </summary>
+/// <remarks>
+/// <para>
+/// It offers methods to set various properties of the columns, such as header name, visibility,
+/// sorting, formatting, and more.
+/// </para>
 /// <example>
 /// An example of using the ColumnDefinitionBuilder to configure a column for a table component:
 /// <code>
 /// builder.Column(x => x.UserName)
-/// .WithHeaderName("E-mail")
-/// .IsVisible(true)
-/// .IsSortable(true)
-/// .WithFormat(new DatePropertyFormatter().WithFormat("yyyy-MM-dd"));
+///     .WithHeaderName("E-mail")
+///     .IsVisible(true)
+///     .IsSortable(true)
+///     .WithFormat(new DatePropertyFormatter().WithFormat("yyyy-MM-dd"));
 /// </code>
 /// </example>
+/// </remarks>
 public class ColumnDefinitionBuilder
 {
     private readonly PropertyAccessor? _propertyAccessor;

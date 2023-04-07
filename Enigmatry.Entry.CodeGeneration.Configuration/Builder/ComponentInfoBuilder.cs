@@ -40,8 +40,11 @@ public class ComponentInfoBuilder : IBuilder<ComponentInfo>
     }
 
     /// <summary>
-    /// Set the feature name to which the component belongs. Components belonging to the same feature will be added to the same Angular module.
+    /// Set the feature name to which the component belongs.
     /// </summary>
+    /// Components belonging to the same feature will be added to the same Angular module.
+    /// <remarks>
+    /// </remarks>
     /// <param name="featureName">The name of the feature.</param>
     /// <returns>The ComponentInfoBuilder instance for method chaining.</returns>
     public ComponentInfoBuilder BelongsToFeature(string featureName)

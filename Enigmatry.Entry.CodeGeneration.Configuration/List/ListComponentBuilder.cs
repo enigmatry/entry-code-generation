@@ -9,26 +9,30 @@ using JetBrains.Annotations;
 namespace Enigmatry.Entry.CodeGeneration.Configuration.List;
 
 /// <summary>
-/// The ListComponentBuilder class is used for configuring table components in an Angular project.
-/// It provides methods to configure various aspects of the table component, such as component name,
-/// feature name, columns, pagination, and row selection. The methods in this class are designed
-/// to be chained together, allowing for a fluent and readable syntax when configuring table components.
+/// The ListComponentBuilder class provides a fluent API for configuring a table component
+/// so that configuration can be used to generate UI client feature component e.g. Angular module.
 /// </summary>
+/// <remarks>
+/// <para>
+/// It provides methods to configure various aspects of the table component, such as component name,
+/// feature name, columns, pagination, and row selection.
+/// </para>
 /// <example>
 /// An example of using the ListComponentBuilder to configure a table component:
 /// <code>
 /// builder.Component()
-/// .HasName("UserList")
-/// .BelongsToFeature("Users");
+///     .HasName("UserList")
+///     .BelongsToFeature("Users");
 ///
 /// builder.Column(x => x.Username)
-/// .WithHeaderName("Email address");
+///     .WithHeaderName("Email address");
 ///
 /// builder.Row().Selection(RowSelectionType.Single);
 ///
 /// builder.Pagination().ShowFirstLastPageButtons(false);
 /// </code>
 /// </example>
+/// </remarks>
 [UsedImplicitly]
 public class ListComponentBuilder<T> : BaseComponentBuilder<ListComponentModel>
 {
@@ -57,7 +61,7 @@ public class ListComponentBuilder<T> : BaseComponentBuilder<ListComponentModel>
     }
 
     /// <summary>
-    /// Configure a table column based on a property name string. Useful for defining properties that don't exist in class T.
+    /// Configure a table column based on a property name string.
     /// </summary>
     /// <param name="propertyName">The name of the property as a string.</param>
     /// <returns>An instance of <see cref="ColumnDefinitionBuilder"/> to further configure the column.</returns>

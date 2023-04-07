@@ -11,6 +11,36 @@ using JetBrains.Annotations;
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration.Form;
 
+/// <summary>
+/// The FormComponentBuilder class provides a fluent API for configuring a form component
+/// so that configuration can be used to generate UI client feature component e.g. Angular module.
+/// </summary>
+/// <remarks>
+/// <para>
+/// It provides methods to configure various aspects of the form component, such as component name,
+/// feature name, etc. as described in <see cref="ComponentInfoBuilder"/>,
+/// as well as the properties and behaviors of each form control,
+/// such as input fields, checkboxes, and buttons as described in <see cref="BaseControlBuilder{TControl, TBuilder}"/>
+/// </para>
+/// <example>
+/// An example of using the FormComponentBuilder to configure a table component:
+/// <code>
+/// builder.Component()
+///     .HasName("ProductEdit")
+///     .BelongsToFeature("Products")
+///     .OrderBy(OrderByType.Configuration);
+///
+/// builder.FormControl(x => x.Price)
+///     .WithLabel("Price per unit")
+///     .WithLabelTranslationId(ProductTranslationId.Price)
+///     .WithPlaceholder("Price per unit")
+///     .WithPlaceholderTranslationId(ProductTranslationId.Price)
+///     .WithAppearance(FormControlAppearance.Outline)
+///     .WithFormat(new CurrencyPropertyFormatter().WithCurrencyCode("EUR").WithDisplay("€"))
+///     .WithValidators("priceIsNotNegative");
+/// </code>
+/// </example>
+/// </remarks>
 [UsedImplicitly]
 public class FormComponentBuilder<T> : BaseComponentBuilder<FormComponentModel>
 {
