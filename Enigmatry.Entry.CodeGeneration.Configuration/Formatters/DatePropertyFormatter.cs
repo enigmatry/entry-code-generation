@@ -14,7 +14,7 @@ public class DatePropertyFormatter : BasePropertyFormatter
     {
         typeof(DateTime), 
         typeof(DateTimeOffset),
-#if NET6_0
+#if NET6_0_OR_GREATER
         typeof(DateOnly)
 #endif
     };
