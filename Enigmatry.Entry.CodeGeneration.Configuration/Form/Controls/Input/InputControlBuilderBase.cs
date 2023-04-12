@@ -6,7 +6,8 @@ public class InputControlBuilderBase<T, TBuilder> : BaseControlBuilder<T, TBuild
     where T : InputControlBase, new()
     where TBuilder : InputControlBuilderBase<T, TBuilder>
 {
-    private bool? _shouldAutocomplete;
+    protected bool? _shouldAutocomplete;
+    protected string? _defaultValue;
 
     protected InputControlBuilderBase(PropertyInfo propertyInfo) : base(propertyInfo)
     {
@@ -27,9 +28,22 @@ public class InputControlBuilderBase<T, TBuilder> : BaseControlBuilder<T, TBuild
         return (TBuilder)this;
     }
 
+    /// <summary>
+    /// Set control default value
+    /// </summary>
+    public TBuilder WithDefaultValue(string defaultValue)
+    {
+        _defaultValue = defaultValue;
+        return (TBuilder)this;
+    }
+
     public override FormControl Build(ComponentInfo componentInfo)
     {
-        var inputFormControl = new T { ShouldAutocomplete = _shouldAutocomplete };
+        var inputFormControl = new T
+        {
+            ShouldAutocomplete = _shouldAutocomplete,
+            DefaultValue = _defaultValue
+        };
         return Build(componentInfo, inputFormControl);
     }
 }

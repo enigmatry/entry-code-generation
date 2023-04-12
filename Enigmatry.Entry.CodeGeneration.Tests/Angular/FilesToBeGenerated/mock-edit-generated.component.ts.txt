@@ -133,7 +133,7 @@ fieldGroupClassName: `entry-field-group ${this.applyOptionally('group-wrapper-re
         key: 'name',
         type: this.resolveFieldType('input', false),
 className: `entry-name-field entry-input`,
-defaultValue: `DEFAULT NAME`,
+defaultValue: 'DEFAULT NAME',
         hideExpression: this.fieldsHideExpressions?.name ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.name ? this.fieldsDisableExpressions.name(model) : false)),
@@ -467,7 +467,7 @@ fieldGroupClassName: `entry-field-group`,
         key: 'city',
         type: this.resolveFieldType('input', false),
 className: `entry-city-field entry-input`,
-defaultValue: `Amsterdam`,
+defaultValue: 'Amsterdam',
         hideExpression: this.fieldsHideExpressions?.city ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.city ? this.fieldsDisableExpressions.city(model) : false)),

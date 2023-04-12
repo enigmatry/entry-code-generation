@@ -48,6 +48,4 @@ public abstract class FormControl
     }
 
     public bool IsRequired => ValidationRules.HasRule<IsRequiredValidationRule>();
-
-    public abstract string? DefaultValueAsString();
 }

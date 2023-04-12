@@ -52,7 +52,7 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
             .WithUpdateOn(ValueUpdateTrigger.OnBlur);
 
         formGroup
-            .FormControl(x => x.Date)
+            .DatepickerFormControl(x => x.Date)
             .WithCustomWrappers("tooltip", "form-field")
             .WithLabel("Date")
             .WithPlaceholder("Date")

@@ -2,6 +2,6 @@
 
 public class MultiCheckboxFormControl : SelectControlBase
 {
-    public override string FormlyType => "multicheckbox";
+    public override string FormlyType => FormlyTypes.MultiCheckBox;
     public override string Type => "array";
 }

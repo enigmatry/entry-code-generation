@@ -4,7 +4,7 @@ namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 
 public class CheckboxFormControlBuilder : BaseControlBuilder<CheckboxFormControl, CheckboxFormControlBuilder>
 {
-    protected bool _defaultValue;
+    private bool? _defaultValue;
 
     public CheckboxFormControlBuilder(PropertyInfo propertyInfo) : base(propertyInfo)
     {
@@ -25,8 +25,10 @@ public class CheckboxFormControlBuilder : BaseControlBuilder<CheckboxFormControl
 
     public override FormControl Build(ComponentInfo componentInfo)
     {
-        var checkboxFormControl = new CheckboxFormControl();
-        checkboxFormControl.DefaultValue = _defaultValue;
+        var checkboxFormControl = new CheckboxFormControl
+        {
+            DefaultValue = _defaultValue
+        };
         return Build(componentInfo, checkboxFormControl);
     }
 }

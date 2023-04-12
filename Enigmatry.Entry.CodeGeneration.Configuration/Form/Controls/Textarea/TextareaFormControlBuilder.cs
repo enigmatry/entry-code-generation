@@ -46,7 +46,9 @@ public class TextareaFormControlBuilder : InputControlBuilderBase<TextareaFormCo
             Cols = _cols,
             AutoResize = _autoResize,
             AutoResizeMinRows = _autoResizeMinRows,
-            AutoResizeMaxRows = _autoResizeMaxRows
+            AutoResizeMaxRows = _autoResizeMaxRows,
+            ShouldAutocomplete = _shouldAutocomplete,
+            DefaultValue = _defaultValue
         };
         return Build(componentInfo, textareaFormControl);
     }
