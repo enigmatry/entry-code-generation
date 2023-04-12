@@ -1,4 +1,5 @@
 ﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+
 public static class FormlyTypes
 {
     public const string Input = "input";

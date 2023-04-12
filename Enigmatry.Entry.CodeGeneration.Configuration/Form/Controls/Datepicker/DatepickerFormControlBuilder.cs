@@ -26,8 +26,7 @@ public class DatepickerFormControlBuilder: BaseControlBuilder<DatepickerFormCont
 
     public override FormControl Build(ComponentInfo componentInfo)
     {
-        var datepickerFormControl = new DatepickerFormControl();
-        datepickerFormControl.DefaultValue = _defaultValue;
+        var datepickerFormControl = new DatepickerFormControl { DefaultValue = _defaultValue };
         return Build(componentInfo, datepickerFormControl);
     }
 }

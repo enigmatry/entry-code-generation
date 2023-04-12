@@ -25,10 +25,7 @@ public class CheckboxFormControlBuilder : BaseControlBuilder<CheckboxFormControl
 
     public override FormControl Build(ComponentInfo componentInfo)
     {
-        var checkboxFormControl = new CheckboxFormControl
-        {
-            DefaultValue = _defaultValue
-        };
+        var checkboxFormControl = new CheckboxFormControl { DefaultValue = _defaultValue };
         return Build(componentInfo, checkboxFormControl);
     }
 }
