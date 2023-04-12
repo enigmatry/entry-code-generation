@@ -1,10 +1,10 @@
-﻿using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Validators;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Validators;
 using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
 using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 using Humanizer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 
@@ -37,14 +37,16 @@ public abstract class FormControl
             .Where(x => x.PropertyName == PropertyName)
             .ToList();
 
-        var validationRulesWithoutTranslationId = ValidationRules.Where(x => !x.HasMessageTranslationId);
-        foreach (var validationRule in validationRulesWithoutTranslationId)
+        IEnumerable<IFormlyValidationRule> validationRulesWithoutTranslationId = ValidationRules.Where(x => !x.HasMessageTranslationId);
+        foreach (IFormlyValidationRule validationRule in validationRulesWithoutTranslationId)
+        {
             validationRule.SetMessageTranslationId(
                 $"{ComponentInfo.Feature.Name.Kebaberize()}" +
                 $".{ComponentInfo.Name.Kebaberize()}" +
                 $".{PropertyName.Kebaberize()}" +
                 $".{validationRule.FormlyRuleName.Kebaberize()}"
             );
+        }
     }
 
     public bool IsRequired => ValidationRules.HasRule<IsRequiredValidationRule>();

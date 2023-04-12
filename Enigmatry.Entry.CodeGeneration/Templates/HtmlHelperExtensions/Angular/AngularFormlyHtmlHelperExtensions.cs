@@ -1,10 +1,10 @@
-﻿using Enigmatry.Entry.CodeGeneration.Configuration;
+﻿using System;
+using System.Globalization;
+using Enigmatry.Entry.CodeGeneration.Configuration;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 using Humanizer;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Globalization;
 
 namespace Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 
@@ -12,9 +12,9 @@ public static class AngularFormlyHtmlHelperExtensions
 {
     public static IHtmlContent FieldCssClass(this IHtmlHelper html, FormControl control)
     {
-        string classNameValue = $"entry-{control.PropertyName.Kebaberize()}-field entry-{control.FormlyType.Kebaberize()}";
+        var classNameValue = $"entry-{control.PropertyName.Kebaberize()}-field entry-{control.FormlyType.Kebaberize()}";
 
-        foreach (var className in control.ClassNames.Values)
+        foreach (OptionallyAppliedValue<string> className in control.ClassNames.Values)
         {
             classNameValue += $" {ApplyOptionally(className)}";
         }
@@ -24,9 +24,9 @@ public static class AngularFormlyHtmlHelperExtensions
 
     public static IHtmlContent GroupCssClass(this IHtmlHelper html, FormControlGroup controlGroup)
     {
-        string classNameValue = "entry-field-group";
+        var classNameValue = "entry-field-group";
 
-        foreach (var className in controlGroup.ClassNames.Values)
+        foreach (OptionallyAppliedValue<string> className in controlGroup.ClassNames.Values)
         {
             classNameValue += $" {ApplyOptionally(className)}";
         }
@@ -47,35 +47,32 @@ public static class AngularFormlyHtmlHelperExtensions
 
     public static IHtmlContent DefaultValue(this IHtmlHelper html, FormControl control)
     {
-        switch (control.FormlyType)
+        return control switch
         {
-            case FormlyTypes.DatePicker:
-                return html.RenderFormlyDefaultValue(((DatepickerFormControl)control).DefaultValue);
-            case FormlyTypes.Input:
-                return html.RenderFormlyDefaultValue(((InputControlBase)control).DefaultValue);
-            case FormlyTypes.TextArea:
-                return html.RenderFormlyDefaultValue(((TextareaFormControl)control).DefaultValue);
-            case FormlyTypes.CheckBox:
-                return html.RenderFormlyDefaultValue(((CheckboxFormControl)control).DefaultValue);
-            case FormlyTypes.Radio:
-                return html.RenderFormlyDefaultValue(((RadioGroupFormControl)control).DefaultValue);
-            case FormlyTypes.Select:
-                return control.GetType() == typeof(SelectFormControl)
-                    ? html.RenderFormlyDefaultValue(((SelectFormControl)control).DefaultValue)
-                    : html.Raw("");
-            default:
-                return html.Raw("");
-        }
+            DatepickerFormControl formControl => html.RenderDefaultValue(formControl.DefaultValue),
+            InputControlBase formControl => html.RenderDefaultValue(formControl.DefaultValue),
+            CheckboxFormControl formControl => html.RenderDefaultValue(formControl.DefaultValue),
+            RadioGroupFormControl formControl => html.RenderDefaultValue(formControl.DefaultValue),
+            SelectFormControl formControl => html.RenderDefaultValue(formControl.DefaultValue),
+            _ => html.Raw("")
+        };
     }
-    private static IHtmlContent RenderFormlyDefaultValue(this IHtmlHelper html, bool? defaultValue) =>
-        defaultValue.HasValue ? html.Raw($"defaultValue: {(defaultValue.Value ? "true" : "false")},\r\n") : html.Raw("");
 
-    private static IHtmlContent RenderFormlyDefaultValue(this IHtmlHelper html, DateTimeOffset? defaultValue) =>
-        defaultValue.HasValue
-            // O - ISO 8601 = 2018-04-24T06:30:00.0000000
+    private static IHtmlContent RenderDefaultValue(this IHtmlHelper html, bool? defaultValue)
+    {
+        return defaultValue.HasValue ? html.Raw($"defaultValue: {(defaultValue.Value ? "true" : "false")},\r\n") : html.Raw("");
+    }
+
+    private static IHtmlContent RenderDefaultValue(this IHtmlHelper html, DateTimeOffset? defaultValue)
+    {
+        return defaultValue.HasValue
+            // O - ISO 8601
             ? html.Raw($"defaultValue: '{defaultValue.Value.ToString("O", CultureInfo.InvariantCulture)}',\r\n")
             : html.Raw("");
+    }
 
-    private static IHtmlContent RenderFormlyDefaultValue(this IHtmlHelper html, string? defaultValue) =>
-        defaultValue.HasContent() ? html.Raw($"defaultValue: '{defaultValue}',\r\n") : html.Raw("");
+    private static IHtmlContent RenderDefaultValue(this IHtmlHelper html, string? defaultValue)
+    {
+        return defaultValue.HasContent() ? html.Raw($"defaultValue: '{defaultValue}',\r\n") : html.Raw("");
+    }
 }
