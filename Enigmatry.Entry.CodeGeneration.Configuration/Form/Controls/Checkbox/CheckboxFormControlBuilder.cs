@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 
@@ -27,10 +28,11 @@ public class CheckboxFormControlBuilder: BaseControlBuilder<CheckboxFormControl,
         return Build(componentInfo, checkboxFormControl);
     }
 
-    // Hide inherited method so it cannot be used with checkbox form control.
+    // This method is deliberately made private so that users cannot set string default values!
 #pragma warning disable IDE0051 // Remove unused private members
-#pragma warning disable IDE0060 // Remove unused parameter
-    private new CheckboxFormControlBuilder WithDefaultValue(string defaultValue) { return this; }
-#pragma warning restore IDE0060 // Remove unused parameter
+    private new CheckboxFormControlBuilder WithDefaultValue(string defaultValue)
+    {
+        throw new NotImplementedException($"String default values ({defaultValue}) are not supported in CheckBox from component!");
+    }
 #pragma warning restore IDE0051 // Remove unused private members
 }
