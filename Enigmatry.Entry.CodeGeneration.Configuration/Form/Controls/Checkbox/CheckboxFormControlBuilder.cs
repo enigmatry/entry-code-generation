@@ -1,10 +1,11 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 
-public class CheckboxFormControlBuilder: BaseControlBuilder<CheckboxFormControl, CheckboxFormControlBuilder>
+public class CheckboxFormControlBuilder : BaseControlBuilder<CheckboxFormControl, CheckboxFormControlBuilder>
 {
+    protected bool _defaultValue;
+
     public CheckboxFormControlBuilder(PropertyInfo propertyInfo) : base(propertyInfo)
     {
     }
@@ -18,21 +19,14 @@ public class CheckboxFormControlBuilder: BaseControlBuilder<CheckboxFormControl,
     /// </summary>
     public CheckboxFormControlBuilder WithDefaultValue(bool defaultValue)
     {
-        _defaultValue = defaultValue ? "true" : "false";
+        _defaultValue = defaultValue;
         return this;
     }
 
     public override FormControl Build(ComponentInfo componentInfo)
     {
         var checkboxFormControl = new CheckboxFormControl();
+        checkboxFormControl.DefaultValue = _defaultValue;
         return Build(componentInfo, checkboxFormControl);
     }
-
-    // This method is deliberately made private so that users cannot set string default values!
-#pragma warning disable IDE0051 // Remove unused private members
-    private new CheckboxFormControlBuilder WithDefaultValue(string defaultValue)
-    {
-        throw new NotImplementedException($"String default values ({defaultValue}) are not supported in CheckBox from component!");
-    }
-#pragma warning restore IDE0051 // Remove unused private members
 }

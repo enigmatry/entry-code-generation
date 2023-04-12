@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Validators;
+﻿using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Validators;
 using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
 using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 using Humanizer;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 
@@ -28,7 +28,6 @@ public abstract class FormControl
     public abstract string FormlyType { get; }
     public IPropertyFormatter? Formatter { get; set; }
     public bool Ignore { get; set; }
-    public string? DefaultValue { get; set; }
     public ValueUpdateTrigger? ValueUpdateTrigger { get; set; }
     public IEnumerable<KeyValuePair<string, string>> Metadata { get; set; } = new List<KeyValuePair<string, string>>();
 
@@ -49,4 +48,6 @@ public abstract class FormControl
     }
 
     public bool IsRequired => ValidationRules.HasRule<IsRequiredValidationRule>();
+
+    public abstract string? DefaultValueAsString();
 }

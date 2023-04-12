@@ -31,17 +31,10 @@ public static class AngularFormlyHtmlHelperExtensions
         return html.Raw($"fieldGroupClassName: `{classNameValue}`,\r\n");
     }
 
-    public static IHtmlContent DefaultValue(this IHtmlHelper html, FormControl control)
-    {
-        if (control.DefaultValue == null)
-        {
-            return html.Raw("");
-        }
-
-        return control.FormlyType == "checkbox"
-            ? html.Raw($"defaultValue: {control.DefaultValue},\r\n")
-            : html.Raw($"defaultValue: `{control.DefaultValue}`,\r\n");
-    }
+    public static IHtmlContent DefaultValue(this IHtmlHelper html, FormControl control) =>
+        control.DefaultValueAsString() == null
+            ? html.Raw("")
+            : html.Raw($"defaultValue: {control.DefaultValueAsString()},\r\n");
 
     private static string ApplyOptionally(OptionallyAppliedValue<string> className)
     {
