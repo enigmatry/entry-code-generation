@@ -39,6 +39,7 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
             .WithValidators("UniqueName", "IsEnsured")
             .WithCustomWrapper("tooltip")
             .WithTooltipText("Tooltip text")
+            .WithDefaultValue("DEFAULT NAME")
             .WithAppearance(FormControlAppearance.Outline)
             .WithFloatLabel(FormControlFloatLabel.Always)
             .WithUpdateOn(ValueUpdateTrigger.OnBlur)
@@ -117,6 +118,11 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
 
         formGroup
             .PasswordFormControl(x => x.Password);
+
+        formGroup
+            .CheckboxFormControl(x => x.IsActive)
+            .WithLabel("Active")
+            .WithDefaultValue(true);
 
         formGroup
             .ArrayFormControl(x => x.Addresses)

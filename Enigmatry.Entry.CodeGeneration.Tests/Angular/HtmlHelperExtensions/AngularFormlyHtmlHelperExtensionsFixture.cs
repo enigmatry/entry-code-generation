@@ -1,10 +1,10 @@
 ﻿using Enigmatry.Entry.CodeGeneration.Configuration.Form;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
-using Enigmatry.Entry.CodeGeneration.Configuration.List;
 using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 using Enigmatry.Entry.CodeGeneration.Tests.Angular.Mocks;
 using Humanizer;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using System.Linq;
 
 namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.HtmlHelperExtensions;
@@ -48,5 +48,17 @@ internal class AngularFormlyHtmlHelperExtensionsFixture : CodeGenerationFixtureB
             .FormControlsOfType<FormControlGroup>()
             .First();
         return _htmlHelper.GroupCssClass(formControlGroup)?.ToString() ?? "";
+    }
+
+    [TestCase(nameof(FormMock.Name), null, ExpectedResult = "")]
+    [TestCase(nameof(FormMock.Name), "true", ExpectedResult = "defaultValue: `true`,\r\n")]
+    [TestCase(nameof(FormMock.IsActive), "true", ExpectedResult = "defaultValue: true,\r\n")]
+    public string DefaultValue(string propertyName, string value)
+    {
+        var formControl = _formComponent
+            .FormControlsOfType<FormControl>()
+            .Single(x => x.PropertyName == propertyName.Camelize());
+        formControl.DefaultValue = value;
+        return _htmlHelper.DefaultValue(formControl).ToString();
     }
 }
