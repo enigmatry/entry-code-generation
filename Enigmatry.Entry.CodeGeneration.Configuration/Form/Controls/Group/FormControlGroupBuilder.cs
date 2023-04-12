@@ -28,6 +28,7 @@ public class FormControlGroupBuilder<T> : BaseControlBuilder<FormControlGroup, F
         return this;
     }
 
+    [Obsolete("This method will be removed in the next release. Please use specific FormControl builders (e.g. InputFormControl(), SelectFormControl(), etc.)", false)]
     public InferredFormControlBuilder FormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
     {
         return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new InferredFormControlBuilder(propertyInfo));
