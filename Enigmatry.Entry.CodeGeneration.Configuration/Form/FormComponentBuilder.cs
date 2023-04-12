@@ -22,7 +22,6 @@ public class FormComponentBuilder<T> : BaseComponentBuilder<FormComponentModel>
         _componentInfoBuilder.Routing().WithIdRoute();
     }
 
-    [Obsolete]
     public InferredFormControlBuilder FormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
     {
         return _formGroup.FormControl(propertyExpression);

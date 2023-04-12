@@ -17,7 +17,7 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
             .OrderBy(OrderByType.Configuration);
             
         builder
-            .InputFormControl(x => x.Id)
+            .FormControl(x => x.Id)
             .IsVisible(false);
 
         builder
@@ -59,12 +59,12 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
             .IsReadonly(true);
 
         formGroup
-            .InputFormControl(x => x.Money)
+            .FormControl(x => x.Money)
             .WithLabel("Money")
             .WithPlaceholder("Money");
 
         formGroup
-            .InputFormControl(x => x.Amount)
+            .FormControl(x => x.Amount)
             .WithLabel("Amount")
             .WithPlaceholder("Amount");
 
@@ -113,7 +113,7 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
             });
 
         formGroup
-            .InputFormControl(x => x.SubTypeId)
+            .FormControl(x => x.SubTypeId)
             .Ignore();
 
         formGroup
@@ -133,7 +133,7 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
                     config
                         .WithCustomWrapper("group-wrapper");
                     config
-                        .InputFormControl(x => x.Id)
+                        .FormControl(x => x.Id)
                         .IsVisible(false);
                     config
                         .InputFormControl(x => x.City)

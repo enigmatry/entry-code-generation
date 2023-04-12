@@ -123,9 +123,9 @@ public class FormComponentConfigurationFixture
                 .HasName("ProjectDetails")
                 .BelongsToFeature("Projects");
 
-            builder.InputFormControl(x => x.Id).IsVisible(false);
+            builder.FormControl(x => x.Id).IsVisible(false);
 
-            builder.InputFormControl(x => x.Title)
+            builder.FormControl(x => x.Title)
                 .WithLabel("Title")
                 .WithPlaceholder("Title");
 
