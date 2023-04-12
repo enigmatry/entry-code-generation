@@ -12,6 +12,7 @@
     <ItemGroup>
         <PackageReference Include="Humanizer.Core" />
         <PackageReference Include="JetBrains.Annotations" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" />
     </ItemGroup>
 
     <ItemGroup>
