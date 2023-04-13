@@ -31,7 +31,6 @@ public abstract class BaseControlBuilder<TControl, TBuilder> : IControlBuilder
     protected string? _tooltipTranslationId;
     protected IPropertyFormatter? _formatter;
     protected bool _ignore;
-    protected string? _defaultValue;
     protected ValueUpdateTrigger? _valueUpdateTrigger;
     protected IEnumerable<KeyValuePair<string, string>> _metadata = new List<KeyValuePair<string, string>>();
 
@@ -275,15 +274,6 @@ public abstract class BaseControlBuilder<TControl, TBuilder> : IControlBuilder
     }
 
     /// <summary>
-    /// Set control default value
-    /// </summary>
-    public TBuilder WithDefaultValue(string defaultValue)
-    {
-        _defaultValue = defaultValue;
-        return (TBuilder)this;
-    }
-
-    /// <summary>
     /// Set control update on trigger
     /// </summary>
     public TBuilder WithUpdateOn(ValueUpdateTrigger valueUpdateTrigger)
@@ -335,7 +325,6 @@ public abstract class BaseControlBuilder<TControl, TBuilder> : IControlBuilder
         control.Wrappers = new FormControlWrappers(_customWrappers);
         control.Formatter = _formatter;
         control.Ignore = _ignore;
-        control.DefaultValue = _defaultValue;
         control.ValueUpdateTrigger = _valueUpdateTrigger ?? control.ValueUpdateTrigger;
         control.Metadata = _metadata;
 

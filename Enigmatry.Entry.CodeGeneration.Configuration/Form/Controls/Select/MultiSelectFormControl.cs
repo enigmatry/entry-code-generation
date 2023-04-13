@@ -2,5 +2,5 @@
 
 public class MultiSelectFormControl : SelectControlBase
 {
-    public override string FormlyType => "select";
+    public override string FormlyType => FormlyTypes.Select;
 }

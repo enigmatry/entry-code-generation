@@ -1,4 +1,7 @@
-﻿using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+﻿using System;
+using System.Globalization;
+using Enigmatry.Entry.CodeGeneration.Configuration;
+using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 using Humanizer;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -9,9 +12,9 @@ public static class AngularFormlyHtmlHelperExtensions
 {
     public static IHtmlContent FieldCssClass(this IHtmlHelper html, FormControl control)
     {
-        string classNameValue = $"entry-{control.PropertyName.Kebaberize()}-field entry-{control.FormlyType.Kebaberize()}";
+        var classNameValue = $"entry-{control.PropertyName.Kebaberize()}-field entry-{control.FormlyType.Kebaberize()}";
 
-        foreach (var className in control.ClassNames.Values)
+        foreach (OptionallyAppliedValue<string> className in control.ClassNames.Values)
         {
             classNameValue += $" {ApplyOptionally(className)}";
         }
@@ -21,9 +24,9 @@ public static class AngularFormlyHtmlHelperExtensions
 
     public static IHtmlContent GroupCssClass(this IHtmlHelper html, FormControlGroup controlGroup)
     {
-        string classNameValue = "entry-field-group";
+        var classNameValue = "entry-field-group";
 
-        foreach (var className in controlGroup.ClassNames.Values)
+        foreach (OptionallyAppliedValue<string> className in controlGroup.ClassNames.Values)
         {
             classNameValue += $" {ApplyOptionally(className)}";
         }
@@ -40,5 +43,36 @@ public static class AngularFormlyHtmlHelperExtensions
             ApplyWhen.Always => $"{className}",
             _ => $"{className}"
         };
+    }
+
+    public static IHtmlContent DefaultValue(this IHtmlHelper html, FormControl control)
+    {
+        return control switch
+        {
+            DatepickerFormControl formControl => html.RenderDefaultValue(formControl.DefaultValue),
+            InputControlBase formControl => html.RenderDefaultValue(formControl.DefaultValue),
+            CheckboxFormControl formControl => html.RenderDefaultValue(formControl.DefaultValue),
+            RadioGroupFormControl formControl => html.RenderDefaultValue(formControl.DefaultValue),
+            SelectFormControl formControl => html.RenderDefaultValue(formControl.DefaultValue),
+            _ => html.Raw("")
+        };
+    }
+
+    private static IHtmlContent RenderDefaultValue(this IHtmlHelper html, bool? defaultValue)
+    {
+        return defaultValue.HasValue ? html.Raw($"defaultValue: {(defaultValue.Value ? "true" : "false")},\r\n") : html.Raw("");
+    }
+
+    private static IHtmlContent RenderDefaultValue(this IHtmlHelper html, DateTimeOffset? defaultValue)
+    {
+        return defaultValue.HasValue
+            // O - ISO 8601
+            ? html.Raw($"defaultValue: '{defaultValue.Value.ToString("O", CultureInfo.InvariantCulture)}',\r\n")
+            : html.Raw("");
+    }
+
+    private static IHtmlContent RenderDefaultValue(this IHtmlHelper html, string? defaultValue)
+    {
+        return defaultValue.HasContent() ? html.Raw($"defaultValue: '{defaultValue}',\r\n") : html.Raw("");
     }
 }

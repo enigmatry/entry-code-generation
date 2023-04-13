@@ -15,6 +15,7 @@ public class FormMock
     public string Email1 { get; set; } = String.Empty;
     public string Email2 { get; set; } = String.Empty;
     public string Password { get; set; } = String.Empty;
+    public bool IsActive { get; set; }
     public EnumMock FormStatus { get; set; }
     public Guid CategoryId { get; set; }
     public IEnumerable<Guid> Types { get; set; } = Enumerable.Empty<Guid>();

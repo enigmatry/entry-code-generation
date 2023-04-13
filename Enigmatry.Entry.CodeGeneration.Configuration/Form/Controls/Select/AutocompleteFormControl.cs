@@ -2,5 +2,5 @@
 
 public class AutocompleteFormControl : SelectControlBase
 {
-    public override string FormlyType => "autocomplete";
+    public override string FormlyType => FormlyTypes.Autocomplete;
 }

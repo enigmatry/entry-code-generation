@@ -44,10 +44,7 @@ import { map, throttleTime } from 'rxjs/operators';
         @:key: '@control.PropertyName',
         @:type: this.resolveFieldType('@Html.Raw(control.FormlyType)', @control.Readonly.ToString().ToLower()),
         @Html.FieldCssClass(control)
-        @if (control.DefaultValue != null)
-        {
-        @:defaultValue: '@Html.Raw(control.DefaultValue)',
-        }
+        @Html.DefaultValue(control)
         @:hideExpression: this.fieldsHideExpressions?.@(control.PropertyName) ?? false,
         @:expressionProperties: {
         @:'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.@(control.PropertyName) ? this.fieldsDisableExpressions.@(control.PropertyName)(model) : @control.Readonly.ToString().ToLower())),
