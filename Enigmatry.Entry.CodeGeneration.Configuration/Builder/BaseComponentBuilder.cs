@@ -15,10 +15,6 @@ public abstract class BaseComponentBuilder<T> : IComponentBuilder<T> where T : I
 
     public ComponentInfoBuilder Component() => _componentInfoBuilder;
 
-    public RoutingInfoBuilder Routing() => _componentInfoBuilder.Routing();
-
-    public ApiClientInfoBuilder ApiClient() => _componentInfoBuilder.ApiClient();
-
     public FeatureInfoBuilder Feature() => _componentInfoBuilder.Feature();
 
     public abstract T Build();

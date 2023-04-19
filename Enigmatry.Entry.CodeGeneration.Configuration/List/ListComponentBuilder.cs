@@ -12,13 +12,12 @@ namespace Enigmatry.Entry.CodeGeneration.Configuration.List;
 public class ListComponentBuilder<T> : BaseComponentBuilder<ListComponentModel>
 {
     private readonly IList<ColumnDefinitionBuilder> _columns;
-    private readonly PaginationInfoBuilder _paginationInfoBuilder = new PaginationInfoBuilder();
-    private readonly RowInfoBuilder _rowInfoBuilder = new RowInfoBuilder();
+    private readonly PaginationInfoBuilder _paginationInfoBuilder = new();
+    private readonly RowInfoBuilder _rowInfoBuilder = new();
 
     public ListComponentBuilder() : base(typeof(T))
     {
         _columns = _modelType.GetProperties().Select(propertyInfo => new ColumnDefinitionBuilder(propertyInfo)).ToList();
-        _componentInfoBuilder.Routing().WithEmptyRoute();
     }
 
     public ColumnDefinitionBuilder Column<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
