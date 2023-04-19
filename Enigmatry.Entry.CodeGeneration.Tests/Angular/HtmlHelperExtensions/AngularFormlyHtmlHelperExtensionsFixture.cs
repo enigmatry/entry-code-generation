@@ -26,7 +26,7 @@ internal class AngularFormlyHtmlHelperExtensionsFixture : CodeGenerationFixtureB
     }
 
     [TestCase(nameof(FormMock.Name), ExpectedResult = "className: `entry-name-field entry-input`,\r\n")]
-    [TestCase(nameof(FormMock.Description), ExpectedResult = "className: `entry-description-field entry-textarea`,\r\n")]
+    [TestCase(nameof(FormMock.Description), ExpectedResult = "className: `entry-description-field entry-ckeditor`,\r\n")]
     [TestCase(nameof(FormMock.Date), ExpectedResult = "className: `entry-date-field entry-datepicker`,\r\n")]
     [TestCase(nameof(FormMock.CategoryId), ExpectedResult = "className: `entry-category-id-field entry-select`,\r\n")]
     [TestCase(nameof(FormMock.Money), ExpectedResult = "className: `entry-money-field entry-input`,\r\n")]
@@ -62,7 +62,7 @@ internal class AngularFormlyHtmlHelperExtensionsFixture : CodeGenerationFixtureB
             .Should().Be("defaultValue: 'DEFAULT NAME',\r\n");
 
         var textAreaFormControl = _formComponent
-            .FormControlsOfType<TextareaFormControl>()
+            .FormControlsOfType<RichTextInputFormControl>()
             .Single(x => x.PropertyName == nameof(FormMock.Description).Camelize());
         textAreaFormControl.DefaultValue = "DEFAULT_TEXT_AREA";
         _htmlHelper.DefaultValue(textAreaFormControl).ToString()

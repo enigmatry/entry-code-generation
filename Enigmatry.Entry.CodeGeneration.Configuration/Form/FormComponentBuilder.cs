@@ -14,7 +14,7 @@ namespace Enigmatry.Entry.CodeGeneration.Configuration.Form;
 [UsedImplicitly]
 public class FormComponentBuilder<T> : BaseComponentBuilder<FormComponentModel>
 {
-    private readonly FormControlGroupBuilder<T> _formGroup = new FormControlGroupBuilder<T>("form");
+    private readonly FormControlGroupBuilder<T> _formGroup = new("form");
     private IEnumerable<IFormlyValidationRule> _validationRules = new List<IFormlyValidationRule>();
 
     public FormComponentBuilder() : base(typeof(T))
@@ -48,6 +48,11 @@ public class FormComponentBuilder<T> : BaseComponentBuilder<FormComponentModel>
     public TextareaFormControlBuilder TextareaFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
     {
         return _formGroup.TextareaFormControl(propertyExpression);
+    }
+
+    public RichTextInputFormControlBuilder RichTextInputFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+    {
+        return _formGroup.RichTextInputFormControl(propertyExpression);
     }
 
     public SelectFormControlBuilder SelectFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
