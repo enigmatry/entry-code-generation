@@ -19,7 +19,6 @@ public class FormComponentBuilder<T> : BaseComponentBuilder<FormComponentModel>
 
     public FormComponentBuilder() : base(typeof(T))
     {
-        _componentInfoBuilder.Routing().WithIdRoute();
     }
 
     public InferredFormControlBuilder FormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
