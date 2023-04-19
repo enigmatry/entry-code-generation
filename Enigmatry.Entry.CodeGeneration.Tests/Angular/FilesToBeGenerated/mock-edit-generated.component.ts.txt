@@ -18,8 +18,7 @@ import { map, throttleTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-g-mock-edit',
-  templateUrl: './mock-edit-generated.component.html',
-  styleUrls: ['./mock-edit-generated.component.scss']
+  templateUrl: './mock-edit-generated.component.html'
 })
 export class MockEditGeneratedComponent implements OnInit, OnDestroy {
 

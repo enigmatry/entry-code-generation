@@ -15,7 +15,6 @@ import { ListMockItem } from 'src/app/api/api-reference';
 @Component({
   selector: 'app-g-mock-list',
   templateUrl: './mock-list-generated.component.html',
-  styleUrls: ['./mock-list-generated.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MockListGeneratedComponent implements OnInit {

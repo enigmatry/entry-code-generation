@@ -15,10 +15,8 @@
 
   <ItemGroup>
     <None Remove="Templates\Angular\Material\Angular.Form.Component.cshtml" />
-    <None Remove="Templates\Angular\Material\Angular.Form.Style.cshtml" />
     <None Remove="Templates\Angular\Material\Angular.Form.View.cshtml" />
     <None Remove="Templates\Angular\Material\Angular.List.Component.cshtml" />
-    <None Remove="Templates\Angular\Material\Angular.List.Style.cshtml" />
     <None Remove="Templates\Angular\Material\Angular.List.View.cshtml" />
     <None Remove="Templates\Angular\Material\Angular.Module.cshtml" />
     <None Remove="Templates\Angular\Material\Angular.Module.Routing.cshtml" />
@@ -28,16 +26,10 @@
     <Content Include="Templates\Angular\Material\Angular.Form.Component.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Templates\Angular\Material\Angular.Form.Style.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Templates\Angular\Material\Angular.Form.View.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Templates\Angular\Material\Angular.List.Component.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Templates\Angular\Material\Angular.List.Style.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Templates\Angular\Material\Angular.List.View.cshtml">
