@@ -58,6 +58,11 @@ public class FormControlGroupBuilder<T> : BaseControlBuilder<FormControlGroup, F
         return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new TextareaFormControlBuilder(propertyInfo));
     }
 
+    public RichTextInputFormControlBuilder RichTextInputFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+    {
+        return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new RichTextInputFormControlBuilder(propertyInfo));
+    }
+
     public SelectFormControlBuilder SelectFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
     {
         return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new SelectFormControlBuilder(propertyInfo));

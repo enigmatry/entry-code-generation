@@ -46,10 +46,9 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
             .ShouldAutocomplete(false);
 
         formGroup
-            .TextareaFormControl(x => x.Description)
-            .WithLabel("Some Description")
-            .WithValidators("ValidDescription")
-            .WithUpdateOn(ValueUpdateTrigger.OnBlur);
+            .RichTextInputFormControl(x => x.Description)
+            .WithEditor(RichTextEditor.Ckeditor)
+            .WithLabel("Some Description");
 
         formGroup
             .DatepickerFormControl(x => x.Date)
