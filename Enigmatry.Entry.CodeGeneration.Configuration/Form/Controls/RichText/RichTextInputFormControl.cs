@@ -2,6 +2,6 @@
 
 public class RichTextInputFormControl : InputControlBase
 {
-    public RichTextEditor Editor { get; init; } = RichTextEditor.Ckeditor;
+    public RichTextEditor Editor { get; set; } = RichTextEditor.Ckeditor;
     public override string FormlyType => Editor.ToString().ToLowerInvariant();
 }
