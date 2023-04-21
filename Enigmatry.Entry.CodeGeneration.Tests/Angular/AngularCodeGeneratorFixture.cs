@@ -21,8 +21,6 @@ public class AngularCodeGeneratorFixture : CodeGenerationFixtureBase
     public async Task Generate()
     {
         _options.Framework.Should().Be(Framework.Angular);
-        // System.NotSupportedException : Calling Equals on Assertion classes is not supported.
-        //_options.SourceAssembly.Should().Equals(Assembly.GetExecutingAssembly());
 
         await _codeGenerator.Generate();
 

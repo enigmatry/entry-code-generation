@@ -4,16 +4,15 @@
 @using Enigmatry.Entry.CodeGeneration.Configuration.List.Model
 @using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
 @model Enigmatry.Entry.CodeGeneration.Configuration.List.ListComponentModel;
-@inject CodeGeneratorOptions _options;
+@inject CodeGeneratorOptions Options;
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@@angular/core';
 import { PagedData, SortDirection, CellTemplate, ContextMenuItem, RowContextMenuFormatter, RowClassFormatter, RowSelectionFormatter, ColumnDef, PageEvent, SortEvent } from '@@enigmatry/entry-table';
 
-import { @(Model.ComponentInfo.ModelType) } from '@_options.ApiClientTsImportPath';
+import { @(Model.ComponentInfo.ModelType) } from '@Options.ApiClientTsImportPath';
 
 @@Component({
-  selector: '@Model.AngularComponentSelector(_options.GeneratedComponentPrefix)',
+  selector: '@Model.AngularComponentSelector(Options.GeneratedComponentPrefix)',
   templateUrl: './@(Model.AngularComponentFileName()).html',
-  styleUrls: ['./@(Model.AngularComponentFileName()).scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class @Model.AngularComponentName() implements OnInit {
@@ -62,7 +61,7 @@ export class @Model.AngularComponentName() implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.columns = @Html.CreateColumnDefs(Model.Columns, _options.EnableI18N);
-    this.contextMenuItems = @Html.CreateContextMenuItems(Model.Row.ContextMenuItems, _options.EnableI18N);
+    this.columns = @Html.CreateColumnDefs(Model.Columns, Options.EnableI18N);
+    this.contextMenuItems = @Html.CreateContextMenuItems(Model.Row.ContextMenuItems, Options.EnableI18N);
   }
 }
