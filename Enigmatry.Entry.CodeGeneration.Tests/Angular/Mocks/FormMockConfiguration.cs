@@ -147,6 +147,8 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
                 }
             );
 
+        formGroup.DateTimePickerFormControl(x => x.DateAndTime);
+
         builder
             .WithValidationConfiguration(new FormMockValidationConfiguration());
     }

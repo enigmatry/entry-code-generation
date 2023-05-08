@@ -23,6 +23,7 @@ public class FormMock
     public EnumMock MockRadio { get; set; }
     public IEnumerable<EnumMock> MockMultiCheckbox { get; set; } = Enumerable.Empty<EnumMock>();
     public IEnumerable<FormAddressMock> Addresses { get; set; } = Enumerable.Empty<FormAddressMock>();
+    public DateTimeOffset DateAndTime { get; set; }
 }
 
 public class FormAddressMock
