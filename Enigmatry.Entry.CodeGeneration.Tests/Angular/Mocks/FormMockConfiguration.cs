@@ -39,19 +39,19 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
             .WithValidators("UniqueName", "IsEnsured")
             .WithCustomWrapper("tooltip")
             .WithTooltipText("Tooltip text")
+            .WithDefaultValue("DEFAULT NAME")
             .WithAppearance(FormControlAppearance.Outline)
             .WithFloatLabel(FormControlFloatLabel.Always)
             .WithUpdateOn(ValueUpdateTrigger.OnBlur)
             .ShouldAutocomplete(false);
 
         formGroup
-            .TextareaFormControl(x => x.Description)
-            .WithLabel("Some Description")
-            .WithValidators("ValidDescription")
-            .WithUpdateOn(ValueUpdateTrigger.OnBlur);
+            .RichTextInputFormControl(x => x.Description)
+            .WithEditor(RichTextEditor.Ckeditor)
+            .WithLabel("Some Description");
 
         formGroup
-            .FormControl(x => x.Date)
+            .DatepickerFormControl(x => x.Date)
             .WithCustomWrappers("tooltip", "form-field")
             .WithLabel("Date")
             .WithPlaceholder("Date")
@@ -119,6 +119,11 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
             .PasswordFormControl(x => x.Password);
 
         formGroup
+            .CheckboxFormControl(x => x.IsActive)
+            .WithLabel("Active")
+            .WithDefaultValue(true);
+
+        formGroup
             .ArrayFormControl(x => x.Addresses)
             .WithCustomControlType("array-field")
             .WithCustomWrapper("array-wrapper")
@@ -141,6 +146,8 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
                         .IsReadonly(true);
                 }
             );
+
+        formGroup.DateTimePickerFormControl(x => x.DateAndTime);
 
         builder
             .WithValidationConfiguration(new FormMockValidationConfiguration());

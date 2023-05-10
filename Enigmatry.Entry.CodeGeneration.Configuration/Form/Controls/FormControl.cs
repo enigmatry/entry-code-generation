@@ -28,7 +28,6 @@ public abstract class FormControl
     public abstract string FormlyType { get; }
     public IPropertyFormatter? Formatter { get; set; }
     public bool Ignore { get; set; }
-    public string? DefaultValue { get; set; }
     public ValueUpdateTrigger? ValueUpdateTrigger { get; set; }
     public IEnumerable<KeyValuePair<string, string>> Metadata { get; set; } = new List<KeyValuePair<string, string>>();
 
@@ -38,14 +37,16 @@ public abstract class FormControl
             .Where(x => x.PropertyName == PropertyName)
             .ToList();
 
-        var validationRulesWithoutTranslationId = ValidationRules.Where(x => !x.HasMessageTranslationId);
-        foreach (var validationRule in validationRulesWithoutTranslationId)
+        IEnumerable<IFormlyValidationRule> validationRulesWithoutTranslationId = ValidationRules.Where(x => !x.HasMessageTranslationId);
+        foreach (IFormlyValidationRule validationRule in validationRulesWithoutTranslationId)
+        {
             validationRule.SetMessageTranslationId(
                 $"{ComponentInfo.Feature.Name.Kebaberize()}" +
                 $".{ComponentInfo.Name.Kebaberize()}" +
                 $".{PropertyName.Kebaberize()}" +
                 $".{validationRule.FormlyRuleName.Kebaberize()}"
             );
+        }
     }
 
     public bool IsRequired => ValidationRules.HasRule<IsRequiredValidationRule>();

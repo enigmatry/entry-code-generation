@@ -2,5 +2,6 @@
 
 public class RadioGroupFormControl : SelectControlBase
 {
-    public override string FormlyType => "radio";
+    public override string FormlyType => FormlyTypes.Radio;
+    public string? DefaultValue { get; set; }
 }

@@ -24,11 +24,4 @@ public static class ComponentModelExtensions
     {
         return $"{prefix}-{component.ComponentInfo.Name.Kebaberize()}".ToLower();
     }
-
-    public static string AngularComponentApiClient(this IComponentModel component)
-    {
-        return component.ComponentInfo.ApiClient.HasApiClient
-            ? $"{component.ComponentInfo.ApiClient.ApiClientName.Pascalize()}Client"
-            : $"{component.ComponentInfo.Feature.Name.Pascalize()}Client";
-    }
 }

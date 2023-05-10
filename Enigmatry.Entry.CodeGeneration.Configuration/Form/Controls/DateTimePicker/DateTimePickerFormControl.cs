@@ -2,12 +2,12 @@
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 
-public class DatepickerFormControl : FormControl
+public class DateTimePickerFormControl : FormControl
 {
-    public override string FormlyType => FormlyTypes.DatePicker;
+    public override string FormlyType => FormlyTypes.DateTimePicker;
     public DateTimeOffset? DefaultValue { get; set; }
 
-    public DatepickerFormControl()
+    public DateTimePickerFormControl()
     {
         ValueUpdateTrigger = Controls.ValueUpdateTrigger.OnBlur;
     }

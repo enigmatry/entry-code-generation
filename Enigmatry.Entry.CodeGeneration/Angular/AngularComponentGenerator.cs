@@ -26,7 +26,7 @@ public class AngularComponentGenerator : IComponentGenerator
     {
         _templateRenderer = templateRenderer;
         _logger = logger;
-        _componentTemplates = angularSettings.Component.Templates;
+        _componentTemplates = angularSettings.ComponentTemplates;
     }
 
     public async Task GenerateAsync(string outputDir, IComponentModel component)

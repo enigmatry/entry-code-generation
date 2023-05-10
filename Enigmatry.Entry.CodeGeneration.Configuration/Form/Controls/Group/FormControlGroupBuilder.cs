@@ -74,6 +74,11 @@ public class FormControlGroupBuilder<T> : BaseControlBuilder<FormControlGroup, F
         return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new TextareaFormControlBuilder(propertyInfo));
     }
 
+    public RichTextInputFormControlBuilder RichTextInputFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+    {
+        return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new RichTextInputFormControlBuilder(propertyInfo));
+    }
+
     public SelectFormControlBuilder SelectFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
     {
         return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new SelectFormControlBuilder(propertyInfo));
@@ -102,6 +107,11 @@ public class FormControlGroupBuilder<T> : BaseControlBuilder<FormControlGroup, F
     public DatepickerFormControlBuilder DatepickerFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
     {
         return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new DatepickerFormControlBuilder(propertyInfo));
+    }
+
+    public DateTimePickerFormControlBuilder DateTimePickerFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+    {
+        return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new DateTimePickerFormControlBuilder(propertyInfo));
     }
 
     public CustomFormControlBuilder CustomFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)

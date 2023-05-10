@@ -18,8 +18,7 @@ import { map, throttleTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-g-mock-edit',
-  templateUrl: './mock-edit-generated.component.html',
-  styleUrls: ['./mock-edit-generated.component.scss']
+  templateUrl: './mock-edit-generated.component.html'
 })
 export class MockEditGeneratedComponent implements OnInit, OnDestroy {
 
@@ -133,6 +132,7 @@ fieldGroupClassName: `entry-field-group ${this.applyOptionally('group-wrapper-re
         key: 'name',
         type: this.resolveFieldType('input', false),
 className: `entry-name-field entry-input`,
+defaultValue: 'DEFAULT NAME',
         hideExpression: this.fieldsHideExpressions?.name ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.name ? this.fieldsDisableExpressions.name(model) : false)),
@@ -167,8 +167,8 @@ modelOptions: { updateOn: 'blur' },
         },
         {
         key: 'description',
-        type: this.resolveFieldType('textarea', false),
-className: `entry-description-field entry-textarea`,
+        type: this.resolveFieldType('ckeditor', false),
+className: `entry-description-field entry-ckeditor`,
         hideExpression: this.fieldsHideExpressions?.description ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.description ? this.fieldsDisableExpressions.description(model) : false)),
@@ -180,17 +180,10 @@ className: `entry-description-field entry-textarea`,
         label: $localize `:@@test.mock-edit.description.label:Some Description`,
         placeholder: $localize `:@@test.mock-edit.description.placeholder:Some Description`,
         description: '',
-            rows: 2,
-            cols: 0,
-            autosize: false,
-            autosizeMinRows: 0,
-            autosizeMaxRows: 0,
             attributes: {  },
             hidden: !true,
             typeFormatDef: undefined
         },
-asyncValidators: { validation: [ 'validDescription' ] },
-modelOptions: { updateOn: 'blur' },
         },
         {
         key: 'date',
@@ -409,6 +402,27 @@ className: `entry-password-field entry-input`,
         },
         },
         {
+        key: 'isActive',
+        type: this.resolveFieldType('checkbox', false),
+className: `entry-is-active-field entry-checkbox`,
+defaultValue: true,
+        hideExpression: this.fieldsHideExpressions?.isActive ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.isActive ? this.fieldsDisableExpressions.isActive(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.isActive ? this.fieldsRequiredExpressions.isActive(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.isActive ? this.fieldsLabelExpressions.isActive(model) : $localize `:@@test.mock-edit.is-active.label:Active`),
+        'model.isActive': (model) => (this.fieldsPropertyExpressions?.isActive ? this.fieldsPropertyExpressions.isActive(model) : model.isActive),
+        },
+        templateOptions: {
+        label: $localize `:@@test.mock-edit.is-active.label:Active`,
+        placeholder: $localize `:@@test.mock-edit.is-active.placeholder:Active`,
+        description: '',
+            attributes: {  },
+            hidden: !true,
+            typeFormatDef: { name: 'boolean' }
+        },
+        },
+        {
         key: 'addresses',
         type: this.resolveFieldType('array-field', false),
 className: `entry-addresses-field entry-array-field`,
@@ -445,7 +459,7 @@ fieldGroupClassName: `entry-field-group`,
         key: 'city',
         type: this.resolveFieldType('input', false),
 className: `entry-city-field entry-input`,
-        defaultValue: 'Amsterdam',
+defaultValue: 'Amsterdam',
         hideExpression: this.fieldsHideExpressions?.city ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.city ? this.fieldsDisableExpressions.city(model) : false)),
@@ -524,6 +538,27 @@ className: `entry-verified-field entry-checkbox`,
         },
         ]
         },
+        },
+        {
+        key: 'dateAndTime',
+        type: this.resolveFieldType('datetimepicker', false),
+className: `entry-date-and-time-field entry-datetimepicker`,
+        hideExpression: this.fieldsHideExpressions?.dateAndTime ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.dateAndTime ? this.fieldsDisableExpressions.dateAndTime(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.dateAndTime ? this.fieldsRequiredExpressions.dateAndTime(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.dateAndTime ? this.fieldsLabelExpressions.dateAndTime(model) : $localize `:@@test.mock-edit.date-and-time.label:Date and time`),
+        'model.dateAndTime': (model) => (this.fieldsPropertyExpressions?.dateAndTime ? this.fieldsPropertyExpressions.dateAndTime(model) : model.dateAndTime),
+        },
+        templateOptions: {
+        label: $localize `:@@test.mock-edit.date-and-time.label:Date and time`,
+        placeholder: $localize `:@@test.mock-edit.date-and-time.placeholder:Date and time`,
+        description: '',
+            attributes: {  },
+            hidden: !true,
+            typeFormatDef: { name: 'date' }
+        },
+modelOptions: { updateOn: 'blur' },
         },
         ]
         },

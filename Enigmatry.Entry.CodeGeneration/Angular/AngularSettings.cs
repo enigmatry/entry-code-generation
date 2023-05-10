@@ -4,43 +4,25 @@ namespace Enigmatry.Entry.CodeGeneration.Angular;
 
 public class AngularSettings
 {
-    public string TemplatePath { get; }
-    public UiLibrary UiLibrary { get; }
-    public ComponentSettings Component { get; } 
-    public ModuleSettings Module { get; }
+    private string TemplatePath { get; }
+    private UiLibrary UiLibrary { get; }
+    public IReadOnlyList<TemplateInfo> ComponentTemplates { get; }
+    public IReadOnlyList<TemplateInfo> ModuleTemplates { get; }
 
     public AngularSettings(UiLibrary uiLibrary)
     {
         UiLibrary = uiLibrary;
         TemplatePath = $"~/Templates/Angular/{UiLibrary}/";
 
-        Component = new ComponentSettings(TemplatePath);
-        Module = new ModuleSettings(TemplatePath);
-    }
-}
-
-public class ComponentSettings
-{
-    public ComponentSettings(string templatePath)
-    {
-        Templates = new List<TemplateInfo>
+        ComponentTemplates = new List<TemplateInfo>
         {
-            new($"{templatePath}/Angular.{{0}}.Component.cshtml", "{0}-generated.component.ts"),
-            new($"{templatePath}/Angular.{{0}}.View.cshtml", "{0}-generated.component.html"),
-            new($"{templatePath}/Angular.{{0}}.Style.cshtml", "{0}-generated.component.scss")
+            new($"{TemplatePath}/Angular.{{0}}.Component.cshtml", "{0}-generated.component.ts"),
+            new($"{TemplatePath}/Angular.{{0}}.View.cshtml", "{0}-generated.component.html")
+        };
+
+        ModuleTemplates = new List<TemplateInfo>
+        {
+            new($"{TemplatePath}/Angular.Module.cshtml", "{0}-generated.module.ts")
         };
     }
-    public IList<TemplateInfo> Templates { get; }
-}
-
-public class ModuleSettings
-{
-    public ModuleSettings(string templatePath)
-    {
-        Templates = new List<TemplateInfo>
-        {
-            new($"{templatePath}/Angular.Module.cshtml", "{0}-generated.module.ts")
-        };
-    }
-    public IList<TemplateInfo> Templates { get; }
 }

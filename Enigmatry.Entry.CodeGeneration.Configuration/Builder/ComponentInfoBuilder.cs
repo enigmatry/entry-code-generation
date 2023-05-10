@@ -11,8 +11,6 @@ public class ComponentInfoBuilder : IBuilder<ComponentInfo>
 {
     private string _componentName;
     private readonly string _modelType;
-    private readonly RoutingInfoBuilder _routingInfoBuilder;
-    private readonly ApiClientInfoBuilder _apiClientInfoBuilder;
     private readonly FeatureInfoBuilder _featureInfoBuilder;
     private string? _translationId;
     private bool _includeUnconfiguredProperties = true;
@@ -22,9 +20,6 @@ public class ComponentInfoBuilder : IBuilder<ComponentInfo>
     {
         _componentName = modelType.Name;
         _modelType = modelType.GetDeclaringName();
-
-        _routingInfoBuilder = new RoutingInfoBuilder();
-        _apiClientInfoBuilder = new ApiClientInfoBuilder();
         _featureInfoBuilder = new FeatureInfoBuilder();
     }
 
@@ -86,15 +81,10 @@ public class ComponentInfoBuilder : IBuilder<ComponentInfo>
         return this;
     }
 
-    public RoutingInfoBuilder Routing() => _routingInfoBuilder;
-
-    public ApiClientInfoBuilder ApiClient() => _apiClientInfoBuilder;
-
     public FeatureInfoBuilder Feature() => _featureInfoBuilder;
 
     public ComponentInfo Build()
     {
-        return new ComponentInfo(_componentName, _modelType, _includeUnconfiguredProperties, _orderByType,
-            _routingInfoBuilder.Build(), _apiClientInfoBuilder.Build(), _featureInfoBuilder.Build(), _translationId);
+        return new ComponentInfo(_componentName, _modelType, _includeUnconfiguredProperties, _orderByType, _featureInfoBuilder.Build(), _translationId);
     }
 }

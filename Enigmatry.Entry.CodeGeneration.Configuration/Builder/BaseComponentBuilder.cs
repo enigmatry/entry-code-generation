@@ -25,10 +25,6 @@ public abstract class BaseComponentBuilder<T> : IComponentBuilder<T> where T : I
     /// <returns>An instance of <see cref="ComponentInfoBuilder" /> to further configure the component.</returns>
     public ComponentInfoBuilder Component() => _componentInfoBuilder;
 
-    public RoutingInfoBuilder Routing() => _componentInfoBuilder.Routing();
-
-    public ApiClientInfoBuilder ApiClient() => _componentInfoBuilder.ApiClient();
-
     /// <summary>
     /// Configure feature-level options, such as the feature name.
     /// </summary>

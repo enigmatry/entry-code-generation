@@ -26,7 +26,7 @@ public class AngularModuleGenerator : IModuleGenerator
         _componentGenerator = componentGenerator;
         _templateRenderer = templateRenderer;
         _logger = logger;
-        _moduleTemplates = angularSettings.Module.Templates;
+        _moduleTemplates = angularSettings.ModuleTemplates;
     }
 
     public async Task GenerateAsync(string outputDir, IFeatureModule module)
