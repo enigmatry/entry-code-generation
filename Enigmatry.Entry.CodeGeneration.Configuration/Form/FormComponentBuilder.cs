@@ -84,6 +84,11 @@ public class FormComponentBuilder<T> : BaseComponentBuilder<FormComponentModel>
         return _formGroup.DatepickerFormControl(propertyExpression);
     }
 
+    public DateTimePickerFormControlBuilder DateTimePickerFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+    {
+        return _formGroup.DateTimePickerFormControl(propertyExpression);
+    }
+
     public CustomFormControlBuilder CustomFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
     {
         return _formGroup.CustomFormControl(propertyExpression);

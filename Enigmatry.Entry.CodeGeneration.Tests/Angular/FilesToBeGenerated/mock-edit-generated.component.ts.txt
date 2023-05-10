@@ -539,6 +539,27 @@ className: `entry-verified-field entry-checkbox`,
         ]
         },
         },
+        {
+        key: 'dateAndTime',
+        type: this.resolveFieldType('datetimepicker', false),
+className: `entry-date-and-time-field entry-datetimepicker`,
+        hideExpression: this.fieldsHideExpressions?.dateAndTime ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.dateAndTime ? this.fieldsDisableExpressions.dateAndTime(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.dateAndTime ? this.fieldsRequiredExpressions.dateAndTime(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.dateAndTime ? this.fieldsLabelExpressions.dateAndTime(model) : $localize `:@@test.mock-edit.date-and-time.label:Date and time`),
+        'model.dateAndTime': (model) => (this.fieldsPropertyExpressions?.dateAndTime ? this.fieldsPropertyExpressions.dateAndTime(model) : model.dateAndTime),
+        },
+        templateOptions: {
+        label: $localize `:@@test.mock-edit.date-and-time.label:Date and time`,
+        placeholder: $localize `:@@test.mock-edit.date-and-time.placeholder:Date and time`,
+        description: '',
+            attributes: {  },
+            hidden: !true,
+            typeFormatDef: { name: 'date' }
+        },
+modelOptions: { updateOn: 'blur' },
+        },
         ]
         },
         {

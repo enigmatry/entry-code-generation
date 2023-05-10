@@ -93,6 +93,11 @@ public class FormControlGroupBuilder<T> : BaseControlBuilder<FormControlGroup, F
         return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new DatepickerFormControlBuilder(propertyInfo));
     }
 
+    public DateTimePickerFormControlBuilder DateTimePickerFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+    {
+        return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new DateTimePickerFormControlBuilder(propertyInfo));
+    }
+
     public CustomFormControlBuilder CustomFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
     {
         return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new CustomFormControlBuilder(propertyInfo));
