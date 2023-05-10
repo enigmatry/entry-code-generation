@@ -3,6 +3,9 @@ using System.Reflection;
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 
+/// <summary>
+/// The DatepickerFormControlBuilder class provides a fluent API for configuring a date-picker form component.
+/// </summary>
 public class DatepickerFormControlBuilder: BaseControlBuilder<DatepickerFormControl, DatepickerFormControlBuilder>
 {
     private DateTimeOffset? _defaultValue;

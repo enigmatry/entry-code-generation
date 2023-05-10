@@ -8,6 +8,31 @@ using JetBrains.Annotations;
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration.List;
 
+/// <summary>
+/// The ListComponentBuilder class provides a fluent API for configuring a table component
+/// so that configuration can be used to generate UI client feature component e.g. Angular module.
+/// </summary>
+/// <remarks>
+/// <para>
+/// It provides methods to configure various aspects of the table component, such as component name,
+/// feature name, columns, pagination, and row selection.
+/// </para>
+/// <example>
+/// An example of using the ListComponentBuilder to configure a table component:
+/// <code>
+/// builder.Component()
+///     .HasName("UserList")
+///     .BelongsToFeature("Users");
+///
+/// builder.Column(x => x.Username)
+///     .WithHeaderName("Email address");
+///
+/// builder.Row().Selection(RowSelectionType.Single);
+///
+/// builder.Pagination().ShowFirstLastPageButtons(false);
+/// </code>
+/// </example>
+/// </remarks>
 [UsedImplicitly]
 public class ListComponentBuilder<T> : BaseComponentBuilder<ListComponentModel>
 {
@@ -20,6 +45,11 @@ public class ListComponentBuilder<T> : BaseComponentBuilder<ListComponentModel>
         _columns = _modelType.GetProperties().Select(propertyInfo => new ColumnDefinitionBuilder(propertyInfo)).ToList();
     }
 
+    /// <summary>
+    /// Configure a table column based on a property of the generic type T.
+    /// </summary>
+    /// <param name="propertyExpression">A lambda expression to specify the property.</param>
+    /// <returns>An instance of <see cref="ColumnDefinitionBuilder"/> to further configure the column.</returns>
     public ColumnDefinitionBuilder Column<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
     {
         Check.NotNull(propertyExpression, nameof(propertyExpression));
@@ -29,6 +59,11 @@ public class ListComponentBuilder<T> : BaseComponentBuilder<ListComponentModel>
         return GetOrAddBuilder(columnDefinitionBuilder, () => new ColumnDefinitionBuilder(propertyInfo));
     }
 
+    /// <summary>
+    /// Configure a table column based on a property name string.
+    /// </summary>
+    /// <param name="propertyName">The name of the property as a string.</param>
+    /// <returns>An instance of <see cref="ColumnDefinitionBuilder"/> to further configure the column.</returns>
     public ColumnDefinitionBuilder Column(string propertyName)
     {
         Check.NotEmpty(propertyName, nameof(propertyName));
@@ -37,8 +72,16 @@ public class ListComponentBuilder<T> : BaseComponentBuilder<ListComponentModel>
         return GetOrAddBuilder(columnDefinitionBuilder, () => new ColumnDefinitionBuilder(propertyName));
     }
 
+    /// <summary>
+    /// Configure pagination options for the table component.
+    /// </summary>
+    /// <returns>An instance of <see cref="PaginationInfoBuilder"/> to further configure the pagination options.</returns>
     public PaginationInfoBuilder Pagination() { return _paginationInfoBuilder; }
 
+    /// <summary>
+    /// Configure row-level options, such as selection type and context menu.
+    /// </summary>
+    /// <returns>An instance of <see cref="RowInfoBuilder"/> to further configure the row options.</returns>
     public RowInfoBuilder Row() { return _rowInfoBuilder; }
 
     public override ListComponentModel Build()

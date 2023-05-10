@@ -2,7 +2,10 @@
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 
-public class CheckboxFormControlBuilder : BaseControlBuilder<CheckboxFormControl, CheckboxFormControlBuilder>
+/// <summary>
+/// The CheckboxFormControlBuilder class provides a fluent API for configuring a check-box form component.
+/// </summary>
+public class CheckboxFormControlBuilder: BaseControlBuilder<CheckboxFormControl, CheckboxFormControlBuilder>
 {
     private bool? _defaultValue;
 

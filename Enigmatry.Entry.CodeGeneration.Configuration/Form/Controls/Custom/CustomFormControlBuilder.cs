@@ -3,6 +3,13 @@ using System.Reflection;
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 
+/// <summary>
+/// The CustomFormControlBuilder class provides a fluent API for configuring a custom form component.
+/// </summary>
+/// <remarks>
+/// Use this builder to set the custom form component's custom control type,
+/// as well as any other properties inherited from the base control builder.
+/// </remarks>
 public class CustomFormControlBuilder : BaseControlBuilder<CustomFormControl, CustomFormControlBuilder>
 {
     private string _controlTypeName = String.Empty;
