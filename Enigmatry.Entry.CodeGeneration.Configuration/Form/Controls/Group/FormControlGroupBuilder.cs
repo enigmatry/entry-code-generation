@@ -1,13 +1,29 @@
-﻿using System;
+﻿using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Array;
+using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Array;
-using JetBrains.Annotations;
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 
+/// <summary>
+/// Creates a FormControlGroupBuilder instance with the specified name, allowing you to configure a named group of form controls.
+/// </summary>
+/// <remarks>
+/// <para>
+/// Use this builder to create UI sections with wrapper elements, add various types of form controls (e.g., input, textarea, select, etc.), and manage form control configuration.
+/// </para>
+/// <code>
+/// var formGroup = builder
+///     .FormControlGroup("Group Name")
+///     .CreateUiSection("group-type")
+///     .WithCustomWrapper("group-wrapper")
+///     .WithClassName("group-wrapper-readonly", ApplyWhen.FormIsReadonly);
+/// </code>
+/// </remarks>
+/// <typeparam name="T">The type of the object being configured with the form control group.</typeparam>
 [UsedImplicitly]
 public class FormControlGroupBuilder<T> : BaseControlBuilder<FormControlGroup, FormControlGroupBuilder<T>>
 {

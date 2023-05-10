@@ -3,6 +3,13 @@ using Humanizer;
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 
+/// <summary>
+/// The ButtonFormControlBuilder class provides a fluent API for configuring a button form component.
+/// </summary>
+/// <remarks>
+/// Use this builder to set the button's text, translation ID, and custom control type,
+/// as well as any other properties inherited from the base control builder <see cref="BaseControlBuilder{TControl, TBuilder}"/>.
+/// </remarks>
 public class ButtonFormControlBuilder: BaseControlBuilder<ButtonFormControl, ButtonFormControlBuilder>
 {
     private string? _text;
