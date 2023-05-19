@@ -4,7 +4,7 @@ namespace Enigmatry.Entry.CodeGeneration.Configuration;
 
 public class I18NString
 {
-    public static readonly I18NString Empty = new I18NString(String.Empty, String.Empty);
+    public static readonly I18NString Empty = new(String.Empty, String.Empty);
     public string Key { get; }
     public string Value { get; }
 
@@ -13,8 +13,6 @@ public class I18NString
         Key = key;
         Value = value;
     }
-
-    public bool HasContent() => Value.HasContent();
 
     public override string ToString() => Value;
 }

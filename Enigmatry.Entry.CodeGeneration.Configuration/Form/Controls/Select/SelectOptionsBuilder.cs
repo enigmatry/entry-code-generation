@@ -22,12 +22,12 @@ public class SelectOptionsBuilder
         return this;
     }
 
-    public SelectOptionsBuilder WithFixedValues<T>() where T : Enum
+    public SelectOptionsBuilder WithFixedValues<T>(bool shouldGenerateTranslationKeys = true) where T : Enum
     {
         _fixedValues = Enum
             .GetValues(typeof(T))
             .Cast<T>()
-            .Select(x => new SelectOption(Convert.ToInt32(x), GetDisplayName<T>(x.ToString()), GetTranslationId(x)))
+            .Select(@enum => GetSelectOption(@enum, shouldGenerateTranslationKeys))
             .ToList();
         return this;
     }
@@ -80,6 +80,13 @@ public class SelectOptionsBuilder
             EmptyOption = _emptyOption,
             SelectAllOption = _selectAllOption
         };
+    }
+
+    private SelectOption GetSelectOption<T>(T x, bool shouldGenerateTranslationKeys) where T : Enum
+    {
+        return shouldGenerateTranslationKeys
+            ? new SelectOption(Convert.ToInt32(x), GetDisplayName<T>(x.ToString()), GetTranslationId(x))
+            : new SelectOption(Convert.ToInt32(x), GetDisplayName<T>(x.ToString()));
     }
 
     private string GetDisplayName<T>(string value) where T : Enum
