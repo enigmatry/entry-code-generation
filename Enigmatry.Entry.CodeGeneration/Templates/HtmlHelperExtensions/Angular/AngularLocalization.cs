@@ -13,7 +13,7 @@ public static class AngularLocalization
         {
             return html.Raw(Localize(text.Key, text.Value));
         }
-        return html.Raw($"'{text?.Value ?? String.Empty}'");
+        return html.Raw($"`{text?.Value ?? String.Empty}`");
     }
 
     public static string Localize(string key, string value)
