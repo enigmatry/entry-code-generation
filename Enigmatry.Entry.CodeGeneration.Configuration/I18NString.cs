@@ -14,7 +14,5 @@ public class I18NString
         Value = value;
     }
 
-    public bool HasContent() => Value.HasContent();
-
     public override string ToString() => Value;
 }

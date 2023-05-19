@@ -1,5 +1,6 @@
 ﻿@using Enigmatry.Entry.CodeGeneration
 @using Enigmatry.Entry.CodeGeneration.Angular
+@using Enigmatry.Entry.CodeGeneration.Configuration
 @using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
 @using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Array
 @using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
@@ -102,7 +103,7 @@ import { map, throttleTime } from 'rxjs/operators';
         }
             @:@Html.AddAttributes(control)
             @:hidden: !@control.Visible.ToString().ToLower(),
-        @if (control.Tooltip.HasContent())
+        @if (control.Tooltip.Value.HasContent())
         {
             @:tooltipText: @Html.Localize(control.Tooltip, Options.EnableI18N),
         }
