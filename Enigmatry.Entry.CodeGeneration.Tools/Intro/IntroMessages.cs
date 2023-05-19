@@ -96,6 +96,7 @@ internal static class IntroMessages
                 new IntroMessage("Executing order 66 ...").WithColors(ConsoleColor.Red),
                 new IntroMessage("Sexy times").WithColors(ConsoleColor.Red),
                 new IntroMessage("Go fish!").WithColors(ConsoleColor.Blue),
+                new IntroMessage(" Psycho killer, qu'est-ce que c'est? ").WithColors(ConsoleColor.Yellow),
                 new IntroMessage(" Bring out the Gimp. ").WithColors(ConsoleColor.Yellow),
                 new IntroMessage(" Zed's dead, baby. Zed's dead. ").WithColors(ConsoleColor.Yellow),
                 new IntroMessage(" There is no spoon. ").WithColors(ConsoleColor.Green),

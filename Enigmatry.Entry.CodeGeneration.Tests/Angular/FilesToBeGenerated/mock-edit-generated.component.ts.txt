@@ -52,6 +52,8 @@ export class MockEditGeneratedComponent implements OnInit, OnDestroy {
                 @Input() mockRadioOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
                 @Input() mockMultiCheckboxOptions: any[] = [{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
                 @Input() mockMultiCheckboxOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
+                @Input() multiCheckboxWithStringIdsOptions: any[] = [{ value: 'value_1', displayName: $localize `:@@translation_Id_1:Label 1` }, { value: 'value_2', displayName: $localize `:@@translation_Id_2:Label 2` }, { value: 'value_3', displayName: $localize `:@@translation_Id_3:Label 3` }];
+                @Input() multiCheckboxWithStringIdsOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
             private categoryIdOptions$ = new BehaviorSubject<any[]>([]);
                 @Input()
                 get categoryIdOptions(): any[] { return this.categoryIdOptions$.value; }
@@ -326,6 +328,30 @@ className: `entry-mock-multi-checkbox-field entry-multicheckbox`,
             options: of(this.mockMultiCheckboxOptions).pipe(map(opts => sortOptions(opts, this.mockMultiCheckboxOptionsConfiguration.valueProperty, this.mockMultiCheckboxOptionsConfiguration.sortProperty, this._localeId))),
             valueProp: this.mockMultiCheckboxOptionsConfiguration.valueProperty,
             labelProp: this.mockMultiCheckboxOptionsConfiguration.labelProperty,
+            attributes: {  },
+            hidden: !true,
+            typeFormatDef: undefined
+        },
+        },
+        {
+        key: 'multiCheckboxWithStringIds',
+        type: this.resolveFieldType('multicheckbox', false),
+className: `entry-multi-checkbox-with-string-ids-field entry-multicheckbox`,
+        hideExpression: this.fieldsHideExpressions?.multiCheckboxWithStringIds ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.multiCheckboxWithStringIds ? this.fieldsDisableExpressions.multiCheckboxWithStringIds(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.multiCheckboxWithStringIds ? this.fieldsRequiredExpressions.multiCheckboxWithStringIds(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.multiCheckboxWithStringIds ? this.fieldsLabelExpressions.multiCheckboxWithStringIds(model) : $localize `:@@test.mock-edit.multi-checkbox-with-string-ids.label:MultiCheckbox`),
+        'model.multiCheckboxWithStringIds': (model) => (this.fieldsPropertyExpressions?.multiCheckboxWithStringIds ? this.fieldsPropertyExpressions.multiCheckboxWithStringIds(model) : model.multiCheckboxWithStringIds),
+        },
+        templateOptions: {
+        label: $localize `:@@test.mock-edit.multi-checkbox-with-string-ids.label:MultiCheckbox`,
+        placeholder: $localize `:@@test.mock-edit.multi-checkbox-with-string-ids.placeholder:MultiCheckbox`,
+        description: '',
+            type: 'array',
+            options: of(this.multiCheckboxWithStringIdsOptions).pipe(map(opts => sortOptions(opts, this.multiCheckboxWithStringIdsOptionsConfiguration.valueProperty, this.multiCheckboxWithStringIdsOptionsConfiguration.sortProperty, this._localeId))),
+            valueProp: this.multiCheckboxWithStringIdsOptionsConfiguration.valueProperty,
+            labelProp: this.multiCheckboxWithStringIdsOptionsConfiguration.labelProperty,
             attributes: {  },
             hidden: !true,
             typeFormatDef: undefined
