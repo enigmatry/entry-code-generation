@@ -347,7 +347,7 @@ className: `entry-multi-checkbox-with-string-ids-field entry-multicheckbox`,
         templateOptions: {
         label: $localize `:@@test.mock-edit.multi-checkbox-with-string-ids.label:MultiCheckbox`,
         placeholder: $localize `:@@test.mock-edit.multi-checkbox-with-string-ids.placeholder:MultiCheckbox`,
-        description: '',
+        description: ``,
             type: 'array',
             options: of(this.multiCheckboxWithStringIdsOptions).pipe(map(opts => sortOptions(opts, this.multiCheckboxWithStringIdsOptionsConfiguration.valueProperty, this.multiCheckboxWithStringIdsOptionsConfiguration.sortProperty, this._localeId))),
             valueProp: this.multiCheckboxWithStringIdsOptionsConfiguration.valueProperty,
