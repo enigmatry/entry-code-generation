@@ -48,7 +48,7 @@ export class MockEditGeneratedComponent implements OnInit, OnDestroy {
 
                 @Input() formStatusOptions: any[] = [{ value: null, displayName: $localize `:@@empty-option.none:None` }, { value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
                 @Input() formStatusOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: 'displayName' };
-                @Input() mockRadioOptions: any[] = [{ value: 0, displayName: 'First' }, { value: 1, displayName: 'Second' }, { value: 2, displayName: 'Third' }];
+                @Input() mockRadioOptions: any[] = [{ value: 0, displayName: `First` }, { value: 1, displayName: `Second` }, { value: 2, displayName: `Third` }];
                 @Input() mockRadioOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
                 @Input() mockMultiCheckboxOptions: any[] = [{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
                 @Input() mockMultiCheckboxOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
@@ -104,13 +104,13 @@ className: `entry-reset-form-btn-field entry-button primary-button`,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.resetFormBtn ? this.fieldsDisableExpressions.resetFormBtn(model) : false)),
         'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.resetFormBtn ? this.fieldsRequiredExpressions.resetFormBtn(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.resetFormBtn ? this.fieldsLabelExpressions.resetFormBtn(model) : ''),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.resetFormBtn ? this.fieldsLabelExpressions.resetFormBtn(model) : ``),
         'model.resetFormBtn': (model) => (this.fieldsPropertyExpressions?.resetFormBtn ? this.fieldsPropertyExpressions.resetFormBtn(model) : model.resetFormBtn),
         },
         templateOptions: {
-        label: '',
-        placeholder: '',
-        description: '',
+        label: ``,
+        placeholder: ``,
+        description: ``,
             text: $localize `:@@test.mock-edit.reset-form-btn.text:Reset`,
             onClick: ($event: any) => this.buttonClick.emit('resetFormBtn'),
             attributes: {  },
@@ -125,7 +125,7 @@ fieldGroupClassName: `entry-field-group ${this.applyOptionally('group-wrapper-re
         label: $localize `:@@test.mock-edit.group-name.label:Group name`,
         placeholder: $localize `:@@test.mock-edit.group-name.placeholder:Group name`,
         disabled: this.isReadonly || false,
-        description: ''
+        description: ``
         },
         fieldGroup:[
         {
@@ -144,7 +144,7 @@ defaultValue: 'DEFAULT NAME',
         templateOptions: {
         label: $localize `:@@test.mock-edit.name.label:Name`,
         placeholder: $localize `:@@test.mock-edit.name.placeholder:Some / Name`,
-        description: '',
+        description: ``,
 appearance: 'outline',
 floatLabel: 'always',
             attributes: { autocomplete: 'off' },
@@ -179,7 +179,7 @@ className: `entry-description-field entry-ckeditor`,
         templateOptions: {
         label: $localize `:@@test.mock-edit.description.label:Some Description`,
         placeholder: $localize `:@@test.mock-edit.description.placeholder:Some Description`,
-        description: '',
+        description: ``,
             attributes: {  },
             hidden: !true,
             typeFormatDef: undefined
@@ -200,7 +200,7 @@ className: `entry-date-field entry-datepicker`,
         templateOptions: {
         label: $localize `:@@test.mock-edit.date.label:Date`,
         placeholder: $localize `:@@test.mock-edit.date.placeholder:Date`,
-        description: '',
+        description: ``,
             attributes: {  },
             hidden: !true,
             typeFormatDef: { name: 'date' }
@@ -221,7 +221,7 @@ className: `entry-money-field entry-input`,
         templateOptions: {
         label: $localize `:@@test.mock-edit.money.label:Money`,
         placeholder: $localize `:@@test.mock-edit.money.placeholder:Money`,
-        description: '',
+        description: ``,
             attributes: {  },
             hidden: !true,
             type: 'number',
@@ -244,7 +244,7 @@ className: `entry-amount-field entry-input`,
         templateOptions: {
         label: $localize `:@@test.mock-edit.amount.label:Amount`,
         placeholder: $localize `:@@test.mock-edit.amount.placeholder:Amount`,
-        description: '',
+        description: $localize `:@@test.mock-edit.amount.hint:Don't panic if it is 0`,
             attributes: {  },
             hidden: !true,
             required: true,
@@ -275,7 +275,7 @@ className: `entry-form-status-field entry-select`,
         templateOptions: {
         label: $localize `:@@test.mock-edit.form-status.label:Form status`,
         placeholder: $localize `:@@test.mock-edit.form-status.placeholder:Form status`,
-        description: '',
+        description: ``,
             options: of(this.formStatusOptions).pipe(map(opts => sortOptions(opts, this.formStatusOptionsConfiguration.valueProperty, this.formStatusOptionsConfiguration.sortProperty, this._localeId))),
             valueProp: this.formStatusOptionsConfiguration.valueProperty,
             labelProp: this.formStatusOptionsConfiguration.labelProperty,
@@ -298,7 +298,7 @@ className: `entry-mock-radio-field entry-radio`,
         templateOptions: {
         label: $localize `:@@test.mock-edit.mock-radio.label:Radio`,
         placeholder: $localize `:@@test.mock-edit.mock-radio.placeholder:Radio`,
-        description: '',
+        description: ``,
             options: of(this.mockRadioOptions).pipe(map(opts => sortOptions(opts, this.mockRadioOptionsConfiguration.valueProperty, this.mockRadioOptionsConfiguration.sortProperty, this._localeId))),
             valueProp: this.mockRadioOptionsConfiguration.valueProperty,
             labelProp: this.mockRadioOptionsConfiguration.labelProperty,
@@ -321,7 +321,7 @@ className: `entry-mock-multi-checkbox-field entry-multicheckbox`,
         templateOptions: {
         label: $localize `:@@test.mock-edit.mock-multi-checkbox.label:MultiCheckbox`,
         placeholder: $localize `:@@test.mock-edit.mock-multi-checkbox.placeholder:MultiCheckbox`,
-        description: '',
+        description: ``,
             type: 'array',
             options: of(this.mockMultiCheckboxOptions).pipe(map(opts => sortOptions(opts, this.mockMultiCheckboxOptionsConfiguration.valueProperty, this.mockMultiCheckboxOptionsConfiguration.sortProperty, this._localeId))),
             valueProp: this.mockMultiCheckboxOptionsConfiguration.valueProperty,
@@ -345,7 +345,7 @@ className: `entry-category-id-field entry-select`,
         templateOptions: {
         label: $localize `:@@test.mock-edit.category-id.label:Category`,
         placeholder: $localize `:@@test.mock-edit.category-id.placeholder:Category`,
-        description: '',
+        description: ``,
             options: this.categoryIdOptions$.pipe(map(opts => sortOptions(opts, this.categoryIdOptionsConfiguration.valueProperty, this.categoryIdOptionsConfiguration.sortProperty, this._localeId))),
             valueProp: this.categoryIdOptionsConfiguration.valueProperty,
             labelProp: this.categoryIdOptionsConfiguration.labelProperty,
@@ -369,7 +369,7 @@ className: `entry-types-field entry-select`,
         templateOptions: {
         label: $localize `:@@test.mock-edit.types.label:Types`,
         placeholder: $localize `:@@test.mock-edit.types.placeholder:Types`,
-        description: '',
+        description: ``,
             options: this.typesOptions$.pipe(map(opts => sortOptions(opts, this.typesOptionsConfiguration.valueProperty, this.typesOptionsConfiguration.sortProperty, this._localeId))),
             valueProp: this.typesOptionsConfiguration.valueProperty,
             labelProp: this.typesOptionsConfiguration.labelProperty,
@@ -394,7 +394,7 @@ className: `entry-password-field entry-input`,
         templateOptions: {
         label: $localize `:@@test.mock-edit.password.label:Password`,
         placeholder: $localize `:@@test.mock-edit.password.placeholder:Password`,
-        description: '',
+        description: ``,
             type: 'password',
             attributes: {  },
             hidden: !true,
@@ -416,7 +416,7 @@ defaultValue: true,
         templateOptions: {
         label: $localize `:@@test.mock-edit.is-active.label:Active`,
         placeholder: $localize `:@@test.mock-edit.is-active.placeholder:Active`,
-        description: '',
+        description: ``,
             attributes: {  },
             hidden: !true,
             typeFormatDef: { name: 'boolean' }
@@ -437,7 +437,7 @@ className: `entry-addresses-field entry-array-field`,
         templateOptions: {
         label: $localize `:@@test.mock-edit.addresses.label:Addresses`,
         placeholder: $localize `:@@test.mock-edit.addresses.placeholder:Addresses`,
-        description: '',
+        description: ``,
             attributes: {  },
             hidden: !true,
             typeFormatDef: undefined
@@ -448,10 +448,10 @@ className: `entry-addresses-field entry-array-field`,
 fieldGroupClassName: `entry-field-group`,
                 wrappers: ['group-wrapper'],
         templateOptions: {
-        label: '',
-        placeholder: '',
+        label: ``,
+        placeholder: ``,
         disabled: this.isReadonly || false,
-        description: ''
+        description: ``
         },
         fieldGroup:[
             { key: 'id' },
@@ -470,7 +470,7 @@ defaultValue: 'Amsterdam',
         templateOptions: {
         label: $localize `:@@test.mock-edit.city.label:City`,
         placeholder: $localize `:@@test.mock-edit.city.placeholder:City`,
-        description: '',
+        description: ``,
             attributes: {  },
             hidden: !true,
             typeFormatDef: undefined
@@ -490,7 +490,7 @@ className: `entry-street-field entry-input`,
         templateOptions: {
         label: $localize `:@@test.mock-edit.street.label:Street`,
         placeholder: $localize `:@@test.mock-edit.street.placeholder:Street`,
-        description: '',
+        description: ``,
             attributes: {  },
             hidden: !true,
             typeFormatDef: undefined
@@ -510,7 +510,7 @@ className: `entry-house-number-field entry-input`,
         templateOptions: {
         label: $localize `:@@test.mock-edit.house-number.label:House number`,
         placeholder: $localize `:@@test.mock-edit.house-number.placeholder:House number`,
-        description: '',
+        description: ``,
             attributes: {  },
             hidden: !true,
             typeFormatDef: undefined
@@ -530,7 +530,7 @@ className: `entry-verified-field entry-checkbox`,
         templateOptions: {
         label: $localize `:@@test.mock-edit.verified.label:Verified`,
         placeholder: $localize `:@@test.mock-edit.verified.placeholder:Verified`,
-        description: '',
+        description: ``,
             attributes: {  },
             hidden: !true,
             typeFormatDef: { name: 'boolean' }
@@ -553,7 +553,7 @@ className: `entry-date-and-time-field entry-datetimepicker`,
         templateOptions: {
         label: $localize `:@@test.mock-edit.date-and-time.label:Date and time`,
         placeholder: $localize `:@@test.mock-edit.date-and-time.placeholder:Date and time`,
-        description: '',
+        description: ``,
             attributes: {  },
             hidden: !true,
             typeFormatDef: { name: 'date' }
@@ -576,7 +576,7 @@ className: `entry-email1-field entry-input`,
         templateOptions: {
         label: $localize `:@@test.mock-edit.email1.label:Email 1`,
         placeholder: $localize `:@@test.mock-edit.email1.placeholder:Email 1`,
-        description: '',
+        description: ``,
             attributes: {  },
             hidden: !true,
             pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
@@ -604,7 +604,7 @@ className: `entry-email2-field entry-input`,
         templateOptions: {
         label: $localize `:@@test.mock-edit.email2.label:Email 2`,
         placeholder: $localize `:@@test.mock-edit.email2.placeholder:Email 2`,
-        description: '',
+        description: ``,
             attributes: {  },
             hidden: !true,
             pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,

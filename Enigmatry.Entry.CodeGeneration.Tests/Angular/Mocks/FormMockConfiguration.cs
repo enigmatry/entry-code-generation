@@ -65,7 +65,8 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
         formGroup
             .FormControl(x => x.Amount)
             .WithLabel("Amount")
-            .WithPlaceholder("Amount");
+            .WithPlaceholder("Amount")
+            .WithHint("Don't panic if it is 0");
 
         formGroup
             .SelectFormControl(x => x.FormStatus)
