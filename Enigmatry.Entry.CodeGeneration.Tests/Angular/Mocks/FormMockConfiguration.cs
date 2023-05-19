@@ -80,7 +80,7 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
         formGroup
             .RadioGroupFormControl(x => x.MockRadio)
             .WithLabel("Radio")
-            .WithOptions(options => options.WithFixedValues<EnumMock>());
+            .WithOptions(options => options.WithFixedValues<EnumMock>(false));
 
         formGroup
             .MultiCheckboxFormControl(x => x.MockMultiCheckbox)

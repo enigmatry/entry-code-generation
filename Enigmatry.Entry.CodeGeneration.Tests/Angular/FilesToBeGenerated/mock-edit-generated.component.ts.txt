@@ -48,7 +48,7 @@ export class MockEditGeneratedComponent implements OnInit, OnDestroy {
 
                 @Input() formStatusOptions: any[] = [{ value: null, displayName: $localize `:@@empty-option.none:None` }, { value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
                 @Input() formStatusOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: 'displayName' };
-                @Input() mockRadioOptions: any[] = [{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
+                @Input() mockRadioOptions: any[] = [{ value: 0, displayName: `First` }, { value: 1, displayName: `Second` }, { value: 2, displayName: `Third` }];
                 @Input() mockRadioOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
                 @Input() mockMultiCheckboxOptions: any[] = [{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
                 @Input() mockMultiCheckboxOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
