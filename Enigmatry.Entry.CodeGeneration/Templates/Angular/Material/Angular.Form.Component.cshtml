@@ -193,7 +193,7 @@ import { map, throttleTime } from 'rxjs/operators';
 
     string GetValueExpression(SelectOption option)
     {
-        if (option.Value != null && option.Value.IsNumericType())
+        if (option.Value != null && option.Value.IsNumeric())
         {
             return $"value: {(option.Value is Enum ? (int)option.Value : option.Value)}";
         }

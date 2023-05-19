@@ -1,29 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration;
 
 public static class ObjectExtensions
 {
-    public static bool IsNumericType(this object o)
+    private static readonly HashSet<Type> NumericTypes = new()
     {
-        switch (Type.GetTypeCode(o.GetType()))
-        {
-            case TypeCode.Byte:
-            case TypeCode.SByte:
-            case TypeCode.UInt16:
-            case TypeCode.UInt32:
-            case TypeCode.UInt64:
-            case TypeCode.Int16:
-            case TypeCode.Int32:
-            case TypeCode.Int64:
-            case TypeCode.Decimal:
-            case TypeCode.Double:
-            case TypeCode.Single:
-                return true;
-            default:
-                return false;
-        }
-    }
+        typeof(int),  typeof(double),  typeof(decimal),
+        typeof(long), typeof(short),   typeof(sbyte),
+        typeof(byte), typeof(ulong),   typeof(ushort),
+        typeof(uint), typeof(float)
+    };
 
-    public static bool IsEnumType(this object o) => o is Enum;
+    public static bool IsNumeric(this object o)
+    {
+        return NumericTypes.Contains(o.GetType());
+    }
 }
