@@ -172,40 +172,49 @@ import { map, throttleTime } from 'rxjs/operators';
         if (select.Options.HasDynamicValues)
         {
             @:private @(select.PropertyName)Options$ = new BehaviorSubject<any[]>([]);
-                @:@@Input()
-                @:get @(select.PropertyName)Options(): any[] { return this.@(select.PropertyName)Options$.value; }
-                @:set @(select.PropertyName)Options(value: any[]) { this.@(select.PropertyName)Options$.next(value); }
-            }
-            else
-            {
-                @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => $"{{ value: {option.Value ?? "null"}, displayName: {(@Html.Localize(option.DisplayName, Options.EnableI18N))} }}");
-            }
-
-            if (select.Options.HasCustomValueAndDisplayKeys)
-            {
-                @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = { valueProperty: '@(select.Options.OptionValueKey)', labelProperty: '@(select.Options.OptionDisplayKey)', sortProperty: '@(select.Options.OptionSortKey)' };
-            }
-            else
-            {
-                @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = @(@Html.Raw(select.Options.DefaultOptionsAsString));
-            }
+            @:@@Input()
+            @:get @(select.PropertyName)Options(): any[] { return this.@(select.PropertyName)Options$.value; }
+            @:set @(select.PropertyName)Options(value: any[]) { this.@(select.PropertyName)Options$.next(value); }
         }
-
-        void CreateWrappers(FormControl control)
+        else
         {
-            if (control.Wrappers.CustomWrappers.Any())
-            {
-                @:wrappers: @Html.JsStringArray(control is ArrayFormControl ? control.Wrappers.CustomWrappers : control.Wrappers.AllWrappers),
-            }
+            @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => $"{{ {GetValueExpression(option)}, displayName: {(@Html.Localize(option.DisplayName, Options.EnableI18N))} }}");
         }
 
-        void CreateCustomWrappers(FormControl control)
+        if (select.Options.HasCustomValueAndDisplayKeys)
         {
-            if (control.Wrappers.CustomWrappers.Any())
-            {
-                @:wrappers: @Html.JsStringArray(control.Wrappers.CustomWrappers),
-            }
+            @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = { valueProperty: '@(select.Options.OptionValueKey)', labelProperty: '@(select.Options.OptionDisplayKey)', sortProperty: '@(select.Options.OptionSortKey)' };
         }
+        else
+        {
+            @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = @(@Html.Raw(select.Options.DefaultOptionsAsString));
+        }
+    }
+
+    string GetValueExpression(SelectOption option)
+    {
+        if (option.Value != null && option.Value.IsNumeric())
+        {
+            return $"value: {(option.Value is Enum ? (int)option.Value : option.Value)}";
+        }
+        return $"value: {(option.Value == null ? "null" : $"'{option.Value}'")}";
+    }
+
+    void CreateWrappers(FormControl control)
+    {
+        if (control.Wrappers.CustomWrappers.Any())
+        {
+            @:wrappers: @Html.JsStringArray(control is ArrayFormControl ? control.Wrappers.CustomWrappers : control.Wrappers.AllWrappers),
+        }
+    }
+
+    void CreateCustomWrappers(FormControl control)
+    {
+        if (control.Wrappers.CustomWrappers.Any())
+        {
+            @:wrappers: @Html.JsStringArray(control.Wrappers.CustomWrappers),
+        }
+    }
 }
 
 @@Component({

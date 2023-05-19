@@ -88,6 +88,18 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
             .WithOptions(options => options.WithFixedValues<EnumMock>());
 
         formGroup
+            .MultiCheckboxFormControl(x => x.MultiCheckboxWithStringIds)
+            .WithLabel("MultiCheckbox")
+            .WithOptions(options => options.WithFixedValues(new[]
+            {
+                new SelectOption("value_1", "Label 1", "translation_Id_1"),
+                new SelectOption(-9, "Label 3", "translation_Id_3"),
+                new SelectOption(1234567, "Label 4", "translation_Id_4"),
+                new SelectOption((int)EnumMock.Third, "Label 5", "translation_Id_5"),
+                new SelectOption(null, "Label 6", "translation_Id_6")
+            }));
+
+        formGroup
             .SelectFormControl(x => x.CategoryId)
             .WithLabel("Category")
             .WithOptions(options =>
