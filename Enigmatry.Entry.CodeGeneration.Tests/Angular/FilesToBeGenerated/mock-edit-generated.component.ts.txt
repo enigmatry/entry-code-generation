@@ -46,24 +46,24 @@ export class MockEditGeneratedComponent implements OnInit, OnDestroy {
   @Output() cancel = new EventEmitter<void>();
   @Output() buttonClick = new EventEmitter<string>();
 
-                @Input() formStatusOptions: any[] = [{ value: null, displayName: $localize `:@@empty-option.none:None` }, { value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
-                @Input() formStatusOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: 'displayName' };
-                @Input() mockRadioOptions: any[] = [{ value: 0, displayName: `First` }, { value: 1, displayName: `Second` }, { value: 2, displayName: `Third` }];
-                @Input() mockRadioOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
-                @Input() mockMultiCheckboxOptions: any[] = [{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
-                @Input() mockMultiCheckboxOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
-                @Input() multiCheckboxWithStringIdsOptions: any[] = [{ value: 'value_1', displayName: $localize `:@@translation_Id_1:Label 1` }, { value: 'value_2', displayName: $localize `:@@translation_Id_2:Label 2` }, { value: 'value_3', displayName: $localize `:@@translation_Id_3:Label 3` }];
-                @Input() multiCheckboxWithStringIdsOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
+            @Input() formStatusOptions: any[] = [{ value: null, displayName: $localize `:@@empty-option.none:None` }, { value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
+            @Input() formStatusOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: 'displayName' };
+            @Input() mockRadioOptions: any[] = [{ value: 0, displayName: `First` }, { value: 1, displayName: `Second` }, { value: 2, displayName: `Third` }];
+            @Input() mockRadioOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
+            @Input() mockMultiCheckboxOptions: any[] = [{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
+            @Input() mockMultiCheckboxOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
+            @Input() multiCheckboxWithStringIdsOptions: any[] = [{ value: 'value_1', displayName: $localize `:@@translation_Id_1:Label 1` }, { value: 5.777665, displayName: $localize `:@@translation_Id_2:Label 2` }, { value: -9, displayName: $localize `:@@translation_Id_3:Label 3` }, { value: 1234567, displayName: $localize `:@@translation_Id_4:Label 4` }, { value: null, displayName: $localize `:@@translation_Id_5:Label 5` }];
+            @Input() multiCheckboxWithStringIdsOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
             private categoryIdOptions$ = new BehaviorSubject<any[]>([]);
-                @Input()
-                get categoryIdOptions(): any[] { return this.categoryIdOptions$.value; }
-                set categoryIdOptions(value: any[]) { this.categoryIdOptions$.next(value); }
-                @Input() categoryIdOptionsConfiguration: SelectConfiguration = { valueProperty: 'id', labelProperty: 'categoryName', sortProperty: 'categoryName' };
+            @Input()
+            get categoryIdOptions(): any[] { return this.categoryIdOptions$.value; }
+            set categoryIdOptions(value: any[]) { this.categoryIdOptions$.next(value); }
+            @Input() categoryIdOptionsConfiguration: SelectConfiguration = { valueProperty: 'id', labelProperty: 'categoryName', sortProperty: 'categoryName' };
             private typesOptions$ = new BehaviorSubject<any[]>([]);
-                @Input()
-                get typesOptions(): any[] { return this.typesOptions$.value; }
-                set typesOptions(value: any[]) { this.typesOptions$.next(value); }
-                @Input() typesOptionsConfiguration: SelectConfiguration = {};
+            @Input()
+            get typesOptions(): any[] { return this.typesOptions$.value; }
+            set typesOptions(value: any[]) { this.typesOptions$.next(value); }
+            @Input() typesOptionsConfiguration: SelectConfiguration = {};
 
   _isReadonly: boolean;
   form = new FormGroup({});
@@ -122,7 +122,7 @@ className: `entry-reset-form-btn-field entry-button primary-button`,
         {
         type: this.resolveFieldType('group-type', false),
 fieldGroupClassName: `entry-field-group ${this.applyOptionally('group-wrapper-readonly', this.isReadonly)}`,
-                wrappers: ['group-wrapper'],
+            wrappers: ['group-wrapper'],
         templateOptions: {
         label: $localize `:@@test.mock-edit.group-name.label:Group name`,
         placeholder: $localize `:@@test.mock-edit.group-name.placeholder:Group name`,
@@ -142,7 +142,7 @@ defaultValue: 'DEFAULT NAME',
         'templateOptions.label': (model) => (this.fieldsLabelExpressions?.name ? this.fieldsLabelExpressions.name(model) : $localize `:@@test.mock-edit.name.label:Name`),
         'model.name': (model) => (this.fieldsPropertyExpressions?.name ? this.fieldsPropertyExpressions.name(model) : model.name),
         },
-                wrappers: ['form-field', 'tooltip'],
+            wrappers: ['form-field', 'tooltip'],
         templateOptions: {
         label: $localize `:@@test.mock-edit.name.label:Name`,
         placeholder: $localize `:@@test.mock-edit.name.placeholder:Some / Name`,
@@ -198,7 +198,7 @@ className: `entry-date-field entry-datepicker`,
         'templateOptions.label': (model) => (this.fieldsLabelExpressions?.date ? this.fieldsLabelExpressions.date(model) : $localize `:@@test.mock-edit.date.label:Date`),
         'model.date': (model) => (this.fieldsPropertyExpressions?.date ? this.fieldsPropertyExpressions.date(model) : model.date),
         },
-                wrappers: ['tooltip', 'form-field'],
+            wrappers: ['tooltip', 'form-field'],
         templateOptions: {
         label: $localize `:@@test.mock-edit.date.label:Date`,
         placeholder: $localize `:@@test.mock-edit.date.placeholder:Date`,
@@ -459,7 +459,7 @@ className: `entry-addresses-field entry-array-field`,
         'templateOptions.label': (model) => (this.fieldsLabelExpressions?.addresses ? this.fieldsLabelExpressions.addresses(model) : $localize `:@@test.mock-edit.addresses.label:Addresses`),
         'model.addresses': (model) => (this.fieldsPropertyExpressions?.addresses ? this.fieldsPropertyExpressions.addresses(model) : model.addresses),
         },
-                wrappers: ['array-wrapper'],
+            wrappers: ['array-wrapper'],
         templateOptions: {
         label: $localize `:@@test.mock-edit.addresses.label:Addresses`,
         placeholder: $localize `:@@test.mock-edit.addresses.placeholder:Addresses`,
@@ -472,7 +472,7 @@ className: `entry-addresses-field entry-array-field`,
         {
         type: this.resolveFieldType('', false),
 fieldGroupClassName: `entry-field-group`,
-                wrappers: ['group-wrapper'],
+            wrappers: ['group-wrapper'],
         templateOptions: {
         label: ``,
         placeholder: ``,

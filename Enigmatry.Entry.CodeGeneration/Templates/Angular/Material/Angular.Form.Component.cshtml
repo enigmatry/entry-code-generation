@@ -193,11 +193,11 @@ import { map, throttleTime } from 'rxjs/operators';
 
     string CreateSelectOptionTemplate(SelectOption selectOption)
     {
-        if (selectOption.Value != null && selectOption.Value.GetType() == typeof(string))
+        if (selectOption.Value != null && selectOption.Value.IsNumericType())
         {
-            return $"{{ value: '{selectOption.Value}', displayName: {(@Html.Localize(selectOption.DisplayName, Options.EnableI18N))} }}";
+            return $"{{ value: {selectOption.Value}, displayName: {(@Html.Localize(selectOption.DisplayName, Options.EnableI18N))} }}";
         }
-        return $"{{ value: {selectOption.Value ?? "null"}, displayName: {(@Html.Localize(selectOption.DisplayName, Options.EnableI18N))} }}";
+        return $"{{ value: {(selectOption.Value == null ? "null" : $"'{selectOption.Value}'")}, displayName: {(@Html.Localize(selectOption.DisplayName, Options.EnableI18N))} }}";
     }
 
     void CreateWrappers(FormControl control)
