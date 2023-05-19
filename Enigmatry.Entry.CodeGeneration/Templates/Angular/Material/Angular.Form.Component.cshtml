@@ -178,7 +178,7 @@ import { map, throttleTime } from 'rxjs/operators';
         }
         else
         {
-            @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => CreateSelectOptionTemplate(option));
+            @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => $"{{ {GetValueExpression(option)}, displayName: {(@Html.Localize(option.DisplayName, Options.EnableI18N))} }}");
         }
 
         if (select.Options.HasCustomValueAndDisplayKeys)
@@ -191,13 +191,13 @@ import { map, throttleTime } from 'rxjs/operators';
         }
     }
 
-    string CreateSelectOptionTemplate(SelectOption selectOption)
+    string GetValueExpression(SelectOption option)
     {
-        if (selectOption.Value != null && selectOption.Value.IsNumericType())
+        if (option.Value != null && option.Value.IsNumericType())
         {
-            return $"{{ value: {selectOption.Value}, displayName: {(@Html.Localize(selectOption.DisplayName, Options.EnableI18N))} }}";
+            return $"value: {(option.Value is Enum ? (int)option.Value : option.Value)}";
         }
-        return $"{{ value: {(selectOption.Value == null ? "null" : $"'{selectOption.Value}'")}, displayName: {(@Html.Localize(selectOption.DisplayName, Options.EnableI18N))} }}";
+        return $"value: {(option.Value == null ? "null" : $"'{option.Value}'")}";
     }
 
     void CreateWrappers(FormControl control)

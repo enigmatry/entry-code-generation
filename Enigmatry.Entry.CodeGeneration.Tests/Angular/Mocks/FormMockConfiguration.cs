@@ -96,7 +96,8 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
                 new SelectOption(5.777665, "Label 2", "translation_Id_2"),
                 new SelectOption(-9, "Label 3", "translation_Id_3"),
                 new SelectOption(1234567, "Label 4", "translation_Id_4"),
-                new SelectOption(null, "Label 5", "translation_Id_5")
+                new SelectOption(EnumMock.Third, "Label 5", "translation_Id_5"),
+                new SelectOption(null, "Label 6", "translation_Id_6")
             }));
 
         formGroup

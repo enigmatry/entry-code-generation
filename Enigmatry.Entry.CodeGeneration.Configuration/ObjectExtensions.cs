@@ -24,4 +24,6 @@ public static class ObjectExtensions
                 return false;
         }
     }
+
+    public static bool IsEnumType(this object o) => o is Enum;
 }
