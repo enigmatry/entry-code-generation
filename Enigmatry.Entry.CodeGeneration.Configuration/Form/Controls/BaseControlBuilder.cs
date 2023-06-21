@@ -329,7 +329,7 @@ public abstract class BaseControlBuilder<TControl, TBuilder> : IControlBuilder
         control.Hint = new I18NString(hintTranslationId, _hint);
         control.Visible = _isVisible;
         control.Readonly = _isReadonly;
-        control.AutoFocus = _hasAutofocus;
+        control.Autofocus = _hasAutofocus;
         control.Validators = _validators;
         control.ClassNames = _classNames;
         control.Appearance = _appearance;

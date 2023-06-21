@@ -44,7 +44,7 @@ import { map, throttleTime } from 'rxjs/operators';
         @:{
         @:key: '@control.PropertyName',
         @:type: this.resolveFieldType('@Html.Raw(control.FormlyType)', @control.Readonly.ToString().ToLower()),
-        @:focus: @control.AutoFocus.ToString().ToLower(),
+        @:focus: @control.Autofocus.ToString().ToLower(),
         @Html.FieldCssClass(control)
         @Html.DefaultValue(control)
         @:hideExpression: this.fieldsHideExpressions?.@(control.PropertyName) ?? false,
