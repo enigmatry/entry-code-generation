@@ -101,6 +101,7 @@ export class MockEditGeneratedComponent implements OnInit, OnDestroy {
         {
         key: 'resetFormBtn',
         type: this.resolveFieldType('button', false),
+        focus: false,
 className: `entry-reset-form-btn-field entry-button primary-button`,
         hideExpression: this.fieldsHideExpressions?.resetFormBtn ?? false,
         expressionProperties: {
@@ -133,6 +134,7 @@ fieldGroupClassName: `entry-field-group ${this.applyOptionally('group-wrapper-re
         {
         key: 'name',
         type: this.resolveFieldType('input', false),
+        focus: true,
 className: `entry-name-field entry-input`,
 defaultValue: 'DEFAULT NAME',
         hideExpression: this.fieldsHideExpressions?.name ?? false,
@@ -170,6 +172,7 @@ modelOptions: { updateOn: 'blur' },
         {
         key: 'description',
         type: this.resolveFieldType('ckeditor', false),
+        focus: false,
 className: `entry-description-field entry-ckeditor`,
         hideExpression: this.fieldsHideExpressions?.description ?? false,
         expressionProperties: {
@@ -190,6 +193,7 @@ className: `entry-description-field entry-ckeditor`,
         {
         key: 'date',
         type: this.resolveFieldType('datepicker', true),
+        focus: false,
 className: `entry-date-field entry-datepicker`,
         hideExpression: this.fieldsHideExpressions?.date ?? false,
         expressionProperties: {
@@ -212,6 +216,7 @@ modelOptions: { updateOn: 'blur' },
         {
         key: 'money',
         type: this.resolveFieldType('input', false),
+        focus: false,
 className: `entry-money-field entry-input`,
         hideExpression: this.fieldsHideExpressions?.money ?? false,
         expressionProperties: {
@@ -235,6 +240,7 @@ max: 999.99 - 0.1,
         {
         key: 'amount',
         type: this.resolveFieldType('input', false),
+        focus: false,
 className: `entry-amount-field entry-input`,
         hideExpression: this.fieldsHideExpressions?.amount ?? false,
         expressionProperties: {
@@ -266,6 +272,7 @@ max: (err, field) => $localize `:@@test.mock-edit.amount.max:CUSTOM_VALIDATION_M
         {
         key: 'formStatus',
         type: this.resolveFieldType('select', false),
+        focus: false,
 className: `entry-form-status-field entry-select`,
         hideExpression: this.fieldsHideExpressions?.formStatus ?? false,
         expressionProperties: {
@@ -289,6 +296,7 @@ className: `entry-form-status-field entry-select`,
         {
         key: 'mockRadio',
         type: this.resolveFieldType('radio', false),
+        focus: false,
 className: `entry-mock-radio-field entry-radio`,
         hideExpression: this.fieldsHideExpressions?.mockRadio ?? false,
         expressionProperties: {
@@ -312,6 +320,7 @@ className: `entry-mock-radio-field entry-radio`,
         {
         key: 'mockMultiCheckbox',
         type: this.resolveFieldType('multicheckbox', false),
+        focus: false,
 className: `entry-mock-multi-checkbox-field entry-multicheckbox`,
         hideExpression: this.fieldsHideExpressions?.mockMultiCheckbox ?? false,
         expressionProperties: {
@@ -336,6 +345,7 @@ className: `entry-mock-multi-checkbox-field entry-multicheckbox`,
         {
         key: 'multiCheckboxWithStringIds',
         type: this.resolveFieldType('multicheckbox', false),
+        focus: false,
 className: `entry-multi-checkbox-with-string-ids-field entry-multicheckbox`,
         hideExpression: this.fieldsHideExpressions?.multiCheckboxWithStringIds ?? false,
         expressionProperties: {
@@ -360,6 +370,7 @@ className: `entry-multi-checkbox-with-string-ids-field entry-multicheckbox`,
         {
         key: 'categoryId',
         type: this.resolveFieldType('select', false),
+        focus: false,
 className: `entry-category-id-field entry-select`,
         hideExpression: this.fieldsHideExpressions?.categoryId ?? false,
         expressionProperties: {
@@ -384,6 +395,7 @@ metadata: { entityType: 'Category', filter: 'category_name' },
         {
         key: 'types',
         type: this.resolveFieldType('select', false),
+        focus: false,
 className: `entry-types-field entry-select`,
         hideExpression: this.fieldsHideExpressions?.types ?? false,
         expressionProperties: {
@@ -409,6 +421,7 @@ className: `entry-types-field entry-select`,
         {
         key: 'password',
         type: this.resolveFieldType('input', false),
+        focus: false,
 className: `entry-password-field entry-input`,
         hideExpression: this.fieldsHideExpressions?.password ?? false,
         expressionProperties: {
@@ -430,6 +443,7 @@ className: `entry-password-field entry-input`,
         {
         key: 'isActive',
         type: this.resolveFieldType('checkbox', false),
+        focus: false,
 className: `entry-is-active-field entry-checkbox`,
 defaultValue: true,
         hideExpression: this.fieldsHideExpressions?.isActive ?? false,
@@ -451,6 +465,7 @@ defaultValue: true,
         {
         key: 'addresses',
         type: this.resolveFieldType('array-field', false),
+        focus: false,
 className: `entry-addresses-field entry-array-field`,
         hideExpression: this.fieldsHideExpressions?.addresses ?? false,
         expressionProperties: {
@@ -484,6 +499,7 @@ fieldGroupClassName: `entry-field-group`,
         {
         key: 'city',
         type: this.resolveFieldType('input', false),
+        focus: false,
 className: `entry-city-field entry-input`,
 defaultValue: 'Amsterdam',
         hideExpression: this.fieldsHideExpressions?.city ?? false,
@@ -505,6 +521,7 @@ defaultValue: 'Amsterdam',
         {
         key: 'street',
         type: this.resolveFieldType('input', false),
+        focus: false,
 className: `entry-street-field entry-input`,
         hideExpression: this.fieldsHideExpressions?.street ?? false,
         expressionProperties: {
@@ -525,6 +542,7 @@ className: `entry-street-field entry-input`,
         {
         key: 'houseNumber',
         type: this.resolveFieldType('input', false),
+        focus: false,
 className: `entry-house-number-field entry-input`,
         hideExpression: this.fieldsHideExpressions?.houseNumber ?? false,
         expressionProperties: {
@@ -545,6 +563,7 @@ className: `entry-house-number-field entry-input`,
         {
         key: 'verified',
         type: this.resolveFieldType('checkbox', true),
+        focus: false,
 className: `entry-verified-field entry-checkbox`,
         hideExpression: this.fieldsHideExpressions?.verified ?? false,
         expressionProperties: {
@@ -568,6 +587,7 @@ className: `entry-verified-field entry-checkbox`,
         {
         key: 'dateAndTime',
         type: this.resolveFieldType('datetimepicker', false),
+        focus: false,
 className: `entry-date-and-time-field entry-datetimepicker`,
         hideExpression: this.fieldsHideExpressions?.dateAndTime ?? false,
         expressionProperties: {
@@ -591,6 +611,7 @@ modelOptions: { updateOn: 'blur' },
         {
         key: 'email1',
         type: this.resolveFieldType('input', false),
+        focus: false,
 className: `entry-email1-field entry-input`,
         hideExpression: this.fieldsHideExpressions?.email1 ?? false,
         expressionProperties: {
@@ -619,6 +640,7 @@ pattern: (err, field) => $localize `:@@test.mock-edit.email1.pattern:CUSTOM_VALI
         {
         key: 'email2',
         type: this.resolveFieldType('input', false),
+        focus: false,
 className: `entry-email2-field entry-input`,
         hideExpression: this.fieldsHideExpressions?.email2 ?? false,
         expressionProperties: {
@@ -652,3 +674,4 @@ pattern: (err, field) => $localize `:@@validators.pattern.emailAddress:Invalid e
   }
 
 }
+
