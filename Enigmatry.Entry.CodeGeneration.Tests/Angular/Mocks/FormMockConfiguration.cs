@@ -43,7 +43,8 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
             .WithAppearance(FormControlAppearance.Outline)
             .WithFloatLabel(FormControlFloatLabel.Always)
             .WithUpdateOn(ValueUpdateTrigger.OnBlur)
-            .ShouldAutocomplete(false);
+            .ShouldAutocomplete(false)
+            .HasAutofocus(true);
 
         formGroup
             .RichTextInputFormControl(x => x.Description)

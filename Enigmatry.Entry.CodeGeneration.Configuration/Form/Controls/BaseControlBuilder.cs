@@ -17,6 +17,7 @@ public abstract class BaseControlBuilder<TControl, TBuilder> : IControlBuilder
     protected string? _label;
     protected bool _isVisible;
     protected bool _isReadonly;
+    protected bool _hasAutofocus;
     protected string? _placeholder;
     protected string _hint;
     protected string? _labelTranslationId;
@@ -104,6 +105,17 @@ public abstract class BaseControlBuilder<TControl, TBuilder> : IControlBuilder
         return (TBuilder)this;
     }
 
+    /// <summary>
+    /// Configure form control for autofocus
+    /// </summary>
+    /// <param name="hasAutofocus"></param>
+    /// <returns></returns>
+    public TBuilder HasAutofocus(bool hasAutofocus)
+    {
+        _hasAutofocus = hasAutofocus;
+        return (TBuilder)this;
+    }
+    
     /// <summary>
     /// Configure form control placeholder
     /// </summary>
@@ -317,6 +329,7 @@ public abstract class BaseControlBuilder<TControl, TBuilder> : IControlBuilder
         control.Hint = new I18NString(hintTranslationId, _hint);
         control.Visible = _isVisible;
         control.Readonly = _isReadonly;
+        control.AutoFocus = _hasAutofocus;
         control.Validators = _validators;
         control.ClassNames = _classNames;
         control.Appearance = _appearance;
