@@ -3,7 +3,7 @@ using Enigmatry.Entry.CodeGeneration.Configuration.List.Model;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Enigmatry.Entry.CodeGeneration.Configuration.Tests.List.Model;
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Tests.List;
 
 [Category("unit")]
 public class ColumnDefinitionBuilderFixture
