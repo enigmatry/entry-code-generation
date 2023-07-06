@@ -61,7 +61,7 @@ public class ListComponentConfigurationFixture
         componentModel.Should().NotBeNull();
         componentModel.Columns.Count.Should().Be(5);
 
-        // Configuration order: Id, Title, Budget, StarDate, EndDate
+        // Configuration order: Id, Title, Budget, StartDate, EndDate
         componentModel.ComponentInfo.OrderByType.Should().Be(OrderByType.Configuration);
         componentModel.Columns.ElementAt(0).Property.ToLower().Should().Be(nameof(Project.Id).ToLower());
         componentModel.Columns.ElementAt(1).Property.ToLower().Should().Be(nameof(Project.Title).ToLower());
