@@ -11,7 +11,7 @@ public class ListComponentConfigurationFixture
     [Test]
     public void TestListComponentConfiguration()
     {
-        var configuration = new ConfigurationP();
+        var configuration = new Configuration1();
         var builder = new ListComponentBuilder<Project>();
 
         configuration.Configure(builder);
@@ -27,7 +27,7 @@ public class ListComponentConfigurationFixture
     [Test]
     public void TestOrderByModel()
     {
-        var configuration = new ConfigurationP();
+        var configuration = new Configuration1();
         var builder = new ListComponentBuilder<Project>();
 
         builder.Component().OrderBy(OrderByType.Model);
@@ -50,7 +50,7 @@ public class ListComponentConfigurationFixture
     [Test]
     public void TestOrderByConfiguration()
     {
-        var configuration = new ConfigurationP();
+        var configuration = new Configuration1();
         var builder = new ListComponentBuilder<Project>();
 
         builder.Component().OrderBy(OrderByType.Configuration);
@@ -73,7 +73,7 @@ public class ListComponentConfigurationFixture
     [Test]
     public void TestIncludeUnconfiguredPropertiesIsTrueWhenNotConfigured()
     {
-        var configuration = new ConfigurationP();
+        var configuration = new Configuration1();
         var builder = new ListComponentBuilder<Project>();
 
         configuration.Configure(builder);
@@ -87,7 +87,7 @@ public class ListComponentConfigurationFixture
     [Test]
     public void TestExcludeUnconfiguredProperties()
     {
-        var configuration = new ConfigurationP();
+        var configuration = new Configuration1();
         var builder = new ListComponentBuilder<Project>();
 
         builder.Component().IncludeUnconfiguredProperties(false);
@@ -106,7 +106,7 @@ public class ListComponentConfigurationFixture
     [Test]
     public void TestDefaultPropertyFormatterForDates()
     {
-        var configuration = new ConfigurationP();
+        var configuration = new Configuration1();
         var builder = new ListComponentBuilder<Project>();
 
         configuration.Configure(builder);
@@ -126,7 +126,7 @@ public class ListComponentConfigurationFixture
         public decimal Budget { get; set; }
     }
 
-    internal class ConfigurationP : IListComponentConfiguration<Project>
+    internal class Configuration1 : IListComponentConfiguration<Project>
     {
         public void Configure(ListComponentBuilder<Project> builder)
         {
