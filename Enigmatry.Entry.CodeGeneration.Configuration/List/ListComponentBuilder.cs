@@ -36,13 +36,12 @@ namespace Enigmatry.Entry.CodeGeneration.Configuration.List;
 [UsedImplicitly]
 public class ListComponentBuilder<T> : BaseComponentBuilder<ListComponentModel>
 {
-    private readonly IList<ColumnDefinitionBuilder> _columns;
+    private readonly IList<ColumnDefinitionBuilder> _columns = new List<ColumnDefinitionBuilder>();
     private readonly PaginationInfoBuilder _paginationInfoBuilder = new();
     private readonly RowInfoBuilder _rowInfoBuilder = new();
 
     public ListComponentBuilder() : base(typeof(T))
     {
-        _columns = _modelType.GetProperties().Select(propertyInfo => new ColumnDefinitionBuilder(propertyInfo)).ToList();
     }
 
     /// <summary>
@@ -87,9 +86,31 @@ public class ListComponentBuilder<T> : BaseComponentBuilder<ListComponentModel>
     public override ListComponentModel Build()
     {
         var componentInfo = _componentInfoBuilder.Build();
+        var columns = BuildColumnDefinitions(componentInfo);
+
+        return new ListComponentModel(componentInfo, columns)
+        {
+            Row = _rowInfoBuilder.Build(componentInfo),
+            Pagination = _paginationInfoBuilder.Build()
+        };
+    }
+
+    private IList<ColumnDefinition> BuildColumnDefinitions(ComponentInfo componentInfo)
+    {
         var columns = _columns.Select(_ => _.Build(componentInfo)).ToList();
 
-        return new ListComponentModel(componentInfo, columns) {Row = _rowInfoBuilder.Build(componentInfo), Pagination = _paginationInfoBuilder.Build()};
+        if (componentInfo.IncludeUnconfiguredProperties)
+        {
+            var unconfiguredColumns = BuildUnconfiguredColumnDefinitions(componentInfo);
+            columns.AddRange(unconfiguredColumns);
+        }
+
+        if (componentInfo.OrderByType == OrderByType.Model)
+        {
+            var properties = _modelType.GetProperties().Select(propertyInfo => propertyInfo.Name.ToUpper()).ToList();
+            columns = columns.OrderBy(columnDefinition => properties.IndexOf(columnDefinition.Property.ToUpper())).ToList();
+        }
+        return columns;
     }
 
     private ColumnDefinitionBuilder GetOrAddBuilder(ColumnDefinitionBuilder? builder, Func<ColumnDefinitionBuilder> creator)
@@ -100,5 +121,13 @@ public class ListComponentBuilder<T> : BaseComponentBuilder<ListComponentModel>
         _columns.Add(columnDefinitionBuilder);
 
         return columnDefinitionBuilder;
+    }
+
+    private IEnumerable<ColumnDefinition> BuildUnconfiguredColumnDefinitions(ComponentInfo componentInfo)
+    {
+        return _modelType.GetProperties()
+            .Where(propertyInfo => _columns.FirstOrDefault(builder => builder.HasProperty(propertyInfo)) == null)
+            .Select(propertyInfo => GetOrAddBuilder(null, () => new ColumnDefinitionBuilder(propertyInfo)).Build(componentInfo))
+            .ToList();
     }
 }
