@@ -50,6 +50,8 @@ export class MockEditGeneratedComponent implements OnInit, OnDestroy {
             @Input() formStatusOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: 'displayName' };
             @Input() mockRadioOptions: any[] = [{ value: 0, displayName: `First` }, { value: 1, displayName: `Second` }, { value: 2, displayName: `Third` }];
             @Input() mockRadioOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
+            @Input() mockBoolSelectOptions: any[] = [{ value: true, displayName: $localize `:@@true-label:This is true` }, { value: false, displayName: $localize `:@@false-label:This is false` }];
+            @Input() mockBoolSelectOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
             @Input() mockMultiCheckboxOptions: any[] = [{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
             @Input() mockMultiCheckboxOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
             @Input() multiCheckboxWithStringIdsOptions: any[] = [{ value: 'value_1', displayName: $localize `:@@translation_Id_1:Label 1` }, { value: -9, displayName: $localize `:@@translation_Id_3:Label 3` }, { value: 1234567, displayName: $localize `:@@translation_Id_4:Label 4` }, { value: 2, displayName: $localize `:@@translation_Id_5:Label 5` }, { value: null, displayName: $localize `:@@translation_Id_6:Label 6` }];
@@ -315,6 +317,30 @@ className: `entry-mock-radio-field entry-radio`,
             attributes: {  },
             hidden: !true,
             typeFormatDef: undefined
+        },
+        },
+        {
+        key: 'mockBoolSelect',
+        type: this.resolveFieldType('select', false),
+        focus: false,
+className: `entry-mock-bool-select-field entry-select`,
+        hideExpression: this.fieldsHideExpressions?.mockBoolSelect ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.mockBoolSelect ? this.fieldsDisableExpressions.mockBoolSelect(model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.mockBoolSelect ? this.fieldsRequiredExpressions.mockBoolSelect(model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.mockBoolSelect ? this.fieldsLabelExpressions.mockBoolSelect(model) : $localize `:@@test.mock-edit.mock-bool-select.label:BoolSelect`),
+        'model.mockBoolSelect': (model) => (this.fieldsPropertyExpressions?.mockBoolSelect ? this.fieldsPropertyExpressions.mockBoolSelect(model) : model.mockBoolSelect),
+        },
+        templateOptions: {
+        label: $localize `:@@test.mock-edit.mock-bool-select.label:BoolSelect`,
+        placeholder: $localize `:@@test.mock-edit.mock-bool-select.placeholder:BoolSelect`,
+        description: ``,
+            options: of(this.mockBoolSelectOptions).pipe(map(opts => sortOptions(opts, this.mockBoolSelectOptionsConfiguration.valueProperty, this.mockBoolSelectOptionsConfiguration.sortProperty, this._localeId))),
+            valueProp: this.mockBoolSelectOptionsConfiguration.valueProperty,
+            labelProp: this.mockBoolSelectOptionsConfiguration.labelProperty,
+            attributes: {  },
+            hidden: !true,
+            typeFormatDef: { name: 'boolean' }
         },
         },
         {
