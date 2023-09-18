@@ -84,6 +84,15 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
             .WithOptions(options => options.WithFixedValues<EnumMock>(false));
 
         formGroup
+            .SelectFormControl(x => x.MockBoolSelect)
+            .WithLabel("BoolSelect")
+            .WithOptions(options => options.WithFixedValues(new[]
+            {
+                new SelectOption(true, "This is true", "true-label"),
+                new SelectOption(false, "This is false", "false-label")
+            }));
+
+        formGroup
             .MultiCheckboxFormControl(x => x.MockMultiCheckbox)
             .WithLabel("MultiCheckbox")
             .WithOptions(options => options.WithFixedValues<EnumMock>());

@@ -21,6 +21,7 @@ public class FormMock
     public IEnumerable<Guid> Types { get; set; } = Enumerable.Empty<Guid>();
     public Guid SubTypeId { get; set; }
     public EnumMock MockRadio { get; set; }
+    public bool MockBoolSelect { get; set; }
     public IEnumerable<EnumMock> MockMultiCheckbox { get; set; } = Enumerable.Empty<EnumMock>();
     public IEnumerable<string> MultiCheckboxWithStringIds { get; set; } = Enumerable.Empty<string>();
     public IEnumerable<FormAddressMock> Addresses { get; set; } = Enumerable.Empty<FormAddressMock>();
