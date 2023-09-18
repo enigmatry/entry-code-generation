@@ -202,7 +202,6 @@ import { map, throttleTime } from 'rxjs/operators';
         if (option.Value is bool boolValue)
         {
             return $"value: {boolValue.ToString().ToLowerInvariant()}";
-            
         }
 
         return $"value: {(option.Value == null ? "null" : $"'{option.Value}'")}";
