@@ -33,5 +33,9 @@ public class ListMockConfiguration : IListComponentConfiguration<ListMock.Item>
                     .WithLocale("en")
                     .WithTimeZone("UTC")
             );
+
+        builder.Row()
+            .ShowContextMenu(true)
+            .ContextMenuItems("Edit", "Delete");
     }
 }
