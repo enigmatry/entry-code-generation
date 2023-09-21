@@ -39,7 +39,7 @@ export class @Model.AngularComponentName() implements OnInit {
   @@Input() noResultTemplate: TemplateRef@(Html.Raw("<any>")) | null;
 
   @@Input() showContextMenu = @Model.Row.ShowContextMenu.ToString().ToLower();
-  @@Input() contextMenuItems: ContextMenuItem[] = [];
+  @@Input() contextMenuItems: ContextMenuItem[] = @Html.CreateContextMenuItems(Model.Row.ContextMenuItems, Options.EnableI18N);
   @@Input() rowContextMenuFormatter: RowContextMenuFormatter;
   
   @@Input() rowClassFormatter: RowClassFormatter;
@@ -62,6 +62,4 @@ export class @Model.AngularComponentName() implements OnInit {
 
   ngOnInit(): void {
     this.columns = @Html.CreateColumnDefs(Model.Columns, Options.EnableI18N);
-    this.contextMenuItems = @Html.CreateContextMenuItems(Model.Row.ContextMenuItems, Options.EnableI18N);
-  }
 }
