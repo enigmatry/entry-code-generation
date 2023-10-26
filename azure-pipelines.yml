@@ -1,0 +1,123 @@
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  artifactName: enigmatry-entry-code-generation
+  buildConfiguration: 'Release'
+  projectNameAngularApp:
+  projectNamePrefix: Enigmatry.Entry.CodeGeneration
+  NUGET_PACKAGES: $(Pipeline.Workspace)/.nuget/packages
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: Enigmatry - Azure Pipelines Templates/enigmatry-azure-pipelines-templates
+
+stages:
+- stage: 'ci_build'
+  displayName: 'Build the pacakges'
+  jobs: 
+  - job: build_prerequisites
+    displayName: Get the version for the build
+    steps:
+    - checkout: self
+      fetchDepth: 0
+    - task: DotNetCoreCLI@2
+      displayName: Add Manifest for tool installation
+      inputs:
+        command: 'custom'
+        custom: 'new '
+        arguments: tool-manifest
+    - task: DotNetCoreCLI@2
+      displayName: Install minver
+      inputs:
+        command: 'custom'
+        custom: 'tool '
+        arguments: install minver-cli
+    - task: PowerShell@2
+      displayName: 'Set MinVer Version'
+      inputs:
+        targetType: inline
+        script: |
+          $version = dotnet minver -p preview
+          echo "##vso[build.updatebuildnumber]$version"
+          Write-Host "Setting MinVer to '$version'"
+
+  - job: 'Build_Package'
+    displayName: Build Package
+    steps:
+    - task: NuGetToolInstaller@1
+      displayName: Install NuGet Tool
+    - task: Cache@2
+      displayName: 'NuGet Cache'
+      inputs:
+        key: 'nuget | "$(Agent.OS)" | **/packages.lock.json,!**/bin/**,!**/obj/**'
+        restoreKeys: |
+            nuget | "$(Agent.OS)"
+            nuget
+        path: $(NUGET_PACKAGES)
+        cacheHitVar: 'NUGET_CACHE_RESTORED'
+    - task: NuGetCommand@2
+      displayName: Nuget Restore
+      inputs:
+        restoreSolution: '$(projectNamePrefix).sln'
+    - task: DotNetCoreCLI@2
+      displayName: 'Build package'
+      inputs:
+        command: 'build'
+        projects: '$(ProjectNamePrefix).sln'
+        configuration: $(buildConfiguration)
+        arguments: /p:TreatWarningsAsErrors=true
+    - task: DotNetCoreCLI@2
+      displayName: Run Unit Tests
+      inputs:
+        command: 'test'
+        projects: $(projectNamePrefix)**/*.Tests.csproj
+        arguments: '--filter TestCategory=unit|TestCategory=smoke --configuration $(buildConfiguration)'
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'pack'
+        packagesToPack: '**/*.csproj'
+        configuration: '$(buildConfiguration)'
+        versioningScheme: 'byBuildNumber'
+    - task: PublishBuildArtifacts@1
+      displayName: Publish artifacts
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: $(artifactName)-$(Build.BuildNumber)
+        publishLocation: 'Container'
+
+  - template: build-report-job.yml@templates
+    parameters:
+      artifactName: $(artifactName)
+      displayName: 'Generate Reports'
+      projectNameAngularApp: ''
+      projectNamePrefix: $(projectNamePrefix)
+
+- stage: publish_nuget
+  displayName: publish packages to NuGet
+  dependsOn:
+  jobs:
+  - deployment: 
+    environment: nuget
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@1
+            inputs:
+              buildType: 'current'
+              downloadType: 'specific'
+              downloadPath: '$(System.ArtifactsDirectory)'
+          - task: DotNetCoreCLI@2
+            displayName: 'Push NuGet Packages'
+            inputs:
+              command: 'push'
+              packagesToPush: '$(System.ArtifactsDirectory)/**/*.nupkg'
+              nuGetFeedType: 'internal'
+              publishVstsFeed: 'b10976dd-2e80-4940-82ff-0f27c8e76baa/d86fc1c0-d5ab-4b0a-8b57-5dc7dd5a60cb'
+              
