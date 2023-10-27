@@ -82,7 +82,8 @@ stages:
         command: 'pack'
         packagesToPack: '**/*.csproj'
         configuration: '$(buildConfiguration)'
-        versioningScheme: 'byBuildNumber'
+        versioningScheme: 'byEnvVar'
+        versionEnvVar: 'BUILD_BUILDNUMBER'
     - task: PublishBuildArtifacts@1
       displayName: Publish artifacts
       inputs:
