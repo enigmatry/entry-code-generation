@@ -49,6 +49,7 @@ stages:
 
   - job: 'Build_Package'
     displayName: Build Package
+    dependsOn: build_prerequisites
     steps:
     - task: NuGetToolInstaller@1
       displayName: Install NuGet Tool
