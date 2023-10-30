@@ -35,7 +35,7 @@ public class AngularCodeGeneratorFixture : CodeGenerationFixtureBase
     private void AssertGeneratedFileNames(IEnumerable<string> generatedFilePaths)
     {
         var expectedFileNames = Directory.GetFiles("Angular/FilesToBeGenerated")
-            .Select(filePath => filePath.Split("\\").Last().Replace(".txt", ""));
+            .Select(filePath => filePath.Split(Path.DirectorySeparatorChar).Last().Replace(".txt", ""));
 
         foreach (var expectedFileName in expectedFileNames)
         {
@@ -49,7 +49,7 @@ public class AngularCodeGeneratorFixture : CodeGenerationFixtureBase
     {
         foreach (var generatedFile in generatedFiles)
         {
-            var fileName = $"{generatedFile.Path.Split("\\").Last()}.txt";
+            var fileName = $"{generatedFile.Path.Split(Path.DirectorySeparatorChar).Last()}.txt";
             var expectedContent = File.ReadAllText($"Angular/FilesToBeGenerated/{fileName}");
             var generatedContent = generatedFile.Content;
 
