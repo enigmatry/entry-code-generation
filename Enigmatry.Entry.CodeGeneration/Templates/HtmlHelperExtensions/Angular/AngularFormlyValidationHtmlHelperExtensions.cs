@@ -32,8 +32,8 @@ public static class AngularFormlyValidationHtmlHelperExtensions
             .ValidationRules
             .Where(rule => rule.HasCustomMessage)
             .Select(x => enableI18N
-                ? $"{x.FormlyRuleName.ToLowerInvariant()}: (err, field) => {AngularLocalization.Localize(x.MessageTranslationId, x.FormlyValidationMessage)}"
-                : $"{x.FormlyRuleName.ToLowerInvariant()}: '{x.FormlyValidationMessage}'"
+                ? $"{x.FormlyRuleName}: (err, field) => {AngularLocalization.Localize(x.MessageTranslationId, x.FormlyValidationMessage)}"
+                : $"{x.FormlyRuleName}: '{x.FormlyValidationMessage}'"
             );
         return html.Raw($"{String.Join(",\r\n", validationMessages)}\r\n");
     }
@@ -49,14 +49,14 @@ public static class AngularFormlyValidationHtmlHelperExtensions
         {
             foreach (var rule in control.ValidationRules.Where(x => !x.HasCustomMessage))
             {
-                if (!messages.ContainsKey(rule.FormlyRuleName.ToLowerInvariant()))
+                if (!messages.ContainsKey(rule.FormlyRuleName))
                 {
                     var message = enableI18N
                         ? AngularLocalization.Localize(rule.MessageTranslationId, rule.FormlyValidationMessage)
                         : $"`{rule.FormlyValidationMessage}`";
                     messages.Add(
-                        rule.FormlyRuleName.ToLowerInvariant(),
-                        $"{{ name: '{rule.FormlyRuleName.ToLowerInvariant()}', message: (err, field) => {message} }}"
+                        rule.FormlyRuleName,
+                        $"{{ name: '{rule.FormlyRuleName}', message: (err, field) => {message} }}"
                     );
                 }
             }
