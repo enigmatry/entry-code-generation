@@ -17,9 +17,9 @@ namespace Enigmatry.Entry.CodeGeneration.Configuration.List.Model;
 /// builder.Pagination()
 ///     .ShowPaginator(true)
 ///     .ShowFirstLastPageButtons(false)
-///     .PageSize(10)
+///     .PageSize(20)
 ///     .ShowPageSize(true)
-///     .PageSizeOptions(new int[] { 10, 50, 100 });
+///     .PageSizeOptions(new int[] { 20, 50, 100 });
 /// </code>
 /// </example>
 /// </remarks>
