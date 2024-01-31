@@ -14,18 +14,18 @@ public static class AngularMaterialHtmlHelperExtensions
             return html.Raw("");
         }
 
-        var appearanceValue = EnumExtensions.GetDescription(appearance.Value);
+        var appearanceValue = appearance.Value.GetDescription();
         return html.Raw($"appearance: '{appearanceValue}',\r\n");
     }
 
-    public static IHtmlContent FloatLabel(this IHtmlHelper html, FormControlFloatLabel? appearance)
+    public static IHtmlContent FloatLabel(this IHtmlHelper html, FormControlFloatLabel? floatLabel)
     {
-        if (!appearance.HasValue)
+        if (!floatLabel.HasValue)
         {
             return html.Raw("");
         }
 
-        var floatLabelValue = EnumExtensions.GetDescription(appearance.Value);
+        var floatLabelValue = floatLabel.Value.GetDescription();
         return html.Raw($"floatLabel: '{floatLabelValue}',\r\n");
     }
 }
