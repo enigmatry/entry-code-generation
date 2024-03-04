@@ -6,14 +6,14 @@ namespace Enigmatry.Entry.CodeGeneration.Validation.PropertyValidations;
 
 public interface IPropertyValidationBuilder<T, TProperty> : IInitialPropertyValidationBuilder<T, TProperty>
 {
-    public IPropertyValidationBuilder<T, TProperty> WithMessage(string message, string messageTranlsationId = "");
+    public IPropertyValidationBuilder<T, TProperty> WithMessage(string message, string messageTranslationId = "");
 }
 
 public class PropertyValidationBuilder<T, TProperty> : BasePropertyValidationBuilder<T, TProperty>, IPropertyValidationBuilder<T, TProperty>
 {
     public PropertyValidationBuilder(IPropertyValidation<T, TProperty> propertyRule) : base(propertyRule) { }
 
-    public IPropertyValidationBuilder<T, TProperty> WithMessage(string message, string messageTranlsationId = "")
+    public IPropertyValidationBuilder<T, TProperty> WithMessage(string message, string messageTranslationId = "")
     {
         if (CurrentValidationRule == null)
         {
@@ -24,9 +24,9 @@ public class PropertyValidationBuilder<T, TProperty> : BasePropertyValidationBui
 
         CurrentValidationRule.SetCustomMessage(message);
 
-        if (!String.IsNullOrWhiteSpace(messageTranlsationId))
+        if (!String.IsNullOrWhiteSpace(messageTranslationId))
         {
-            CurrentValidationRule.SetMessageTranslationId(messageTranlsationId);
+            CurrentValidationRule.SetMessageTranslationId(messageTranslationId);
         }
 
         return this;
