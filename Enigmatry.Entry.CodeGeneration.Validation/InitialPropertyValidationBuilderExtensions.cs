@@ -8,6 +8,7 @@ namespace Enigmatry.Entry.CodeGeneration.Validation;
 
 public static class InitialPropertyValidationBuilderExtensions
 {
+
     public static IPropertyValidationBuilder<T, TProperty> IsRequired<T, TProperty>(this IInitialPropertyValidationBuilder<T, TProperty> builder)
     {
         var response = new PropertyValidationBuilder<T, TProperty>(builder.PropertyRule);
@@ -16,6 +17,12 @@ public static class InitialPropertyValidationBuilderExtensions
     }
 
     #region STRINGS
+
+    // Disabling nullability for string extension methods below
+    // IPropertyValidationBuilder<T, TProperty> where TProperty is a type parameter that's not constrained to be a value or reference type
+    // https://github.com/dotnet/csharplang/blob/main/meetings/2019/LDM-2019-11-25.md
+
+    #nullable disable
 
     public static IPropertyValidationBuilder<T, string> Match<T>(this IInitialPropertyValidationBuilder<T, string> builder, Regex rule)
     {
@@ -51,6 +58,8 @@ public static class InitialPropertyValidationBuilderExtensions
         MaxLength(response, rule);
         return response;
     }
+
+    #nullable enable
 
     #endregion STRINGS
 
