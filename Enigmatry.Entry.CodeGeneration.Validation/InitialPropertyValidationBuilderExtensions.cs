@@ -17,6 +17,12 @@ public static class InitialPropertyValidationBuilderExtensions
 
     #region STRINGS
 
+    // Disabling nullability for string extension methods below
+    // It`s not possible to specify both nullable and non-nullable generic type parameter
+    // https://github.com/dotnet/csharplang/blob/main/meetings/2019/LDM-2019-11-25.md
+
+    #nullable disable
+
     public static IPropertyValidationBuilder<T, string> Match<T>(this IInitialPropertyValidationBuilder<T, string> builder, Regex rule)
     {
         var response = new PropertyValidationBuilder<T, string>(builder.PropertyRule);
@@ -51,6 +57,8 @@ public static class InitialPropertyValidationBuilderExtensions
         MaxLength(response, rule);
         return response;
     }
+
+    #nullable enable
 
     #endregion STRINGS
 

@@ -11,4 +11,5 @@ internal class ValidationMockModel
     public DateTimeOffset DateTimeOffsetField { get; set; }
     public string StringField { get; set; } = String.Empty;
     public string OtherStringField { get; set; } = String.Empty;
+    public string? NullableStringField { get; set; } = String.Empty;
 }
