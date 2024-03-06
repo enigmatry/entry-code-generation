@@ -18,7 +18,7 @@ public static class InitialPropertyValidationBuilderExtensions
     #region STRINGS
 
     // Disabling nullability for string extension methods below
-    // Not sure how to specify both nullable and non-nullable string in methods signature
+    // It`s not possible to specify both nullable and non-nullable generic type parameter
     // https://github.com/dotnet/csharplang/blob/main/meetings/2019/LDM-2019-11-25.md
 
     #nullable disable
