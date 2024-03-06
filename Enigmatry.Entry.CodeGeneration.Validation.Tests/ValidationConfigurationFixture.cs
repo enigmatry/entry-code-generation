@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+﻿using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 using FluentAssertions;
 using Humanizer;
 using NUnit.Framework;
@@ -11,7 +11,7 @@ public class ValidationConfigurationFixture
     [Test]
     public void ValidationConfiguration()
     {
-        var validationConfiguration = new MockValidationModelConfiguration();
+        var validationConfiguration = new ModelConfiguration();
 
         validationConfiguration.ValidationRules
             .Where(x => x.PropertyName == nameof(ValidationMockModel.IntField).Camelize())
@@ -39,10 +39,10 @@ public class ValidationConfigurationFixture
     }
 
     [TestCase(nameof(ValidationMockModel.IntField), "required", "", "validators.required")]
-    [TestCase(nameof(ValidationMockModel.IntField), "min", MockValidationModelConfiguration.CustomMessage, "")]
-    [TestCase(nameof(ValidationMockModel.IntField), "max", MockValidationModelConfiguration.CustomMessage, MockValidationModelConfiguration.CustomMessageTranlsationId)]
-    [TestCase(nameof(ValidationMockModel.StringField), "required", MockValidationModelConfiguration.CustomMessage, MockValidationModelConfiguration.CustomMessageTranlsationId)]
-    [TestCase(nameof(ValidationMockModel.StringField), "minLength", MockValidationModelConfiguration.CustomMessage, "")]
+    [TestCase(nameof(ValidationMockModel.IntField), "min", ModelConfiguration.CustomMessage, "")]
+    [TestCase(nameof(ValidationMockModel.IntField), "max", ModelConfiguration.CustomMessage, ModelConfiguration.CustomMessageTranslationId)]
+    [TestCase(nameof(ValidationMockModel.StringField), "required", ModelConfiguration.CustomMessage, ModelConfiguration.CustomMessageTranslationId)]
+    [TestCase(nameof(ValidationMockModel.StringField), "minLength", ModelConfiguration.CustomMessage, "")]
     [TestCase(nameof(ValidationMockModel.StringField), "maxLength", "", "validators.maxLength")]
     public void ValidationConfigurationPerValidationRule(
         string propertyName,
@@ -50,12 +50,12 @@ public class ValidationConfigurationFixture
         string validationMessage,
         string validationMessageTranslationId)
     {
-        var validationConfiguration = new MockValidationModelConfiguration();
+        var validationConfiguration = new ModelConfiguration();
 
         validationConfiguration.ValidationRules
             .Where(x => x.PropertyName == propertyName.Camelize())
             .Should().NotBeNullOrEmpty();
-        var validationRule = validationConfiguration.ValidationRules
+        IFormlyValidationRule? validationRule = validationConfiguration.ValidationRules
             .Where(x => x.PropertyName == propertyName.Camelize())
             .SingleOrDefault(rule => rule.FormlyRuleName == validationRuleName);
         validationRule.Should().NotBeNull();
@@ -66,7 +66,7 @@ public class ValidationConfigurationFixture
     [Test]
     public void ValidationConfigurationForPatterns()
     {
-        var validationConfiguration = new MockValidationModelWithPatternsConfiguration();
+        var validationConfiguration = new PatternsConfiguration();
 
         validationConfiguration.ValidationRules
             .Select(x => x.PropertyName.Pascalize())
@@ -96,18 +96,20 @@ public class ValidationConfigurationFixture
     [Test]
     public void ValidationConfigurationForNullables()
     {
-        var validationConfiguration = new MockValidationModelWithNullablesConfiguration();
+        var validationConfiguration = new NullablesConfiguration();
 
         validationConfiguration.ValidationRules
             .Select(x => x.PropertyName.Pascalize()).Distinct()
             .Should().BeEquivalentTo(
                 nameof(ValidationMockModel.NullableIntField),
                 nameof(ValidationMockModel.NullableDoubleField),
-                nameof(ValidationMockModel.NullableByteField)
+                nameof(ValidationMockModel.NullableByteField),
+                nameof(ValidationMockModel.NullableStringField)
             );
+
         validationConfiguration.ValidationRules
             .Select(x => x.FormlyRuleName).Distinct()
-            .Should().BeEquivalentTo("required", "min", "max");
+            .Should().BeEquivalentTo("required", "min", "max", "minLength", "maxLength", "pattern");
         validationConfiguration.ValidationRules
             .All(x => x.HasMessageTranslationId).Should().BeTrue();
         validationConfiguration.ValidationRules
@@ -117,55 +119,57 @@ public class ValidationConfigurationFixture
             .Should().BeEquivalentTo(
                 "${field?.templateOptions?.label}:property-name: is required",
                 "${field?.templateOptions?.label}:property-name: value should be more than ${field?.templateOptions?.min}:min-value:",
-                "${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:"
+                "${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:",
+                "${field?.templateOptions?.label}:property-name: should have at least ${field?.templateOptions?.minLength}:min-value: characters",
+                "${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters",
+                "${field?.templateOptions?.label}:property-name: is not in valid format"
             );
     }
 }
 
 #region Mocks
 
-internal class MockValidationModelConfiguration : ValidationConfiguration<ValidationMockModel>
+internal class ModelConfiguration : ValidationConfiguration<ValidationMockModel>
 {
     public const string CustomMessage = "CUSTOM_VALIDATION_MESSAGE";
-    public const string CustomMessageTranlsationId = "CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID";
+    public const string CustomMessageTranslationId = "CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID";
 
-    public MockValidationModelConfiguration()
+    public ModelConfiguration()
     {
         RuleFor(x => x.IntField)
             .IsRequired()
             .GreaterThen(0).WithMessage(CustomMessage)
-            .LessThen(10).WithMessage(CustomMessage, CustomMessageTranlsationId);
+            .LessThen(10).WithMessage(CustomMessage, CustomMessageTranslationId);
 
         RuleFor(x => x.DoubleField)
             .IsRequired()
             .GreaterThen(0.5).WithMessage(CustomMessage)
-            .LessThen(10).WithMessage(CustomMessage, CustomMessageTranlsationId);
+            .LessThen(10).WithMessage(CustomMessage, CustomMessageTranslationId);
 
         RuleFor(x => x.StringField)
-            .IsRequired().WithMessage(CustomMessage, CustomMessageTranlsationId)
+            .IsRequired().WithMessage(CustomMessage, CustomMessageTranslationId)
             .MinLength(0).WithMessage(CustomMessage)
             .MaxLength(10);
     }
 }
 
-internal class MockValidationModelWithPatternsConfiguration : ValidationConfiguration<ValidationMockModel>
+internal class PatternsConfiguration : ValidationConfiguration<ValidationMockModel>
 {
-    public MockValidationModelWithPatternsConfiguration()
+    public PatternsConfiguration()
     {
         RuleFor(x => x.OtherStringField).EmailAddress();
-        RuleFor(x => x.StringField).Match(new Regex("/[A-Z]/"));
-
+        RuleFor(x => x.StringField).Match(new("/[A-Z]/"));
     }
 }
 
-internal class MockValidationModelWithNullablesConfiguration : ValidationConfiguration<ValidationMockModel>
+internal class NullablesConfiguration : ValidationConfiguration<ValidationMockModel>
 {
-    public MockValidationModelWithNullablesConfiguration()
+    public NullablesConfiguration()
     {
         RuleFor(x => x.NullableIntField).IsRequired().GreaterThen(1).LessThen(10);
         RuleFor(x => x.NullableDoubleField).IsRequired().GreaterThen(1.1).LessThen(10.1);
         RuleFor(x => x.NullableByteField).IsRequired().GreaterThen((byte)1).LessThen((byte)10);
-
+        RuleFor(x => x.NullableStringField).MinLength(0).MaxLength(100).Match(new("/[A-Z]/"));
     }
 }
 
