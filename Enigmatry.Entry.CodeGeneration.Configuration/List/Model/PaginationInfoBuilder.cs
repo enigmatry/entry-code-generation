@@ -26,6 +26,7 @@ namespace Enigmatry.Entry.CodeGeneration.Configuration.List.Model;
 public class PaginationInfoBuilder : IBuilder<PaginationInfo>
 {
     private bool _showPaginator = true;
+    private bool _showPaginatorIfNoData = false;
     private bool _showFirstLastPageButtons = true;
     private int _pageSize = 20;
     private IEnumerable<int> _pageSizeOptions = new[] {20, 50, 100};
@@ -39,6 +40,17 @@ public class PaginationInfoBuilder : IBuilder<PaginationInfo>
     public PaginationInfoBuilder ShowPaginator(bool value)
     {
         _showPaginator = value;
+        return this;
+    }
+
+    /// <summary>
+    /// Show or hide the paginator if the list is empty. 
+    /// </summary>
+    /// <param name="value">Set to true to show paginator, false to hide it. Default is false</param>
+    /// <returns>The <see cref="PaginationInfoBuilder"/> instance for method chaining.</returns>
+    public PaginationInfoBuilder ShowPaginatorIfNoData(bool value)
+    {
+        _showPaginatorIfNoData = value;
         return this;
     }
 
@@ -94,7 +106,8 @@ public class PaginationInfoBuilder : IBuilder<PaginationInfo>
             ShowPageSize = _showPageSize,
             ShowFirstLastPageButtons = _showFirstLastPageButtons,
             PageSizeOptions = _pageSizeOptions,
-            ShowPaginator = _showPaginator
+            ShowPaginator = _showPaginator,
+            ShowPaginatorIfNoData = _showPaginatorIfNoData
         };
     }
 }

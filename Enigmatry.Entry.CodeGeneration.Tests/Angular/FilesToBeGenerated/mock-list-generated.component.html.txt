@@ -4,6 +4,7 @@
                 [columns]="columns" 
                 [data]="data" 
                 [showPaginator]="showPaginator"
+                [showPaginatorIfNoData]="showPaginatorIfNoData"
                 [showFirstLastButtons]="showFirstLastButtons"
                 [pageSizeOptions]="pageSizeOptions"
                 [hidePageSize]="hidePageSize"

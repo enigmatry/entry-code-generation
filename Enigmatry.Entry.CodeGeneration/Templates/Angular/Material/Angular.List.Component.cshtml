@@ -21,6 +21,7 @@ export class @Model.AngularComponentName() implements OnInit {
   @@Input() loading: boolean;
 
   @@Input() showPaginator = @Model.Pagination.ShowPaginator.ToString().ToLower();
+  @@Input() showPaginatorIfNoData = @Model.Pagination.ShowPaginatorIfNoData.ToString().ToLower();
   @@Input() showFirstLastButtons = @Model.Pagination.ShowFirstLastPageButtons.ToString().ToLower();
   @@Input() pageSizeOptions = @Html.JsArray(Model.Pagination.PageSizeOptions);
   @@Input() hidePageSize = !@Model.Pagination.ShowPageSize.ToString().ToLower();

@@ -23,6 +23,7 @@ export class MockListGeneratedComponent implements OnInit {
   @Input() loading: boolean;
 
   @Input() showPaginator = true;
+  @Input() showPaginatorIfNoData = false;
   @Input() showFirstLastButtons = true;
   @Input() pageSizeOptions = [20, 50, 100];
   @Input() hidePageSize = !true;

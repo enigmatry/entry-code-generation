@@ -5,6 +5,7 @@ namespace Enigmatry.Entry.CodeGeneration.Configuration.List.Model;
 public class PaginationInfo
 {
     public bool ShowPaginator { get; set; } = true;
+    public bool ShowPaginatorIfNoData { get; set; } = false;
     public bool ShowFirstLastPageButtons { get; set; } = true;
     public int PageSize { get; set; } = 20;
     public IEnumerable<int> PageSizeOptions { get; set; } = new[] { 20, 50, 100 };
