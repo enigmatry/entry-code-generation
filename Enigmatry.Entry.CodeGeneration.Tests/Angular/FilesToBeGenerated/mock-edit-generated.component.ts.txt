@@ -7,9 +7,6 @@
 // </auto-generated>
 // ------------------------------------------------------------------------------;
 /* eslint-disable */
-// @ts-nocheck
-// @ts-ignore
-// @ts-expect-error
 import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, OnDestroy, Optional, Output, TemplateRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FormlyFieldConfig } from '@ngx-formly/core';
