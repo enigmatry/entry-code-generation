@@ -14,5 +14,5 @@ public class MaxLengthValidationRule : ValidationRule<int>
 
     public override string FormlyValidationMessage => HasCustomMessage
         ? CustomMessage
-        : "${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters";
+        : "${field?.props?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters";
 }
