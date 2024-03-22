@@ -164,8 +164,8 @@ pattern: /[A-Z]/,
         },
             validation: {
             messages: {
-required: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`,
-maxlength: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`
+required: (_err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`,
+maxlength: (_err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`
             }
             },
 asyncValidators: { validation: [ 'uniqueName', 'isEnsured' ] },
@@ -266,8 +266,8 @@ max: 100,
         },
             validation: {
             messages: {
-min: (err, field) => $localize `:@@test.mock-edit.amount.min:CUSTOM_VALIDATION_MESSAGE`,
-max: (err, field) => $localize `:@@test.mock-edit.amount.max:CUSTOM_VALIDATION_MESSAGE`
+min: (_err, field) => $localize `:@@test.mock-edit.amount.min:CUSTOM_VALIDATION_MESSAGE`,
+max: (_err, field) => $localize `:@@test.mock-edit.amount.max:CUSTOM_VALIDATION_MESSAGE`
             }
             },
         },
@@ -659,7 +659,7 @@ maxLength: 50,
         },
             validation: {
             messages: {
-pattern: (err, field) => $localize `:@@test.mock-edit.email1.pattern:CUSTOM_VALIDATION_MESSAGE`
+pattern: (_err, field) => $localize `:@@test.mock-edit.email1.pattern:CUSTOM_VALIDATION_MESSAGE`
             }
             },
         },
@@ -688,7 +688,7 @@ maxLength: 50,
         },
             validation: {
             messages: {
-pattern: (err, field) => $localize `:@@validators.pattern.emailAddress:Invalid email address format`
+pattern: (_err, field) => $localize `:@@validators.pattern.emailAddress:Invalid email address format`
             }
             },
         },

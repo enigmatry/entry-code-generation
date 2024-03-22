@@ -17,5 +17,5 @@ public class IsRequiredValidationRule : ValidationRule<bool>
 
     public override string FormlyValidationMessage => HasCustomMessage
         ? CustomMessage
-        : "${field?.templateOptions?.label}:property-name: is required";
+        : "${field?.props?.label}:property-name: is required";
 }
