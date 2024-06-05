@@ -165,7 +165,7 @@ pattern: /[A-Z]/,
             validation: {
             messages: {
 required: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`,
-maxlength: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`
+maxLength: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`
             }
             },
 asyncValidators: { validation: [ 'uniqueName', 'isEnsured' ] },
@@ -233,9 +233,6 @@ className: `entry-money-field entry-input`,
         description: ``,
             attributes: {  },
             hidden: !true,
-            type: 'number',
-max: 999.99 - 0.1,
-
             typeFormatDef: { name: 'number' }
         },
         },
@@ -255,10 +252,10 @@ className: `entry-amount-field entry-input`,
         label: $localize `:@@test.mock-edit.amount.label:Amount`,
         placeholder: $localize `:@@test.mock-edit.amount.placeholder:Amount`,
         description: $localize `:@@test.mock-edit.amount.hint:Don't panic if it is 0`,
+            type: 'number',
             attributes: {  },
             hidden: !true,
             required: true,
-type: 'number',
 min: 0 + 1,
 max: 100,
 
@@ -700,4 +697,3 @@ pattern: (err, field) => $localize `:@@validators.pattern.emailAddress:Invalid e
   }
 
 }
-

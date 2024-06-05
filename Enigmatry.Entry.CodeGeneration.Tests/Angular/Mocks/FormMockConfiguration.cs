@@ -64,7 +64,7 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
             .WithPlaceholder("Money");
 
         formGroup
-            .FormControl(x => x.Amount)
+            .NumberFormControl(x => x.Amount)
             .WithLabel("Amount")
             .WithPlaceholder("Amount")
             .WithHint("Don't panic if it is 0");
