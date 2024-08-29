@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Enigmatry.Entry.CodeGeneration.Configuration;
+using Enigmatry.Entry.CodeGeneration.Rendering;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Enigmatry.Entry.CodeGeneration.Configuration;
-using Enigmatry.Entry.CodeGeneration.Rendering;
-using Microsoft.Extensions.Logging;
 
 namespace Enigmatry.Entry.CodeGeneration;
 
@@ -13,7 +13,7 @@ public class CodeGenerator
     private readonly IModuleGenerator _moduleGenerator;
     private readonly CodeGeneratorOptions _options;
     private readonly ILogger<CodeGenerator> _logger;
-    private IList<IComponentModel> _components = new List<IComponentModel>();
+    private IList<IComponentModel> _components = [];
 
     public CodeGenerator(
         IModuleGenerator moduleGenerator,
@@ -41,6 +41,7 @@ public class CodeGenerator
         _logger.LogInformation("Generating {Framework} components", _options.Framework);
         _logger.LogInformation("Output dir {Directory}", _options.OutputDirectory);
         _logger.LogInformation("I18N: {I18nEnabled}", _options.EnableI18N ? "enabled" : "disabled");
+        _logger.LogInformation("Standalone components: {WithStandaloneComponents}", _options.WithStandaloneComponents ? "supported" : "unsupported");
         _logger.LogInformation("Generated components prefix: {Prefix}", _options.GeneratedComponentPrefix);
         if (_options.ValidatorsPath.HasContent())
         {
@@ -77,12 +78,19 @@ public class CodeGenerator
 
         LogComponentsCount();
 
-        foreach (var feature in _components.GroupByFeature())
+        foreach (IFeatureModule feature in _components.GroupByFeature())
         {
             await _moduleGenerator.GenerateAsync(_options.OutputDirectory, feature);
         }
     }
 
-    private void LogComponentsCount() => _logger.LogInformation("Found {Number} component(s)", _components.Count);
-    private void LogEnd() => _logger.LogInformation("End" + Environment.NewLine);
+    private void LogComponentsCount()
+    {
+        _logger.LogInformation("Found {Number} component(s)", _components.Count);
+    }
+
+    private void LogEnd()
+    {
+        _logger.LogInformation("End" + Environment.NewLine);
+    }
 }
