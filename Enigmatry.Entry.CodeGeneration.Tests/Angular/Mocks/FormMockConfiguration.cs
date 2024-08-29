@@ -48,7 +48,7 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
 
         formGroup
             .RichTextInputFormControl(x => x.Description)
-            .WithEditor(RichTextEditor.Ckeditor)
+            .WithEditor(RichTextEditor.Redactor)
             .WithLabel("Some Description");
 
         formGroup
