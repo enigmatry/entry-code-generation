@@ -8,6 +8,10 @@
 import { NgModule } from '@@angular/core';
 import { CommonModule } from '@@angular/common';
 import { SharedModule } from 'src/app/shared/shared.module';
+@if (_options.WithStandaloneComponents)
+{
+    @:import { StandaloneModule } from 'src/app/shared/standalone.module';
+}
 import { EntryTableModule } from '@@enigmatry/entry-components/table';
 @if (Model.HasFormComponents)
 {
