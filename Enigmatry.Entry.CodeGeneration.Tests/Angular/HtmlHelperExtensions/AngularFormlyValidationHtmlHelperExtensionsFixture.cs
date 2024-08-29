@@ -31,14 +31,13 @@ public class AngularFormlyValidationHtmlHelperExtensionsFixture : CodeGeneration
     }
 
     [TestCase(nameof(FormMock.Name), ExpectedResult = "required: true,maxLength: 50,pattern: /[A-Z]/,")]
-    [TestCase(nameof(FormMock.Money), ExpectedResult = "type: 'number',max: 999.99 - 0.1,")]
-    [TestCase(nameof(FormMock.Amount), ExpectedResult = "required: true,type: 'number',min: 0 + 1,max: 100,")]
+    [TestCase(nameof(FormMock.Amount), ExpectedResult = "required: true,min: 0 + 1,max: 100,")]
     [TestCase(nameof(FormMock.Email1), ExpectedResult = "pattern: /^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$/,maxLength: 50,")]
     [TestCase(nameof(FormMock.Email2), ExpectedResult = "pattern: /^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$/,maxLength: 50,")]
     public string AddValidationTemplateOptions(string propertyName)
     {
         var formControl = _formComponent.FormControlsOfType<FormControl>().Single(x => x.PropertyName == propertyName.Camelize());
-        return _htmlHelper.AddValidationTemplateOptions(formControl)?.ToString()?.Replace("\r\n", "") ?? "";
+        return _htmlHelper.AddValidationTemplateOptions(formControl).ToString()?.Replace("\r\n", "") ?? "";
     }
 
     [TestCase(nameof(FormMock.Name), ExpectedResult = "modelOptions: { updateOn: 'blur' },")]
@@ -48,7 +47,7 @@ public class AngularFormlyValidationHtmlHelperExtensionsFixture : CodeGeneration
     public string AddModelOptions(string propertyName)
     {
         var formControl = _formComponent.FormControlsOfType<FormControl>().Single(x => x.PropertyName == propertyName.Camelize());
-        return _htmlHelper.AddModelOptions(formControl)?.ToString()?.Replace("\r\n", "") ?? "";
+        return _htmlHelper.AddModelOptions(formControl).ToString()?.Replace("\r\n", "") ?? "";
     }
 
     [TestCase(nameof(FormMock.Name), ExpectedResult = "asyncValidators: { validation: [ 'nameValidator' ] },")]
@@ -59,7 +58,7 @@ public class AngularFormlyValidationHtmlHelperExtensionsFixture : CodeGeneration
     public string AddAsyncValidators(string propertyName)
     {
         var formControl = _formComponent.FormControlsOfType<FormControl>().Single(x => x.PropertyName == propertyName.Camelize());
-        return _htmlHelper.AddAsyncValidators(formControl)?.ToString()?.Replace("\r\n", "") ?? "";
+        return _htmlHelper.AddAsyncValidators(formControl).ToString()?.Replace("\r\n", "") ?? "";
     }
 
     [TestCase(nameof(FormMock.Name), ExpectedResult =
@@ -73,22 +72,21 @@ public class AngularFormlyValidationHtmlHelperExtensionsFixture : CodeGeneration
     public string AddCustomValidationMessages(string propertyName)
     {
         var formControl = _formComponent.FormControlsOfType<FormControl>().Single(x => x.PropertyName == propertyName.Camelize());
-        return _htmlHelper.AddCustomValidationMessages(formControl, true)?.ToString()?.Replace("\r\n", "") ?? "";
+        return _htmlHelper.AddCustomValidationMessages(formControl, true).ToString()?.Replace("\r\n", "") ?? "";
     }
 
     [TestCase(ExpectedResult =
         "{ name: 'maxLength', message: (err, field) => $localize `:@@validators.maxLength:${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters` }," +
         "{ name: 'pattern', message: (err, field) => $localize `:@@validators.pattern:${field?.templateOptions?.label}:property-name: is not in valid format` }," +
-        "{ name: 'max', message: (err, field) => $localize `:@@validators.max:${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:` }," +
         "{ name: 'required', message: (err, field) => $localize `:@@validators.required:${field?.templateOptions?.label}:property-name: is required` }")]
     public string AddCommonValidationMessages() =>
-        _htmlHelper.AddCommonValidationMessages(_featureModule, true)?.ToString()?.Replace("\r\n", "") ?? "";
+        _htmlHelper.AddCommonValidationMessages(_featureModule, true).ToString()?.Replace("\r\n", "") ?? "";
 
     [TestCase("src/app/custom-path", ExpectedResult = "import { CustomValidatorsService, customValidatorsFactory } from 'src/app/custom-path';")]
     public string ImportValidators(string path) =>
-        _htmlHelper.ImportValidators(_featureModule, path)?.ToString()?.Replace("\r\n", "") ?? "";
+        _htmlHelper.ImportValidators(_featureModule, path).ToString()?.Replace("\r\n", "") ?? "";
 
     [TestCase(ExpectedResult = "CustomValidatorsService,{ provide: FORMLY_CONFIG, multi: true, useFactory: customValidatorsFactory, deps: [ CustomValidatorsService ] }")]
     public string AddFromValidationProvider() =>
-        _htmlHelper.AddFromValidationProvider(_featureModule)?.ToString()?.Replace("\r\n", "") ?? "";
+        _htmlHelper.AddFromValidationProvider(_featureModule).ToString()?.Replace("\r\n", "") ?? "";
 }

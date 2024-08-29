@@ -166,9 +166,9 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
 
         _validationConfiguration.ValidationRules.Should().HaveCount(3);
 
-        AssertNumbercMinValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.IntField)), MinIntField, false);
-        AssertNumbercMinValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.DoubleField)), MinDoubleField, false);
-        AssertNumbercMinValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.ByteField)), MinByteField, false);
+        AssertNumericMinValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.IntField)), MinIntField, false);
+        AssertNumericMinValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.DoubleField)), MinDoubleField, false);
+        AssertNumericMinValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.ByteField)), MinByteField, false);
     }
 
     [Test]
@@ -186,9 +186,9 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
 
         _validationConfiguration.ValidationRules.Should().HaveCount(3);
 
-        AssertNumbercMinValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.IntField)), MinIntField, true);
-        AssertNumbercMinValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.DoubleField)), MinDoubleField, true);
-        AssertNumbercMinValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.ByteField)), MinByteField, true);
+        AssertNumericMinValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.IntField)), MinIntField, true);
+        AssertNumericMinValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.DoubleField)), MinDoubleField, true);
+        AssertNumericMinValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.ByteField)), MinByteField, true);
     }
 
     [Test]
@@ -206,9 +206,9 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
 
         _validationConfiguration.ValidationRules.Should().HaveCount(3);
 
-        AssertNumbercMaxValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.IntField)), MaxIntField, false);
-        AssertNumbercMaxValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.DoubleField)), MaxDoubleField, false);
-        AssertNumbercMaxValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.ByteField)), MaxByteField, false);
+        AssertNumericMaxValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.IntField)), MaxIntField, false);
+        AssertNumericMaxValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.DoubleField)), MaxDoubleField, false);
+        AssertNumericMaxValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.ByteField)), MaxByteField, false);
     }
 
     [Test]
@@ -226,9 +226,9 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
 
         _validationConfiguration.ValidationRules.Should().HaveCount(3);
 
-        AssertNumbercMaxValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.IntField)), MaxIntField, true);
-        AssertNumbercMaxValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.DoubleField)), MaxDoubleField, true);
-        AssertNumbercMaxValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.ByteField)), MaxByteField, true);
+        AssertNumericMaxValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.IntField)), MaxIntField, true);
+        AssertNumericMaxValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.DoubleField)), MaxDoubleField, true);
+        AssertNumericMaxValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.ByteField)), MaxByteField, true);
     }
 
     [Test]
@@ -240,8 +240,8 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
 
         _validationConfiguration.ValidationRules.Should().HaveCount(2);
 
-        AssertNumbercMinValidationRule(GetRuleByFormlyRuleName("min"), MinIntField, true);
-        AssertNumbercMaxValidationRule(GetRuleByFormlyRuleName("max"), MinIntField, true);
+        AssertNumericMinValidationRule(GetRuleByFormlyRuleName("min"), MinIntField, true);
+        AssertNumericMaxValidationRule(GetRuleByFormlyRuleName("max"), MinIntField, true);
     }
 
     [Test]
@@ -253,8 +253,8 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
 
         _validationConfiguration.ValidationRules.Should().HaveCount(2);
 
-        AssertNumbercMinValidationRule(GetRuleByFormlyRuleName("min"), MinDoubleField, true);
-        AssertNumbercMaxValidationRule(GetRuleByFormlyRuleName("max"), MinDoubleField, true);
+        AssertNumericMinValidationRule(GetRuleByFormlyRuleName("min"), MinDoubleField, true);
+        AssertNumericMaxValidationRule(GetRuleByFormlyRuleName("max"), MinDoubleField, true);
     }
 
     [TestCase("MESSAGE", "")]
@@ -286,7 +286,7 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
             .WithMessage($"{nameof(ValidationMockModel.IntField)} validation message cannot be empty.");
     }
 
-    private static void AssertNumbercMinValidationRule<T>(IFormlyValidationRule rule, T value, bool isEqual)
+    private static void AssertNumericMinValidationRule<T>(IFormlyValidationRule rule, T value, bool isEqual)
     {
         rule.FormlyRuleName
             .Should().Be("min");
@@ -295,12 +295,12 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
         rule.MessageTranslationId
             .Should().Be("validators.min");
         rule.FormlyTemplateOptions
-            .Should().BeEquivalentTo("type: 'number'", $"min: {String.Format(CultureInfo.InvariantCulture, "{0}", value)}{(isEqual ? "" : $" + {GetIncrement<T>()}")}");
+            .Should().BeEquivalentTo($"min: {String.Format(CultureInfo.InvariantCulture, "{0}", value)}{(isEqual ? "" : $" + {GetIncrement<T>()}")}");
         rule.FormlyValidationMessage
             .Should().Be("${field?.templateOptions?.label}:property-name: value should be more than ${field?.templateOptions?.min}:min-value:");
     }
 
-    private static void AssertNumbercMaxValidationRule<T>(IFormlyValidationRule rule, T value, bool isEqual)
+    private static void AssertNumericMaxValidationRule<T>(IFormlyValidationRule rule, T value, bool isEqual)
     {
         rule.FormlyRuleName
             .Should().Be("max");
@@ -309,7 +309,7 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
         rule.MessageTranslationId
             .Should().Be("validators.max");
         rule.FormlyTemplateOptions
-            .Should().BeEquivalentTo("type: 'number'", $"max: {String.Format(CultureInfo.InvariantCulture, "{0}", value)}{(isEqual ? "" : $" - {GetIncrement<T>()}")}");
+            .Should().BeEquivalentTo($"max: {String.Format(CultureInfo.InvariantCulture, "{0}", value)}{(isEqual ? "" : $" - {GetIncrement<T>()}")}");
         rule.FormlyValidationMessage
             .Should().Be("${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:");
     }

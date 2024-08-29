@@ -64,6 +64,11 @@ public class FormControlGroupBuilder<T> : BaseControlBuilder<FormControlGroup, F
         return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new PasswordFormControlBuilder(propertyInfo));
     }
 
+    public NumberFormControlBuilder NumberFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+    {
+        return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new NumberFormControlBuilder(propertyInfo));
+    }
+
     public CheckboxFormControlBuilder CheckboxFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
     {
         return GetOrCreateBuilder(propertyExpression.GetPropertyInfo(), propertyInfo => new CheckboxFormControlBuilder(propertyInfo));

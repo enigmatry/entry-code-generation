@@ -69,6 +69,11 @@ public class FormComponentBuilder<T> : BaseComponentBuilder<FormComponentModel>
         return _formGroup.PasswordFormControl(propertyExpression);
     }
 
+    public NumberFormControlBuilder NumberFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+    {
+        return _formGroup.NumberFormControl(propertyExpression);
+    }
+
     public CheckboxFormControlBuilder CheckboxFormControl<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
     {
         return _formGroup.CheckboxFormControl(propertyExpression);

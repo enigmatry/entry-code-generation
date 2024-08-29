@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 
-public class LessOrEqualToValidationRule<T> : NumbericValidationRule<T>
+public class LessOrEqualToValidationRule<T> : NumericValidationRule<T>
     where T : struct, IComparable, IComparable<T>, IConvertible, IEquatable<T>, IFormattable
 {
     public LessOrEqualToValidationRule(T value, PropertyInfo propertyInfo, LambdaExpression expression)
@@ -14,11 +14,9 @@ public class LessOrEqualToValidationRule<T> : NumbericValidationRule<T>
     public override string FormlyRuleName => "max";
 
     public override string[] FormlyTemplateOptions =>
-        new[]
-        {
-            "type: 'number'",
-            $"{FormlyRuleName}: {RuleAsString}"
-        };
+    [
+        $"{FormlyRuleName}: {RuleAsString}"
+    ];
 
     public override string FormlyValidationMessage => HasCustomMessage
         ? CustomMessage
