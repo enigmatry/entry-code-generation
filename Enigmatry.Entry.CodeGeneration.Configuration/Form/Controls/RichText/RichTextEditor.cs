@@ -2,5 +2,6 @@
 
 public enum RichTextEditor
 {
-    Ckeditor = 0
+    Ckeditor = 0,
+    Redactor
 }

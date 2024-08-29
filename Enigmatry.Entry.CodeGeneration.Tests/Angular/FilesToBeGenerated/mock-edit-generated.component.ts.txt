@@ -173,9 +173,9 @@ modelOptions: { updateOn: 'blur' },
         },
         {
         key: 'description',
-        type: this.resolveFieldType('ckeditor', false),
+        type: this.resolveFieldType('redactor', false),
         focus: false,
-className: `entry-description-field entry-ckeditor`,
+className: `entry-description-field entry-redactor`,
         hideExpression: this.fieldsHideExpressions?.description ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.description ? this.fieldsDisableExpressions.description(model) : false)),

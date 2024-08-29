@@ -5,7 +5,6 @@ using Enigmatry.Entry.CodeGeneration.Tests.Angular.Mocks;
 using FluentAssertions;
 using Humanizer;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using System;
 using System.Linq;
 
@@ -26,7 +25,7 @@ internal class AngularFormlyHtmlHelperExtensionsFixture : CodeGenerationFixtureB
     }
 
     [TestCase(nameof(FormMock.Name), ExpectedResult = "className: `entry-name-field entry-input`,\r\n")]
-    [TestCase(nameof(FormMock.Description), ExpectedResult = "className: `entry-description-field entry-ckeditor`,\r\n")]
+    [TestCase(nameof(FormMock.Description), ExpectedResult = "className: `entry-description-field entry-redactor`,\r\n")]
     [TestCase(nameof(FormMock.Date), ExpectedResult = "className: `entry-date-field entry-datepicker`,\r\n")]
     [TestCase(nameof(FormMock.CategoryId), ExpectedResult = "className: `entry-category-id-field entry-select`,\r\n")]
     [TestCase(nameof(FormMock.Money), ExpectedResult = "className: `entry-money-field entry-input`,\r\n")]
@@ -40,7 +39,7 @@ internal class AngularFormlyHtmlHelperExtensionsFixture : CodeGenerationFixtureB
         var formControl = _formComponent
             .FormControlsOfType<FormControl>()
             .Single(x => x.PropertyName == propertyName.Camelize());
-        return _htmlHelper.FieldCssClass(formControl)?.ToString() ?? "";
+        return _htmlHelper.FieldCssClass(formControl).ToString() ?? "";
     }
 
     [TestCase(ExpectedResult = "fieldGroupClassName: `entry-field-group ${this.applyOptionally('group-wrapper-readonly', this.isReadonly)}`,\r\n")]
@@ -49,7 +48,7 @@ internal class AngularFormlyHtmlHelperExtensionsFixture : CodeGenerationFixtureB
         var formControlGroup = _formComponent
             .FormControlsOfType<FormControlGroup>()
             .First();
-        return _htmlHelper.GroupCssClass(formControlGroup)?.ToString() ?? "";
+        return _htmlHelper.GroupCssClass(formControlGroup).ToString() ?? "";
     }
 
     [Test]
