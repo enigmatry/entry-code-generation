@@ -46,6 +46,10 @@ import { EntryTableModule } from '@@enigmatry/entry-components/table';
         @:FormlyMaterialModule,
         @:FormlyMatDatepickerModule,
     }
+    @if (_options.WithStandaloneComponents)
+    {
+        @:StandaloneModule,
+    }
     @if (Model.HasModuleImports)
     {
         @String.Join(',', Model.Imports.Select(m => m.Name))
