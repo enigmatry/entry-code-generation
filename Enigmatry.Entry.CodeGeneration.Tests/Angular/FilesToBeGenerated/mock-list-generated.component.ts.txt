@@ -47,6 +47,7 @@ export class MockListGeneratedComponent implements OnInit {
 ];
   @Input() rowContextMenuFormatter: RowContextMenuFormatter;
   
+  @Input() rowFocusVisible: boolean;
   @Input() rowClassFormatter: RowClassFormatter;
   @Input() rowSelectionFormatter: RowSelectionFormatter = {};
 
