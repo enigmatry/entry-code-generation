@@ -14,9 +14,6 @@ public class FormMockValidationConfiguration : ValidationConfiguration<FormMock>
             .WithMessage(Constants.CustomValidationMessage, Constants.CustomValidationMessageTranslationId)
             .Match(new Regex("/[A-Z]/"));
 
-        RuleFor(x => x.Money)
-            .LessThen(999.99M);
-
         RuleFor(x => x.Amount)
             .IsRequired()
             .GreaterThen(0)

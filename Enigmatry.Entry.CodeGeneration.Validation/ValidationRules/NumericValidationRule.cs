@@ -6,10 +6,10 @@ using Enigmatry.Entry.CodeGeneration.Validation.Helpers;
 
 namespace Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 
-public abstract class NumbericValidationRule<T> : ValidationRule<T>
+public abstract class NumericValidationRule<T> : ValidationRule<T>
     where T : struct, IComparable, IComparable<T>, IConvertible, IEquatable<T>, IFormattable
 {
-    protected NumbericValidationRule(T rule, PropertyInfo propertyInfo, LambdaExpression expression, string message, string messageTranslationId)
+    protected NumericValidationRule(T rule, PropertyInfo propertyInfo, LambdaExpression expression, string message, string messageTranslationId)
         : base(rule, propertyInfo, expression, message, messageTranslationId)
     { }
 
