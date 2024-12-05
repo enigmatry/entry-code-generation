@@ -30,7 +30,7 @@ public class DatePropertyFormatter : BasePropertyFormatter
     {
         typeof(DateTime), 
         typeof(DateTimeOffset),
-#if NET6_0_OR_GREATER
+#if NET8_0_OR_GREATER
         typeof(DateOnly)
 #endif
     };

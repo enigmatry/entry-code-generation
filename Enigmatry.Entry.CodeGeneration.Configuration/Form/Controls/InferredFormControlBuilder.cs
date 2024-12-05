@@ -17,7 +17,7 @@ public class InferredFormControlBuilder : BaseControlBuilder<FormControl, Inferr
         {
             case { } when propertyType == typeof(DateTime):
             case { } when propertyType == typeof(DateTimeOffset):
-#if NET6_0_OR_GREATER
+#if NET8_0_OR_GREATER
             case { } when propertyType == typeof(DateOnly):
 #endif
                 return Build(componentInfo, new DatepickerFormControl());
