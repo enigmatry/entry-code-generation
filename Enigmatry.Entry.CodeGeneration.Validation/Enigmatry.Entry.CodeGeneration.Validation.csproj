@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <PackageId>Enigmatry.Entry.CodeGeneration.Validation</PackageId>
     <Product>Enigmatry.Entry.CodeGeneration.Validation</Product>
     <Description>Validation configurations to be used in form generator</Description>
