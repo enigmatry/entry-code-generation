@@ -2,7 +2,7 @@
   "profiles": {
     "Enigmatry.Entry.CodeGeneration.Tools": {
       "commandName": "Project",
-      "commandLineArgs": "Enigmatry.Entry.CodeGeneration.Tools --source-assembly C:\\Users\\msl\\source\\github\\enigmatry\\entry-blueprint\\Enigmatry.Entry.Blueprint.CodeGeneration.Setup\\bin\\Debug\\net8.0\\Enigmatry.Entry.Blueprint.CodeGeneration.Setup.dll --destination-directory C:\\Users\\msl\\source\\github\\enigmatry\\entry-blueprint\\enigmatry-entry-blueprint-app\\src\\app\\features --enable-i18n true"
+      "commandLineArgs": "Enigmatry.Entry.CodeGeneration.Tools --source-assembly ..\\..\\..\\..\\..\\entry-blueprint\\Enigmatry.Entry.Blueprint.CodeGeneration.Setup\\bin\\Debug\\net8.0\\Enigmatry.Entry.Blueprint.CodeGeneration.Setup.dll --destination-directory ..\\..\\..\\..\\..\\entry-blueprint\\enigmatry-entry-blueprint-app\\src\\app\\features --enable-i18n true"
     }
   }
 }
