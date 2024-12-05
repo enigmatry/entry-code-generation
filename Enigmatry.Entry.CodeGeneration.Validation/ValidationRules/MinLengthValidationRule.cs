@@ -14,5 +14,5 @@ public class MinLengthValidationRule : ValidationRule<int>
 
     public override string FormlyValidationMessage => HasCustomMessage
         ? CustomMessage
-        : "${field?.templateOptions?.label}:property-name: should have at least ${field?.templateOptions?.minLength}:min-value: characters";
+        : "${field?.props?.label}:property-name: should have at least ${field?.templateOptions?.minLength}:min-value: characters";
 }
