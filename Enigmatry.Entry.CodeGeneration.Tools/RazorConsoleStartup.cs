@@ -28,7 +28,7 @@ public class RazorConsoleStartup
             .AddRazorRuntimeCompilation(options =>
             {
                 options.FileProviders.Clear();
-                options.FileProviders.Add(new PhysicalFileProvider(Path.GetDirectoryName(AppContext.BaseDirectory)));
+                options.FileProviders.Add(new PhysicalFileProvider(Path.GetDirectoryName(AppContext.BaseDirectory)!));
             });
 
         services.AddSingleton<RazorTemplatingEngine>();

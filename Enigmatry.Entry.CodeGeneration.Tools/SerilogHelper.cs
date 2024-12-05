@@ -12,7 +12,7 @@ public static class SerilogHelper
     public static void ConfigureSerilog()
     {
         var configuration = new ConfigurationBuilder()
-            .SetBasePath(Path.GetDirectoryName(AppContext.BaseDirectory))
+            .SetBasePath(Path.GetDirectoryName(AppContext.BaseDirectory)!)
             .AddJsonFile("appsettings.json", false, true)
             .Build();
 

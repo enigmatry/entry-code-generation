@@ -8,7 +8,7 @@ internal class IntroMessage : IntroContent
     private const string ContnetSufix = "...";
 
     public IntroMessageType Type { get; private set; } = IntroMessageType.Regular;
-    public Func<bool> Condition { get; private set; } = null;
+    public Func<bool>? Condition { get; private set; }
     public bool SatisfiesCondition => Condition == null || Condition.Invoke();
 
     public IntroMessage(string content)
