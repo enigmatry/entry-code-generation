@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Enigmatry.Entry.CodeGeneration.Configuration.Form;
+﻿using Enigmatry.Entry.CodeGeneration.Configuration.Form;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration;

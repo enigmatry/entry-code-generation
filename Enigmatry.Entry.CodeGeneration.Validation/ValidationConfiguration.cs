@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using Enigmatry.Entry.CodeGeneration.Validation.PropertyValidations;
 using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 
@@ -27,10 +24,6 @@ public abstract class ValidationConfiguration<T> : IHasFormlyValidationRules whe
         if (existing == null)
         {
             PropertyValidations.Add(propertyValidator);
-        }
-        else
-        {
-            existing = propertyValidator;
         }
     }
 }

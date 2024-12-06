@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
+﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
 
 /// <summary>
 /// The CurrencyPropertyFormatter formats numeric values as currency values in a table column.

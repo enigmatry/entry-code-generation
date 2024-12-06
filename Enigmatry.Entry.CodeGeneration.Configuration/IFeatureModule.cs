@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Enigmatry.Entry.CodeGeneration.Configuration;
+﻿namespace Enigmatry.Entry.CodeGeneration.Configuration;
 
 public interface IFeatureModule
 {

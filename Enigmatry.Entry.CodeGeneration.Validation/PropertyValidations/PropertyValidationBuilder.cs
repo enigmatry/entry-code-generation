@@ -1,5 +1,4 @@
-﻿using System;
-using Enigmatry.Entry.CodeGeneration.Validation.Helpers;
+﻿using Enigmatry.Entry.CodeGeneration.Validation.Helpers;
 using Humanizer;
 
 namespace Enigmatry.Entry.CodeGeneration.Validation.PropertyValidations;

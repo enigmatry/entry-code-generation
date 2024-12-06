@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Enigmatry.Entry.CodeGeneration.Validation.Helpers;
 using Enigmatry.Entry.CodeGeneration.Validation.PropertyValidations;
 using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;

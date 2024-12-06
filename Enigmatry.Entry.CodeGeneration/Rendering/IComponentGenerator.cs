@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Enigmatry.Entry.CodeGeneration.Configuration;
+﻿using Enigmatry.Entry.CodeGeneration.Configuration;
 
 namespace Enigmatry.Entry.CodeGeneration.Rendering;
 

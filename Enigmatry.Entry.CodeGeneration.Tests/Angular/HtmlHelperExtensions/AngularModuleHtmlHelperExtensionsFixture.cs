@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Text.Encodings.Web;
+﻿using System.Text.Encodings.Web;
 using Enigmatry.Entry.CodeGeneration.Angular;
 using Enigmatry.Entry.CodeGeneration.Configuration;
 using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions;

@@ -1,5 +1,4 @@
-﻿using System;
-using Humanizer;
+﻿using Humanizer;
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration;
 

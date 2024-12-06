@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Enigmatry.Entry.CodeGeneration.Tools.Intro;
+﻿namespace Enigmatry.Entry.CodeGeneration.Tools.Intro;
 
 internal abstract class IntroContent
 {

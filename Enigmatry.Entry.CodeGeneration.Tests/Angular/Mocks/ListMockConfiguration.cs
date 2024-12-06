@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
+﻿using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
 using Enigmatry.Entry.CodeGeneration.Configuration.List;
 
 namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.Mocks;

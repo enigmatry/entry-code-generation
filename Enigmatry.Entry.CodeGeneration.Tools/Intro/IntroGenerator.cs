@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Enigmatry.Entry.CodeGeneration.Tools.Intro;
+﻿namespace Enigmatry.Entry.CodeGeneration.Tools.Intro;
 
 internal class IntroGenerator
 {

@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using Enigmatry.Entry.TemplatingEngine;
+﻿using Enigmatry.Entry.TemplatingEngine;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

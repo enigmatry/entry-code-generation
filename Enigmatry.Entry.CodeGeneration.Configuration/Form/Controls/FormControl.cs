@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Validators;
+﻿using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Validators;
 using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
 using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 using Humanizer;

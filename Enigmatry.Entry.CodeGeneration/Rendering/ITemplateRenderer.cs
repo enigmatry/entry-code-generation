@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Enigmatry.Entry.CodeGeneration.Rendering;
+﻿namespace Enigmatry.Entry.CodeGeneration.Rendering;
 
 public interface ITemplateRenderer
 {

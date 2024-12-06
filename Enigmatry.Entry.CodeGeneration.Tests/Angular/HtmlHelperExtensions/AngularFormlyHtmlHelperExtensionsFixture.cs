@@ -5,8 +5,6 @@ using Enigmatry.Entry.CodeGeneration.Tests.Angular.Mocks;
 using FluentAssertions;
 using Humanizer;
 using NUnit.Framework;
-using System;
-using System.Linq;
 
 namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.HtmlHelperExtensions;
 

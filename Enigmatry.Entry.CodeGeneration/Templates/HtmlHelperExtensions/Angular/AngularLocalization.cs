@@ -1,5 +1,4 @@
-﻿using System;
-using Enigmatry.Entry.CodeGeneration.Configuration;
+﻿using Enigmatry.Entry.CodeGeneration.Configuration;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using Enigmatry.Entry.CodeGeneration.Configuration.Builder;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Validators;
 using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;

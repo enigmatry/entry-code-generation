@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Enigmatry.Entry.CodeGeneration.Tools.Intro;
+﻿namespace Enigmatry.Entry.CodeGeneration.Tools.Intro;
 
 internal static class IntroLogoLines
 {

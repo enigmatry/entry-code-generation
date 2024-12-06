@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.Mocks;
+﻿namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.Mocks;
 
 public class ListMock
 {

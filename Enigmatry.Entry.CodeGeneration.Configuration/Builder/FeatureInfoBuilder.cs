@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Enigmatry.Entry.CodeGeneration.Configuration.Builder;
+﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.Builder;
 
 public class FeatureInfoBuilder : IBuilder<FeatureInfo>
 {

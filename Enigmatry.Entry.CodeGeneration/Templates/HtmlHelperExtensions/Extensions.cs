@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions;
+﻿namespace Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions;
 
 public static class Extensions
 {
