@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.Mocks;
+﻿namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.Mocks;
 
 public class FormMock
 {

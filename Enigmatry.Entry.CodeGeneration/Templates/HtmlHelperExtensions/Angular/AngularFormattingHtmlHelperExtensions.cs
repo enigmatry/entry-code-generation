@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
 
 // ReSharper disable once CheckNamespace

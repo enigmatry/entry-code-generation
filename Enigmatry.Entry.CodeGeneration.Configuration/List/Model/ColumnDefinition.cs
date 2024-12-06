@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
+﻿using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration.List.Model;
 

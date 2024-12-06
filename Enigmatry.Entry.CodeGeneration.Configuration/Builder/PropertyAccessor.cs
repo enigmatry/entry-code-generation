@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Reflection;
 using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
 using Humanizer;
@@ -31,7 +30,7 @@ public class PropertyAccessor
         {
             case { } when propertyType == typeof(DateTime):
             case { } when propertyType == typeof(DateTimeOffset):
-#if NET6_0_OR_GREATER
+#if NET8_0_OR_GREATER
             case { } when propertyType == typeof(DateOnly):
 #endif
                 return new DatePropertyFormatter();

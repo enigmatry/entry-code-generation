@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <PackageId>Enigmatry.Entry.CodeGeneration.Validation</PackageId>
     <Product>Enigmatry.Entry.CodeGeneration.Validation</Product>
     <Description>Validation configurations to be used in form generator</Description>
@@ -11,7 +10,10 @@
 
     <ItemGroup>
     <PackageReference Include="Humanizer.Core" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

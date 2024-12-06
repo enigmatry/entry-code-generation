@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Array;
+﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Array;
 
 public class ArrayFormControl: FormControl
 {

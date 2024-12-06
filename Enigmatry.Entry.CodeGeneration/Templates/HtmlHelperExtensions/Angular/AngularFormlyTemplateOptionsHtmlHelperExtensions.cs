@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+﻿using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 

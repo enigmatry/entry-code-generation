@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Text.Encodings.Web;
+﻿using System.Text.Encodings.Web;
 using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript;
 using NUnit.Framework;
 

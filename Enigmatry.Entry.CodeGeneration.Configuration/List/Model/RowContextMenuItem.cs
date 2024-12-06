@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Enigmatry.Entry.CodeGeneration.Configuration.List.Model;
+﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.List.Model;
 
 /// <summary>
 /// The RowContextMenuItem class represents an individual context menu item for a row in a table component.

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Enigmatry.Entry.CodeGeneration.Configuration.List.Model;
+﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.List.Model;
 
 public class RowInfo
 {

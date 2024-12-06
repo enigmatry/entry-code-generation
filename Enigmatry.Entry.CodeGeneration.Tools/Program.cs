@@ -8,11 +8,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Enigmatry.Entry.CodeGeneration.Tools;
 

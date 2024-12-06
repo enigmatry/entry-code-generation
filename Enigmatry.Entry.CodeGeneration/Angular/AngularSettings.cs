@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Enigmatry.Entry.CodeGeneration.Angular;
+﻿namespace Enigmatry.Entry.CodeGeneration.Angular;
 
 public class AngularSettings
 {

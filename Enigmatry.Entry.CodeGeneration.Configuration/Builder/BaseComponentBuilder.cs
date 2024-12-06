@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Enigmatry.Entry.CodeGeneration.Configuration.Builder;
+﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.Builder;
 
 /// <summary>
 /// Base class for component builder classes.

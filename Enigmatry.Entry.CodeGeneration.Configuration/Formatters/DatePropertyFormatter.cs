@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
+﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
 
 /// <summary>
 /// The DatePropertyFormatter is an implementation of the <see cref="IPropertyFormatter"/> interface
@@ -30,7 +27,7 @@ public class DatePropertyFormatter : BasePropertyFormatter
     {
         typeof(DateTime), 
         typeof(DateTimeOffset),
-#if NET6_0_OR_GREATER
+#if NET8_0_OR_GREATER
         typeof(DateOnly)
 #endif
     };

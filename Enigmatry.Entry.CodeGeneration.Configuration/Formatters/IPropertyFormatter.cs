@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
+﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
 
 /// <summary>
 /// The IPropertyFormatter interface defines the methods and properties required for creating custom property formatters.

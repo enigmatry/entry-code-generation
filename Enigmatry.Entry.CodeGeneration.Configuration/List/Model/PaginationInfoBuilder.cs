@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Enigmatry.Entry.CodeGeneration.Configuration.List.Model;
+﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.List.Model;
 
 /// <summary>
 /// The PaginationInfoBuilder class provides a fluent API for configuring pagination settings for a table component.

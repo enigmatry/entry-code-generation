@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <Description>Console runner for generating frontend code</Description>
     <PackageId>Enigmatry.Entry.CodeGeneration.Tools</PackageId>
     <Product>Enigmatry.Entry.CodeGeneration.Tools</Product>
@@ -12,9 +12,8 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" />
-    <PackageReference Include="Enigmatry.Entry.TemplatingEngine" />
+    <PackageReference Include="Enigmatry.Entry.TemplatingEngine.Razor" />
     <PackageReference Include="JetBrains.Annotations" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" />
     <PackageReference Include="Microsoft.Extensions.Hosting" />
     <PackageReference Include="Serilog.Enrichers.Environment" />
     <PackageReference Include="Serilog.Enrichers.Thread" />
@@ -22,7 +21,6 @@
     <PackageReference Include="Serilog.Settings.Configuration" />
     <PackageReference Include="Serilog.Sinks.Async" />
     <PackageReference Include="Serilog.Sinks.Console" />
-    <PackageReference Include="Serilog.Sinks.File" />
     <PackageReference Include="System.CommandLine" />
   </ItemGroup>
 

@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Enigmatry.Entry.CodeGeneration.Rendering;
+﻿using Enigmatry.Entry.CodeGeneration.Rendering;
 using FluentAssertions;
 using NUnit.Framework;
 

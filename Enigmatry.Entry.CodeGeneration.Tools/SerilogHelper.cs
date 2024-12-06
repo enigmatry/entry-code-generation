@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -12,7 +10,7 @@ public static class SerilogHelper
     public static void ConfigureSerilog()
     {
         var configuration = new ConfigurationBuilder()
-            .SetBasePath(Path.GetDirectoryName(AppContext.BaseDirectory))
+            .SetBasePath(Path.GetDirectoryName(AppContext.BaseDirectory)!)
             .AddJsonFile("appsettings.json", false, true)
             .Build();
 

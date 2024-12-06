@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
-        <Nullable>enable</Nullable>
+        <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
         <PackageId>Enigmatry.Entry.CodeGeneration.Configuration</PackageId>
         <Product>Enigmatry.Entry.CodeGeneration.Configuration</Product>
         <Description>Package for generating frontend code</Description>
@@ -12,7 +11,10 @@
     <ItemGroup>
         <PackageReference Include="Humanizer.Core" />
         <PackageReference Include="JetBrains.Annotations" />
-        <PackageReference Include="Microsoft.SourceLink.GitHub" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>

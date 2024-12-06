@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 
 public class OptionallyAppliedValue<T>
 {

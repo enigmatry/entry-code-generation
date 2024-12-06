@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Enigmatry.Entry.CodeGeneration.Angular;
 using Enigmatry.Entry.CodeGeneration.Rendering;
 using Enigmatry.Entry.TemplatingEngine;

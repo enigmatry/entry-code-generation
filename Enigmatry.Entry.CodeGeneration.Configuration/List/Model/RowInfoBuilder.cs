@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Humanizer;
+﻿using Humanizer;
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration.List.Model;
 

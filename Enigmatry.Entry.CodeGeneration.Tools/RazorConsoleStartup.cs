@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using Enigmatry.Entry.TemplatingEngine;
+﻿using Enigmatry.Entry.TemplatingEngine;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,7 +26,7 @@ public class RazorConsoleStartup
             .AddRazorRuntimeCompilation(options =>
             {
                 options.FileProviders.Clear();
-                options.FileProviders.Add(new PhysicalFileProvider(Path.GetDirectoryName(AppContext.BaseDirectory)));
+                options.FileProviders.Add(new PhysicalFileProvider(Path.GetDirectoryName(AppContext.BaseDirectory)!));
             });
 
         services.AddSingleton<RazorTemplatingEngine>();

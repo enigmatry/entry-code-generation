@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
+﻿using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 
 namespace Enigmatry.Entry.CodeGeneration.Validation;
 
