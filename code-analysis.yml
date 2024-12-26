@@ -24,6 +24,7 @@ jobs:
     projectName: 'Enigmatry - Entry Code Generation'
     sonarProjectKey: 'AspNetCoreAngular_EnigmatryBlueprintCodeGeneration'
     displayName: 'Code Analysis'
+    dotNetVersion: 9.0.101
 
 - template: build-report-job.yml@templates
   parameters:
