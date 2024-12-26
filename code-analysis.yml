@@ -19,13 +19,6 @@ resources:
       name: Enigmatry - Azure Pipelines Templates/enigmatry-azure-pipelines-templates
 
 jobs:
-- job: set_dotnet_version
-  displayName: Set .Net version
-  steps: 
-  - task: UseDotNet@2
-    displayName: Set .Net version
-    inputs:
-      version: 9.0.101
 - template: code-analysis.yml@templates
   parameters:
     projectName: 'Enigmatry - Entry Code Generation'
