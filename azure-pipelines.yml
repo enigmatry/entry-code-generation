@@ -58,6 +58,10 @@ stages:
     displayName: Build Package
     dependsOn: build_prerequisites
     steps:
+    - task: UseDotNet@2
+      displayName: Set .Net version
+      inputs:
+        version: 9.0.101
     - task: NuGetToolInstaller@1
       displayName: Install NuGet Tool
     - task: Cache@2
