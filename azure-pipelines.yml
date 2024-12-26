@@ -21,10 +21,13 @@ stages:
 - stage: 'ci_build'
   displayName: 'Build the pacakges'
   jobs: 
-  - job: UseDotNet@2
-    displayName: 'Set .Net version'
-    inputs:
-      version: 9.0.101
+  - job: set_dotnet_version
+    displayName: Set .Net version
+    steps: 
+    - task: UseDotNet@2
+      displayName: Set .Net version
+      inputs:
+        version: 9.0.101
   - job: build_prerequisites
     displayName: Get the version for the build
     steps:
