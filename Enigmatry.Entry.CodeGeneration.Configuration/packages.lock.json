@@ -55,7 +55,7 @@
         }
       }
     },
-    "net8.0": {
+    "net9.0": {
       "Humanizer.Core": {
         "type": "Direct",
         "requested": "[2.14.1, )",
