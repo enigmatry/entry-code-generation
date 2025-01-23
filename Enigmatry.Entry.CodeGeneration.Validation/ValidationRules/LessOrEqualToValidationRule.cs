@@ -21,5 +21,5 @@ public class LessOrEqualToValidationRule<T> : NumbericValidationRule<T>
 
     public override string FormlyValidationMessage => HasCustomMessage
         ? CustomMessage
-        : "${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:";
+        : "${field?.props?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:";
 }

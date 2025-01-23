@@ -31,10 +31,10 @@ import { CustomValidatorsService, customValidatorsFactory } from 'src/app/shared
         FormlyModule.forChild(
             {
                 validationMessages: [
-{ name: 'maxlength', message: (err, field) => $localize `:@@validators.maxLength:${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters` },
-{ name: 'pattern', message: (err, field) => $localize `:@@validators.pattern:${field?.templateOptions?.label}:property-name: is not in valid format` },
-{ name: 'max', message: (err, field) => $localize `:@@validators.max:${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:` },
-{ name: 'required', message: (err, field) => $localize `:@@validators.required:${field?.templateOptions?.label}:property-name: is required` }
+{ name: 'maxlength', message: (_err, field) => $localize `:@@validators.maxLength:${field?.props?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters` },
+{ name: 'pattern', message: (_err, field) => $localize `:@@validators.pattern:${field?.props?.label}:property-name: is not in valid format` },
+{ name: 'max', message: (_err, field) => $localize `:@@validators.max:${field?.props?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:` },
+{ name: 'required', message: (_err, field) => $localize `:@@validators.required:${field?.props?.label}:property-name: is required` }
                 ]
             }
         ),

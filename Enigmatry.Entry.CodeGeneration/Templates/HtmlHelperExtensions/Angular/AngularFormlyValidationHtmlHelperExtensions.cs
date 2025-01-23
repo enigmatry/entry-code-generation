@@ -29,7 +29,7 @@ public static class AngularFormlyValidationHtmlHelperExtensions
             .ValidationRules
             .Where(rule => rule.HasCustomMessage)
             .Select(x => enableI18N
-                ? $"{x.FormlyRuleName}: (err, field) => {AngularLocalization.Localize(x.MessageTranslationId, x.FormlyValidationMessage)}"
+                ? $"{x.FormlyRuleName}: (_err, field) => {AngularLocalization.Localize(x.MessageTranslationId, x.FormlyValidationMessage)}"
                 : $"{x.FormlyRuleName}: '{x.FormlyValidationMessage}'"
             );
         return html.Raw($"{String.Join(",\r\n", validationMessages)}\r\n");
@@ -53,7 +53,7 @@ public static class AngularFormlyValidationHtmlHelperExtensions
                         : $"`{rule.FormlyValidationMessage}`";
                     messages.Add(
                         rule.FormlyRuleName,
-                        $"{{ name: '{rule.FormlyRuleName}', message: (err, field) => {message} }}"
+                        $"{{ name: '{rule.FormlyRuleName}', message: (_err, field) => {message} }}"
                     );
                 }
             }

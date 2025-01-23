@@ -88,7 +88,7 @@ public class ValidationConfigurationFixture
         validationConfiguration.ValidationRules
             .Select(x => x.FormlyValidationMessage)
             .Should().BeEquivalentTo(
-                "${field?.templateOptions?.label}:property-name: is not in valid format",
+                "${field?.props?.label}:property-name: is not in valid format",
                 "Invalid email address format"
             );
     }
@@ -117,12 +117,12 @@ public class ValidationConfigurationFixture
         validationConfiguration.ValidationRules
             .Select(x => x.FormlyValidationMessage).Distinct()
             .Should().BeEquivalentTo(
-                "${field?.templateOptions?.label}:property-name: is required",
-                "${field?.templateOptions?.label}:property-name: value should be more than ${field?.templateOptions?.min}:min-value:",
-                "${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:",
-                "${field?.templateOptions?.label}:property-name: should have at least ${field?.templateOptions?.minLength}:min-value: characters",
-                "${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters",
-                "${field?.templateOptions?.label}:property-name: is not in valid format"
+                "${field?.props?.label}:property-name: is required",
+                "${field?.props?.label}:property-name: value should be more than ${field?.templateOptions?.min}:min-value:",
+                "${field?.props?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:",
+                "${field?.props?.label}:property-name: should have at least ${field?.templateOptions?.minLength}:min-value: characters",
+                "${field?.props?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters",
+                "${field?.props?.label}:property-name: is not in valid format"
             );
     }
 }

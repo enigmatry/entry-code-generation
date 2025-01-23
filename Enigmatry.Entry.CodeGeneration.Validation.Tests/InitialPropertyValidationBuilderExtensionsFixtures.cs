@@ -40,7 +40,7 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
         _validationConfiguration.ValidationRules.Single().FormlyTemplateOptions
             .Should().BeEquivalentTo("required: true");
         _validationConfiguration.ValidationRules.Single().FormlyValidationMessage
-            .Should().Be("${field?.templateOptions?.label}:property-name: is required");
+            .Should().Be("${field?.props?.label}:property-name: is required");
     }
 
     [Test]
@@ -61,7 +61,7 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
         _validationConfiguration.ValidationRules.Single().FormlyTemplateOptions
             .Should().BeEquivalentTo("pattern: /^[A-Z]{4}[1-9]{8}$/mu");
         _validationConfiguration.ValidationRules.Single().FormlyValidationMessage
-            .Should().Be("${field?.templateOptions?.label}:property-name: is not in valid format");
+            .Should().Be("${field?.props?.label}:property-name: is not in valid format");
     }
 
     [Test]
@@ -103,7 +103,7 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
         _validationConfiguration.ValidationRules.Single().FormlyTemplateOptions
             .Should().BeEquivalentTo("minLength: 0");
         _validationConfiguration.ValidationRules.Single().FormlyValidationMessage
-            .Should().Be("${field?.templateOptions?.label}:property-name: should have at least ${field?.templateOptions?.minLength}:min-value: characters");
+            .Should().Be("${field?.props?.label}:property-name: should have at least ${field?.templateOptions?.minLength}:min-value: characters");
     }
 
     [Test]
@@ -124,7 +124,7 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
         _validationConfiguration.ValidationRules.Single().FormlyTemplateOptions
             .Should().BeEquivalentTo("maxLength: 100");
         _validationConfiguration.ValidationRules.Single().FormlyValidationMessage
-            .Should().Be("${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters");
+            .Should().Be("${field?.props?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters");
     }
 
     [Test]
@@ -141,14 +141,14 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
         minRule.MessageTranslationId.Should().Be("validators.minLength");
         minRule.FormlyTemplateOptions.Should().BeEquivalentTo("minLength: 10");
         minRule.FormlyValidationMessage
-            .Should().Be("${field?.templateOptions?.label}:property-name: should have at least ${field?.templateOptions?.minLength}:min-value: characters");
+            .Should().Be("${field?.props?.label}:property-name: should have at least ${field?.templateOptions?.minLength}:min-value: characters");
 
         var maxRule = _validationConfiguration.ValidationRules.Single(x => x.FormlyRuleName == "maxLength");
         maxRule.CustomMessage.Should().BeEmpty();
         maxRule.MessageTranslationId.Should().Be("validators.maxLength");
         maxRule.FormlyTemplateOptions.Should().BeEquivalentTo("maxLength: 10");
         maxRule.FormlyValidationMessage
-            .Should().Be("${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters");
+            .Should().Be("${field?.props?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters");
     }
 
     [Test]
@@ -297,7 +297,7 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
         rule.FormlyTemplateOptions
             .Should().BeEquivalentTo("type: 'number'", $"min: {String.Format(CultureInfo.InvariantCulture, "{0}", value)}{(isEqual ? "" : $" + {GetIncrement<T>()}")}");
         rule.FormlyValidationMessage
-            .Should().Be("${field?.templateOptions?.label}:property-name: value should be more than ${field?.templateOptions?.min}:min-value:");
+            .Should().Be("${field?.props?.label}:property-name: value should be more than ${field?.templateOptions?.min}:min-value:");
     }
 
     private static void AssertNumbercMaxValidationRule<T>(IFormlyValidationRule rule, T value, bool isEqual)
@@ -311,7 +311,7 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
         rule.FormlyTemplateOptions
             .Should().BeEquivalentTo("type: 'number'", $"max: {String.Format(CultureInfo.InvariantCulture, "{0}", value)}{(isEqual ? "" : $" - {GetIncrement<T>()}")}");
         rule.FormlyValidationMessage
-            .Should().Be("${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:");
+            .Should().Be("${field?.props?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:");
     }
 
     private IFormlyValidationRule GetRuleByPropertyName(string propertyName) =>

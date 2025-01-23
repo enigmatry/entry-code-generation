@@ -62,13 +62,13 @@ public class AngularFormlyValidationHtmlHelperExtensionsFixture : CodeGeneration
     }
 
     [TestCase(nameof(FormMock.Name), ExpectedResult =
-        "required: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`," +
-        "maxLength: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`")]
+        "required: (_err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`," +
+        "maxLength: (_err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`")]
     [TestCase(nameof(FormMock.Amount), ExpectedResult =
-        "min: (err, field) => $localize `:@@test.mock-edit.amount.min:CUSTOM_VALIDATION_MESSAGE`," +
-        "max: (err, field) => $localize `:@@test.mock-edit.amount.max:CUSTOM_VALIDATION_MESSAGE`")]
-    [TestCase(nameof(FormMock.Email1), ExpectedResult = "pattern: (err, field) => $localize `:@@test.mock-edit.email1.pattern:CUSTOM_VALIDATION_MESSAGE`")]
-    [TestCase(nameof(FormMock.Email2), ExpectedResult = "pattern: (err, field) => $localize `:@@validators.pattern.emailAddress:Invalid email address format`")]
+        "min: (_err, field) => $localize `:@@test.mock-edit.amount.min:CUSTOM_VALIDATION_MESSAGE`," +
+        "max: (_err, field) => $localize `:@@test.mock-edit.amount.max:CUSTOM_VALIDATION_MESSAGE`")]
+    [TestCase(nameof(FormMock.Email1), ExpectedResult = "pattern: (_err, field) => $localize `:@@test.mock-edit.email1.pattern:CUSTOM_VALIDATION_MESSAGE`")]
+    [TestCase(nameof(FormMock.Email2), ExpectedResult = "pattern: (_err, field) => $localize `:@@validators.pattern.emailAddress:Invalid email address format`")]
     public string AddCustomValidationMessages(string propertyName)
     {
         var formControl = _formComponent.FormControlsOfType<FormControl>().Single(x => x.PropertyName == propertyName.Camelize());
@@ -76,10 +76,10 @@ public class AngularFormlyValidationHtmlHelperExtensionsFixture : CodeGeneration
     }
 
     [TestCase(ExpectedResult =
-        "{ name: 'maxLength', message: (err, field) => $localize `:@@validators.maxLength:${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters` }," +
-        "{ name: 'pattern', message: (err, field) => $localize `:@@validators.pattern:${field?.templateOptions?.label}:property-name: is not in valid format` }," +
-        "{ name: 'max', message: (err, field) => $localize `:@@validators.max:${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:` }," +
-        "{ name: 'required', message: (err, field) => $localize `:@@validators.required:${field?.templateOptions?.label}:property-name: is required` }")]
+        "{ name: 'maxLength', message: (_err, field) => $localize `:@@validators.maxLength:${field?.props?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters` }," +
+        "{ name: 'pattern', message: (_err, field) => $localize `:@@validators.pattern:${field?.props?.label}:property-name: is not in valid format` }," +
+        "{ name: 'max', message: (_err, field) => $localize `:@@validators.max:${field?.props?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:` }," +
+        "{ name: 'required', message: (_err, field) => $localize `:@@validators.required:${field?.props?.label}:property-name: is required` }")]
     public string AddCommonValidationMessages() =>
         _htmlHelper.AddCommonValidationMessages(_featureModule, true)?.ToString()?.Replace("\r\n", "") ?? "";
 
