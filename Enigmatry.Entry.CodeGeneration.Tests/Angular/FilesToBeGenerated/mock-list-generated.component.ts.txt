@@ -13,6 +13,7 @@ import { PagedData, SortDirection, CellTemplate, ContextMenuItem, RowContextMenu
 import { ListMockItem } from 'src/app/api/api-reference';
 
 @Component({
+  standalone: false,
   selector: 'app-g-mock-list',
   templateUrl: './mock-list-generated.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush

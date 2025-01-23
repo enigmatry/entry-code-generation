@@ -17,6 +17,7 @@ import { map, throttleTime } from 'rxjs/operators';
 
 
 @Component({
+  standalone: false,
   selector: 'app-g-mock-edit',
   templateUrl: './mock-edit-generated.component.html'
 })
