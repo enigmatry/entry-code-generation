@@ -16,6 +16,9 @@ public class DisclaimerTemplateAppender : ITemplateWriterAppender
 // </auto-generated>
 // ------------------------------------------------------------------------------;
 /* eslint-disable */
+// @ts-nocheck
+// @ts-ignore
+// @ts-expect-error
 ";
 
     public bool AppendAtStart(string path) => Path.GetExtension(path) == ".ts";
