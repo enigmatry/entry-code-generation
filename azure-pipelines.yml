@@ -19,7 +19,7 @@ resources:
 
 stages:
 - stage: 'ci_build'
-  displayName: 'Build the pacakges'
+  displayName: 'Build the packages'
   jobs: 
   - job: set_dotnet_version
     displayName: Set .Net version
@@ -27,7 +27,7 @@ stages:
     - task: UseDotNet@2
       displayName: Set .Net version
       inputs:
-        version: 9.0.101
+        version: '9.0.x'
   - job: build_prerequisites
     displayName: Get the version for the build
     steps:
@@ -61,7 +61,7 @@ stages:
     - task: UseDotNet@2
       displayName: Set .Net version
       inputs:
-        version: 9.0.101
+        version: '9.0.x'
     - task: NuGetToolInstaller@1
       displayName: Install NuGet Tool
     - task: Cache@2

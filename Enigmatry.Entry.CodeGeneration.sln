@@ -9,7 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 		Enigmatry.Entry.CodeGeneration.sln.DotSettings = Enigmatry.Entry.CodeGeneration.sln.DotSettings
-		nuget.config = nuget.config
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enigmatry.Entry.CodeGeneration.Configuration", "Enigmatry.Entry.CodeGeneration.Configuration\Enigmatry.Entry.CodeGeneration.Configuration.csproj", "{34226C10-052A-4391-9F17-5220A1BC4F1A}"
@@ -25,6 +24,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enigmatry.Entry.CodeGeneration.Validation", "Enigmatry.Entry.CodeGeneration.Validation\Enigmatry.Entry.CodeGeneration.Validation.csproj", "{C62B1D17-622D-4844-A83D-1A1587894D4D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enigmatry.Entry.CodeGeneration.Validation.Tests", "Enigmatry.Entry.CodeGeneration.Validation.Tests\Enigmatry.Entry.CodeGeneration.Validation.Tests.csproj", "{539916F1-F50D-4185-990E-AECB3EDEF82F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pipelines", "Pipelines", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
+		code-analysis.yml = code-analysis.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
