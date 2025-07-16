@@ -1,6 +1,6 @@
 ﻿using Enigmatry.Entry.CodeGeneration.Rendering;
-using FluentAssertions;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Enigmatry.Entry.CodeGeneration.Tests.Angular;
 
@@ -16,48 +16,49 @@ public class AngularCodeGeneratorFixture : CodeGenerationFixtureBase
     [Test]
     public async Task Generate()
     {
-        _options.Framework.Should().Be(Framework.Angular);
+        _options.Framework.ShouldBe(Framework.Angular);
 
         await _codeGenerator.Generate();
 
         var inMemoryTemplateWriter = (InMemoryTemplateWriter)GetService<ITemplateWriter>();
 
-        inMemoryTemplateWriter.FilesToWrite.Should().NotBeEmpty();
-        AssertGeneratedFileNames(inMemoryTemplateWriter.FilesToWrite.Select(x => x.Path));
+        inMemoryTemplateWriter.FilesToWrite.ShouldNotBeEmpty();
+        AssertGeneratedFileNames(inMemoryTemplateWriter.FilesToWrite.Select(x => x.Path).ToList());
         AssertGeneratedFileContent(inMemoryTemplateWriter.FilesToWrite);
     }
 
 
-    private void AssertGeneratedFileNames(IEnumerable<string> generatedFilePaths)
+    private static void AssertGeneratedFileNames(IList<string> generatedFilePaths)
     {
-        var expectedFileNames = Directory.GetFiles("Angular/FilesToBeGenerated")
+        IEnumerable<string> expectedFileNames = Directory.GetFiles("Angular/FilesToBeGenerated")
             .Select(filePath => filePath.Split(Path.DirectorySeparatorChar).Last().Replace(".txt", ""));
 
         foreach (var expectedFileName in expectedFileNames)
         {
             generatedFilePaths
                 .Any(path => path.Contains(expectedFileName))
-                .Should().BeTrue();
+                .ShouldBeTrue();
         }
     }
 
-    private void AssertGeneratedFileContent(IEnumerable<(string Path, string Content)> generatedFiles)
+    private static void AssertGeneratedFileContent(IEnumerable<(string Path, string Content)> generatedFiles)
     {
-        foreach (var generatedFile in generatedFiles)
+        foreach ((string Path, string Content) generatedFile in generatedFiles)
         {
             var fileName = $"{generatedFile.Path.Split(Path.DirectorySeparatorChar).Last()}.txt";
             var expectedContent = File.ReadAllText($"Angular/FilesToBeGenerated/{fileName}");
             var generatedContent = generatedFile.Content;
 
-            System.Console.WriteLine($"Validation against {fileName} file!");
+            Console.WriteLine($"Validation against {fileName} file!");
 
             Uglify(generatedContent)
-                .Should()
-                .BeEquivalentTo(Uglify(expectedContent), fileName);
+                .ShouldBe(Uglify(expectedContent), fileName);
         }
     }
 
     // Dirty Hack
-    private string Uglify(string input)
-        => input.Replace("\n", "").Replace("\r", "").Replace("\t", "").Replace(" ", "");
+    private static string Uglify(string input)
+    {
+        return input.Replace("\n", "").Replace("\r", "").Replace("\t", "").Replace(" ", "");
+    }
 }

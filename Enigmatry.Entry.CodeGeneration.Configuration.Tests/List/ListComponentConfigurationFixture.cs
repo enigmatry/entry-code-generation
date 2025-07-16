@@ -1,7 +1,7 @@
 ﻿using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
 using Enigmatry.Entry.CodeGeneration.Configuration.List;
-using FluentAssertions;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration.Tests.List;
 
@@ -15,13 +15,13 @@ public class ListComponentConfigurationFixture
         var builder = new ListComponentBuilder<Project>();
 
         configuration.Configure(builder);
-        var componentModel = builder.Build();
+        ListComponentModel componentModel = builder.Build();
 
-        componentModel.Should().NotBeNull();
-        componentModel.ComponentInfo.Name.Should().Be("ProjectList");
-        componentModel.ComponentInfo.Feature.Name.Should().Be("Projects");
-        componentModel.Columns.Count.Should().Be(5);
-        componentModel.VisibleColumns.Count().Should().Be(4);
+        componentModel.ShouldNotBeNull();
+        componentModel.ComponentInfo.Name.ShouldBe("ProjectList");
+        componentModel.ComponentInfo.Feature.Name.ShouldBe("Projects");
+        componentModel.Columns.Count.ShouldBe(5);
+        componentModel.VisibleColumns.Count().ShouldBe(4);
     }
 
     [Test]
@@ -33,18 +33,18 @@ public class ListComponentConfigurationFixture
         builder.Component().OrderBy(OrderByType.Model);
 
         configuration.Configure(builder);
-        var componentModel = builder.Build();
+        ListComponentModel componentModel = builder.Build();
 
-        componentModel.Should().NotBeNull();
-        componentModel.Columns.Count.Should().Be(5);
+        componentModel.ShouldNotBeNull();
+        componentModel.Columns.Count.ShouldBe(5);
 
         // Property order: Id, Title, StartDate, EndDate, Budget
-        componentModel.ComponentInfo.OrderByType.Should().Be(OrderByType.Model);
-        componentModel.Columns.ElementAt(0).Property.ToLower().Should().Be(nameof(Project.Id).ToLower());
-        componentModel.Columns.ElementAt(1).Property.ToLower().Should().Be(nameof(Project.Title).ToLower());
-        componentModel.Columns.ElementAt(2).Property.ToLower().Should().Be(nameof(Project.StartDate).ToLower());
-        componentModel.Columns.ElementAt(3).Property.ToLower().Should().Be(nameof(Project.EndDate).ToLower());
-        componentModel.Columns.ElementAt(4).Property.ToLower().Should().Be(nameof(Project.Budget).ToLower());
+        componentModel.ComponentInfo.OrderByType.ShouldBe(OrderByType.Model);
+        componentModel.Columns.ElementAt(0).Property.ToLower().ShouldBe(nameof(Project.Id).ToLower());
+        componentModel.Columns.ElementAt(1).Property.ToLower().ShouldBe(nameof(Project.Title).ToLower());
+        componentModel.Columns.ElementAt(2).Property.ToLower().ShouldBe(nameof(Project.StartDate).ToLower());
+        componentModel.Columns.ElementAt(3).Property.ToLower().ShouldBe(nameof(Project.EndDate).ToLower());
+        componentModel.Columns.ElementAt(4).Property.ToLower().ShouldBe(nameof(Project.Budget).ToLower());
     }
 
     [Test]
@@ -56,18 +56,18 @@ public class ListComponentConfigurationFixture
         builder.Component().OrderBy(OrderByType.Configuration);
 
         configuration.Configure(builder);
-        var componentModel = builder.Build();
+        ListComponentModel componentModel = builder.Build();
 
-        componentModel.Should().NotBeNull();
-        componentModel.Columns.Count.Should().Be(5);
+        componentModel.ShouldNotBeNull();
+        componentModel.Columns.Count.ShouldBe(5);
 
         // Configuration order: Id, Title, Budget, StartDate, EndDate
-        componentModel.ComponentInfo.OrderByType.Should().Be(OrderByType.Configuration);
-        componentModel.Columns.ElementAt(0).Property.ToLower().Should().Be(nameof(Project.Id).ToLower());
-        componentModel.Columns.ElementAt(1).Property.ToLower().Should().Be(nameof(Project.Title).ToLower());
-        componentModel.Columns.ElementAt(2).Property.ToLower().Should().Be(nameof(Project.Budget).ToLower());
-        componentModel.Columns.ElementAt(3).Property.ToLower().Should().Be(nameof(Project.StartDate).ToLower());
-        componentModel.Columns.ElementAt(4).Property.ToLower().Should().Be(nameof(Project.EndDate).ToLower());
+        componentModel.ComponentInfo.OrderByType.ShouldBe(OrderByType.Configuration);
+        componentModel.Columns.ElementAt(0).Property.ToLower().ShouldBe(nameof(Project.Id).ToLower());
+        componentModel.Columns.ElementAt(1).Property.ToLower().ShouldBe(nameof(Project.Title).ToLower());
+        componentModel.Columns.ElementAt(2).Property.ToLower().ShouldBe(nameof(Project.Budget).ToLower());
+        componentModel.Columns.ElementAt(3).Property.ToLower().ShouldBe(nameof(Project.StartDate).ToLower());
+        componentModel.Columns.ElementAt(4).Property.ToLower().ShouldBe(nameof(Project.EndDate).ToLower());
     }
 
     [Test]
@@ -77,11 +77,11 @@ public class ListComponentConfigurationFixture
         var builder = new ListComponentBuilder<Project>();
 
         configuration.Configure(builder);
-        var componentModel = builder.Build();
+        ListComponentModel componentModel = builder.Build();
 
         // All properties are included as columns
-        componentModel.ComponentInfo.IncludeUnconfiguredProperties.Should().BeTrue();
-        componentModel.Columns.Count.Should().Be(5);
+        componentModel.ComponentInfo.IncludeUnconfiguredProperties.ShouldBeTrue();
+        componentModel.Columns.Count.ShouldBe(5);
     }
 
     [Test]
@@ -93,14 +93,14 @@ public class ListComponentConfigurationFixture
         builder.Component().IncludeUnconfiguredProperties(false);
 
         configuration.Configure(builder);
-        var componentModel = builder.Build();
-        
+        ListComponentModel componentModel = builder.Build();
+
         // Only Id, Title and Budged are configured and created as columns
-        componentModel.ComponentInfo.IncludeUnconfiguredProperties.Should().BeFalse();
-        componentModel.Columns.Count.Should().Be(3);
-        componentModel.Columns.ElementAt(0).Property.ToLower().Should().Be(nameof(Project.Id).ToLower());
-        componentModel.Columns.ElementAt(1).Property.ToLower().Should().Be(nameof(Project.Title).ToLower());
-        componentModel.Columns.ElementAt(2).Property.ToLower().Should().Be(nameof(Project.Budget).ToLower());
+        componentModel.ComponentInfo.IncludeUnconfiguredProperties.ShouldBeFalse();
+        componentModel.Columns.Count.ShouldBe(3);
+        componentModel.Columns.ElementAt(0).Property.ToLower().ShouldBe(nameof(Project.Id).ToLower());
+        componentModel.Columns.ElementAt(1).Property.ToLower().ShouldBe(nameof(Project.Title).ToLower());
+        componentModel.Columns.ElementAt(2).Property.ToLower().ShouldBe(nameof(Project.Budget).ToLower());
     }
 
     [Test]
@@ -110,11 +110,11 @@ public class ListComponentConfigurationFixture
         var builder = new ListComponentBuilder<Project>();
 
         configuration.Configure(builder);
-        var componentModel = builder.Build();
+        ListComponentModel componentModel = builder.Build();
 
         componentModel.Columns.Where(x => x.Property == "startDate" || x.Property == "endDate")
             .All(x => x.Formatter.GetType() == typeof(DatePropertyFormatter))
-            .Should().BeTrue();
+            .ShouldBeTrue();
     }
 
     internal class Project

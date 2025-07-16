@@ -1,8 +1,8 @@
 ﻿using System.Text.Encodings.Web;
-using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
-using FluentAssertions;
+using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.HtmlHelperExtensions;
 
@@ -19,7 +19,7 @@ public class AngularFormattingHtmlHelperExtensionsFixture : CodeGenerationFixtur
     {
         var stringWriter = new StringWriter();
 
-        var htmlContent = _htmlHelper.Pipe(
+        Microsoft.AspNetCore.Html.IHtmlContent htmlContent = _htmlHelper.Pipe(
             new DatePropertyFormatter()
                 .WithFormat(format)
                 .WithTimeZone(timeZone)
@@ -45,7 +45,7 @@ public class AngularFormattingHtmlHelperExtensionsFixture : CodeGenerationFixtur
     {
         var stringWriter = new StringWriter();
 
-        var htmlContent = _htmlHelper.Pipe(
+        Microsoft.AspNetCore.Html.IHtmlContent htmlContent = _htmlHelper.Pipe(
             new CurrencyPropertyFormatter()
                 .WithCurrencyCode(currencyCode)
                 .WithDisplay(display)
@@ -65,7 +65,7 @@ public class AngularFormattingHtmlHelperExtensionsFixture : CodeGenerationFixtur
     {
         var stringWriter = new StringWriter();
 
-        var htmlContent = _htmlHelper.Pipe(
+        Microsoft.AspNetCore.Html.IHtmlContent htmlContent = _htmlHelper.Pipe(
             new DecimalPropertyFormatter()
                 .WithDigitsInfo(digitsInfo)
                 .WithLocale(locale)
@@ -83,7 +83,7 @@ public class AngularFormattingHtmlHelperExtensionsFixture : CodeGenerationFixtur
     {
         var stringWriter = new StringWriter();
 
-        var htmlContent = _htmlHelper.Pipe(
+        Microsoft.AspNetCore.Html.IHtmlContent htmlContent = _htmlHelper.Pipe(
             new PercentPropertyFormatter()
                 .WithDigitsInfo(digitsInfo)
                 .WithLocale(locale)
@@ -98,7 +98,7 @@ public class AngularFormattingHtmlHelperExtensionsFixture : CodeGenerationFixtur
     {
         var stringWriter = new StringWriter();
 
-        var htmlContent = _htmlHelper.Pipe(new BooleanPropertyFormatter());
+        Microsoft.AspNetCore.Html.IHtmlContent htmlContent = _htmlHelper.Pipe(new BooleanPropertyFormatter());
 
         htmlContent.WriteTo(stringWriter, HtmlEncoder.Default);
         return stringWriter.ToString();
@@ -109,7 +109,7 @@ public class AngularFormattingHtmlHelperExtensionsFixture : CodeGenerationFixtur
     {
         var stringWriter = new StringWriter();
 
-        var htmlContent = _htmlHelper.Pipe(new NoFormattingPropertyFormatter());
+        Microsoft.AspNetCore.Html.IHtmlContent htmlContent = _htmlHelper.Pipe(new NoFormattingPropertyFormatter());
 
         htmlContent.WriteTo(stringWriter, HtmlEncoder.Default);
         return stringWriter.ToString();
@@ -120,17 +120,23 @@ public class AngularFormattingHtmlHelperExtensionsFixture : CodeGenerationFixtur
     {
         Action action = () => _htmlHelper.Pipe(new NotSupportedPropertyFormatter());
 
-        action.Should().ThrowExactly<NotImplementedException>("Formatter type not supported");
+        action.ShouldThrow<NotImplementedException>("Formatter type not supported");
     }
 
 
 
     internal class NotSupportedPropertyFormatter : BasePropertyFormatter
     {
-        public override IList<Type> SupportedInputTypes() => throw new NotImplementedException();
+        public override IList<Type> SupportedInputTypes()
+        {
+            throw new NotImplementedException();
+        }
 
         public override string JsFormatterName { get; } = String.Empty;
 
-        public override string ToJsObject() => throw new NotImplementedException();
+        public override string ToJsObject()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
-using FluentAssertions;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration.Tests;
 
@@ -12,10 +12,10 @@ public class ExpressionExtensionsFixture
     {
         Expression<Func<Model1, string>> propertyExpression = model => model.Title;
 
-        var propertyInfo = propertyExpression.GetPropertyInfo();
+        System.Reflection.PropertyInfo propertyInfo = propertyExpression.GetPropertyInfo();
 
-        propertyInfo.Should().NotBeNull();
-        propertyInfo.Name.Should().Be(nameof(Model1.Title));
+        propertyInfo.ShouldNotBeNull();
+        propertyInfo.Name.ShouldBe(nameof(Model1.Title));
     }
 
     internal class Model1

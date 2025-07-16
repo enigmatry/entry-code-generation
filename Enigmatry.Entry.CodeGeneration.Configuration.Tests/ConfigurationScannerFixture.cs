@@ -1,6 +1,6 @@
 ﻿using Enigmatry.Entry.CodeGeneration.Configuration.List;
-using FluentAssertions;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration.Tests;
 
@@ -10,35 +10,35 @@ public class ConfigurationScannerFixture
     [Test]
     public void Test_ConfigurationScanner_ShouldGetComponentsFromComponentConfigurations()
     {
-        var scanner = new ConfigurationScanner(new[] { typeof(Model1Configuration), typeof(Model2Configuration) });
+        var scanner = new ConfigurationScanner([typeof(Model1Configuration), typeof(Model2Configuration)]);
 
-        List<IComponentModel> components = scanner.GetComponents().ToList();
+        var components = scanner.GetComponents().ToList();
 
-        components.Count.Should().Be(2);
-        components[0].ComponentInfo.Name.Should().Be("Model1");
-        components[1].ComponentInfo.Name.Should().Be("Model2");
+        components.Count.ShouldBe(2);
+        components[0].ComponentInfo.Name.ShouldBe("Model1");
+        components[1].ComponentInfo.Name.ShouldBe("Model2");
     }
 
     [Test]
     public void Test_ConfigurationScanner_ShouldIgnoreTypesThatAreNotComponentConfigurations()
     {
-        var scanner = new ConfigurationScanner(new[] { typeof(Model1Configuration), typeof(Model2) });
+        var scanner = new ConfigurationScanner([typeof(Model1Configuration), typeof(Model2)]);
 
-        List<IComponentModel> components = scanner.GetComponents().ToList();
+        var components = scanner.GetComponents().ToList();
 
-        components.Count.Should().Be(1);
-        components[0].ComponentInfo.Name.Should().Be("Model1");
+        components.Count.ShouldBe(1);
+        components[0].ComponentInfo.Name.ShouldBe("Model1");
     }
 
     [Test]
     public void Test_ConfigurationScanner_ShouldIgnoreAbstractAndOrGenericComponentConfigurations()
     {
-        var scanner = new ConfigurationScanner(new[] { typeof(Model2Configuration), typeof(GenericConfiguration<>), typeof(AbstractConfiguration) });
+        var scanner = new ConfigurationScanner([typeof(Model2Configuration), typeof(GenericConfiguration<>), typeof(AbstractConfiguration)]);
 
-        List<IComponentModel> components = scanner.GetComponents().ToList();
+        var components = scanner.GetComponents().ToList();
 
-        components.Count.Should().Be(1);
-        components[0].ComponentInfo.Name.Should().Be("Model2");
+        components.Count.ShouldBe(1);
+        components[0].ComponentInfo.Name.ShouldBe("Model2");
     }
 
     internal class Model1

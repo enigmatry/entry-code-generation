@@ -1,8 +1,8 @@
 ﻿using Enigmatry.Entry.CodeGeneration.Configuration.Form;
 using Enigmatry.Entry.CodeGeneration.Validation;
-using FluentAssertions;
 using JetBrains.Annotations;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration.Tests.Form;
 
@@ -23,26 +23,26 @@ public class FormComponentConfigurationFixture
     public void TestFormComponentConfiguration()
     {
         _configuration.Configure(_builder);
-        var formComponent = _builder.Build();
+        FormComponentModel formComponent = _builder.Build();
 
-        formComponent.Should().NotBeNull();
-        formComponent.ComponentInfo.Name.Should().Be("ProjectDetails");
-        formComponent.ComponentInfo.Feature.Name.Should().Be("Projects");
+        formComponent.ShouldNotBeNull();
+        formComponent.ComponentInfo.Name.ShouldBe("ProjectDetails");
+        formComponent.ComponentInfo.Feature.Name.ShouldBe("Projects");
 
-        formComponent.FormControls.Count.Should().Be(5);
+        formComponent.FormControls.Count.ShouldBe(5);
 
-        var titleFormControl = formComponent.FormControls.Single(x => x.PropertyName == nameof(ProjectDetails.Title).ToLowerInvariant());
+        Configuration.Form.Controls.FormControl titleFormControl = formComponent.FormControls.Single(x => x.PropertyName == nameof(ProjectDetails.Title).ToLowerInvariant());
 
-        titleFormControl.ValidationRules.Count.Should().Be(1);
+        titleFormControl.ValidationRules.Count.ShouldBe(1);
         titleFormControl.ValidationRules.Single()
             .FormlyRuleName
-            .Should().Be("maxLength");
+            .ShouldBe("maxLength");
 
-        var detailsFormControl = formComponent.FormControls.Single(x => x.PropertyName == nameof(ProjectDetails.Description).ToLowerInvariant());
-        detailsFormControl.ValidationRules.Count.Should().Be(1);
+        Configuration.Form.Controls.FormControl detailsFormControl = formComponent.FormControls.Single(x => x.PropertyName == nameof(ProjectDetails.Description).ToLowerInvariant());
+        detailsFormControl.ValidationRules.Count.ShouldBe(1);
         detailsFormControl.ValidationRules.Single()
             .FormlyRuleName
-            .Should().Be("maxLength");
+            .ShouldBe("maxLength");
     }
 
     [Test]
@@ -51,10 +51,10 @@ public class FormComponentConfigurationFixture
         _builder.Component().IncludeUnconfiguredProperties(false);
 
         _configuration.Configure(_builder);
-        var formComponent = _builder.Build();
+        FormComponentModel formComponent = _builder.Build();
 
-        formComponent.Should().NotBeNull();
-        formComponent.FormControls.Count.Should().Be(4);
+        formComponent.ShouldNotBeNull();
+        formComponent.FormControls.Count.ShouldBe(4);
     }
 
     [Test]
@@ -63,16 +63,16 @@ public class FormComponentConfigurationFixture
         _builder.Component().OrderBy(OrderByType.Model);
 
         _configuration.Configure(_builder);
-        var formComponent = _builder.Build();
+        FormComponentModel formComponent = _builder.Build();
 
-        formComponent.Should().NotBeNull();
-        formComponent.FormControls.Count.Should().Be(5);
+        formComponent.ShouldNotBeNull();
+        formComponent.FormControls.Count.ShouldBe(5);
 
-        formComponent.FormControls.ElementAt(0).PropertyName.ToLower().Should().Be(nameof(ProjectDetails.Id).ToLower());
-        formComponent.FormControls.ElementAt(1).PropertyName.ToLower().Should().Be(nameof(ProjectDetails.Title).ToLower());
-        formComponent.FormControls.ElementAt(2).PropertyName.ToLower().Should().Be(nameof(ProjectDetails.Description).ToLower());
-        formComponent.FormControls.ElementAt(3).PropertyName.ToLower().Should().Be(nameof(ProjectDetails.StartDate).ToLower());
-        formComponent.FormControls.ElementAt(4).PropertyName.ToLower().Should().Be(nameof(ProjectDetails.EndDate).ToLower());
+        formComponent.FormControls.ElementAt(0).PropertyName.ToLower().ShouldBe(nameof(ProjectDetails.Id).ToLower());
+        formComponent.FormControls.ElementAt(1).PropertyName.ToLower().ShouldBe(nameof(ProjectDetails.Title).ToLower());
+        formComponent.FormControls.ElementAt(2).PropertyName.ToLower().ShouldBe(nameof(ProjectDetails.Description).ToLower());
+        formComponent.FormControls.ElementAt(3).PropertyName.ToLower().ShouldBe(nameof(ProjectDetails.StartDate).ToLower());
+        formComponent.FormControls.ElementAt(4).PropertyName.ToLower().ShouldBe(nameof(ProjectDetails.EndDate).ToLower());
     }
 
     [Test]
@@ -81,16 +81,16 @@ public class FormComponentConfigurationFixture
         _builder.Component().OrderBy(OrderByType.Configuration);
 
         _configuration.Configure(_builder);
-        var formComponent = _builder.Build();
+        FormComponentModel formComponent = _builder.Build();
 
-        formComponent.Should().NotBeNull();
-        formComponent.FormControls.Count.Should().Be(5);
+        formComponent.ShouldNotBeNull();
+        formComponent.FormControls.Count.ShouldBe(5);
 
-        formComponent.FormControls.ElementAt(0).PropertyName.ToLower().Should().Be(nameof(ProjectDetails.Id).ToLower());
-        formComponent.FormControls.ElementAt(1).PropertyName.ToLower().Should().Be(nameof(ProjectDetails.Title).ToLower());
-        formComponent.FormControls.ElementAt(2).PropertyName.ToLower().Should().Be(nameof(ProjectDetails.StartDate).ToLower());
-        formComponent.FormControls.ElementAt(3).PropertyName.ToLower().Should().Be(nameof(ProjectDetails.EndDate).ToLower());
-        formComponent.FormControls.ElementAt(4).PropertyName.ToLower().Should().Be(nameof(ProjectDetails.Description).ToLower());
+        formComponent.FormControls.ElementAt(0).PropertyName.ToLower().ShouldBe(nameof(ProjectDetails.Id).ToLower());
+        formComponent.FormControls.ElementAt(1).PropertyName.ToLower().ShouldBe(nameof(ProjectDetails.Title).ToLower());
+        formComponent.FormControls.ElementAt(2).PropertyName.ToLower().ShouldBe(nameof(ProjectDetails.StartDate).ToLower());
+        formComponent.FormControls.ElementAt(3).PropertyName.ToLower().ShouldBe(nameof(ProjectDetails.EndDate).ToLower());
+        formComponent.FormControls.ElementAt(4).PropertyName.ToLower().ShouldBe(nameof(ProjectDetails.Description).ToLower());
     }
 
     [UsedImplicitly]

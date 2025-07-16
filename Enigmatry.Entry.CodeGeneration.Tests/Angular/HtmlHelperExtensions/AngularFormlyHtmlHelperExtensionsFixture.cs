@@ -2,7 +2,7 @@
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 using Enigmatry.Entry.CodeGeneration.Tests.Angular.Mocks;
-using FluentAssertions;
+using Shouldly;
 using Humanizer;
 using NUnit.Framework;
 
@@ -56,40 +56,40 @@ internal class AngularFormlyHtmlHelperExtensionsFixture : CodeGenerationFixtureB
             .FormControlsOfType<InputFormControl>()
             .Single(x => x.PropertyName == nameof(FormMock.Name).Camelize());
         _htmlHelper.DefaultValue(inputFormControl).ToString()
-            .Should().Be("defaultValue: 'DEFAULT NAME',\r\n");
+            .ShouldBe("defaultValue: 'DEFAULT NAME',\r\n");
 
         var textAreaFormControl = _formComponent
             .FormControlsOfType<RichTextInputFormControl>()
             .Single(x => x.PropertyName == nameof(FormMock.Description).Camelize());
         textAreaFormControl.DefaultValue = "DEFAULT_TEXT_AREA";
         _htmlHelper.DefaultValue(textAreaFormControl).ToString()
-            .Should().Be($"defaultValue: 'DEFAULT_TEXT_AREA',\r\n");
+            .ShouldBe($"defaultValue: 'DEFAULT_TEXT_AREA',\r\n");
 
         var checkBoxFormControl = _formComponent
             .FormControlsOfType<CheckboxFormControl>()
             .Single(x => x.PropertyName == nameof(FormMock.IsActive).Camelize());
         _htmlHelper.DefaultValue(checkBoxFormControl).ToString()
-            .Should().Be($"defaultValue: true,\r\n");
+            .ShouldBe($"defaultValue: true,\r\n");
 
         var radioFormControl = _formComponent
             .FormControlsOfType<RadioGroupFormControl>()
             .Single(x => x.PropertyName == nameof(FormMock.MockRadio).Camelize());
         radioFormControl.DefaultValue = "DEFAULT_RADIO";
         _htmlHelper.DefaultValue(radioFormControl).ToString()
-            .Should().Be($"defaultValue: 'DEFAULT_RADIO',\r\n");
+            .ShouldBe($"defaultValue: 'DEFAULT_RADIO',\r\n");
 
         var selectFormControl = _formComponent
             .FormControlsOfType<SelectFormControl>()
             .Single(x => x.PropertyName == nameof(FormMock.FormStatus).Camelize());
         selectFormControl.DefaultValue = "DEFAULT_SELECT";
         _htmlHelper.DefaultValue(selectFormControl).ToString()
-            .Should().Be($"defaultValue: 'DEFAULT_SELECT',\r\n");
+            .ShouldBe($"defaultValue: 'DEFAULT_SELECT',\r\n");
 
         var datePickerFormControl = _formComponent
             .FormControlsOfType<DatepickerFormControl>()
             .Single(x => x.PropertyName == nameof(FormMock.Date).Camelize());
         datePickerFormControl.DefaultValue = new DateTimeOffset(2000, 1, 1, 12, 33, 15, TimeSpan.Zero);
         _htmlHelper.DefaultValue(datePickerFormControl).ToString()
-            .Should().Be($"defaultValue: '2000-01-01T12:33:15.0000000+00:00',\r\n");
+            .ShouldBe($"defaultValue: '2000-01-01T12:33:15.0000000+00:00',\r\n");
     }
 }

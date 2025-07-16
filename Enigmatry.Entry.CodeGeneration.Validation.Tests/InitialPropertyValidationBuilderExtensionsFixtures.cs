@@ -2,9 +2,9 @@
 using System.Text.RegularExpressions;
 using Enigmatry.Entry.CodeGeneration.Validation.PropertyValidations;
 using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
-using FluentAssertions;
 using Humanizer;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Enigmatry.Entry.CodeGeneration.Validation.Tests;
 
@@ -20,7 +20,10 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
     private MockModelValidationConfiguration _validationConfiguration = null!;
 
     [SetUp]
-    public void SetUp() => _validationConfiguration = new MockModelValidationConfiguration();
+    public void SetUp()
+    {
+        _validationConfiguration = new MockModelValidationConfiguration();
+    }
 
     [Test]
     public void IsRequired()
@@ -30,17 +33,17 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
             .IsRequired();
 
         _validationConfiguration.ValidationRules
-            .Should().HaveCount(1);
+            .Count().ShouldBe(1);
         _validationConfiguration.ValidationRules.Single().FormlyRuleName
-            .Should().Be("required");
+            .ShouldBe("required");
         _validationConfiguration.ValidationRules.Single().CustomMessage
-            .Should().BeEmpty();
+            .ShouldBeEmpty();
         _validationConfiguration.ValidationRules.Single().MessageTranslationId
-            .Should().Be("validators.required");
+            .ShouldBe("validators.required");
         _validationConfiguration.ValidationRules.Single().FormlyTemplateOptions
-            .Should().BeEquivalentTo("required: true");
+            .ShouldBe(["required: true"]);
         _validationConfiguration.ValidationRules.Single().FormlyValidationMessage
-            .Should().Be("${field?.templateOptions?.label}:property-name: is required");
+            .ShouldBe("${field?.templateOptions?.label}:property-name: is required");
     }
 
     [Test]
@@ -51,17 +54,17 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
             .Match(new Regex("/^[A-Z]{4}[1-9]{8}$/mu"));
 
         _validationConfiguration.ValidationRules
-            .Should().HaveCount(1);
+            .Count().ShouldBe(1);
         _validationConfiguration.ValidationRules.Single().FormlyRuleName
-            .Should().Be("pattern");
+            .ShouldBe("pattern");
         _validationConfiguration.ValidationRules.Single().CustomMessage
-            .Should().BeEmpty();
+            .ShouldBeEmpty();
         _validationConfiguration.ValidationRules.Single().MessageTranslationId
-            .Should().Be("validators.pattern");
+            .ShouldBe("validators.pattern");
         _validationConfiguration.ValidationRules.Single().FormlyTemplateOptions
-            .Should().BeEquivalentTo("pattern: /^[A-Z]{4}[1-9]{8}$/mu");
+            .ShouldBe(["pattern: /^[A-Z]{4}[1-9]{8}$/mu"]);
         _validationConfiguration.ValidationRules.Single().FormlyValidationMessage
-            .Should().Be("${field?.templateOptions?.label}:property-name: is not in valid format");
+            .ShouldBe("${field?.templateOptions?.label}:property-name: is not in valid format");
     }
 
     [Test]
@@ -72,17 +75,17 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
             .EmailAddress();
 
         _validationConfiguration.ValidationRules
-            .Should().HaveCount(1);
+            .Count().ShouldBe(1);
         _validationConfiguration.ValidationRules.Single().FormlyRuleName
-            .Should().Be("pattern");
+            .ShouldBe("pattern");
         _validationConfiguration.ValidationRules.Single().CustomMessage
-            .Should().Be("Invalid email address format");
+            .ShouldBe("Invalid email address format");
         _validationConfiguration.ValidationRules.Single().MessageTranslationId
-            .Should().Be("validators.pattern.emailAddress");
+            .ShouldBe("validators.pattern.emailAddress");
         _validationConfiguration.ValidationRules.Single().FormlyTemplateOptions
-            .Should().BeEquivalentTo(@"pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/");
+            .ShouldBe([@"pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/"]);
         _validationConfiguration.ValidationRules.Single().FormlyValidationMessage
-            .Should().Be("Invalid email address format");
+            .ShouldBe("Invalid email address format");
     }
 
     [Test]
@@ -93,17 +96,17 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
             .MinLength(0);
 
         _validationConfiguration.ValidationRules
-            .Should().HaveCount(1);
+            .Count().ShouldBe(1);
         _validationConfiguration.ValidationRules.Single().FormlyRuleName
-            .Should().Be("minLength");
+            .ShouldBe("minLength");
         _validationConfiguration.ValidationRules.Single().CustomMessage
-            .Should().BeEmpty();
+            .ShouldBeEmpty();
         _validationConfiguration.ValidationRules.Single().MessageTranslationId
-            .Should().Be("validators.minLength");
+            .ShouldBe("validators.minLength");
         _validationConfiguration.ValidationRules.Single().FormlyTemplateOptions
-            .Should().BeEquivalentTo("minLength: 0");
+            .ShouldBe(["minLength: 0"]);
         _validationConfiguration.ValidationRules.Single().FormlyValidationMessage
-            .Should().Be("${field?.templateOptions?.label}:property-name: should have at least ${field?.templateOptions?.minLength}:min-value: characters");
+            .ShouldBe("${field?.templateOptions?.label}:property-name: should have at least ${field?.templateOptions?.minLength}:min-value: characters");
     }
 
     [Test]
@@ -114,17 +117,17 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
             .MaxLength(100);
 
         _validationConfiguration.ValidationRules
-            .Should().HaveCount(1);
+            .Count().ShouldBe(1);
         _validationConfiguration.ValidationRules.Single().FormlyRuleName
-            .Should().Be("maxLength");
+            .ShouldBe("maxLength");
         _validationConfiguration.ValidationRules.Single().CustomMessage
-            .Should().BeEmpty();
+            .ShouldBeEmpty();
         _validationConfiguration.ValidationRules.Single().MessageTranslationId
-            .Should().Be("validators.maxLength");
+            .ShouldBe("validators.maxLength");
         _validationConfiguration.ValidationRules.Single().FormlyTemplateOptions
-            .Should().BeEquivalentTo("maxLength: 100");
+            .ShouldBe(["maxLength: 100"]);
         _validationConfiguration.ValidationRules.Single().FormlyValidationMessage
-            .Should().Be("${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters");
+            .ShouldBe("${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters");
     }
 
     [Test]
@@ -134,21 +137,21 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
             .RuleFor(x => x.StringField)
             .Length(10);
 
-        _validationConfiguration.ValidationRules.Should().HaveCount(2);
+        _validationConfiguration.ValidationRules.Count().ShouldBe(2);
 
-        var minRule = _validationConfiguration.ValidationRules.Single(x => x.FormlyRuleName == "minLength");
-        minRule.CustomMessage.Should().BeEmpty();
-        minRule.MessageTranslationId.Should().Be("validators.minLength");
-        minRule.FormlyTemplateOptions.Should().BeEquivalentTo("minLength: 10");
+        IFormlyValidationRule minRule = _validationConfiguration.ValidationRules.Single(x => x.FormlyRuleName == "minLength");
+        minRule.CustomMessage.ShouldBeEmpty();
+        minRule.MessageTranslationId.ShouldBe("validators.minLength");
+        minRule.FormlyTemplateOptions.ShouldBe(["minLength: 10"]);
         minRule.FormlyValidationMessage
-            .Should().Be("${field?.templateOptions?.label}:property-name: should have at least ${field?.templateOptions?.minLength}:min-value: characters");
+            .ShouldBe("${field?.templateOptions?.label}:property-name: should have at least ${field?.templateOptions?.minLength}:min-value: characters");
 
-        var maxRule = _validationConfiguration.ValidationRules.Single(x => x.FormlyRuleName == "maxLength");
-        maxRule.CustomMessage.Should().BeEmpty();
-        maxRule.MessageTranslationId.Should().Be("validators.maxLength");
-        maxRule.FormlyTemplateOptions.Should().BeEquivalentTo("maxLength: 10");
+        IFormlyValidationRule maxRule = _validationConfiguration.ValidationRules.Single(x => x.FormlyRuleName == "maxLength");
+        maxRule.CustomMessage.ShouldBeEmpty();
+        maxRule.MessageTranslationId.ShouldBe("validators.maxLength");
+        maxRule.FormlyTemplateOptions.ShouldBe(["maxLength: 10"]);
         maxRule.FormlyValidationMessage
-            .Should().Be("${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters");
+            .ShouldBe("${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters");
     }
 
     [Test]
@@ -164,7 +167,7 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
             .RuleFor(x => x.ByteField)
             .GreaterThen(MinByteField);
 
-        _validationConfiguration.ValidationRules.Should().HaveCount(3);
+        _validationConfiguration.ValidationRules.Count().ShouldBe(3);
 
         AssertNumbercMinValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.IntField)), MinIntField, false);
         AssertNumbercMinValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.DoubleField)), MinDoubleField, false);
@@ -184,7 +187,7 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
             .RuleFor(x => x.ByteField)
             .GreaterOrEqualTo(MinByteField);
 
-        _validationConfiguration.ValidationRules.Should().HaveCount(3);
+        _validationConfiguration.ValidationRules.Count().ShouldBe(3);
 
         AssertNumbercMinValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.IntField)), MinIntField, true);
         AssertNumbercMinValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.DoubleField)), MinDoubleField, true);
@@ -204,7 +207,7 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
             .RuleFor(x => x.ByteField)
             .LessThen(MaxByteField);
 
-        _validationConfiguration.ValidationRules.Should().HaveCount(3);
+        _validationConfiguration.ValidationRules.Count().ShouldBe(3);
 
         AssertNumbercMaxValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.IntField)), MaxIntField, false);
         AssertNumbercMaxValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.DoubleField)), MaxDoubleField, false);
@@ -224,7 +227,7 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
             .RuleFor(x => x.ByteField)
             .LessOrEqualTo(MaxByteField);
 
-        _validationConfiguration.ValidationRules.Should().HaveCount(3);
+        _validationConfiguration.ValidationRules.Count().ShouldBe(3);
 
         AssertNumbercMaxValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.IntField)), MaxIntField, true);
         AssertNumbercMaxValidationRule(GetRuleByPropertyName(nameof(ValidationMockModel.DoubleField)), MaxDoubleField, true);
@@ -238,7 +241,7 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
             .RuleFor(x => x.IntField)
             .EqualTo(MinIntField);
 
-        _validationConfiguration.ValidationRules.Should().HaveCount(2);
+        _validationConfiguration.ValidationRules.Count().ShouldBe(2);
 
         AssertNumbercMinValidationRule(GetRuleByFormlyRuleName("min"), MinIntField, true);
         AssertNumbercMaxValidationRule(GetRuleByFormlyRuleName("max"), MinIntField, true);
@@ -251,7 +254,7 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
             .RuleFor(x => x.DoubleField)
             .EqualTo(MinDoubleField);
 
-        _validationConfiguration.ValidationRules.Should().HaveCount(2);
+        _validationConfiguration.ValidationRules.Count().ShouldBe(2);
 
         AssertNumbercMinValidationRule(GetRuleByFormlyRuleName("min"), MinDoubleField, true);
         AssertNumbercMaxValidationRule(GetRuleByFormlyRuleName("max"), MinDoubleField, true);
@@ -267,10 +270,9 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
             .WithMessage(message, messageTranslationId);
 
         _validationConfiguration.ValidationRules.Single()
-            .CustomMessage.Should().Be(message);
+            .CustomMessage.ShouldBe(message);
         _validationConfiguration.ValidationRules.Single()
-            .MessageTranslationId.Should()
-            .Be(String.IsNullOrWhiteSpace(messageTranslationId) ? String.Empty : messageTranslationId);
+            .MessageTranslationId.ShouldBe(String.IsNullOrWhiteSpace(messageTranslationId) ? String.Empty : messageTranslationId);
     }
 
     [Test]
@@ -280,48 +282,52 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
             () => (IPropertyValidationBuilder<ValidationMockModel, DateTimeOffset>)
                 _validationConfiguration.RuleFor(x => x.IntField).LessThen(100).WithMessage("", "test");
 
-        lessThenFunc
-            .Should()
-            .ThrowExactly<InvalidOperationException>()
-            .WithMessage($"{nameof(ValidationMockModel.IntField)} validation message cannot be empty.");
+        InvalidOperationException exception = Should.Throw<InvalidOperationException>(lessThenFunc);
+        exception.Message.ShouldBe($"{nameof(ValidationMockModel.IntField)} validation message cannot be empty.");
     }
 
     private static void AssertNumbercMinValidationRule<T>(IFormlyValidationRule rule, T value, bool isEqual)
     {
         rule.FormlyRuleName
-            .Should().Be("min");
+            .ShouldBe("min");
         rule.CustomMessage
-            .Should().BeEmpty();
+            .ShouldBeEmpty();
         rule.MessageTranslationId
-            .Should().Be("validators.min");
+            .ShouldBe("validators.min");
         rule.FormlyTemplateOptions
-            .Should().BeEquivalentTo("type: 'number'", $"min: {String.Format(CultureInfo.InvariantCulture, "{0}", value)}{(isEqual ? "" : $" + {GetIncrement<T>()}")}");
+            .ShouldBe(["type: 'number'", $"min: {String.Format(CultureInfo.InvariantCulture, "{0}", value)}{(isEqual ? "" : $" + {GetIncrement<T>()}")}"]);
         rule.FormlyValidationMessage
-            .Should().Be("${field?.templateOptions?.label}:property-name: value should be more than ${field?.templateOptions?.min}:min-value:");
+            .ShouldBe("${field?.templateOptions?.label}:property-name: value should be more than ${field?.templateOptions?.min}:min-value:");
     }
 
     private static void AssertNumbercMaxValidationRule<T>(IFormlyValidationRule rule, T value, bool isEqual)
     {
         rule.FormlyRuleName
-            .Should().Be("max");
+            .ShouldBe("max");
         rule.CustomMessage
-            .Should().BeEmpty();
+            .ShouldBeEmpty();
         rule.MessageTranslationId
-            .Should().Be("validators.max");
+            .ShouldBe("validators.max");
         rule.FormlyTemplateOptions
-            .Should().BeEquivalentTo("type: 'number'", $"max: {String.Format(CultureInfo.InvariantCulture, "{0}", value)}{(isEqual ? "" : $" - {GetIncrement<T>()}")}");
+            .ShouldBe(["type: 'number'", $"max: {String.Format(CultureInfo.InvariantCulture, "{0}", value)}{(isEqual ? "" : $" - {GetIncrement<T>()}")}"]);
         rule.FormlyValidationMessage
-            .Should().Be("${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:");
+            .ShouldBe("${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:");
     }
 
-    private IFormlyValidationRule GetRuleByPropertyName(string propertyName) =>
-        _validationConfiguration.ValidationRules.Single(x => x.PropertyName == propertyName.Camelize());
+    private IFormlyValidationRule GetRuleByPropertyName(string propertyName)
+    {
+        return _validationConfiguration.ValidationRules.Single(x => x.PropertyName == propertyName.Camelize());
+    }
 
-    private IFormlyValidationRule GetRuleByFormlyRuleName(string formlyRuleName) =>
-        _validationConfiguration.ValidationRules.Single(x => x.FormlyRuleName == formlyRuleName);
+    private IFormlyValidationRule GetRuleByFormlyRuleName(string formlyRuleName)
+    {
+        return _validationConfiguration.ValidationRules.Single(x => x.FormlyRuleName == formlyRuleName);
+    }
 
-    private static string GetIncrement<T>() =>
-        new[] { typeof(float), typeof(decimal), typeof(double) }.Contains(typeof(T)) ? "0.1" : "1";
+    private static string GetIncrement<T>()
+    {
+        return new[] { typeof(float), typeof(decimal), typeof(double) }.Contains(typeof(T)) ? "0.1" : "1";
+    }
 }
 
 internal class MockModelValidationConfiguration : ValidationConfiguration<ValidationMockModel> { }

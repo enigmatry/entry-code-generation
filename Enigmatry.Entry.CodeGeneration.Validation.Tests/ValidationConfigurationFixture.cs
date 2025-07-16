@@ -1,7 +1,7 @@
 ﻿using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
-using FluentAssertions;
 using Humanizer;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Enigmatry.Entry.CodeGeneration.Validation.Tests;
 
@@ -14,28 +14,25 @@ public class ValidationConfigurationFixture
         var validationConfiguration = new ModelConfiguration();
 
         validationConfiguration.ValidationRules
-            .Where(x => x.PropertyName == nameof(ValidationMockModel.IntField).Camelize())
-            .Should().HaveCount(3);
+            .Count(x => x.PropertyName == nameof(ValidationMockModel.IntField).Camelize()).ShouldBe(3);
         validationConfiguration.ValidationRules
             .Where(x => x.PropertyName == nameof(ValidationMockModel.IntField).Camelize())
             .Select(x => x.FormlyRuleName)
-            .Should().BeEquivalentTo("required", "min", "max");
+            .ShouldBe(["required", "min", "max"]);
 
         validationConfiguration.ValidationRules
-            .Where(x => x.PropertyName == nameof(ValidationMockModel.DoubleField).Camelize())
-            .Should().HaveCount(3);
+            .Count(x => x.PropertyName == nameof(ValidationMockModel.DoubleField).Camelize()).ShouldBe(3);
         validationConfiguration.ValidationRules
             .Where(x => x.PropertyName == nameof(ValidationMockModel.DoubleField).Camelize())
             .Select(x => x.FormlyRuleName)
-            .Should().BeEquivalentTo("required", "min", "max");
+            .ShouldBe(["required", "min", "max"]);
 
         validationConfiguration.ValidationRules
-            .Where(x => x.PropertyName == nameof(ValidationMockModel.StringField).Camelize())
-            .Should().HaveCount(3);
+            .Count(x => x.PropertyName == nameof(ValidationMockModel.StringField).Camelize()).ShouldBe(3);
         validationConfiguration.ValidationRules
             .Where(x => x.PropertyName == nameof(ValidationMockModel.StringField).Camelize())
             .Select(x => x.FormlyRuleName)
-            .Should().BeEquivalentTo("required", "minLength", "maxLength");
+            .ShouldBe(["required", "minLength", "maxLength"]);
     }
 
     [TestCase(nameof(ValidationMockModel.IntField), "required", "", "validators.required")]
@@ -52,15 +49,17 @@ public class ValidationConfigurationFixture
     {
         var validationConfiguration = new ModelConfiguration();
 
-        validationConfiguration.ValidationRules
-            .Where(x => x.PropertyName == propertyName.Camelize())
-            .Should().NotBeNullOrEmpty();
+        IEnumerable<IFormlyValidationRule> rules = validationConfiguration.ValidationRules
+            .Where(x => x.PropertyName == propertyName.Camelize()).ToList();
+        rules.ShouldNotBeNull();
+        rules.ShouldNotBeEmpty();
+
         IFormlyValidationRule? validationRule = validationConfiguration.ValidationRules
             .Where(x => x.PropertyName == propertyName.Camelize())
             .SingleOrDefault(rule => rule.FormlyRuleName == validationRuleName);
-        validationRule.Should().NotBeNull();
-        validationRule?.CustomMessage.Should().Be(validationMessage);
-        validationRule?.MessageTranslationId.Should().Be(validationMessageTranslationId);
+        validationRule.ShouldNotBeNull();
+        validationRule?.CustomMessage.ShouldBe(validationMessage);
+        validationRule?.MessageTranslationId.ShouldBe(validationMessageTranslationId);
     }
 
     [Test]
@@ -70,27 +69,27 @@ public class ValidationConfigurationFixture
 
         validationConfiguration.ValidationRules
             .Select(x => x.PropertyName.Pascalize())
-            .Should().BeEquivalentTo(nameof(ValidationMockModel.StringField), nameof(ValidationMockModel.OtherStringField));
+            .ShouldBe([nameof(ValidationMockModel.StringField), nameof(ValidationMockModel.OtherStringField)], ignoreOrder: true);
         validationConfiguration.ValidationRules
             .Select(x => x.FormlyRuleName)
-            .Should().BeEquivalentTo("pattern", "pattern");
+            .ShouldBe(["pattern", "pattern"], ignoreOrder: true);
         validationConfiguration.ValidationRules
             .Where(x => x.HasCustomMessage)
             .Select(x => $"{x.PropertyName.Pascalize()}: {x.CustomMessage}")
-            .Should().BeEquivalentTo($"{nameof(ValidationMockModel.OtherStringField)}: Invalid email address format");
+            .ShouldBe([$"{nameof(ValidationMockModel.OtherStringField)}: Invalid email address format"], ignoreOrder: true);
         validationConfiguration.ValidationRules
             .Where(x => x.HasMessageTranslationId)
             .Select(x => $"{x.PropertyName.Pascalize()}: {x.MessageTranslationId}")
-            .Should().BeEquivalentTo(
+            .ShouldBe([
                 $"{nameof(ValidationMockModel.StringField)}: validators.pattern",
                 $"{nameof(ValidationMockModel.OtherStringField)}: validators.pattern.emailAddress"
-            );
+            ], ignoreOrder: true);
         validationConfiguration.ValidationRules
             .Select(x => x.FormlyValidationMessage)
-            .Should().BeEquivalentTo(
+            .ShouldBe([
                 "${field?.templateOptions?.label}:property-name: is not in valid format",
                 "Invalid email address format"
-            );
+            ], ignoreOrder: true);
     }
 
     [Test]
@@ -100,30 +99,30 @@ public class ValidationConfigurationFixture
 
         validationConfiguration.ValidationRules
             .Select(x => x.PropertyName.Pascalize()).Distinct()
-            .Should().BeEquivalentTo(
+            .ShouldBe([
                 nameof(ValidationMockModel.NullableIntField),
                 nameof(ValidationMockModel.NullableDoubleField),
                 nameof(ValidationMockModel.NullableByteField),
                 nameof(ValidationMockModel.NullableStringField)
-            );
+            ], ignoreOrder: true);
 
         validationConfiguration.ValidationRules
             .Select(x => x.FormlyRuleName).Distinct()
-            .Should().BeEquivalentTo("required", "min", "max", "minLength", "maxLength", "pattern");
+            .ShouldBe(["required", "min", "max", "minLength", "maxLength", "pattern"], ignoreOrder: true);
         validationConfiguration.ValidationRules
-            .All(x => x.HasMessageTranslationId).Should().BeTrue();
+            .All(x => x.HasMessageTranslationId).ShouldBeTrue();
         validationConfiguration.ValidationRules
-            .All(x => x.HasCustomMessage).Should().BeFalse();
+            .All(x => x.HasCustomMessage).ShouldBeFalse();
         validationConfiguration.ValidationRules
             .Select(x => x.FormlyValidationMessage).Distinct()
-            .Should().BeEquivalentTo(
+            .ShouldBe([
                 "${field?.templateOptions?.label}:property-name: is required",
                 "${field?.templateOptions?.label}:property-name: value should be more than ${field?.templateOptions?.min}:min-value:",
                 "${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:",
                 "${field?.templateOptions?.label}:property-name: should have at least ${field?.templateOptions?.minLength}:min-value: characters",
                 "${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters",
                 "${field?.templateOptions?.label}:property-name: is not in valid format"
-            );
+            ], ignoreOrder: true);
     }
 }
 
