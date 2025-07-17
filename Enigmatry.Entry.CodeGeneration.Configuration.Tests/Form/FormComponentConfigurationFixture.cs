@@ -23,7 +23,7 @@ public class FormComponentConfigurationFixture
     public void TestFormComponentConfiguration()
     {
         _configuration.Configure(_builder);
-        FormComponentModel formComponent = _builder.Build();
+        var formComponent = _builder.Build();
 
         formComponent.ShouldNotBeNull();
         formComponent.ComponentInfo.Name.ShouldBe("ProjectDetails");
@@ -31,14 +31,14 @@ public class FormComponentConfigurationFixture
 
         formComponent.FormControls.Count.ShouldBe(5);
 
-        Configuration.Form.Controls.FormControl titleFormControl = formComponent.FormControls.Single(x => x.PropertyName == nameof(ProjectDetails.Title).ToLowerInvariant());
+        var titleFormControl = formComponent.FormControls.Single(x => x.PropertyName == nameof(ProjectDetails.Title).ToLowerInvariant());
 
         titleFormControl.ValidationRules.Count.ShouldBe(1);
         titleFormControl.ValidationRules.Single()
             .FormlyRuleName
             .ShouldBe("maxLength");
 
-        Configuration.Form.Controls.FormControl detailsFormControl = formComponent.FormControls.Single(x => x.PropertyName == nameof(ProjectDetails.Description).ToLowerInvariant());
+        var detailsFormControl = formComponent.FormControls.Single(x => x.PropertyName == nameof(ProjectDetails.Description).ToLowerInvariant());
         detailsFormControl.ValidationRules.Count.ShouldBe(1);
         detailsFormControl.ValidationRules.Single()
             .FormlyRuleName
@@ -51,7 +51,7 @@ public class FormComponentConfigurationFixture
         _builder.Component().IncludeUnconfiguredProperties(false);
 
         _configuration.Configure(_builder);
-        FormComponentModel formComponent = _builder.Build();
+        var formComponent = _builder.Build();
 
         formComponent.ShouldNotBeNull();
         formComponent.FormControls.Count.ShouldBe(4);
@@ -63,7 +63,7 @@ public class FormComponentConfigurationFixture
         _builder.Component().OrderBy(OrderByType.Model);
 
         _configuration.Configure(_builder);
-        FormComponentModel formComponent = _builder.Build();
+        var formComponent = _builder.Build();
 
         formComponent.ShouldNotBeNull();
         formComponent.FormControls.Count.ShouldBe(5);
@@ -81,7 +81,7 @@ public class FormComponentConfigurationFixture
         _builder.Component().OrderBy(OrderByType.Configuration);
 
         _configuration.Configure(_builder);
-        FormComponentModel formComponent = _builder.Build();
+        var formComponent = _builder.Build();
 
         formComponent.ShouldNotBeNull();
         formComponent.FormControls.Count.ShouldBe(5);

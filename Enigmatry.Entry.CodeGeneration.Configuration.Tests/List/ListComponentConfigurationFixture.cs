@@ -15,7 +15,7 @@ public class ListComponentConfigurationFixture
         var builder = new ListComponentBuilder<Project>();
 
         configuration.Configure(builder);
-        ListComponentModel componentModel = builder.Build();
+        var componentModel = builder.Build();
 
         componentModel.ShouldNotBeNull();
         componentModel.ComponentInfo.Name.ShouldBe("ProjectList");
@@ -33,7 +33,7 @@ public class ListComponentConfigurationFixture
         builder.Component().OrderBy(OrderByType.Model);
 
         configuration.Configure(builder);
-        ListComponentModel componentModel = builder.Build();
+        var componentModel = builder.Build();
 
         componentModel.ShouldNotBeNull();
         componentModel.Columns.Count.ShouldBe(5);
@@ -56,7 +56,7 @@ public class ListComponentConfigurationFixture
         builder.Component().OrderBy(OrderByType.Configuration);
 
         configuration.Configure(builder);
-        ListComponentModel componentModel = builder.Build();
+        var componentModel = builder.Build();
 
         componentModel.ShouldNotBeNull();
         componentModel.Columns.Count.ShouldBe(5);
@@ -77,7 +77,7 @@ public class ListComponentConfigurationFixture
         var builder = new ListComponentBuilder<Project>();
 
         configuration.Configure(builder);
-        ListComponentModel componentModel = builder.Build();
+        var componentModel = builder.Build();
 
         // All properties are included as columns
         componentModel.ComponentInfo.IncludeUnconfiguredProperties.ShouldBeTrue();
@@ -93,7 +93,7 @@ public class ListComponentConfigurationFixture
         builder.Component().IncludeUnconfiguredProperties(false);
 
         configuration.Configure(builder);
-        ListComponentModel componentModel = builder.Build();
+        var componentModel = builder.Build();
 
         // Only Id, Title and Budged are configured and created as columns
         componentModel.ComponentInfo.IncludeUnconfiguredProperties.ShouldBeFalse();
@@ -110,7 +110,7 @@ public class ListComponentConfigurationFixture
         var builder = new ListComponentBuilder<Project>();
 
         configuration.Configure(builder);
-        ListComponentModel componentModel = builder.Build();
+        var componentModel = builder.Build();
 
         componentModel.Columns.Where(x => x.Property == "startDate" || x.Property == "endDate")
             .All(x => x.Formatter.GetType() == typeof(DatePropertyFormatter))

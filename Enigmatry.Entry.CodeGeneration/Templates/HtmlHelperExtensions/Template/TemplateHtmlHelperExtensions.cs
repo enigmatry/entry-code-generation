@@ -10,13 +10,13 @@ public static class TemplateHtmlHelperExtensions
 {
     public static IHtmlContent FormCssClass(this IHtmlHelper html, FormComponentModel form)
     {
-        string classNameValue = $"entry-{form.ComponentInfo.Name.Kebaberize()}-form";
+        var classNameValue = $"entry-{form.ComponentInfo.Name.Kebaberize()}-form";
         return html.Raw($"class=\"{classNameValue} entry-form\"");
     }
 
     public static IHtmlContent ListCssClass(this IHtmlHelper html, ListComponentModel list)
     {
-        string classNameValue = $"entry-{list.ComponentInfo.Name.Kebaberize()}-table";
+        var classNameValue = $"entry-{list.ComponentInfo.Name.Kebaberize()}-table";
         return html.Raw($"class=\"{classNameValue} entry-table\"");
     }
 }

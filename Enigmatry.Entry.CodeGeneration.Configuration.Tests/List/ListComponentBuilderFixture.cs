@@ -14,7 +14,7 @@ public class ListComponentBuilderFixture
         builder.Component().HasName("ProjectList");
         builder.Component().BelongsToFeature("Projects");
 
-        ListComponentModel componentModel = builder.Build();
+        var componentModel = builder.Build();
 
         componentModel.ComponentInfo.Name.ShouldBe("ProjectList");
         componentModel.ComponentInfo.Feature.Name.ShouldBe("Projects");
@@ -24,7 +24,7 @@ public class ListComponentBuilderFixture
     public void TestColumnsAreVisibleByDefault()
     {
         var builder = new ListComponentBuilder<Project1>();
-        ListComponentModel componentModel = builder.Build();
+        var componentModel = builder.Build();
         componentModel.Columns.Count.ShouldBe(2);
     }
 
@@ -39,9 +39,9 @@ public class ListComponentBuilderFixture
             .WithHeaderName("Test Title")
             .WithTranslationId("title");
 
-        ListComponentModel componentModel = builder.Build();
+        var componentModel = builder.Build();
 
-        Configuration.List.Model.ColumnDefinition? column = componentModel.Columns.FirstOrDefault(c => c.HeaderName == "Test Title");
+        var column = componentModel.Columns.FirstOrDefault(c => c.HeaderName == "Test Title");
         column.ShouldNotBeNull();
         column!.IsVisible.ShouldBeTrue();
         column.IsSortable.ShouldBeFalse();

@@ -9,7 +9,7 @@ public class TypeExtensionsFixture
     [Test]
     public void Test_GetDeclaringName_ShouldIncludeParentTypeNames()
     {
-        Type type = typeof(GetProjects.Response.Item);
+        var type = typeof(GetProjects.Response.Item);
         var declaringName = type.GetDeclaringName();
         declaringName.ShouldBe("GetProjectsResponseItem");
     }
@@ -17,7 +17,7 @@ public class TypeExtensionsFixture
     [Test]
     public void Test_GetDeclaringName_ShouldIncludeTypeNameWhenThereAreNoParentTypes()
     {
-        Type type = typeof(Model);
+        var type = typeof(Model);
         var declaringName = type.GetDeclaringName();
         declaringName.ShouldBe("Model");
     }

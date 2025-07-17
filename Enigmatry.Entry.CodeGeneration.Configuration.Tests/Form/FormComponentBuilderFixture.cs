@@ -12,7 +12,7 @@ public class FormComponentBuilderFixture
     {
         var builder = new FormComponentBuilder<Project1>();
 
-        FormComponentModel componentModel = builder.Build();
+        var componentModel = builder.Build();
 
         componentModel.ShouldNotBeNull();
         componentModel.ComponentInfo.ShouldNotBeNull();

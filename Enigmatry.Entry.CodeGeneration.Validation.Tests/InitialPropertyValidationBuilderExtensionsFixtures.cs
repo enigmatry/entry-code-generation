@@ -139,14 +139,14 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
 
         _validationConfiguration.ValidationRules.Count().ShouldBe(2);
 
-        IFormlyValidationRule minRule = _validationConfiguration.ValidationRules.Single(x => x.FormlyRuleName == "minLength");
+        var minRule = _validationConfiguration.ValidationRules.Single(x => x.FormlyRuleName == "minLength");
         minRule.CustomMessage.ShouldBeEmpty();
         minRule.MessageTranslationId.ShouldBe("validators.minLength");
         minRule.FormlyTemplateOptions.ShouldBe(["minLength: 10"]);
         minRule.FormlyValidationMessage
             .ShouldBe("${field?.templateOptions?.label}:property-name: should have at least ${field?.templateOptions?.minLength}:min-value: characters");
 
-        IFormlyValidationRule maxRule = _validationConfiguration.ValidationRules.Single(x => x.FormlyRuleName == "maxLength");
+        var maxRule = _validationConfiguration.ValidationRules.Single(x => x.FormlyRuleName == "maxLength");
         maxRule.CustomMessage.ShouldBeEmpty();
         maxRule.MessageTranslationId.ShouldBe("validators.maxLength");
         maxRule.FormlyTemplateOptions.ShouldBe(["maxLength: 10"]);
@@ -278,11 +278,11 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
     [Test]
     public void InvalidWithMessage()
     {
-        Func<IPropertyValidationBuilder<ValidationMockModel, DateTimeOffset>> lessThenFunc =
+        var lessThenFunc =
             () => (IPropertyValidationBuilder<ValidationMockModel, DateTimeOffset>)
                 _validationConfiguration.RuleFor(x => x.IntField).LessThen(100).WithMessage("", "test");
 
-        InvalidOperationException exception = Should.Throw<InvalidOperationException>(lessThenFunc);
+        var exception = Should.Throw<InvalidOperationException>(lessThenFunc);
         exception.Message.ShouldBe($"{nameof(ValidationMockModel.IntField)} validation message cannot be empty.");
     }
 

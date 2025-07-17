@@ -54,7 +54,7 @@ public class ValidationConfigurationFixture
         rules.ShouldNotBeNull();
         rules.ShouldNotBeEmpty();
 
-        IFormlyValidationRule? validationRule = validationConfiguration.ValidationRules
+        var validationRule = validationConfiguration.ValidationRules
             .Where(x => x.PropertyName == propertyName.Camelize())
             .SingleOrDefault(rule => rule.FormlyRuleName == validationRuleName);
         validationRule.ShouldNotBeNull();
