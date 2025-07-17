@@ -118,12 +118,14 @@ public class ColumnDefinitionBuilderFixture
             action.ShouldThrow<ArgumentOutOfRangeException>();
         }
     }
-    private static ColumnDefinitionBuilder CreatePropertyBuilder(string propertyName) =>
-        typeof(TestModel)
+    private static ColumnDefinitionBuilder CreatePropertyBuilder(string propertyName)
+    {
+        return typeof(TestModel)
             .GetProperties()
             .Where(prop => prop.Name == propertyName)
             .Select(propertyInfo => new ColumnDefinitionBuilder(propertyInfo))
             .Single();
+    }
 
     internal class TestModel
     {

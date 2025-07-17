@@ -75,6 +75,7 @@ stages:
         projects: $(projectNamePrefix)**/*.Tests.csproj
         arguments: '--filter TestCategory=unit|TestCategory=smoke --configuration $(buildConfiguration)'
     - task: DotNetCoreCLI@2
+      displayName: Pack artifacts
       inputs:
         command: 'pack'
         packagesToPack: '**/*.csproj'
