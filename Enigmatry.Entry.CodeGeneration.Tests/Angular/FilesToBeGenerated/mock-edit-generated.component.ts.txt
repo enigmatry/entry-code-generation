@@ -19,36 +19,36 @@ import { BehaviorSubject, of, Subject, Subscription } from 'rxjs';
 import { map, throttleTime } from 'rxjs/operators';
 
 
-@Component({
-  standalone: false,
-  selector: 'app-g-mock-edit',
-  templateUrl: './mock-edit-generated.component.html'
-})
-export class MockEditGeneratedComponent implements OnInit, OnDestroy {
+    @Component({
+    standalone: false,
+    selector: 'app-g-mock-edit',
+    templateUrl: './mock-edit-generated.component.html'
+    })
+    export class MockEditGeneratedComponent implements OnInit, OnDestroy {
 
-  @Input() model: IFormMock = {} as IFormMock;
-  @Input() set isReadonly(value: boolean) {
+    @Input() model: IFormMock = {} as IFormMock;
+    @Input() set isReadonly(value: boolean) {
     this._isReadonly = value;
     this.fields = this.initializeFields();
-  }
-  get isReadonly() {
+    }
+    get isReadonly() {
     return this._isReadonly;
-  }
+    }
 
-  @Input() saveButtonText: string = 'Save';
-  @Input() cancelButtonText: string = 'Cancel';
-  @Input() saveButtonDisabled: boolean = false;
-  @Input() formButtonsTemplate: TemplateRef<any> | null | undefined;
+    @Input() saveButtonText: string = 'Save';
+    @Input() cancelButtonText: string = 'Cancel';
+    @Input() saveButtonDisabled: boolean = false;
+    @Input() formButtonsTemplate: TemplateRef<any> | null | undefined;
 
-  @Input() fieldsHideExpressions: IFieldExpressionDictionary<IFormMock> | undefined = undefined;
-  @Input() fieldsDisableExpressions: IFieldExpressionDictionary<IFormMock> | undefined = undefined;
-  @Input() fieldsRequiredExpressions: IFieldExpressionDictionary<IFormMock> | undefined = undefined;
-  @Input() fieldsPropertyExpressions: IFieldPropertyExpressionDictionary<IFormMock> | undefined = undefined;
-  @Input() fieldsLabelExpressions: IFieldPropertyExpressionDictionary<IFormMock> | undefined = undefined;
+    @Input() fieldsHideExpressions: IFieldExpressionDictionary<IFormMock> | undefined = undefined;
+    @Input() fieldsDisableExpressions: IFieldExpressionDictionary<IFormMock> | undefined = undefined;
+    @Input() fieldsRequiredExpressions: IFieldExpressionDictionary<IFormMock> | undefined = undefined;
+    @Input() fieldsPropertyExpressions: IFieldPropertyExpressionDictionary<IFormMock> | undefined = undefined;
+    @Input() fieldsLabelExpressions: IFieldPropertyExpressionDictionary<IFormMock> | undefined = undefined;
 
-  @Output() save = new EventEmitter<IFormMock>();
-  @Output() cancel = new EventEmitter<void>();
-  @Output() buttonClick = new EventEmitter<string>();
+    @Output() save = new EventEmitter<IFormMock>();
+    @Output() cancel = new EventEmitter<void>();
+    @Output() buttonClick = new EventEmitter<string>();
 
             @Input() formStatusOptions: any[] = [{ value: null, displayName: $localize `:@@empty-option.none:None` }, { value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
             @Input() formStatusOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: 'displayName' };
@@ -71,37 +71,37 @@ export class MockEditGeneratedComponent implements OnInit, OnDestroy {
             set typesOptions(value: any[]) { this.typesOptions$.next(value); }
             @Input() typesOptionsConfiguration: SelectConfiguration = {};
 
-  _isReadonly: boolean;
-  form = new FormGroup({});
-  fields: FormlyFieldConfig[] = [];
-  private _submitClicks = new Subject<void>();
-  private _submitClicksSubscription: Subscription;
+    _isReadonly: boolean;
+    form = new FormGroup({});
+    fields: FormlyFieldConfig[] = [];
+    private _submitClicks = new Subject<void>();
+    private _submitClicksSubscription: Subscription;
 
-  constructor(
+    constructor(
     @Inject(LOCALE_ID) private _localeId: string,
     @Optional() @Inject(ENTRY_FIELD_TYPE_RESOLVER) private _fieldTypeResolver: FieldTypeResolver) { }
 
-  ngOnInit(): void {
+    ngOnInit(): void {
     this.fields = this.initializeFields();
     this._submitClicksSubscription = this._submitClicks
-        .pipe(throttleTime(500))
-        .subscribe(() => this.save.emit(this.model));
-  }
-
-  ngOnDestroy(): void {
-      this._submitClicksSubscription.unsubscribe();
-  }
-
-  onSubmit() {
-    if (this.form.valid) {
-      this._submitClicks.next();
+    .pipe(throttleTime(500))
+    .subscribe(() => this.save.emit(this.model));
     }
-  }
 
-  resolveFieldType = (type: string, isControlReadonly: boolean): string =>
+    ngOnDestroy(): void {
+    this._submitClicksSubscription.unsubscribe();
+    }
+
+    onSubmit() {
+    if (this.form.valid) {
+    this._submitClicks.next();
+    }
+    }
+
+    resolveFieldType = (type: string, isControlReadonly: boolean): string =>
     this._fieldTypeResolver ? this._fieldTypeResolver(type, this.isReadonly || isControlReadonly) : type;
 
-  initializeFields(): FormlyFieldConfig[] {
+    initializeFields(): FormlyFieldConfig[] {
     return [
             { key: 'id' },
         {
@@ -109,12 +109,12 @@ export class MockEditGeneratedComponent implements OnInit, OnDestroy {
         type: this.resolveFieldType('button', false),
         focus: false,
 className: `entry-reset-form-btn-field entry-button primary-button`,
-        hideExpression: this.fieldsHideExpressions?.resetFormBtn ?? false,
+        hideExpression: this.fieldsHideExpressions?.['resetFormBtn'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.resetFormBtn ? this.fieldsDisableExpressions.resetFormBtn(model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.resetFormBtn ? this.fieldsRequiredExpressions.resetFormBtn(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.resetFormBtn ? this.fieldsLabelExpressions.resetFormBtn(model) : ``),
-        'model.resetFormBtn': (model) => (this.fieldsPropertyExpressions?.resetFormBtn ? this.fieldsPropertyExpressions.resetFormBtn(model) : model.resetFormBtn),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['resetFormBtn'] ? this.fieldsDisableExpressions['resetFormBtn'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['resetFormBtn'] ? this.fieldsRequiredExpressions['resetFormBtn'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['resetFormBtn'] ? this.fieldsLabelExpressions['resetFormBtn'](model) : ``),
+        'model.resetFormBtn': (model) => (this.fieldsPropertyExpressions?.['resetFormBtn'] ? this.fieldsPropertyExpressions['resetFormBtn'](model) : model.resetFormBtn),
         },
         templateOptions: {
         label: ``,
@@ -123,7 +123,7 @@ className: `entry-reset-form-btn-field entry-button primary-button`,
             text: $localize `:@@test.mock-edit.reset-form-btn.text:Reset`,
             onClick: ($event: any) => this.buttonClick.emit('resetFormBtn'),
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
         },
         },
         {
@@ -143,12 +143,12 @@ fieldGroupClassName: `entry-field-group ${this.applyOptionally('group-wrapper-re
         focus: true,
 className: `entry-name-field entry-input`,
 defaultValue: 'DEFAULT NAME',
-        hideExpression: this.fieldsHideExpressions?.name ?? false,
+        hideExpression: this.fieldsHideExpressions?.['name'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.name ? this.fieldsDisableExpressions.name(model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.name ? this.fieldsRequiredExpressions.name(model) : true),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.name ? this.fieldsLabelExpressions.name(model) : $localize `:@@test.mock-edit.name.label:Name`),
-        'model.name': (model) => (this.fieldsPropertyExpressions?.name ? this.fieldsPropertyExpressions.name(model) : model.name),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['name'] ? this.fieldsDisableExpressions['name'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['name'] ? this.fieldsRequiredExpressions['name'](model) : true),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['name'] ? this.fieldsLabelExpressions['name'](model) : $localize `:@@test.mock-edit.name.label:Name`),
+        'model.name': (model) => (this.fieldsPropertyExpressions?.['name'] ? this.fieldsPropertyExpressions['name'](model) : model.name),
         },
             wrappers: ['form-field', 'tooltip'],
         templateOptions: {
@@ -158,7 +158,7 @@ defaultValue: 'DEFAULT NAME',
 appearance: 'outline',
 floatLabel: 'always',
             attributes: { autocomplete: 'off' },
-            hidden: !true,
+        hidden: !true,
             tooltipText: $localize `:@@test.mock-edit.name.tooltip:Tooltip text`,
             required: true,
 maxLength: 50,
@@ -169,7 +169,7 @@ pattern: /[A-Z]/,
             validation: {
             messages: {
 required: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`,
-maxlength: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`
+maxLength: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`
             }
             },
 asyncValidators: { validation: [ 'uniqueName', 'isEnsured' ] },
@@ -180,19 +180,19 @@ modelOptions: { updateOn: 'blur' },
         type: this.resolveFieldType('redactor', false),
         focus: false,
 className: `entry-description-field entry-redactor`,
-        hideExpression: this.fieldsHideExpressions?.description ?? false,
+        hideExpression: this.fieldsHideExpressions?.['description'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.description ? this.fieldsDisableExpressions.description(model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.description ? this.fieldsRequiredExpressions.description(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.description ? this.fieldsLabelExpressions.description(model) : $localize `:@@test.mock-edit.description.label:Some Description`),
-        'model.description': (model) => (this.fieldsPropertyExpressions?.description ? this.fieldsPropertyExpressions.description(model) : model.description),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['description'] ? this.fieldsDisableExpressions['description'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['description'] ? this.fieldsRequiredExpressions['description'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['description'] ? this.fieldsLabelExpressions['description'](model) : $localize `:@@test.mock-edit.description.label:Some Description`),
+        'model.description': (model) => (this.fieldsPropertyExpressions?.['description'] ? this.fieldsPropertyExpressions['description'](model) : model.description),
         },
         templateOptions: {
         label: $localize `:@@test.mock-edit.description.label:Some Description`,
         placeholder: $localize `:@@test.mock-edit.description.placeholder:Some Description`,
         description: ``,
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
             typeFormatDef: undefined
         },
         },
@@ -201,12 +201,12 @@ className: `entry-description-field entry-redactor`,
         type: this.resolveFieldType('datepicker', true),
         focus: false,
 className: `entry-date-field entry-datepicker`,
-        hideExpression: this.fieldsHideExpressions?.date ?? false,
+        hideExpression: this.fieldsHideExpressions?.['date'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.date ? this.fieldsDisableExpressions.date(model) : true)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.date ? this.fieldsRequiredExpressions.date(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.date ? this.fieldsLabelExpressions.date(model) : $localize `:@@test.mock-edit.date.label:Date`),
-        'model.date': (model) => (this.fieldsPropertyExpressions?.date ? this.fieldsPropertyExpressions.date(model) : model.date),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['date'] ? this.fieldsDisableExpressions['date'](model) : true)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['date'] ? this.fieldsRequiredExpressions['date'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['date'] ? this.fieldsLabelExpressions['date'](model) : $localize `:@@test.mock-edit.date.label:Date`),
+        'model.date': (model) => (this.fieldsPropertyExpressions?.['date'] ? this.fieldsPropertyExpressions['date'](model) : model.date),
         },
             wrappers: ['tooltip', 'form-field'],
         templateOptions: {
@@ -214,7 +214,7 @@ className: `entry-date-field entry-datepicker`,
         placeholder: $localize `:@@test.mock-edit.date.placeholder:Date`,
         description: ``,
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
             typeFormatDef: { name: 'date' }
         },
 modelOptions: { updateOn: 'blur' },
@@ -224,19 +224,19 @@ modelOptions: { updateOn: 'blur' },
         type: this.resolveFieldType('input', false),
         focus: false,
 className: `entry-money-field entry-input`,
-        hideExpression: this.fieldsHideExpressions?.money ?? false,
+        hideExpression: this.fieldsHideExpressions?.['money'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.money ? this.fieldsDisableExpressions.money(model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.money ? this.fieldsRequiredExpressions.money(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.money ? this.fieldsLabelExpressions.money(model) : $localize `:@@test.mock-edit.money.label:Money`),
-        'model.money': (model) => (this.fieldsPropertyExpressions?.money ? this.fieldsPropertyExpressions.money(model) : model.money),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['money'] ? this.fieldsDisableExpressions['money'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['money'] ? this.fieldsRequiredExpressions['money'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['money'] ? this.fieldsLabelExpressions['money'](model) : $localize `:@@test.mock-edit.money.label:Money`),
+        'model.money': (model) => (this.fieldsPropertyExpressions?.['money'] ? this.fieldsPropertyExpressions['money'](model) : model.money),
         },
         templateOptions: {
         label: $localize `:@@test.mock-edit.money.label:Money`,
         placeholder: $localize `:@@test.mock-edit.money.placeholder:Money`,
         description: ``,
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
             type: 'number',
 max: 999.99 - 0.1,
 
@@ -248,19 +248,19 @@ max: 999.99 - 0.1,
         type: this.resolveFieldType('input', false),
         focus: false,
 className: `entry-amount-field entry-input`,
-        hideExpression: this.fieldsHideExpressions?.amount ?? false,
+        hideExpression: this.fieldsHideExpressions?.['amount'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.amount ? this.fieldsDisableExpressions.amount(model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.amount ? this.fieldsRequiredExpressions.amount(model) : true),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.amount ? this.fieldsLabelExpressions.amount(model) : $localize `:@@test.mock-edit.amount.label:Amount`),
-        'model.amount': (model) => (this.fieldsPropertyExpressions?.amount ? this.fieldsPropertyExpressions.amount(model) : model.amount),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['amount'] ? this.fieldsDisableExpressions['amount'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['amount'] ? this.fieldsRequiredExpressions['amount'](model) : true),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['amount'] ? this.fieldsLabelExpressions['amount'](model) : $localize `:@@test.mock-edit.amount.label:Amount`),
+        'model.amount': (model) => (this.fieldsPropertyExpressions?.['amount'] ? this.fieldsPropertyExpressions['amount'](model) : model.amount),
         },
         templateOptions: {
         label: $localize `:@@test.mock-edit.amount.label:Amount`,
         placeholder: $localize `:@@test.mock-edit.amount.placeholder:Amount`,
         description: $localize `:@@test.mock-edit.amount.hint:Don't panic if it is 0`,
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
             required: true,
 type: 'number',
 min: 0 + 1,
@@ -280,12 +280,12 @@ max: (err, field) => $localize `:@@test.mock-edit.amount.max:CUSTOM_VALIDATION_M
         type: this.resolveFieldType('select', false),
         focus: false,
 className: `entry-form-status-field entry-select`,
-        hideExpression: this.fieldsHideExpressions?.formStatus ?? false,
+        hideExpression: this.fieldsHideExpressions?.['formStatus'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.formStatus ? this.fieldsDisableExpressions.formStatus(model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.formStatus ? this.fieldsRequiredExpressions.formStatus(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.formStatus ? this.fieldsLabelExpressions.formStatus(model) : $localize `:@@test.mock-edit.form-status.label:Form status`),
-        'model.formStatus': (model) => (this.fieldsPropertyExpressions?.formStatus ? this.fieldsPropertyExpressions.formStatus(model) : model.formStatus),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['formStatus'] ? this.fieldsDisableExpressions['formStatus'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['formStatus'] ? this.fieldsRequiredExpressions['formStatus'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['formStatus'] ? this.fieldsLabelExpressions['formStatus'](model) : $localize `:@@test.mock-edit.form-status.label:Form status`),
+        'model.formStatus': (model) => (this.fieldsPropertyExpressions?.['formStatus'] ? this.fieldsPropertyExpressions['formStatus'](model) : model.formStatus),
         },
         templateOptions: {
         label: $localize `:@@test.mock-edit.form-status.label:Form status`,
@@ -295,7 +295,7 @@ className: `entry-form-status-field entry-select`,
             valueProp: this.formStatusOptionsConfiguration.valueProperty,
             labelProp: this.formStatusOptionsConfiguration.labelProperty,
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
             typeFormatDef: undefined
         },
         },
@@ -304,12 +304,12 @@ className: `entry-form-status-field entry-select`,
         type: this.resolveFieldType('radio', false),
         focus: false,
 className: `entry-mock-radio-field entry-radio`,
-        hideExpression: this.fieldsHideExpressions?.mockRadio ?? false,
+        hideExpression: this.fieldsHideExpressions?.['mockRadio'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.mockRadio ? this.fieldsDisableExpressions.mockRadio(model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.mockRadio ? this.fieldsRequiredExpressions.mockRadio(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.mockRadio ? this.fieldsLabelExpressions.mockRadio(model) : $localize `:@@test.mock-edit.mock-radio.label:Radio`),
-        'model.mockRadio': (model) => (this.fieldsPropertyExpressions?.mockRadio ? this.fieldsPropertyExpressions.mockRadio(model) : model.mockRadio),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['mockRadio'] ? this.fieldsDisableExpressions['mockRadio'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['mockRadio'] ? this.fieldsRequiredExpressions['mockRadio'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['mockRadio'] ? this.fieldsLabelExpressions['mockRadio'](model) : $localize `:@@test.mock-edit.mock-radio.label:Radio`),
+        'model.mockRadio': (model) => (this.fieldsPropertyExpressions?.['mockRadio'] ? this.fieldsPropertyExpressions['mockRadio'](model) : model.mockRadio),
         },
         templateOptions: {
         label: $localize `:@@test.mock-edit.mock-radio.label:Radio`,
@@ -319,7 +319,7 @@ className: `entry-mock-radio-field entry-radio`,
             valueProp: this.mockRadioOptionsConfiguration.valueProperty,
             labelProp: this.mockRadioOptionsConfiguration.labelProperty,
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
             typeFormatDef: undefined
         },
         },
@@ -328,12 +328,12 @@ className: `entry-mock-radio-field entry-radio`,
         type: this.resolveFieldType('select', false),
         focus: false,
 className: `entry-mock-bool-select-field entry-select`,
-        hideExpression: this.fieldsHideExpressions?.mockBoolSelect ?? false,
+        hideExpression: this.fieldsHideExpressions?.['mockBoolSelect'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.mockBoolSelect ? this.fieldsDisableExpressions.mockBoolSelect(model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.mockBoolSelect ? this.fieldsRequiredExpressions.mockBoolSelect(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.mockBoolSelect ? this.fieldsLabelExpressions.mockBoolSelect(model) : $localize `:@@test.mock-edit.mock-bool-select.label:BoolSelect`),
-        'model.mockBoolSelect': (model) => (this.fieldsPropertyExpressions?.mockBoolSelect ? this.fieldsPropertyExpressions.mockBoolSelect(model) : model.mockBoolSelect),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['mockBoolSelect'] ? this.fieldsDisableExpressions['mockBoolSelect'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['mockBoolSelect'] ? this.fieldsRequiredExpressions['mockBoolSelect'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['mockBoolSelect'] ? this.fieldsLabelExpressions['mockBoolSelect'](model) : $localize `:@@test.mock-edit.mock-bool-select.label:BoolSelect`),
+        'model.mockBoolSelect': (model) => (this.fieldsPropertyExpressions?.['mockBoolSelect'] ? this.fieldsPropertyExpressions['mockBoolSelect'](model) : model.mockBoolSelect),
         },
         templateOptions: {
         label: $localize `:@@test.mock-edit.mock-bool-select.label:BoolSelect`,
@@ -343,7 +343,7 @@ className: `entry-mock-bool-select-field entry-select`,
             valueProp: this.mockBoolSelectOptionsConfiguration.valueProperty,
             labelProp: this.mockBoolSelectOptionsConfiguration.labelProperty,
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
             typeFormatDef: { name: 'boolean' }
         },
         },
@@ -352,12 +352,12 @@ className: `entry-mock-bool-select-field entry-select`,
         type: this.resolveFieldType('multicheckbox', false),
         focus: false,
 className: `entry-mock-multi-checkbox-field entry-multicheckbox`,
-        hideExpression: this.fieldsHideExpressions?.mockMultiCheckbox ?? false,
+        hideExpression: this.fieldsHideExpressions?.['mockMultiCheckbox'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.mockMultiCheckbox ? this.fieldsDisableExpressions.mockMultiCheckbox(model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.mockMultiCheckbox ? this.fieldsRequiredExpressions.mockMultiCheckbox(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.mockMultiCheckbox ? this.fieldsLabelExpressions.mockMultiCheckbox(model) : $localize `:@@test.mock-edit.mock-multi-checkbox.label:MultiCheckbox`),
-        'model.mockMultiCheckbox': (model) => (this.fieldsPropertyExpressions?.mockMultiCheckbox ? this.fieldsPropertyExpressions.mockMultiCheckbox(model) : model.mockMultiCheckbox),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['mockMultiCheckbox'] ? this.fieldsDisableExpressions['mockMultiCheckbox'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['mockMultiCheckbox'] ? this.fieldsRequiredExpressions['mockMultiCheckbox'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['mockMultiCheckbox'] ? this.fieldsLabelExpressions['mockMultiCheckbox'](model) : $localize `:@@test.mock-edit.mock-multi-checkbox.label:MultiCheckbox`),
+        'model.mockMultiCheckbox': (model) => (this.fieldsPropertyExpressions?.['mockMultiCheckbox'] ? this.fieldsPropertyExpressions['mockMultiCheckbox'](model) : model.mockMultiCheckbox),
         },
         templateOptions: {
         label: $localize `:@@test.mock-edit.mock-multi-checkbox.label:MultiCheckbox`,
@@ -368,7 +368,7 @@ className: `entry-mock-multi-checkbox-field entry-multicheckbox`,
             valueProp: this.mockMultiCheckboxOptionsConfiguration.valueProperty,
             labelProp: this.mockMultiCheckboxOptionsConfiguration.labelProperty,
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
             typeFormatDef: undefined
         },
         },
@@ -377,12 +377,12 @@ className: `entry-mock-multi-checkbox-field entry-multicheckbox`,
         type: this.resolveFieldType('multicheckbox', false),
         focus: false,
 className: `entry-multi-checkbox-with-string-ids-field entry-multicheckbox`,
-        hideExpression: this.fieldsHideExpressions?.multiCheckboxWithStringIds ?? false,
+        hideExpression: this.fieldsHideExpressions?.['multiCheckboxWithStringIds'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.multiCheckboxWithStringIds ? this.fieldsDisableExpressions.multiCheckboxWithStringIds(model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.multiCheckboxWithStringIds ? this.fieldsRequiredExpressions.multiCheckboxWithStringIds(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.multiCheckboxWithStringIds ? this.fieldsLabelExpressions.multiCheckboxWithStringIds(model) : $localize `:@@test.mock-edit.multi-checkbox-with-string-ids.label:MultiCheckbox`),
-        'model.multiCheckboxWithStringIds': (model) => (this.fieldsPropertyExpressions?.multiCheckboxWithStringIds ? this.fieldsPropertyExpressions.multiCheckboxWithStringIds(model) : model.multiCheckboxWithStringIds),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['multiCheckboxWithStringIds'] ? this.fieldsDisableExpressions['multiCheckboxWithStringIds'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['multiCheckboxWithStringIds'] ? this.fieldsRequiredExpressions['multiCheckboxWithStringIds'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['multiCheckboxWithStringIds'] ? this.fieldsLabelExpressions['multiCheckboxWithStringIds'](model) : $localize `:@@test.mock-edit.multi-checkbox-with-string-ids.label:MultiCheckbox`),
+        'model.multiCheckboxWithStringIds': (model) => (this.fieldsPropertyExpressions?.['multiCheckboxWithStringIds'] ? this.fieldsPropertyExpressions['multiCheckboxWithStringIds'](model) : model.multiCheckboxWithStringIds),
         },
         templateOptions: {
         label: $localize `:@@test.mock-edit.multi-checkbox-with-string-ids.label:MultiCheckbox`,
@@ -393,7 +393,7 @@ className: `entry-multi-checkbox-with-string-ids-field entry-multicheckbox`,
             valueProp: this.multiCheckboxWithStringIdsOptionsConfiguration.valueProperty,
             labelProp: this.multiCheckboxWithStringIdsOptionsConfiguration.labelProperty,
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
             typeFormatDef: undefined
         },
         },
@@ -402,12 +402,12 @@ className: `entry-multi-checkbox-with-string-ids-field entry-multicheckbox`,
         type: this.resolveFieldType('select', false),
         focus: false,
 className: `entry-category-id-field entry-select`,
-        hideExpression: this.fieldsHideExpressions?.categoryId ?? false,
+        hideExpression: this.fieldsHideExpressions?.['categoryId'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.categoryId ? this.fieldsDisableExpressions.categoryId(model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.categoryId ? this.fieldsRequiredExpressions.categoryId(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.categoryId ? this.fieldsLabelExpressions.categoryId(model) : $localize `:@@test.mock-edit.category-id.label:Category`),
-        'model.categoryId': (model) => (this.fieldsPropertyExpressions?.categoryId ? this.fieldsPropertyExpressions.categoryId(model) : model.categoryId),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['categoryId'] ? this.fieldsDisableExpressions['categoryId'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['categoryId'] ? this.fieldsRequiredExpressions['categoryId'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['categoryId'] ? this.fieldsLabelExpressions['categoryId'](model) : $localize `:@@test.mock-edit.category-id.label:Category`),
+        'model.categoryId': (model) => (this.fieldsPropertyExpressions?.['categoryId'] ? this.fieldsPropertyExpressions['categoryId'](model) : model.categoryId),
         },
         templateOptions: {
         label: $localize `:@@test.mock-edit.category-id.label:Category`,
@@ -417,7 +417,7 @@ className: `entry-category-id-field entry-select`,
             valueProp: this.categoryIdOptionsConfiguration.valueProperty,
             labelProp: this.categoryIdOptionsConfiguration.labelProperty,
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
 metadata: { entityType: 'Category', filter: 'category_name' },
             typeFormatDef: undefined
         },
@@ -427,12 +427,12 @@ metadata: { entityType: 'Category', filter: 'category_name' },
         type: this.resolveFieldType('select', false),
         focus: false,
 className: `entry-types-field entry-select`,
-        hideExpression: this.fieldsHideExpressions?.types ?? false,
+        hideExpression: this.fieldsHideExpressions?.['types'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.types ? this.fieldsDisableExpressions.types(model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.types ? this.fieldsRequiredExpressions.types(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.types ? this.fieldsLabelExpressions.types(model) : $localize `:@@test.mock-edit.types.label:Types`),
-        'model.types': (model) => (this.fieldsPropertyExpressions?.types ? this.fieldsPropertyExpressions.types(model) : model.types),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['types'] ? this.fieldsDisableExpressions['types'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['types'] ? this.fieldsRequiredExpressions['types'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['types'] ? this.fieldsLabelExpressions['types'](model) : $localize `:@@test.mock-edit.types.label:Types`),
+        'model.types': (model) => (this.fieldsPropertyExpressions?.['types'] ? this.fieldsPropertyExpressions['types'](model) : model.types),
         },
         templateOptions: {
         label: $localize `:@@test.mock-edit.types.label:Types`,
@@ -444,7 +444,7 @@ className: `entry-types-field entry-select`,
             multiple: true,
             selectAllOption: $localize `:@@select-all-option.select-all:SelectAll`,
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
             typeFormatDef: undefined
         },
         },
@@ -453,12 +453,12 @@ className: `entry-types-field entry-select`,
         type: this.resolveFieldType('input', false),
         focus: false,
 className: `entry-password-field entry-input`,
-        hideExpression: this.fieldsHideExpressions?.password ?? false,
+        hideExpression: this.fieldsHideExpressions?.['password'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.password ? this.fieldsDisableExpressions.password(model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.password ? this.fieldsRequiredExpressions.password(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.password ? this.fieldsLabelExpressions.password(model) : $localize `:@@test.mock-edit.password.label:Password`),
-        'model.password': (model) => (this.fieldsPropertyExpressions?.password ? this.fieldsPropertyExpressions.password(model) : model.password),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['password'] ? this.fieldsDisableExpressions['password'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['password'] ? this.fieldsRequiredExpressions['password'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['password'] ? this.fieldsLabelExpressions['password'](model) : $localize `:@@test.mock-edit.password.label:Password`),
+        'model.password': (model) => (this.fieldsPropertyExpressions?.['password'] ? this.fieldsPropertyExpressions['password'](model) : model.password),
         },
         templateOptions: {
         label: $localize `:@@test.mock-edit.password.label:Password`,
@@ -466,7 +466,7 @@ className: `entry-password-field entry-input`,
         description: ``,
             type: 'password',
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
             typeFormatDef: undefined
         },
         },
@@ -476,19 +476,19 @@ className: `entry-password-field entry-input`,
         focus: false,
 className: `entry-is-active-field entry-checkbox`,
 defaultValue: true,
-        hideExpression: this.fieldsHideExpressions?.isActive ?? false,
+        hideExpression: this.fieldsHideExpressions?.['isActive'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.isActive ? this.fieldsDisableExpressions.isActive(model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.isActive ? this.fieldsRequiredExpressions.isActive(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.isActive ? this.fieldsLabelExpressions.isActive(model) : $localize `:@@test.mock-edit.is-active.label:Active`),
-        'model.isActive': (model) => (this.fieldsPropertyExpressions?.isActive ? this.fieldsPropertyExpressions.isActive(model) : model.isActive),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['isActive'] ? this.fieldsDisableExpressions['isActive'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['isActive'] ? this.fieldsRequiredExpressions['isActive'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['isActive'] ? this.fieldsLabelExpressions['isActive'](model) : $localize `:@@test.mock-edit.is-active.label:Active`),
+        'model.isActive': (model) => (this.fieldsPropertyExpressions?.['isActive'] ? this.fieldsPropertyExpressions['isActive'](model) : model.isActive),
         },
         templateOptions: {
         label: $localize `:@@test.mock-edit.is-active.label:Active`,
         placeholder: $localize `:@@test.mock-edit.is-active.placeholder:Active`,
         description: ``,
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
             typeFormatDef: { name: 'boolean' }
         },
         },
@@ -497,12 +497,12 @@ defaultValue: true,
         type: this.resolveFieldType('array-field', false),
         focus: false,
 className: `entry-addresses-field entry-array-field`,
-        hideExpression: this.fieldsHideExpressions?.addresses ?? false,
+        hideExpression: this.fieldsHideExpressions?.['addresses'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.addresses ? this.fieldsDisableExpressions.addresses(model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.addresses ? this.fieldsRequiredExpressions.addresses(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.addresses ? this.fieldsLabelExpressions.addresses(model) : $localize `:@@test.mock-edit.addresses.label:Addresses`),
-        'model.addresses': (model) => (this.fieldsPropertyExpressions?.addresses ? this.fieldsPropertyExpressions.addresses(model) : model.addresses),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['addresses'] ? this.fieldsDisableExpressions['addresses'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['addresses'] ? this.fieldsRequiredExpressions['addresses'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['addresses'] ? this.fieldsLabelExpressions['addresses'](model) : $localize `:@@test.mock-edit.addresses.label:Addresses`),
+        'model.addresses': (model) => (this.fieldsPropertyExpressions?.['addresses'] ? this.fieldsPropertyExpressions['addresses'](model) : model.addresses),
         },
             wrappers: ['array-wrapper'],
         templateOptions: {
@@ -510,7 +510,7 @@ className: `entry-addresses-field entry-array-field`,
         placeholder: $localize `:@@test.mock-edit.addresses.placeholder:Addresses`,
         description: ``,
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
             typeFormatDef: undefined
         },
             fieldArray:
@@ -532,19 +532,19 @@ fieldGroupClassName: `entry-field-group`,
         focus: false,
 className: `entry-city-field entry-input`,
 defaultValue: 'Amsterdam',
-        hideExpression: this.fieldsHideExpressions?.city ?? false,
+        hideExpression: this.fieldsHideExpressions?.['city'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.city ? this.fieldsDisableExpressions.city(model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.city ? this.fieldsRequiredExpressions.city(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.city ? this.fieldsLabelExpressions.city(model) : $localize `:@@test.mock-edit.city.label:City`),
-        'model.city': (model) => (this.fieldsPropertyExpressions?.city ? this.fieldsPropertyExpressions.city(model) : model.city),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['city'] ? this.fieldsDisableExpressions['city'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['city'] ? this.fieldsRequiredExpressions['city'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['city'] ? this.fieldsLabelExpressions['city'](model) : $localize `:@@test.mock-edit.city.label:City`),
+        'model.city': (model) => (this.fieldsPropertyExpressions?.['city'] ? this.fieldsPropertyExpressions['city'](model) : model.city),
         },
         templateOptions: {
         label: $localize `:@@test.mock-edit.city.label:City`,
         placeholder: $localize `:@@test.mock-edit.city.placeholder:City`,
         description: ``,
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
             typeFormatDef: undefined
         },
         },
@@ -553,19 +553,19 @@ defaultValue: 'Amsterdam',
         type: this.resolveFieldType('input', false),
         focus: false,
 className: `entry-street-field entry-input`,
-        hideExpression: this.fieldsHideExpressions?.street ?? false,
+        hideExpression: this.fieldsHideExpressions?.['street'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.street ? this.fieldsDisableExpressions.street(model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.street ? this.fieldsRequiredExpressions.street(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.street ? this.fieldsLabelExpressions.street(model) : $localize `:@@test.mock-edit.street.label:Street`),
-        'model.street': (model) => (this.fieldsPropertyExpressions?.street ? this.fieldsPropertyExpressions.street(model) : model.street),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['street'] ? this.fieldsDisableExpressions['street'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['street'] ? this.fieldsRequiredExpressions['street'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['street'] ? this.fieldsLabelExpressions['street'](model) : $localize `:@@test.mock-edit.street.label:Street`),
+        'model.street': (model) => (this.fieldsPropertyExpressions?.['street'] ? this.fieldsPropertyExpressions['street'](model) : model.street),
         },
         templateOptions: {
         label: $localize `:@@test.mock-edit.street.label:Street`,
         placeholder: $localize `:@@test.mock-edit.street.placeholder:Street`,
         description: ``,
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
             typeFormatDef: undefined
         },
         },
@@ -574,19 +574,19 @@ className: `entry-street-field entry-input`,
         type: this.resolveFieldType('input', false),
         focus: false,
 className: `entry-house-number-field entry-input`,
-        hideExpression: this.fieldsHideExpressions?.houseNumber ?? false,
+        hideExpression: this.fieldsHideExpressions?.['houseNumber'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.houseNumber ? this.fieldsDisableExpressions.houseNumber(model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.houseNumber ? this.fieldsRequiredExpressions.houseNumber(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.houseNumber ? this.fieldsLabelExpressions.houseNumber(model) : $localize `:@@test.mock-edit.house-number.label:House number`),
-        'model.houseNumber': (model) => (this.fieldsPropertyExpressions?.houseNumber ? this.fieldsPropertyExpressions.houseNumber(model) : model.houseNumber),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['houseNumber'] ? this.fieldsDisableExpressions['houseNumber'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['houseNumber'] ? this.fieldsRequiredExpressions['houseNumber'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['houseNumber'] ? this.fieldsLabelExpressions['houseNumber'](model) : $localize `:@@test.mock-edit.house-number.label:House number`),
+        'model.houseNumber': (model) => (this.fieldsPropertyExpressions?.['houseNumber'] ? this.fieldsPropertyExpressions['houseNumber'](model) : model.houseNumber),
         },
         templateOptions: {
         label: $localize `:@@test.mock-edit.house-number.label:House number`,
         placeholder: $localize `:@@test.mock-edit.house-number.placeholder:House number`,
         description: ``,
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
             typeFormatDef: undefined
         },
         },
@@ -595,19 +595,19 @@ className: `entry-house-number-field entry-input`,
         type: this.resolveFieldType('checkbox', true),
         focus: false,
 className: `entry-verified-field entry-checkbox`,
-        hideExpression: this.fieldsHideExpressions?.verified ?? false,
+        hideExpression: this.fieldsHideExpressions?.['verified'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.verified ? this.fieldsDisableExpressions.verified(model) : true)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.verified ? this.fieldsRequiredExpressions.verified(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.verified ? this.fieldsLabelExpressions.verified(model) : $localize `:@@test.mock-edit.verified.label:Verified`),
-        'model.verified': (model) => (this.fieldsPropertyExpressions?.verified ? this.fieldsPropertyExpressions.verified(model) : model.verified),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['verified'] ? this.fieldsDisableExpressions['verified'](model) : true)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['verified'] ? this.fieldsRequiredExpressions['verified'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['verified'] ? this.fieldsLabelExpressions['verified'](model) : $localize `:@@test.mock-edit.verified.label:Verified`),
+        'model.verified': (model) => (this.fieldsPropertyExpressions?.['verified'] ? this.fieldsPropertyExpressions['verified'](model) : model.verified),
         },
         templateOptions: {
         label: $localize `:@@test.mock-edit.verified.label:Verified`,
         placeholder: $localize `:@@test.mock-edit.verified.placeholder:Verified`,
         description: ``,
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
             typeFormatDef: { name: 'boolean' }
         },
         },
@@ -619,19 +619,19 @@ className: `entry-verified-field entry-checkbox`,
         type: this.resolveFieldType('datetimepicker', false),
         focus: false,
 className: `entry-date-and-time-field entry-datetimepicker`,
-        hideExpression: this.fieldsHideExpressions?.dateAndTime ?? false,
+        hideExpression: this.fieldsHideExpressions?.['dateAndTime'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.dateAndTime ? this.fieldsDisableExpressions.dateAndTime(model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.dateAndTime ? this.fieldsRequiredExpressions.dateAndTime(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.dateAndTime ? this.fieldsLabelExpressions.dateAndTime(model) : $localize `:@@test.mock-edit.date-and-time.label:Date and time`),
-        'model.dateAndTime': (model) => (this.fieldsPropertyExpressions?.dateAndTime ? this.fieldsPropertyExpressions.dateAndTime(model) : model.dateAndTime),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['dateAndTime'] ? this.fieldsDisableExpressions['dateAndTime'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['dateAndTime'] ? this.fieldsRequiredExpressions['dateAndTime'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['dateAndTime'] ? this.fieldsLabelExpressions['dateAndTime'](model) : $localize `:@@test.mock-edit.date-and-time.label:Date and time`),
+        'model.dateAndTime': (model) => (this.fieldsPropertyExpressions?.['dateAndTime'] ? this.fieldsPropertyExpressions['dateAndTime'](model) : model.dateAndTime),
         },
         templateOptions: {
         label: $localize `:@@test.mock-edit.date-and-time.label:Date and time`,
         placeholder: $localize `:@@test.mock-edit.date-and-time.placeholder:Date and time`,
         description: ``,
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
             typeFormatDef: { name: 'date' }
         },
 modelOptions: { updateOn: 'blur' },
@@ -643,19 +643,19 @@ modelOptions: { updateOn: 'blur' },
         type: this.resolveFieldType('input', false),
         focus: false,
 className: `entry-email1-field entry-input`,
-        hideExpression: this.fieldsHideExpressions?.email1 ?? false,
+        hideExpression: this.fieldsHideExpressions?.['email1'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.email1 ? this.fieldsDisableExpressions.email1(model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.email1 ? this.fieldsRequiredExpressions.email1(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.email1 ? this.fieldsLabelExpressions.email1(model) : $localize `:@@test.mock-edit.email1.label:Email 1`),
-        'model.email1': (model) => (this.fieldsPropertyExpressions?.email1 ? this.fieldsPropertyExpressions.email1(model) : model.email1),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['email1'] ? this.fieldsDisableExpressions['email1'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['email1'] ? this.fieldsRequiredExpressions['email1'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['email1'] ? this.fieldsLabelExpressions['email1'](model) : $localize `:@@test.mock-edit.email1.label:Email 1`),
+        'model.email1': (model) => (this.fieldsPropertyExpressions?.['email1'] ? this.fieldsPropertyExpressions['email1'](model) : model.email1),
         },
         templateOptions: {
         label: $localize `:@@test.mock-edit.email1.label:Email 1`,
         placeholder: $localize `:@@test.mock-edit.email1.placeholder:Email 1`,
         description: ``,
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
             pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
 maxLength: 50,
 
@@ -672,19 +672,19 @@ pattern: (err, field) => $localize `:@@test.mock-edit.email1.pattern:CUSTOM_VALI
         type: this.resolveFieldType('input', false),
         focus: false,
 className: `entry-email2-field entry-input`,
-        hideExpression: this.fieldsHideExpressions?.email2 ?? false,
+        hideExpression: this.fieldsHideExpressions?.['email2'] ?? false,
         expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.email2 ? this.fieldsDisableExpressions.email2(model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.email2 ? this.fieldsRequiredExpressions.email2(model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.email2 ? this.fieldsLabelExpressions.email2(model) : $localize `:@@test.mock-edit.email2.label:Email 2`),
-        'model.email2': (model) => (this.fieldsPropertyExpressions?.email2 ? this.fieldsPropertyExpressions.email2(model) : model.email2),
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['email2'] ? this.fieldsDisableExpressions['email2'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['email2'] ? this.fieldsRequiredExpressions['email2'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['email2'] ? this.fieldsLabelExpressions['email2'](model) : $localize `:@@test.mock-edit.email2.label:Email 2`),
+        'model.email2': (model) => (this.fieldsPropertyExpressions?.['email2'] ? this.fieldsPropertyExpressions['email2'](model) : model.email2),
         },
         templateOptions: {
         label: $localize `:@@test.mock-edit.email2.label:Email 2`,
         placeholder: $localize `:@@test.mock-edit.email2.placeholder:Email 2`,
         description: ``,
             attributes: {  },
-            hidden: !true,
+        hidden: !true,
             pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
 maxLength: 50,
 
@@ -697,11 +697,10 @@ pattern: (err, field) => $localize `:@@validators.pattern.emailAddress:Invalid e
             },
         },
     ];
-}
+    }
 
-  private applyOptionally<T>(value: T, apply: boolean): T | undefined {
+    private applyOptionally<T>(value: T, apply: boolean): T | undefined {
     return apply ? value : undefined;
-  }
+    }
 
-}
-
+    }
