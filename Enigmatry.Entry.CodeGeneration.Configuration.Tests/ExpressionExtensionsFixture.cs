@@ -12,7 +12,7 @@ public class ExpressionExtensionsFixture
     {
         Expression<Func<Model1, string>> propertyExpression = model => model.Title;
 
-        System.Reflection.PropertyInfo propertyInfo = propertyExpression.GetPropertyInfo();
+        var propertyInfo = propertyExpression.GetPropertyInfo();
 
         propertyInfo.ShouldNotBeNull();
         propertyInfo.Name.ShouldBe(nameof(Model1.Title));

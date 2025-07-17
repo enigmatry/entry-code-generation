@@ -19,7 +19,7 @@ public class AngularFormattingHtmlHelperExtensionsFixture : CodeGenerationFixtur
     {
         var stringWriter = new StringWriter();
 
-        Microsoft.AspNetCore.Html.IHtmlContent htmlContent = _htmlHelper.Pipe(
+        var htmlContent = _htmlHelper.Pipe(
             new DatePropertyFormatter()
                 .WithFormat(format)
                 .WithTimeZone(timeZone)
@@ -45,7 +45,7 @@ public class AngularFormattingHtmlHelperExtensionsFixture : CodeGenerationFixtur
     {
         var stringWriter = new StringWriter();
 
-        Microsoft.AspNetCore.Html.IHtmlContent htmlContent = _htmlHelper.Pipe(
+        var htmlContent = _htmlHelper.Pipe(
             new CurrencyPropertyFormatter()
                 .WithCurrencyCode(currencyCode)
                 .WithDisplay(display)
@@ -65,7 +65,7 @@ public class AngularFormattingHtmlHelperExtensionsFixture : CodeGenerationFixtur
     {
         var stringWriter = new StringWriter();
 
-        Microsoft.AspNetCore.Html.IHtmlContent htmlContent = _htmlHelper.Pipe(
+        var htmlContent = _htmlHelper.Pipe(
             new DecimalPropertyFormatter()
                 .WithDigitsInfo(digitsInfo)
                 .WithLocale(locale)
@@ -83,7 +83,7 @@ public class AngularFormattingHtmlHelperExtensionsFixture : CodeGenerationFixtur
     {
         var stringWriter = new StringWriter();
 
-        Microsoft.AspNetCore.Html.IHtmlContent htmlContent = _htmlHelper.Pipe(
+        var htmlContent = _htmlHelper.Pipe(
             new PercentPropertyFormatter()
                 .WithDigitsInfo(digitsInfo)
                 .WithLocale(locale)
@@ -98,7 +98,7 @@ public class AngularFormattingHtmlHelperExtensionsFixture : CodeGenerationFixtur
     {
         var stringWriter = new StringWriter();
 
-        Microsoft.AspNetCore.Html.IHtmlContent htmlContent = _htmlHelper.Pipe(new BooleanPropertyFormatter());
+        var htmlContent = _htmlHelper.Pipe(new BooleanPropertyFormatter());
 
         htmlContent.WriteTo(stringWriter, HtmlEncoder.Default);
         return stringWriter.ToString();
@@ -109,7 +109,7 @@ public class AngularFormattingHtmlHelperExtensionsFixture : CodeGenerationFixtur
     {
         var stringWriter = new StringWriter();
 
-        Microsoft.AspNetCore.Html.IHtmlContent htmlContent = _htmlHelper.Pipe(new NoFormattingPropertyFormatter());
+        var htmlContent = _htmlHelper.Pipe(new NoFormattingPropertyFormatter());
 
         htmlContent.WriteTo(stringWriter, HtmlEncoder.Default);
         return stringWriter.ToString();
