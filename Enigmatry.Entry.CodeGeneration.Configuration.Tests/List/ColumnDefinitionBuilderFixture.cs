@@ -1,7 +1,7 @@
 ﻿using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
 using Enigmatry.Entry.CodeGeneration.Configuration.List.Model;
-using FluentAssertions;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration.Tests.List;
 
@@ -14,7 +14,7 @@ public class ColumnDefinitionBuilderFixture
         foreach (var propertyName in propertyNames)
         {
             Action action = () => CreatePropertyBuilder(propertyName).WithFormat(new DatePropertyFormatter());
-            action.Should().NotThrow();
+            action.ShouldNotThrow();
         }
     }
 
@@ -24,7 +24,7 @@ public class ColumnDefinitionBuilderFixture
         foreach (var propertyName in propertyNames)
         {
             Action action = () => CreatePropertyBuilder(propertyName).WithFormat(new DatePropertyFormatter());
-            action.Should().ThrowExactly<ArgumentOutOfRangeException>();
+            action.ShouldThrow<ArgumentOutOfRangeException>();
 
         }
     }
@@ -35,7 +35,7 @@ public class ColumnDefinitionBuilderFixture
         foreach (var propertyName in propertyNames)
         {
             Action action = () => CreatePropertyBuilder(propertyName).WithFormat(new CurrencyPropertyFormatter());
-            action.Should().NotThrow();
+            action.ShouldNotThrow();
         }
     }
 
@@ -45,7 +45,7 @@ public class ColumnDefinitionBuilderFixture
         foreach (var propertyName in propertyNames)
         {
             Action action = () => CreatePropertyBuilder(propertyName).WithFormat(new CurrencyPropertyFormatter());
-            action.Should().ThrowExactly<ArgumentOutOfRangeException>();
+            action.ShouldThrow<ArgumentOutOfRangeException>();
         }
     }
 
@@ -55,7 +55,7 @@ public class ColumnDefinitionBuilderFixture
         foreach (var propertyName in propertyNames)
         {
             Action action = () => CreatePropertyBuilder(propertyName).WithFormat(new DecimalPropertyFormatter());
-            action.Should().NotThrow();
+            action.ShouldNotThrow();
         }
     }
 
@@ -65,7 +65,7 @@ public class ColumnDefinitionBuilderFixture
         foreach (var propertyName in propertyNames)
         {
             Action action = () => CreatePropertyBuilder(propertyName).WithFormat(new DecimalPropertyFormatter());
-            action.Should().ThrowExactly<ArgumentOutOfRangeException>();
+            action.ShouldThrow<ArgumentOutOfRangeException>();
         }
     }
 
@@ -75,7 +75,7 @@ public class ColumnDefinitionBuilderFixture
         foreach (var propertyName in propertyNames)
         {
             Action action = () => CreatePropertyBuilder(propertyName).WithFormat(new PercentPropertyFormatter());
-            action.Should().NotThrow();
+            action.ShouldNotThrow();
         }
     }
 
@@ -85,7 +85,7 @@ public class ColumnDefinitionBuilderFixture
         foreach (var propertyName in propertyNames)
         {
             Action action = () => CreatePropertyBuilder(propertyName).WithFormat(new PercentPropertyFormatter());
-            action.Should().ThrowExactly<ArgumentOutOfRangeException>();
+            action.ShouldThrow<ArgumentOutOfRangeException>();
         }
     }
 
@@ -95,7 +95,7 @@ public class ColumnDefinitionBuilderFixture
         foreach (var propertyName in propertyNames)
         {
             Action action = () => CreatePropertyBuilder(propertyName).WithFormat(new NoFormattingPropertyFormatter());
-            action.Should().NotThrow();
+            action.ShouldNotThrow();
         }
     }
 
@@ -105,7 +105,7 @@ public class ColumnDefinitionBuilderFixture
         foreach (var propertyName in propertyNames)
         {
             Action action = () => CreatePropertyBuilder(propertyName).WithFormat(new BooleanPropertyFormatter());
-            action.Should().NotThrow();
+            action.ShouldNotThrow();
         }
     }
 
@@ -115,15 +115,17 @@ public class ColumnDefinitionBuilderFixture
         foreach (var propertyName in propertyNames)
         {
             Action action = () => CreatePropertyBuilder(propertyName).WithFormat(new BooleanPropertyFormatter());
-            action.Should().ThrowExactly<ArgumentOutOfRangeException>();
+            action.ShouldThrow<ArgumentOutOfRangeException>();
         }
     }
-    private static ColumnDefinitionBuilder CreatePropertyBuilder(string propertyName) =>
-        typeof(TestModel)
+    private static ColumnDefinitionBuilder CreatePropertyBuilder(string propertyName)
+    {
+        return typeof(TestModel)
             .GetProperties()
             .Where(prop => prop.Name == propertyName)
             .Select(propertyInfo => new ColumnDefinitionBuilder(propertyInfo))
             .Single();
+    }
 
     internal class TestModel
     {

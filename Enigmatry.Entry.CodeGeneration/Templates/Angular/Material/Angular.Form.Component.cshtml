@@ -47,12 +47,12 @@ import { map, throttleTime } from 'rxjs/operators';
         @:focus: @control.Autofocus.ToString().ToLower(),
         @Html.FieldCssClass(control)
         @Html.DefaultValue(control)
-        @:hideExpression: this.fieldsHideExpressions?.@(control.PropertyName) ?? false,
+        @:hideExpression: this.fieldsHideExpressions?.['@(control.PropertyName)'] ?? false,
         @:expressionProperties: {
-        @:'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.@(control.PropertyName) ? this.fieldsDisableExpressions.@(control.PropertyName)(model) : @control.Readonly.ToString().ToLower())),
-        @:'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.@(control.PropertyName) ? this.fieldsRequiredExpressions.@(control.PropertyName)(model) : @control.IsRequired.ToString().ToLower()),
-        @:'templateOptions.label': (model) => (this.fieldsLabelExpressions?.@(control.PropertyName) ? this.fieldsLabelExpressions.@(control.PropertyName)(model) : @Html.Localize(control.Label, Options.EnableI18N)),
-        @:'model.@(control.PropertyName)': (model) => (this.fieldsPropertyExpressions?.@(control.PropertyName) ? this.fieldsPropertyExpressions.@(control.PropertyName)(model) : model.@(control.PropertyName)),
+        @:'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['@(control.PropertyName)'] ? this.fieldsDisableExpressions['@(control.PropertyName)'](model) : @control.Readonly.ToString().ToLower())),
+        @:'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['@(control.PropertyName)'] ? this.fieldsRequiredExpressions['@(control.PropertyName)'](model) : @control.IsRequired.ToString().ToLower()),
+        @:'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['@(control.PropertyName)'] ? this.fieldsLabelExpressions['@(control.PropertyName)'](model) : @Html.Localize(control.Label, Options.EnableI18N)),
+        @:'model.@(control.PropertyName)': (model) => (this.fieldsPropertyExpressions?.['@(control.PropertyName)'] ? this.fieldsPropertyExpressions['@(control.PropertyName)'](model) : model.@(control.PropertyName)),
         @:},
         CreateWrappers(control);
         CreateFieldTemplateOptions(control);
@@ -60,7 +60,7 @@ import { map, throttleTime } from 'rxjs/operators';
         @if (control is ArrayFormControl arrayControl)
         {
             @:fieldArray:
-                RenderControls(new List<FormControl> { arrayControl.FormControlGroup });
+            RenderControls(new List<FormControl> { arrayControl.FormControlGroup });
         }
         @Html.AddModelOptions(control)
         @:},
@@ -103,7 +103,7 @@ import { map, throttleTime } from 'rxjs/operators';
             @:autosizeMaxRows: @(textarea.AutoResizeMaxRows),
         }
             @:@Html.AddAttributes(control)
-            @:hidden: !@control.Visible.ToString().ToLower(),
+        @:hidden: !@control.Visible.ToString().ToLower(),
         @if (control.Tooltip.Value.HasContent())
         {
             @:tooltipText: @Html.Localize(control.Tooltip, Options.EnableI18N),
@@ -224,77 +224,81 @@ import { map, throttleTime } from 'rxjs/operators';
     }
 }
 
-@@Component({
-  standalone: false,
-  selector: '@Model.AngularComponentSelector(Options.GeneratedComponentPrefix)',
-  templateUrl: './@(Model.AngularComponentFileName()).html'
-})
-export class @Model.AngularComponentName() implements OnInit, OnDestroy {
+    @@Component({
+    standalone: false,
+    selector: '@Model.AngularComponentSelector(Options.GeneratedComponentPrefix)',
+    templateUrl: './@(Model.AngularComponentFileName()).html'
+    })
+    export class @Model.AngularComponentName() implements OnInit, OnDestroy {
 
-  @@Input() model: I@(Model.ComponentInfo.ModelType) = {} as I@(Model.ComponentInfo.ModelType);
-  @@Input() set isReadonly(value: boolean) {
+    @@Input() model: I@(Model.ComponentInfo.ModelType) = {} as I@(Model.ComponentInfo.ModelType);
+    @@Input() set isReadonly(value: boolean) {
     this._isReadonly = value;
     this.fields = this.initializeFields();
-  }
-  get isReadonly() {
+    }
+    get isReadonly() {
     return this._isReadonly;
-  }
+    }
 
-  @@Input() saveButtonText: string = 'Save';
-  @@Input() cancelButtonText: string = 'Cancel';
-  @@Input() saveButtonDisabled: boolean = false;
-  @@Input() formButtonsTemplate: TemplateRef@(Html.Raw("<any>")) | null | undefined;
+    @@Input() saveButtonText: string = 'Save';
+    @@Input() cancelButtonText: string = 'Cancel';
+    @@Input() saveButtonDisabled: boolean = false;
+    @@Input() formButtonsTemplate: TemplateRef@(Html.Raw("<any>")) | null | undefined;
 
-  @@Input() fieldsHideExpressions: IFieldExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
-  @@Input() fieldsDisableExpressions: IFieldExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
-  @@Input() fieldsRequiredExpressions: IFieldExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
-  @@Input() fieldsPropertyExpressions: IFieldPropertyExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
-  @@Input() fieldsLabelExpressions: IFieldPropertyExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
+    @@Input() fieldsHideExpressions: IFieldExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
+    @@Input() fieldsDisableExpressions: IFieldExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
+    @@Input() fieldsRequiredExpressions: IFieldExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
+    @@Input() fieldsPropertyExpressions: IFieldPropertyExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
+    @@Input() fieldsLabelExpressions: IFieldPropertyExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
 
-  @@Output() save = new EventEmitter@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>"))();
-  @@Output() cancel = new EventEmitter@(Html.Raw("<void>"))();
-  @@Output() buttonClick = new EventEmitter@(Html.Raw("<string>"))();
+    @@Output() save = new EventEmitter@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>"))();
+    @@Output() cancel = new EventEmitter@(Html.Raw("<void>"))();
+    @@Output() buttonClick = new EventEmitter@(Html.Raw("<string>"))();
 
-@{CreateInputsForSelectControlOptions();}
+@{
+    CreateInputsForSelectControlOptions();
+}
 
-  _isReadonly: boolean;
-  form = new FormGroup({});
-  fields: FormlyFieldConfig[] = [];
-  private _submitClicks = new Subject@(Html.Raw("<void>"))();
-  private _submitClicksSubscription: Subscription;
+    _isReadonly: boolean;
+    form = new FormGroup({});
+    fields: FormlyFieldConfig[] = [];
+    private _submitClicks = new Subject@(Html.Raw("<void>"))();
+    private _submitClicksSubscription: Subscription;
 
-  constructor(
+    constructor(
     @@Inject(LOCALE_ID) private _localeId: string,
     @@Optional() @@Inject(ENTRY_FIELD_TYPE_RESOLVER) private _fieldTypeResolver: FieldTypeResolver) { }
 
-  ngOnInit(): void {
+    ngOnInit(): void {
     this.fields = this.initializeFields();
     this._submitClicksSubscription = this._submitClicks
-        .pipe(throttleTime(500))
-        .subscribe(() => this.save.emit(this.model));
-  }
-
-  ngOnDestroy(): void {
-      this._submitClicksSubscription.unsubscribe();
-  }
-
-  onSubmit() {
-    if (this.form.valid) {
-      this._submitClicks.next();
+    .pipe(throttleTime(500))
+    .subscribe(() => this.save.emit(this.model));
     }
-  }
 
-  resolveFieldType = (type: string, isControlReadonly: boolean): string =>
+    ngOnDestroy(): void {
+    this._submitClicksSubscription.unsubscribe();
+    }
+
+    onSubmit() {
+    if (this.form.valid) {
+    this._submitClicks.next();
+    }
+    }
+
+    resolveFieldType = (type: string, isControlReadonly: boolean): string =>
     this._fieldTypeResolver ? this._fieldTypeResolver(type, this.isReadonly || isControlReadonly) : type;
 
-  initializeFields(): FormlyFieldConfig[] {
+    initializeFields(): FormlyFieldConfig[] {
     return [
-@{ RenderControls(Model.FormControls); }
+@{
+    RenderControls(Model.FormControls);
+}
     ];
-}
+    }
 
-  private applyOptionally@(Html.Raw("<T>"))(value: T, apply: boolean): T | undefined {
+    private applyOptionally@(Html.Raw("<T>"))(value: T, apply: boolean): T | undefined {
     return apply ? value : undefined;
-  }
+    }
 
-}
+    }

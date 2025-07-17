@@ -1,6 +1,6 @@
 ﻿using Enigmatry.Entry.CodeGeneration.Configuration.Form;
-using FluentAssertions;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Enigmatry.Entry.CodeGeneration.Configuration.Tests.Form;
 
@@ -12,10 +12,10 @@ public class FormComponentBuilderFixture
     {
         var builder = new FormComponentBuilder<Project1>();
 
-        var componentModel = builder.Build();
+        FormComponentModel componentModel = builder.Build();
 
-        componentModel.Should().NotBeNull();
-        componentModel.ComponentInfo.Should().NotBeNull();
+        componentModel.ShouldNotBeNull();
+        componentModel.ComponentInfo.ShouldNotBeNull();
     }
 
     internal class Project1
