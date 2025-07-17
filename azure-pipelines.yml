@@ -9,7 +9,6 @@ variables:
   buildConfiguration: 'Release'
   projectNameAngularApp:
   projectNamePrefix: Enigmatry.Entry.CodeGeneration
-  NUGET_PACKAGES: $(Pipeline.Workspace)/.nuget/packages
   dotnetVersion: '9.0.x'
 
 resources:
@@ -63,23 +62,6 @@ stages:
       displayName: Set .Net version
       inputs:
         version: $(dotnetVersion)
-    - task: NuGetToolInstaller@1
-      displayName: Install NuGet Tool
-    - task: Cache@2
-      displayName: 'NuGet Cache'
-      inputs:
-        key: 'nuget | "$(Agent.OS)" | **/packages.lock.json,!**/bin/**,!**/obj/**'
-        restoreKeys: |
-            nuget | "$(Agent.OS)"
-            nuget
-        path: $(NUGET_PACKAGES)
-        cacheHitVar: 'NUGET_CACHE_RESTORED'
-    - task: NuGetAuthenticate@1
-    - task: NuGetCommand@2
-      displayName: Nuget Restore
-      inputs:
-        command: 'restore'
-        restoreSolution: '$(projectNamePrefix).sln'
     - task: DotNetCoreCLI@2
       displayName: 'Build package'
       inputs:
