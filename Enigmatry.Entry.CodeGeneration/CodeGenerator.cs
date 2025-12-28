@@ -55,10 +55,7 @@ public class CodeGenerator
         _logger.LogInformation("");
     }
 
-    private void BuildDefinitions()
-    {
-        _components = ConfigurationScanner.FindComponentsInAssembly(_options.SourceAssembly).ToList();
-    }
+    private void BuildDefinitions() => _components = ConfigurationScanner.FindComponentsInAssembly(_options.SourceAssembly).ToList();
 
     private async Task GenerateFiles()
     {
@@ -74,19 +71,13 @@ public class CodeGenerator
 
         LogComponentsCount();
 
-        foreach (IFeatureModule feature in _components.GroupByFeature())
+        foreach (var feature in _components.GroupByFeature())
         {
-            await _moduleGenerator.GenerateAsync(_options.OutputDirectory, feature);
+            await _moduleGenerator.GenerateAsync(_options, feature);
         }
     }
 
-    private void LogComponentsCount()
-    {
-        _logger.LogInformation("Found {Number} component(s)", _components.Count);
-    }
+    private void LogComponentsCount() => _logger.LogInformation("Found {Number} component(s)", _components.Count);
 
-    private void LogEnd()
-    {
-        _logger.LogInformation("End" + Environment.NewLine);
-    }
+    private void LogEnd() => _logger.LogInformation("End" + Environment.NewLine);
 }

@@ -37,14 +37,14 @@ public abstract class CodeGenerationFixtureBase
             .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<RazorTestStartup>())
             .ConfigureServices((hostContext, services) =>
             {
-                services.AddSingleton<ITemplatingEngine, RazorTemplatingEngine>();
+                services.AddScoped<ITemplatingEngine, RazorTemplatingEngine>();
                 services.AddSingleton(_options);
-                services.AddSingleton<IComponentGenerator, AngularComponentGenerator>();
-                services.AddSingleton<IModuleGenerator, AngularModuleGenerator>();
-                services.AddSingleton<ITemplateRenderer, TemplateRenderer>();
+                services.AddScoped<IComponentGenerator, AngularComponentGenerator>();
+                services.AddScoped<IModuleGenerator, AngularModuleGenerator>();
+                services.AddScoped<ITemplateRenderer, TemplateRenderer>();
                 services.AddSingleton<ITemplateWriter, InMemoryTemplateWriter>();
                 services.AddSingleton<ITemplateWriterAppender, DisclaimerTemplateAppender>();
-                services.AddSingleton<CodeGenerator>();
+                services.AddScoped<CodeGenerator>();
                 services.AddSingleton(new AngularSettings(UiLibrary.Material));
             });
 
@@ -67,8 +67,5 @@ public abstract class CodeGenerationFixtureBase
         return scopeFactory.CreateScope();
     }
 
-    protected T GetService<T>() where T : notnull
-    {
-        return _testScope.ServiceProvider.GetRequiredService<T>();
-    }
+    protected T GetService<T>() where T : notnull => _testScope.ServiceProvider.GetRequiredService<T>();
 }

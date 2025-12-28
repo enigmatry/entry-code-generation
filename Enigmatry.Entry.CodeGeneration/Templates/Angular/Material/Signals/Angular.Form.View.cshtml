@@ -1,0 +1,18 @@
+﻿@using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Template
+@model Enigmatry.Entry.CodeGeneration.Configuration.Form.FormComponentModel;
+<form [formGroup]="form" (ngSubmit)="onSubmit()" [class.entry-form-readonly]="isReadonly" @Html.FormCssClass(Model)>
+    <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
+    <ng-template [ngIf]="formButtonsTemplate" [ngIfElse]="defaultFormButtonsTpl">
+        <ng-template [ngTemplateOutlet]="formButtonsTemplate"></ng-template>
+    </ng-template>
+    <ng-template #defaultFormButtonsTpl>
+        <div class="action-buttons">
+            <button mat-button entry-submit-button *ngIf="!isReadonly" [disabled]="saveButtonDisabled" type="submit">
+                {{saveButtonText}}
+            </button>
+            <button mat-button entry-cancel-button *ngIf="!isReadonly" type="button" (click)="cancel.emit()">
+                {{cancelButtonText}}
+            </button>
+        </div>
+    </ng-template>
+</form>

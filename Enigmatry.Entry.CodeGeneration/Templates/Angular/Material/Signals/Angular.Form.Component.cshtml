@@ -1,0 +1,304 @@
+﻿@using Enigmatry.Entry.CodeGeneration
+@using Enigmatry.Entry.CodeGeneration.Angular
+@using Enigmatry.Entry.CodeGeneration.Configuration
+@using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
+@using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Array
+@using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
+@using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
+@model Enigmatry.Entry.CodeGeneration.Configuration.Form.FormComponentModel;
+@inject CodeGeneratorOptions Options;
+import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, OnDestroy, Optional, Output, TemplateRef } from '@@angular/core';
+import { FormGroup } from '@@angular/forms';
+import { FormlyFieldConfig } from '@@ngx-formly/core';
+import { I@(Model.ComponentInfo.ModelType) } from '@Options.ApiClientTsImportPath';
+import { IFieldExpressionDictionary, IFieldPropertyExpressionDictionary, SelectConfiguration, ENTRY_FIELD_TYPE_RESOLVER, FieldTypeResolver, sortOptions } from '@@enigmatry/entry-form';
+import { BehaviorSubject, of, Subject, Subscription } from 'rxjs';
+import { map, throttleTime } from 'rxjs/operators';
+
+@functions {
+
+    void RenderControls(IEnumerable<FormControl> controls)
+    {
+        foreach (FormControl control in controls)
+        {
+            switch (control)
+            {
+                case FormControlGroup formControlGroup:
+                    CreateFieldGroup(formControlGroup);
+                    break;
+                default:
+                    CreateField(control);
+                    break;
+            }
+        }
+    }
+
+    void CreateField(FormControl control)
+    {
+        @if (!control.Visible)
+        {
+            @:{ key: '@control.PropertyName' },
+            return;
+        }
+
+        @:{
+        @:key: '@control.PropertyName',
+        @:type: this.resolveFieldType('@Html.Raw(control.FormlyType)', @control.Readonly.ToString().ToLower()),
+        @:focus: @control.Autofocus.ToString().ToLower(),
+        @Html.FieldCssClass(control)
+        @Html.DefaultValue(control)
+        @:hideExpression: this.fieldsHideExpressions?.['@(control.PropertyName)'] ?? false,
+        @:expressionProperties: {
+        @:'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['@(control.PropertyName)'] ? this.fieldsDisableExpressions['@(control.PropertyName)'](model) : @control.Readonly.ToString().ToLower())),
+        @:'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['@(control.PropertyName)'] ? this.fieldsRequiredExpressions['@(control.PropertyName)'](model) : @control.IsRequired.ToString().ToLower()),
+        @:'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['@(control.PropertyName)'] ? this.fieldsLabelExpressions['@(control.PropertyName)'](model) : @Html.Localize(control.Label, Options.EnableI18N)),
+        @:'model.@(control.PropertyName)': (model) => (this.fieldsPropertyExpressions?.['@(control.PropertyName)'] ? this.fieldsPropertyExpressions['@(control.PropertyName)'](model) : model.@(control.PropertyName)),
+        @:},
+        CreateWrappers(control);
+        CreateFieldTemplateOptions(control);
+        CreateFieldValidationProperties(control);
+        @if (control is ArrayFormControl arrayControl)
+        {
+            @:fieldArray:
+            RenderControls(new List<FormControl> { arrayControl.FormControlGroup });
+        }
+        @Html.AddModelOptions(control)
+        @:},
+    }
+
+    void CreateFieldTemplateOptions(FormControl control)
+    {
+        @:templateOptions: {
+        @:label: @Html.Localize(control.Label, Options.EnableI18N),
+        @:placeholder: @Html.Localize(control.Placeholder, Options.EnableI18N),
+        @:description: @Html.Localize(control.Hint, Options.EnableI18N),
+        @Html.Appearance(control.Appearance)
+        @Html.FloatLabel(control.FloatLabel)
+        @if (!String.IsNullOrWhiteSpace(control.Type))
+        {
+            @:type: '@Html.Raw(control.Type)',
+        }
+        @if (control is ButtonFormControl button)
+        {
+            @:text: @Html.Localize(button.Text, Options.EnableI18N),
+            @:onClick: ($event: any) => this.buttonClick.emit('@control.PropertyName'),
+        }
+        @if (control is SelectControlBase select)
+        {
+            @:options: @(select.Options.HasDynamicValues ? String.Empty : "of(")this.@(select.PropertyName)Options@(select.Options.HasDynamicValues ? "$" : ")").pipe(map(opts => sortOptions(opts, this.@(select.PropertyName)OptionsConfiguration.valueProperty, this.@(select.PropertyName)OptionsConfiguration.sortProperty, this._localeId))),
+            @:valueProp: this.@(select.PropertyName)OptionsConfiguration.valueProperty,
+            @:labelProp: this.@(select.PropertyName)OptionsConfiguration.labelProperty,
+        }
+        @if (control is MultiSelectFormControl multiSelect)
+        {
+            @:multiple: true,
+            @:selectAllOption: @Html.Localize(multiSelect.Options.SelectAllOption?.DisplayName, Options.EnableI18N),
+        }
+        @if (control is TextareaFormControl textarea)
+        {
+            @:rows: @(textarea.Rows),
+            @:cols: @(textarea.Cols),
+            @:autosize: @textarea.AutoResize.ToString().ToLower(),
+            @:autosizeMinRows: @(textarea.AutoResizeMinRows),
+            @:autosizeMaxRows: @(textarea.AutoResizeMaxRows),
+        }
+            @:@Html.AddAttributes(control)
+        @:hidden: !@control.Visible.ToString().ToLower(),
+        @if (control.Tooltip.Value.HasContent())
+        {
+            @:tooltipText: @Html.Localize(control.Tooltip, Options.EnableI18N),
+        }
+        @if (control.ValidationRules.Any())
+        {
+            @:@Html.AddValidationTemplateOptions(control)
+        }
+        @if (control.Metadata.Any())
+        {
+            @Html.AddMetadata(control.Metadata)
+        }
+        @if (control.Formatter != null)
+        {
+            @:typeFormatDef: @Html.Raw(control.Formatter.ToJsObject())
+        }
+        @:},
+    }
+
+    void CreateFieldValidationProperties(FormControl control)
+    {
+        @if (control.ValidationRules.Any(x => x.HasCustomMessage))
+        {
+            @:validation: {
+            @:messages: {
+            @Html.AddCustomValidationMessages(control, Options.EnableI18N)
+            @:}
+            @:},
+        }
+        @if (control.Validators.Any())
+        {
+            @Html.AddAsyncValidators(control)
+        }
+    }
+
+    void CreateFieldGroup(FormControlGroup controlGroup)
+    {
+        var type = controlGroup.FormlyType;
+
+        @:{
+        @:type: this.resolveFieldType('@Html.Raw(type)', @controlGroup.Readonly.ToString().ToLower()),
+        @Html.GroupCssClass(controlGroup)
+        CreateCustomWrappers(controlGroup);
+        @:templateOptions: {
+        @:label: @Html.Localize(controlGroup.Label, Options.EnableI18N),
+        @:placeholder: @Html.Localize(controlGroup.Placeholder, Options.EnableI18N),
+        @:disabled: this.isReadonly || @controlGroup.Readonly.ToString().ToLower(),
+        @:description: @Html.Localize(controlGroup.Hint, Options.EnableI18N)
+        @:},
+        @:fieldGroup:[
+        RenderControls(controlGroup.FormControls);
+        @:]
+        @:},
+    }
+
+
+    void CreateInputsForSelectControlOptions()
+    {
+        foreach (var select in Model.FormControlsOfType<SelectControlBase>())
+        {
+            CreateSelectInput(select);
+        }
+    }
+
+    void CreateSelectInput(SelectControlBase select)
+    {
+        if (select.Options.HasDynamicValues)
+        {
+            @:private @(select.PropertyName)Options$ = new BehaviorSubject<any[]>([]);
+            @:@@Input()
+            @:get @(select.PropertyName)Options(): any[] { return this.@(select.PropertyName)Options$.value; }
+            @:set @(select.PropertyName)Options(value: any[]) { this.@(select.PropertyName)Options$.next(value); }
+        }
+        else
+        {
+            @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => $"{{ {GetValueExpression(option)}, displayName: {(@Html.Localize(option.DisplayName, Options.EnableI18N))} }}");
+        }
+
+        if (select.Options.HasCustomValueAndDisplayKeys)
+        {
+            @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = { valueProperty: '@(select.Options.OptionValueKey)', labelProperty: '@(select.Options.OptionDisplayKey)', sortProperty: '@(select.Options.OptionSortKey)' };
+        }
+        else
+        {
+            @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = @(@Html.Raw(select.Options.DefaultOptionsAsString));
+        }
+    }
+
+    string GetValueExpression(SelectOption option)
+    {
+        if (option.Value != null && option.Value.IsNumeric())
+        {
+            return $"value: {(option.Value is Enum ? (int)option.Value : option.Value)}";
+        }
+
+        if (option.Value is bool boolValue)
+        {
+            return $"value: {boolValue.ToString().ToLowerInvariant()}";
+        }
+
+        return $"value: {(option.Value == null ? "null" : $"'{option.Value}'")}";
+    }
+
+    void CreateWrappers(FormControl control)
+    {
+        if (control.Wrappers.CustomWrappers.Any())
+        {
+            @:wrappers: @Html.JsStringArray(control is ArrayFormControl ? control.Wrappers.CustomWrappers : control.Wrappers.AllWrappers),
+        }
+    }
+
+    void CreateCustomWrappers(FormControl control)
+    {
+        if (control.Wrappers.CustomWrappers.Any())
+        {
+            @:wrappers: @Html.JsStringArray(control.Wrappers.CustomWrappers),
+        }
+    }
+}
+
+    @@Component({
+    standalone: false,
+    selector: '@Model.AngularComponentSelector(Options.GeneratedComponentPrefix)',
+    templateUrl: './@(Model.AngularComponentFileName()).html'
+    })
+    export class @Model.AngularComponentName() implements OnInit, OnDestroy {
+
+    @@Input() model: I@(Model.ComponentInfo.ModelType) = {} as I@(Model.ComponentInfo.ModelType);
+    @@Input() set isReadonly(value: boolean) {
+    this._isReadonly = value;
+    this.fields = this.initializeFields();
+    }
+    get isReadonly() {
+    return this._isReadonly;
+    }
+
+    @@Input() saveButtonText: string = 'Save';
+    @@Input() cancelButtonText: string = 'Cancel';
+    @@Input() saveButtonDisabled: boolean = false;
+    @@Input() formButtonsTemplate: TemplateRef@(Html.Raw("<any>")) | null | undefined;
+
+    @@Input() fieldsHideExpressions: IFieldExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
+    @@Input() fieldsDisableExpressions: IFieldExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
+    @@Input() fieldsRequiredExpressions: IFieldExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
+    @@Input() fieldsPropertyExpressions: IFieldPropertyExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
+    @@Input() fieldsLabelExpressions: IFieldPropertyExpressionDictionary@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>")) | undefined = undefined;
+
+    @@Output() save = new EventEmitter@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>"))();
+    @@Output() cancel = new EventEmitter@(Html.Raw("<void>"))();
+    @@Output() buttonClick = new EventEmitter@(Html.Raw("<string>"))();
+
+@{
+    CreateInputsForSelectControlOptions();
+}
+
+    _isReadonly: boolean;
+    form = new FormGroup({});
+    fields: FormlyFieldConfig[] = [];
+    private _submitClicks = new Subject@(Html.Raw("<void>"))();
+    private _submitClicksSubscription: Subscription;
+
+    constructor(
+    @@Inject(LOCALE_ID) private _localeId: string,
+    @@Optional() @@Inject(ENTRY_FIELD_TYPE_RESOLVER) private _fieldTypeResolver: FieldTypeResolver) { }
+
+    ngOnInit(): void {
+    this.fields = this.initializeFields();
+    this._submitClicksSubscription = this._submitClicks
+    .pipe(throttleTime(500))
+    .subscribe(() => this.save.emit(this.model));
+    }
+
+    ngOnDestroy(): void {
+    this._submitClicksSubscription.unsubscribe();
+    }
+
+    onSubmit() {
+    if (this.form.valid) {
+    this._submitClicks.next();
+    }
+    }
+
+    resolveFieldType = (type: string, isControlReadonly: boolean): string =>
+    this._fieldTypeResolver ? this._fieldTypeResolver(type, this.isReadonly || isControlReadonly) : type;
+
+    initializeFields(): FormlyFieldConfig[] {
+    return [
+@{
+    RenderControls(Model.FormControls);
+}
+    ];
+    }
+
+    private applyOptionally@(Html.Raw("<T>"))(value: T, apply: boolean): T | undefined {
+    return apply ? value : undefined;
+    }
+
+    }

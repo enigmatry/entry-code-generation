@@ -19,6 +19,7 @@ public class CodeGeneratorOptions
     public string GeneratedComponentPrefix { get; set; } = "app-g";
     public string ApiClientTsImportPath { get; set; } = "src/app/api/api-reference";
     public string ValidatorsPath { get; set; } = "src/app/shared/validators/custom-validators";
-    public bool EnableI18N { get; set; } = false;
-    public bool WithStandaloneComponents { get; set; } = false;
+    public bool EnableI18N { get; set; }
+    public bool WithStandaloneComponents { get; set; }
+    public bool WithSignals { get; set; }
 }

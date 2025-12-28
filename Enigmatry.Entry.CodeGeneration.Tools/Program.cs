@@ -1,4 +1,7 @@
-﻿using Autofac;
+﻿using System.CommandLine;
+using System.CommandLine.Invocation;
+using System.Reflection;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Enigmatry.Entry.CodeGeneration.Angular;
 using Enigmatry.Entry.CodeGeneration.Rendering;
@@ -8,9 +11,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using System.CommandLine;
-using System.CommandLine.Invocation;
-using System.Reflection;
 
 namespace Enigmatry.Entry.CodeGeneration.Tools;
 
@@ -21,8 +21,9 @@ internal class Program
     private static string _component = String.Empty;
     private static string _feature = String.Empty;
     private static string _validatorsPath = String.Empty;
-    private static bool _enableI18n = false;
-    private static bool _standaloneComponents = false;
+    private static bool _enableI18n;
+    private static bool _standaloneComponents;
+    private static bool _withSignals;
 
     private static async Task<int> Main(string[] args)
     {
@@ -48,32 +49,34 @@ internal class Program
     {
         var rootCommand = new RootCommand("Generates UI client feature component(s) from configuration(s)")
         {
-            new Option<string>(new[] { "--source-assembly", "-sa" }, "Source assembly file from which component(s) configuration(s) will be read")
+            new Option<string>(["--source-assembly", "-sa"], "Source assembly file from which component(s) configuration(s) will be read")
             {
                 IsRequired = true
             },
-            new Option<string>(new[] { "--destination-directory", "-dd" }, "Destination directory where angular component(s) will be generated")
+            new Option<string>(["--destination-directory", "-dd"], "Destination directory where angular component(s) will be generated")
             {
                 IsRequired = true
             },
-            new Option<string>(new[] { "--component", "-c" }, "Single component to be generated"),
-            new Option<string>(new[] { "--feature", "-f" }, "Single feature to be generated"),
-            new Option<string>(new[] { "--validators-path", "-vlp" }, "Destination of custom-validators.ts file"),
-            new Option<bool>(new[] { "--enable-i18n", "-i" }, "Enable i18n"),
-            new Option<bool>(new[] { "--standalone-components", "-stc" }, "With support for standalone components")
+            new Option<string>(["--component", "-c"], "Single component to be generated"),
+            new Option<string>(["--feature", "-f"], "Single feature to be generated"),
+            new Option<string>(["--validators-path", "-vlp"], "Destination of custom-validators.ts file"),
+            new Option<bool>(["--enable-i18n", "-i"], "Enable i18n"),
+            new Option<bool>(["--standalone-components", "-stc"], "With support for standalone components"),
+            new Option<bool>(["--signals", "-s"], "With support for signals")
         };
-        rootCommand.Handler = CommandHandler.Create<string, string, string, string, string, bool, bool>(RootCommandHandler);
+        rootCommand.Handler = CommandHandler.Create(RootCommandHandler);
         return rootCommand;
     }
 
-    private static async Task RootCommandHandler(
+    private static async Task<int> RootCommandHandler(
         string sourceAssembly,
         string destinationDirectory,
         string component = "",
         string feature = "",
         string validatorsPath = "src/app/shared/validators/custom-validators",
         bool enableI18N = false,
-        bool standaloneComponents = false)
+        bool standaloneComponents = false,
+        bool withSignals = false)
     {
         _sourceAssembly = sourceAssembly;
         _destinationDirectory = destinationDirectory;
@@ -82,27 +85,30 @@ internal class Program
         _validatorsPath = validatorsPath;
         _enableI18n = enableI18N;
         _standaloneComponents = standaloneComponents;
+        _withSignals = withSignals;
 
         try
         {
             new IntroGenerator().Print();
 
-            IHost host = CreateHostBuilder().Build();
+            var host = CreateHostBuilder().Build();
 
-            using IServiceScope scope = host.Services.CreateScope();
-            CodeGenerator codeGenerator = scope.ServiceProvider.GetRequiredService<CodeGenerator>();
+            using var scope = host.Services.CreateScope();
+            var codeGenerator = scope.ServiceProvider.GetRequiredService<CodeGenerator>();
 
             await codeGenerator.Generate();
+            return 0;
         }
         catch (Exception ex)
         {
-            Log.Error($"Service host terminated unexpectedly!. Error: {ex}");
+            Log.Error("Service host terminated unexpectedly!. Error: {Exception}", ex);
+            return -1;
         }
     }
 
     private static IHostBuilder CreateHostBuilder()
     {
-        IHostBuilder builder = Host.CreateDefaultBuilder();
+        var builder = Host.CreateDefaultBuilder();
         return BuildHost<RazorConsoleStartup>(builder, containerBuilder => { });
     }
 
@@ -114,12 +120,13 @@ internal class Program
             Component = _component,
             Feature = _feature,
             ValidatorsPath = _validatorsPath,
-            WithStandaloneComponents = _standaloneComponents
+            WithStandaloneComponents = _standaloneComponents,
+            WithSignals = _withSignals
         };
 
         return builder
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
-            .ConfigureServices((hostContext, services) =>
+            .ConfigureServices((_, services) =>
             {
                 services.AddSingleton<ITemplatingEngine, RazorTemplatingEngine>();
                 services.AddSingleton(options);
