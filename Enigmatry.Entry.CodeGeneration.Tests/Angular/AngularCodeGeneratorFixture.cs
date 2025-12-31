@@ -57,8 +57,5 @@ public class AngularCodeGeneratorFixture : CodeGenerationFixtureBase
     }
 
     // Dirty Hack
-    private static string Uglify(string input)
-    {
-        return input.Replace("\n", "").Replace("\r", "").Replace("\t", "").Replace(" ", "");
-    }
+    private static string Uglify(string input) => input.Replace("\n", "").Replace("\r", "").Replace("\t", "").Replace(" ", "");
 }
