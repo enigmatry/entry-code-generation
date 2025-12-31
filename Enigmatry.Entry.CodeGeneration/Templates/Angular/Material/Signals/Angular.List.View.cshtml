@@ -6,7 +6,7 @@
 <entry-table
                 @Html.ListCssClass(Model)
                 [columns]="columns"
-                [data]="data"
+                [data]="data()"
                 [showPaginator]="showPaginator"
                 [showFirstLastButtons]="showFirstLastButtons"
                 [pageSizeOptions]="pageSizeOptions"
@@ -37,7 +37,7 @@
 
 @foreach (var column in Model.Columns.Where(column => column.HasCustomCellComponent))
 {
-<ng-template @Html.Raw($"#{Html.CustomCellTemplateRefId(column)}") let-row let-index="index" let-col="colDef">
-    @Html.Raw($"<{column.CustomCellComponent} [rowData]=\"row\" [colDef]=\"col\"></{column.CustomCellComponent}>")
+<ng-template @Html.Raw($"#{Html.CustomCellTemplateRefId(column)}") let-row let-index="index" let-column="columnDefinition">
+    @Html.Raw($"<{column.CustomCellComponent} [rowData]=\"row\" [columnDefinition]=\"column\"></{column.CustomCellComponent}>")
 </ng-template>
 }

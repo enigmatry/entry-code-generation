@@ -8,25 +8,22 @@ namespace Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 
 public static class EnigmatryGridHtmlHelperExtensions
 {
-    public static IHtmlContent CustomCellTemplateRefId(this IHtmlHelper html, ColumnDefinition column) 
+    public static IHtmlContent CustomCellTemplateRefId(this IHtmlHelper html, ColumnDefinition column)
         => html.Raw(CustomCellTemplateRefId(column));
 
-    public static IHtmlContent CustomCellTemplateViewChildRef(this IHtmlHelper html, ColumnDefinition column) 
-        => html.Raw(CustomCellTemplateViewChildRef(column));
-
-    public static IHtmlContent AllCustomCellTemplateViewChildRefs(this IHtmlHelper html, IEnumerable<ColumnDefinition> columns)
+    public static IHtmlContent AllCustomCellTemplateViewChildRefs(this IHtmlHelper html, IEnumerable<ColumnDefinition> columns, bool withSignals)
     {
         var customComponents = columns.Where(c => c.HasCustomCellComponent);
-        var viewChildTemplateRefs = customComponents.Select(CustomCellTemplateViewChildRef);
-        var htmlContent = $"{String.Join("\r\n", viewChildTemplateRefs)}\r\n";
+        var viewChildTemplateRefs = customComponents.Select(component => CustomCellTemplateViewChildRef(component, withSignals));
+        var htmlContent = $"{string.Join("\r\n", viewChildTemplateRefs)}\r\n";
 
         return html.Raw(htmlContent);
     }
 
-    public static IHtmlContent CreateColumnDefs(this IHtmlHelper html, IEnumerable<ColumnDefinition> columns, bool enableI18N)
+    public static IHtmlContent CreateColumnDefinitions(this IHtmlHelper html, IEnumerable<ColumnDefinition> columns, bool enableI18N)
     {
-        var columnDefs = columns.Select(definition => CreateColumnDef(definition, enableI18N)).ToList();
-        var htmlContent = columnDefs.Any() ? $"[\r\n{String.Join(",\r\n", columnDefs)}\r\n]" : "[]";
+        var columnDefinitions = columns.Select(definition => CreateColumnDef(definition, enableI18N)).ToList();
+        var htmlContent = columnDefinitions.Any() ? $"[\r\n{String.Join(",\r\n", columnDefinitions)}\r\n]" : "[]";
 
         return html.Raw(htmlContent);
     }
@@ -59,7 +56,7 @@ public static class EnigmatryGridHtmlHelperExtensions
         var cellTemplate = $"this.{CustomCellTemplateRefId(column)}";
 
         var header = enableI18N ? AngularLocalization.Localize(column.TranslationId, column.HeaderName) : column.HeaderName;
-        var sortProps = new KeyValuePair<string, string>[] { new("id", column.SortId ?? String.Empty) };
+        var sortProperties = new KeyValuePair<string, string>[] { new("id", column.SortId ?? string.Empty) };
 
         return JsObject(
             JsProperty("field", propertyName),
@@ -71,31 +68,27 @@ public static class EnigmatryGridHtmlHelperExtensions
             JsProperty("cellTemplate", cellTemplate, !column.HasCustomCellComponent, true),
             JsProperty("class", column.CustomCellCssClass ?? "", !column.HasCustomCellCssClass),
             JsProperty("customProperties", JsObject(column.CustomProperties), !column.CustomProperties.Any(), true),
-            JsProperty("sortProp", JsObject(sortProps), !column.SortId.HasContent(), true)
+            JsProperty("sortProperties", JsObject(sortProperties), !column.SortId.HasContent(), true)
         );
     }
 
-    private static string CustomCellTemplateViewChildRef(ColumnDefinition column)
+    private static string CustomCellTemplateViewChildRef(ColumnDefinition column, bool withSignals)
     {
         var templateRefId = CustomCellTemplateRefId(column);
-        return $"@ViewChild('{templateRefId}', {{ static: true }}) {templateRefId}: TemplateRef<any>;";
+        return withSignals ?
+            $"protected readonly {templateRefId} = viewChild<TemplateRef<unknown>>('{templateRefId}');" :
+            $"@ViewChild('{templateRefId}', {{ static: true }}) {templateRefId}: TemplateRef<unknown>;";
     }
 
     private static string CustomCellTemplateRefId(ColumnDefinition column)
     {
         var templateRefId = column.Property.Replace(".", "_").Camelize();
-        return $"{templateRefId}Tpl";
+        return $"{templateRefId}Template";
     }
 
-    private static string JsObject(params string?[] properties)
-    {
-        return $"{{ {String.Join(", ", properties.Where(property => property.HasContent()))} }}";
-    }
+    private static string JsObject(params string?[] properties) => $"{{ {String.Join(", ", properties.Where(property => property.HasContent()))} }}";
 
-    private static string JsObject(IEnumerable<KeyValuePair<string, string>> properties)
-    {
-        return $"{{ {String.Join(", ", properties.Select(keyValue => JsProperty(keyValue.Key.Camelize(), keyValue.Value)))} }}";
-    }
+    private static string JsObject(IEnumerable<KeyValuePair<string, string>> properties) => $"{{ {string.Join(", ", properties.Select(keyValue => JsProperty(keyValue.Key.Camelize(), keyValue.Value)))} }}";
 
     private static string? JsProperty(string name, string value, bool skip = false, bool asObject = false)
     {
@@ -103,10 +96,7 @@ public static class EnigmatryGridHtmlHelperExtensions
         return !skip ? jsProperty : null;
     }
 
-    private static string? JsProperty(string name, bool value, bool skip = false)
-    {
-        return !skip ? $"{name}: {value.ToString().ToLower()}" : null;
-    }
+    private static string? JsProperty(string name, bool value, bool skip = false) => !skip ? $"{name}: {value.ToString().ToLower()}" : null;
 
     #endregion
 }
