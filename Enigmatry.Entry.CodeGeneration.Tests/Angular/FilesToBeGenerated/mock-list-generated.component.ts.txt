@@ -46,9 +46,9 @@ export class MockListGeneratedComponent implements OnInit {
 
   @Input() showContextMenu = true;
   @Input() contextMenuItems: ContextMenuItem[] = [
-{ id: 'edit', name: $localize `:@@:Edit` },
-{ id: 'delete', name: $localize `:@@:Delete` }
-];
+        { id: 'edit', name: $localize `:@@:Edit` },
+        { id: 'delete', name: $localize `:@@:Delete` }
+    ];
   @Input() rowContextMenuFormatter: RowContextMenuFormatter;
   
   @Input() rowFocusVisible: boolean;
@@ -69,9 +69,9 @@ export class MockListGeneratedComponent implements OnInit {
 
   ngOnInit(): void {
    this.columns = [
-{ field: 'id', hide: true, sortable: true },
-{ field: 'name', header: $localize `:@@CUSTOM_TRANSLATION_ID:Name`, hide: false, sortable: true, cellTemplate: this.nameTemplate, class: 'name-custom-class', customProperties: { codeSystem: 'ABC' }, sortProperties: { id: 'User.Name' } },
-{ field: 'date', header: $localize `:@@test.mock-list.date:Date`, hide: false, sortable: true, type: 'date', typeParameter: { name: 'date', format: 'mediumDate', timezone: 'UTC', locale: 'en' } }
-];
+        { field: 'id', hide: true, sortable: true },
+        { field: 'name', header: $localize `:@@CUSTOM_TRANSLATION_ID:Name`, hide: false, sortable: true, cellTemplate: this.nameTemplate, class: 'name-custom-class', customProperties: { codeSystem: 'ABC' }, sortProperties: { id: 'User.Name' } },
+        { field: 'date', header: $localize `:@@test.mock-list.date:Date`, hide: false, sortable: true, type: 'date', typeParameter: { name: 'date', format: 'mediumDate', timezone: 'UTC', locale: 'en' } }
+    ];
   }
 }

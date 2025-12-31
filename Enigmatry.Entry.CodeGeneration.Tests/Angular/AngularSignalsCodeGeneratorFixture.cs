@@ -4,14 +4,15 @@ using Shouldly;
 
 namespace Enigmatry.Entry.CodeGeneration.Tests.Angular;
 
-public class AngularCodeGeneratorFixture : AngularCodeGeneratorFixtureBase
+public class AngularSignalsCodeGeneratorFixture : AngularCodeGeneratorFixtureBase
 {
-    protected override string ExpectedResultsLocation => "Angular/FilesToBeGenerated";
+    protected override string ExpectedResultsLocation => "Angular/FilesToBeGenerated/Signals";
 
     [SetUp]
     public new void Setup()
     {
         _enableI18N = true;
+        _withSignals = true;
         base.Setup();
     }
 

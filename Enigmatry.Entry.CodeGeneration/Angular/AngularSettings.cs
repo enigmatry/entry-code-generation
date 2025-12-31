@@ -19,7 +19,12 @@ public class AngularSettings
 
     public IReadOnlyList<TemplateInfo> GetModuleTemplates(bool withSignals)
     {
-        var path = DetermineAngularPath(withSignals);
+        if (withSignals)
+        {
+            return new List<TemplateInfo>();
+        }
+
+        var path = DetermineAngularPath(false);
         return new List<TemplateInfo> { new($"{path}.Module.cshtml", "{0}-generated.module.ts") };
     }
 

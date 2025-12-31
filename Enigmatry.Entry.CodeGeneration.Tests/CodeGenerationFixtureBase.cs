@@ -21,6 +21,7 @@ public abstract class CodeGenerationFixtureBase
     protected CodeGenerator _codeGenerator = null!;
     protected string _validatorsPath = "src/app/shared/custom-path";
     protected bool _enableI18N = false;
+    protected bool _withSignals = false;
 
     [SetUp]
     public void Setup()
@@ -30,7 +31,8 @@ public abstract class CodeGenerationFixtureBase
             Component = String.Empty,
             Framework = Framework.Angular,
             EnableI18N = _enableI18N,
-            ValidatorsPath = _validatorsPath
+            ValidatorsPath = _validatorsPath,
+            WithSignals = _withSignals
         };
 
         var hostBuilder = Host.CreateDefaultBuilder()

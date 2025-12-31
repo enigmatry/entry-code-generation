@@ -23,7 +23,7 @@ public static class EnigmatryGridHtmlHelperExtensions
     public static IHtmlContent CreateColumnDefinitions(this IHtmlHelper html, IEnumerable<ColumnDefinition> columns, bool enableI18N)
     {
         var columnDefinitions = columns.Select(definition => CreateColumnDef(definition, enableI18N)).ToList();
-        var htmlContent = columnDefinitions.Any() ? $"[\r\n{String.Join(",\r\n", columnDefinitions)}\r\n]" : "[]";
+        var htmlContent = columnDefinitions.Any() ? $"[\r\n{String.Join(",\r\n", columnDefinitions)}\r\n\t]" : "[]";
 
         return html.Raw(htmlContent);
     }
@@ -31,7 +31,7 @@ public static class EnigmatryGridHtmlHelperExtensions
     public static IHtmlContent CreateContextMenuItems(this IHtmlHelper html, IEnumerable<RowContextMenuItem> items, bool enableI18N)
     {
         var contextMenuItems = items.Select(item => ContextMenuItemToJs(item, enableI18N)).ToList();
-        var htmlContent = contextMenuItems.Any() ? $"[\r\n{String.Join(",\r\n", contextMenuItems)}\r\n]" : "[]";
+        var htmlContent = contextMenuItems.Any() ? $"[\r\n{String.Join(",\r\n", contextMenuItems)}\r\n\t]" : "[]";
 
         return html.Raw(htmlContent);
     }
@@ -76,7 +76,7 @@ public static class EnigmatryGridHtmlHelperExtensions
     {
         var templateRefId = CustomCellTemplateRefId(column);
         return withSignals ?
-            $"protected readonly {templateRefId} = viewChild<TemplateRef<unknown>>('{templateRefId}');" :
+            $"\tprotected readonly {templateRefId} = viewChild<TemplateRef<unknown>>('{templateRefId}');" :
             $"@ViewChild('{templateRefId}', {{ static: true }}) {templateRefId}: TemplateRef<unknown>;";
     }
 
@@ -86,9 +86,9 @@ public static class EnigmatryGridHtmlHelperExtensions
         return $"{templateRefId}Template";
     }
 
-    private static string JsObject(params string?[] properties) => $"{{ {String.Join(", ", properties.Where(property => property.HasContent()))} }}";
+    private static string JsObject(params string?[] properties) => $"\t\t{{ {string.Join(", ", properties.Where(property => property.HasContent()))} }}";
 
-    private static string JsObject(IEnumerable<KeyValuePair<string, string>> properties) => $"{{ {string.Join(", ", properties.Select(keyValue => JsProperty(keyValue.Key.Camelize(), keyValue.Value)))} }}";
+    private static string JsObject(IEnumerable<KeyValuePair<string, string>> properties) => $"\t\t{{ {string.Join(", ", properties.Select(keyValue => JsProperty(keyValue.Key.Camelize(), keyValue.Value)))} }}";
 
     private static string? JsProperty(string name, string value, bool skip = false, bool asObject = false)
     {

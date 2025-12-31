@@ -30,6 +30,18 @@
     <EmbeddedResource Include="Angular\FilesToBeGenerated\mock-list-generated.component.ts.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Angular\FilesToBeGenerated\Signals\mock-edit-generated.component.html.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Angular\FilesToBeGenerated\Signals\mock-edit-generated.component.ts.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Angular\FilesToBeGenerated\Signals\mock-list-generated.component.html.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Angular\FilesToBeGenerated\Signals\mock-list-generated.component.ts.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Angular\FilesToBeGenerated\test-generated.module.ts.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>

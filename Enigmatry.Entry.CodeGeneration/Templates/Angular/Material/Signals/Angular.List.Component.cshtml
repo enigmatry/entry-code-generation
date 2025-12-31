@@ -46,8 +46,8 @@ export class @Model.AngularComponentName() {
     protected readonly contextMenuItemSelected = output@(Html.Raw($"<{{ itemId: string; rowData: {Model.ComponentInfo.ModelType} }}>"))();
     protected readonly rowClick = output@(Html.Raw($"<{Model.ComponentInfo.ModelType}>"))();
 
-@if (Model.HasColumns)
-{
-    @Html.AllCustomCellTemplateViewChildRefs(Model.Columns, true)
-}
+    @if (Model.HasColumns)
+    {
+        @Html.AllCustomCellTemplateViewChildRefs(Model.Columns, true)
+    }
 }
