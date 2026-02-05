@@ -4,36 +4,21 @@ using JetBrains.Annotations;
 namespace Enigmatry.Entry.CodeGeneration.Rendering;
 
 [UsedImplicitly]
-public class TemplateRenderer : ITemplateRenderer
+public class TemplateRenderer(ITemplatingEngine templatingEngine, ITemplateWriter templateWriter) : ITemplateRenderer
 {
-    private readonly ITemplatingEngine _templatingEngine;
-    private readonly ITemplateWriter _templateWriter;
+    public async Task<string> RenderAsync<T>(string templatePath, T model) => await templatingEngine.RenderFromFileAsync(templatePath, model);
 
-    public TemplateRenderer(ITemplatingEngine templatingEngine, ITemplateWriter templateWriter)
-    {
-        _templatingEngine = templatingEngine;
-        _templateWriter = templateWriter;
-    }
-
-    public Task<string> RenderAsync<T>(string templatePath, T model)
-    {
-        return _templatingEngine.RenderFromFileAsync(templatePath, model);
-    }
-
-    public Task<string> RenderAsync<T>(string templatePath, T model, IDictionary<string, object> viewBag)
-    {
-        return _templatingEngine.RenderFromFileAsync(templatePath, model, viewBag);
-    }
+    public async Task<string> RenderAsync<T>(string templatePath, T model, IDictionary<string, object> viewBag) => await templatingEngine.RenderFromFileAsync(templatePath, model, viewBag);
 
     public async Task RenderAndSaveToFileAsync<T>(string templatePath, T model, string filePath)
     {
         var contents = await RenderAsync(templatePath, model);
-        await _templateWriter.WriteToFileAsync(filePath, contents);
+        await templateWriter.WriteToFileAsync(filePath, contents);
     }
 
     public async Task RenderAndSaveToFileAsync<T>(string templatePath, T model, IDictionary<string, object> viewBag, string filePath)
     {
         var contents = await RenderAsync(templatePath, model, viewBag);
-        await _templateWriter.WriteToFileAsync(filePath, contents);
+        await templateWriter.WriteToFileAsync(filePath, contents);
     }
 }
