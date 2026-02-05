@@ -80,6 +80,10 @@ export class @Model.AngularComponentName() {
         }
     };
     
+    protected readonly isDisabled = (propertyName: string, isReadOnlyProperty: boolean) => {
+        return this.isReadonly() || (this.fieldsDisableExpressions()?.[propertyName] ? this.fieldsDisableExpressions()[propertyName](this.model()) : isReadOnlyProperty);
+    };
+
     private readonly resolveFieldType = (type: string, isControlReadonly: boolean): string =>
         this.fieldTypeResolver ? this.fieldTypeResolver(type, this.isReadonly() || isControlReadonly) : type;
 
