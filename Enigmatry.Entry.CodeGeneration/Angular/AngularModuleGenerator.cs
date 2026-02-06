@@ -7,45 +7,29 @@ using Microsoft.Extensions.Logging;
 namespace Enigmatry.Entry.CodeGeneration.Angular;
 
 [UsedImplicitly]
-public class AngularModuleGenerator : IModuleGenerator
+public class AngularModuleGenerator(IComponentGenerator componentGenerator, ITemplateRenderer templateRenderer,
+    AngularSettings angularSettings, ILogger<AngularModuleGenerator> logger) : IModuleGenerator
 {
-    private readonly IComponentGenerator _componentGenerator;
-    private readonly ITemplateRenderer _templateRenderer;
-    private readonly IEnumerable<TemplateInfo> _moduleTemplates;
-    private readonly ILogger<AngularModuleGenerator> _logger;
-
-    public AngularModuleGenerator(
-        IComponentGenerator componentGenerator,
-        ITemplateRenderer templateRenderer,
-        AngularSettings angularSettings,
-        ILogger<AngularModuleGenerator> logger)
+    public async Task GenerateAsync(CodeGeneratorOptions options, IFeatureModule module)
     {
-        _componentGenerator = componentGenerator;
-        _templateRenderer = templateRenderer;
-        _logger = logger;
-        _moduleTemplates = angularSettings.ModuleTemplates;
-    }
+        var directory = Path.Combine(options.OutputDirectory, module.Name.Kebaberize(), "generated");
 
-    public async Task GenerateAsync(string outputDir, IFeatureModule module)
-    {
-        var directory = Path.Combine(outputDir, module.Name.Kebaberize(), "generated");
-
-        _logger.LogInformation("Generating {ModuleName} feature module", module.Name);
+        logger.LogInformation("Generating {ModuleName} feature module", module.Name);
 
         foreach (var component in module.Components)
         {
-            _logger.LogInformation(" Generating {ComponentName} component", component.ComponentInfo.Name);
-            await _componentGenerator.GenerateAsync(directory, component);
+            logger.LogInformation(" Generating {ComponentName} component", component.ComponentInfo.Name);
+            await componentGenerator.GenerateAsync(options, directory, component);
         }
 
-        foreach (var templateInfo in _moduleTemplates)
+        foreach (var templateInfo in angularSettings.GetModuleTemplates(options.WithSignals))
         {
             var fileName = templateInfo.FileNamingPattern.FormatWith(module.Name.Kebaberize());
             var filePath = Path.Combine(directory, fileName);
 
-            await _templateRenderer.RenderAndSaveToFileAsync(templateInfo.TemplatePath, module, filePath);
+            await templateRenderer.RenderAndSaveToFileAsync(templateInfo.TemplatePath, module, filePath);
 
-            _logger.LogInformation($"  {fileName} generated");
+            logger.LogInformation("  {FileName} generated", fileName);
         }
     }
 }

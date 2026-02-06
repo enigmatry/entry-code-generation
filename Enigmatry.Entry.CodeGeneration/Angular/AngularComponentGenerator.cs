@@ -12,7 +12,7 @@ namespace Enigmatry.Entry.CodeGeneration.Angular;
 public class AngularComponentGenerator : IComponentGenerator
 {
     private readonly ITemplateRenderer _templateRenderer;
-    private readonly IEnumerable<TemplateInfo> _componentTemplates;
+    private readonly AngularSettings _angularSettings;
     private readonly ILogger<AngularComponentGenerator> _logger;
 
     public AngularComponentGenerator(
@@ -21,15 +21,15 @@ public class AngularComponentGenerator : IComponentGenerator
         ILogger<AngularComponentGenerator> logger)
     {
         _templateRenderer = templateRenderer;
+        _angularSettings = angularSettings;
         _logger = logger;
-        _componentTemplates = angularSettings.ComponentTemplates;
     }
 
-    public async Task GenerateAsync(string outputDir, IComponentModel component)
+    public async Task GenerateAsync(CodeGeneratorOptions options, string outputDir, IComponentModel component)
     {
         var componentDirectory = Path.Combine(outputDir, component.AngularComponentDirectory());
 
-        foreach (TemplateInfo templateInfo in _componentTemplates)
+        foreach (var templateInfo in _angularSettings.GetComponentTemplates(options.WithSignals))
         {
             var templatePath = templateInfo.TemplatePath.FormatWith(GetTemplateNameFor(component));
 
@@ -42,13 +42,10 @@ public class AngularComponentGenerator : IComponentGenerator
         }
     }
 
-    private static string GetTemplateNameFor(IComponentModel component)
+    private static string GetTemplateNameFor(IComponentModel component) => component switch
     {
-        return component switch
-        {
-            ListComponentModel _ => "List",
-            FormComponentModel _ => "Form",
-            _ => throw new ArgumentOutOfRangeException(nameof(component))
-        };
-    }
+        ListComponentModel _ => "List",
+        FormComponentModel _ => "Form",
+        _ => throw new ArgumentOutOfRangeException(nameof(component))
+    };
 }

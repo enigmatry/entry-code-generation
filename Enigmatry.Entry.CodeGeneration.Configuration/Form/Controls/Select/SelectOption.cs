@@ -1,18 +1,27 @@
 ﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 
-public class SelectOption
+public class SelectOption(object? value, string displayName, string translationId)
 {
-    public object? Value { get; }
-    public I18NString DisplayName { get; }
+    public object? Value { get; } = value;
+    public I18NString DisplayName { get; } = new(translationId, displayName);
 
     public SelectOption(object? value, string displayName)
         : this(value, displayName, String.Empty)
     {
     }
 
-    public SelectOption(object? value, string displayName, string translationId)
+    public string GetValueExpression()
     {
-        Value = value;
-        DisplayName = new I18NString(translationId, displayName);
+        if (Value != null && Value.IsNumeric())
+        {
+            return $"value: {(Value is Enum ? (int)Value : Value)}";
+        }
+
+        if (Value is bool boolValue)
+        {
+            return $"value: {boolValue.ToString().ToLowerInvariant()}";
+        }
+
+        return $"value: {(Value == null ? "null" : $"'{Value}'")}";
     }
 }

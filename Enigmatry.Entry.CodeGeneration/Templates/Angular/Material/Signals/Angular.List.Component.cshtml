@@ -1,0 +1,53 @@
+﻿@using Enigmatry.Entry.CodeGeneration
+@using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
+@using Enigmatry.Entry.CodeGeneration.Angular
+@using Enigmatry.Entry.CodeGeneration.Configuration.List.Model
+@using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
+@model Enigmatry.Entry.CodeGeneration.Configuration.List.ListComponentModel;
+@inject CodeGeneratorOptions Options;
+import { input, output, ChangeDetectionStrategy, Component, TemplateRef } from '@@angular/core';
+import { EntryTableComponent, PagedData, SortDirection, CellTemplate, ContextMenuItem, 
+    RowContextMenuFormatter, RowClassFormatter, RowSelectionFormatter, ColumnDefinition, PageEvent, SortEvent } from '@@enigmatry/entry-components/table';
+import { @(Model.ComponentInfo.ModelType) } from '@Options.ApiClientTsImportPath';
+
+@@Component({
+  selector: '@Model.AngularComponentSelector(Options.GeneratedComponentPrefix)',
+  imports: [EntryTableComponent],
+  templateUrl: './@(Model.AngularComponentFileName()).html',
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class @Model.AngularComponentName() {
+    protected readonly data = input.required@(Html.Raw($"<PagedData<{Model.ComponentInfo.ModelType}> | null>"))();
+    protected readonly loading = input@(Html.Raw("<boolean>"))(false);
+    protected readonly showPaginator = input@(Html.Raw("<boolean>"))(@Model.Pagination.ShowPaginator.ToString().ToLower());
+    protected readonly showFirstLastButtons = input@(Html.Raw("<boolean>"))(@Model.Pagination.ShowFirstLastPageButtons.ToString().ToLower());
+    protected readonly pageSizeOptions = input@(Html.Raw("<number[]>"))(@Html.JsArray(Model.Pagination.PageSizeOptions));
+    protected readonly hidePageSize = input@(Html.Raw("<boolean>"))(!@Model.Pagination.ShowPageSize.ToString().ToLower());
+    protected readonly defaultSort = input@(Html.Raw("<{ sortBy?: string | undefined, sortDirection?: SortDirection }>"))();
+    protected readonly rowSelectable = input@(Html.Raw("<boolean>"))(@Model.Row.IsSelectable.ToString().ToLower());
+    protected readonly multiSelectable = input@(Html.Raw("<boolean>"))(@((Model.Row.Selection == RowSelectionType.Multiple).ToString().ToLower()));
+    protected readonly showSelectAllCheckbox = input@(Html.Raw("<boolean>"))(@Model.Row.ShowSelectAllOption.ToString().ToLower());
+    protected readonly rowSelected = input@(Html.Raw($"<{Model.ComponentInfo.ModelType}[]>"))(@Model.Row.ShowSelectAllOption.ToString().ToLower());
+    protected readonly headerTemplate = input@(Html.Raw("<TemplateRef<unknown> | CellTemplate>"))();
+    protected readonly cellTemplate = input@(Html.Raw("<TemplateRef<unknown> | CellTemplate>"))();
+    protected readonly noResultText = input@(Html.Raw("<string>"))();
+    protected readonly noResultTemplate = input@(Html.Raw("<TemplateRef<unknown> | null>"))();
+    protected readonly showContextMenu = input@(Html.Raw("<boolean>"))(@Model.Row.ShowContextMenu.ToString().ToLower());
+    protected readonly contextMenuItems = input@(Html.Raw("<ContextMenuItem[]>"))(@Html.CreateContextMenuItems(Model.Row.ContextMenuItems, Options.EnableI18N));
+    protected readonly rowContextMenuFormatter = input@(Html.Raw("<RowContextMenuFormatter>"))();
+    protected readonly rowFocusVisible = input@(Html.Raw("<boolean>"))();
+    protected readonly rowClassFormatter = input@(Html.Raw("<RowClassFormatter>"))();
+    protected readonly rowSelectionFormatter = input@(Html.Raw("<RowSelectionFormatter>"))({});
+    protected readonly columns = input@(Html.Raw("<ColumnDefinition[]>"))(@Html.CreateColumnDefinitions(Model.Columns, Options.EnableI18N));
+
+    protected readonly pageChange = output@(Html.Raw("<PageEvent>"))();
+    protected readonly sortChange = output@(Html.Raw("<SortEvent>"))();
+    protected readonly selectionChange = output@(Html.Raw($"<{Model.ComponentInfo.ModelType}[]>"))();
+    protected readonly contextMenuItemSelected = output@(Html.Raw($"<{{ itemId: string; rowData: {Model.ComponentInfo.ModelType} }}>"))();
+    protected readonly rowClick = output@(Html.Raw($"<{Model.ComponentInfo.ModelType}>"))();
+
+    @if (Model.HasColumns)
+    {
+        @Html.AllCustomCellTemplateViewChildRefs(Model.Columns, true)
+    }
+}

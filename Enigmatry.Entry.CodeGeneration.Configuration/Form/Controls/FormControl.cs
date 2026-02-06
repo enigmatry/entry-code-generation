@@ -47,5 +47,17 @@ public abstract class FormControl
         }
     }
 
+    public string StackedClasses()
+    {
+        var classNameValue = $"entry-{PropertyName.Kebaberize()}-field entry-{FormlyType.Kebaberize()}";
+
+        foreach (var className in ClassNames.Values)
+        {
+            classNameValue += $" {className.ApplyOptionally()}";
+        }
+
+        return classNameValue;
+    }
+
     public bool IsRequired => ValidationRules.HasRule<IsRequiredValidationRule>();
 }

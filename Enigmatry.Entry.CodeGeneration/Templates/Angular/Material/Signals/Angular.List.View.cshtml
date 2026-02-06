@@ -1,0 +1,43 @@
+﻿@using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
+@using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Template
+
+@model Enigmatry.Entry.CodeGeneration.Configuration.List.ListComponentModel;
+
+<entry-table
+                @Html.ListCssClass(Model)
+                [columns]="columns()"
+                [data]="data()"
+                [showPaginator]="showPaginator()"
+                [showFirstLastButtons]="showFirstLastButtons()"
+                [pageSizeOptions]="pageSizeOptions()"
+                [hidePageSize]="hidePageSize()"
+                [sortActive]="defaultSort().sortBy ?? ''"
+                [sortDirection]="defaultSort().sortDirection ?? ''"
+                [multiSelectable]="multiSelectable()"
+                [rowSelectable]="rowSelectable()"
+                [showSelectAllCheckbox]="showSelectAllCheckbox()"
+                [rowSelected]="rowSelected()"
+                [loading]="loading()"
+                [headerTemplate]="headerTemplate()"
+                [cellTemplate]="cellTemplate()"
+                [noResultText]="noResultText()"
+                [noResultTemplate]="noResultTemplate()"
+                [showContextMenu]="showContextMenu()"
+                [contextMenuItems]="contextMenuItems()"
+                [rowContextMenuFormatter]="rowContextMenuFormatter()"
+                [rowClassFormatter]="rowClassFormatter()"
+                [rowSelectionFormatter]="rowSelectionFormatter()"
+                [rowFocusVisible]="rowFocusVisible()"
+                (pageChange)="pageChange.emit($event)"
+                (sortChange)="sortChange.emit($event)"
+                (rowSelectionChange)="selectionChange.emit($event)"
+                (contextMenuItemSelected)="contextMenuItemSelected.emit($event)"
+                (rowClick)="rowClick.emit($event)">
+</entry-table>
+
+@foreach (var column in Model.Columns.Where(column => column.HasCustomCellComponent))
+{
+<ng-template @Html.Raw($"#{Html.CustomCellTemplateRefId(column)}") let-row let-index="index" let-column="columnDefinition">
+    @Html.Raw($"<{column.CustomCellComponent} [rowData]=\"row\" [columnDefinition]=\"column\"></{column.CustomCellComponent}>")
+</ng-template>
+}

@@ -1,0 +1,84 @@
+﻿@using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
+@using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Array
+@using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
+@using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Template
+@using Enigmatry.Entry.Core.Helpers
+@model Enigmatry.Entry.CodeGeneration.Configuration.Form.FormComponentModel;
+
+@functions {
+    void Render(IEnumerable<FormControl> controls)
+    {
+        foreach (FormControl control in controls)
+        {
+            switch (control)
+            {
+                case FormControlGroup formControlGroup:
+                    CreateFieldGroup(formControlGroup);
+                    break;
+                default:
+                    CreateField(control);
+                    break;
+            }
+        }
+    }
+
+    void CreateFieldGroup(FormControlGroup controlGroup)
+    {
+    }
+
+    void CreateField(FormControl field)
+    {
+        <text>
+            @@if(!fieldsHideExpressions && !@{ // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
+                                                field.Visible.ToString().ToLowerInvariant(); })
+            {
+                return;
+            }
+
+            @@if (fieldsHideExpressions?.['@{ field.PropertyName.ToCamelCase(); }'](model, form))
+            {
+                return;
+            }
+        </text>
+
+        if (field is ArrayFormControl arrayControl)
+        {
+            <div formArrayName="@{ arrayControl.FormControlGroup.PropertyName.ToCamelCase();}">
+                @{
+                    Render(new List<FormControl> { arrayControl.FormControlGroup });
+                }
+            </div>
+        }
+
+        else if (field is ButtonFormControl buttonControl)
+        {
+            <button matButton [disabled]="isDisabled(@(buttonControl.PropertyName), @(buttonControl.Readonly)})" type="button" class="@{ buttonControl.StackedClasses(); }">Disabled</button>
+        }        
+    }
+}
+
+<form [formGroup]="form()" (submit)="submit()" [class.entry-form-readonly]="isReadonly()" @Html.FormCssClass(Model)>
+    @{
+        Render(Model.FormControls);
+    }
+    
+
+    @@for(field of @Model.FormControls; track field.PropertyName)
+    {
+    <entry-field [field]="field" [form]="form()"></entry-field>
+    }
+
+    <ng-template #defaultActionsTemplate>
+        <div class="action-buttons">
+            @@if (!isReadonly())
+            {
+            <button mat-button entry-submit-button [disabled]="saveButtonDisabled()" type="submit">
+                {{saveButtonText}}
+            </button>
+            <button mat-button entry-cancel-button type="button" (click)="cancel.emit()">
+                {{cancelButtonText}}
+            </button>
+            }
+        </div>
+    </ng-template>
+</form>

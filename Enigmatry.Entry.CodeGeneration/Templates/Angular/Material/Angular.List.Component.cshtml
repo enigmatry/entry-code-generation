@@ -57,12 +57,12 @@ export class @Model.AngularComponentName() implements OnInit {
 
   @if (Model.HasColumns)
   {
-  @Html.AllCustomCellTemplateViewChildRefs(Model.Columns)
+  @Html.AllCustomCellTemplateViewChildRefs(Model.Columns, false)
   }
 
   constructor() { }
 
   ngOnInit(): void {
-   this.columns = @Html.CreateColumnDefs(Model.Columns, Options.EnableI18N);
+   this.columns = @Html.CreateColumnDefinitions(Model.Columns, Options.EnableI18N);
   }
 }
