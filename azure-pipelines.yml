@@ -10,7 +10,7 @@ variables:
   projectNameAngularApp:
   projectNamePrefix: Enigmatry.Entry.CodeGeneration
   NUGET_PACKAGES: $(Pipeline.Workspace)/.nuget/packages
-  dotnetVersion: '9.0.x'
+  dotnetVersion: '10.0.x'
 
 resources:
   repositories:
