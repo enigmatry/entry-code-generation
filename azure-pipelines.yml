@@ -63,8 +63,6 @@ stages:
       displayName: Set .Net version
       inputs:
         version: $(dotnetVersion)
-    - task: NuGetToolInstaller@1
-      displayName: Install NuGet Tool
     - task: Cache@2
       displayName: 'NuGet Cache'
       inputs:
@@ -74,12 +72,11 @@ stages:
             nuget
         path: $(NUGET_PACKAGES)
         cacheHitVar: 'NUGET_CACHE_RESTORED'
-    - task: NuGetCommand@2
+    - task: DotNetCoreCLI@2
       displayName: 'NuGet restore'
-      condition: ne(variables.NUGET_CACHE_RESTORED, true)
       inputs:
         command: 'restore'
-        restoreSolution: '$(projectNamePrefix).sln'
+        projects: '$(projectNamePrefix).sln'
     - task: DotNetCoreCLI@2
       displayName: 'Build package'
       inputs:
