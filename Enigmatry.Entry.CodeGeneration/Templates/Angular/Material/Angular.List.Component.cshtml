@@ -5,8 +5,10 @@
 @using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
 @model Enigmatry.Entry.CodeGeneration.Configuration.List.ListComponentModel;
 @inject CodeGeneratorOptions Options;
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@@angular/core';
-import { PagedData, SortDirection, CellTemplate, ContextMenuItem, RowContextMenuFormatter, RowClassFormatter, RowSelectionFormatter, ColumnDef, PageEvent, SortEvent } from '@@enigmatry/entry-components/table';
+import { ChangeDetectionStrategy, Component, computed, EventEmitter, Input, OnInit, Output, 
+    TemplateRef, viewChild, ViewChild } from '@@angular/core';
+import { EntryTableComponent, PagedData, SortDirection, CellTemplate, ContextMenuItem, RowContextMenuFormatter, RowClassFormatter,
+    RowSelectionFormatter, ColumnDef, PageEvent, SortEvent } from '@@enigmatry/entry-components/table';
 
 import { @(Model.ComponentInfo.ModelType) } from '@Options.ApiClientTsImportPath';
 
@@ -51,13 +53,16 @@ export class @Model.AngularComponentName() implements OnInit {
 
   @@Output() pageChange = new EventEmitter@(Html.Raw("<PageEvent>"))();
   @@Output() sortChange = new EventEmitter@(Html.Raw("<SortEvent>"))();
-  @@Output() selectionChange = new EventEmitter@(Html.Raw($"<{Model.ComponentInfo.ModelType}[]>"))();
   @@Output() contextMenuItemSelected = new EventEmitter<@(Html.Raw($"{{ itemId: string; rowData: {Model.ComponentInfo.ModelType} }}"))>();
   @@Output() rowClick = new EventEmitter@(Html.Raw($"<{Model.ComponentInfo.ModelType}>"))();
 
+  private readonly _entryTable = viewChild(EntryTableComponent);
+  readonly selectedItems = computed@(Html.Raw($"<{Model.ComponentInfo.ModelType}[]>"))(() => 
+    this._entryTable()?.rowSelection().selected as @(Html.Raw($"{Model.ComponentInfo.ModelType}[]")) ?? []);
+
   @if (Model.HasColumns)
   {
-  @Html.AllCustomCellTemplateViewChildRefs(Model.Columns, false)
+    @Html.AllCustomCellTemplateViewChildRefs(Model.Columns, false)
   }
 
   constructor() { }
