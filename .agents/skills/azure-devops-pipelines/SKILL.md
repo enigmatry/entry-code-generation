@@ -36,7 +36,7 @@ trigger:
   batch: true
   branches:
     include:
-      - '*'
+      - master
 ```
 
 For PR validation triggers:
