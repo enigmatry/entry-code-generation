@@ -6,8 +6,11 @@
 # Build
 dotnet build Enigmatry.Entry.CodeGeneration.sln
 
-# Run all tests (unit + smoke)
+# Run CI test suite (categorized tests only — matches CI pipeline filter)
 dotnet test Enigmatry.Entry.CodeGeneration.sln --filter "TestCategory=unit|TestCategory=smoke"
+
+# Run all tests including uncategorized
+dotnet test Enigmatry.Entry.CodeGeneration.sln
 
 # Run a single test project
 dotnet test Enigmatry.Entry.CodeGeneration.Tests/Enigmatry.Entry.CodeGeneration.Tests.csproj --filter "TestCategory=unit"

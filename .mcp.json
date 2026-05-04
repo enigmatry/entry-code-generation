@@ -3,17 +3,7 @@
     "azure-devops": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@azure-devops/mcp", "enigmatry", "-d", "core", "repositories", "pipelines"]
-    },
-    "atlassian": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.atlassian.com/v1/sse"]
-    },
-    "Context7": {
-      "type": "http",
-      "url": "https://mcp.context7.com/mcp/oauth",
-      "tools": ["query-docs", "resolve-library-id"]
+      "args": ["-y", "@azure-devops/mcp@2.7.0", "enigmatry", "-d", "core", "repositories", "pipelines"]
     }
   }
 }

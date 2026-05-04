@@ -1,6 +1,6 @@
 ---
 name: csharp-unit-tests
-description: Best practices for C# unit and integration testing with NUnit, FluentAssertions and NSubstitute. Use this when writing or reviewing C# tests.
+description: Best practices for C# unit and integration testing with NUnit and Shouldly. Use this when writing or reviewing C# tests.
 ---
 
 # C# Unit Testing
@@ -8,10 +8,8 @@ description: Best practices for C# unit and integration testing with NUnit, Flue
 ## Stack
 
 - **Test runner**: NUnit 4 (`[Test]` / `[TestCase]` / `[TestCaseSource]`)
-- **Assertions**: FluentAssertions — always prefer over `Assert.*`
-- **Mocks**: NSubstitute — use `Substitute.For<T>()` in `[SetUp]`
-- **Snapshots**: Verify.NUnit — use for integration tests and complex output verification
-- **Integration**: `Microsoft.AspNetCore.Mvc.Testing` (`WebApplicationFactory<T>`)
+- **Assertions**: Shouldly — always prefer over `Assert.*`
+- **Categorization**: `[Category("unit")]` or `[Category("smoke")]` — required on every test class to be included in CI
 
 ## File and class conventions
 
@@ -20,9 +18,9 @@ description: Best practices for C# unit and integration testing with NUnit, Flue
 - Mirror the production folder structure under the test project root
 - Test classes are `internal sealed`
 
-## Naming — no underscores
+## Naming — PascalCase, no underscores
 
-Test method names use **descriptive camelCase** — no underscores, no prefixes like `Constructor_` or `ToString_`:
+Test method names use **descriptive PascalCase** — no underscores, no prefixes like `Constructor_` or `ToString_`:
 
 ```csharp
 // ✅ correct
@@ -46,7 +44,7 @@ public void WhenStartEqualsEndThrows()
 {
     var act = () => new Section(1000, 1000);
 
-    act.Should().Throw<ArgumentException>();
+    Should.Throw<ArgumentException>(() => act());
 }
 ```
 
@@ -58,7 +56,7 @@ public void ToStringReturnsEndValue()
 
     var result = section.ToString();
 
-    result.Should().Be("2500");
+    result.ShouldBe("2500");
 }
 ```
 
@@ -68,8 +66,8 @@ public void ToStringReturnsEndValue()
 
 ```csharp
 // ❌ avoid — identical structure, only the expected string differs
-[Test] public void ActiveStatusHasCorrectName()   { ... status.Name.Should().Be("Active"); }
-[Test] public void InactiveStatusHasCorrectName() { ... status.Name.Should().Be("Inactive"); }
+[Test] public void ActiveStatusHasCorrectName()   { ... status.Name.ShouldBe("Active"); }
+[Test] public void InactiveStatusHasCorrectName() { ... status.Name.ShouldBe("Inactive"); }
 
 // ✅ correct — collapsed into one parameterized test
 [TestCase(UserStatusId.Active,   "Active")]
@@ -78,7 +76,7 @@ public void StatusHasCorrectName(UserStatusId id, string expected)
 {
     var status = UserStatus.FromValue(id.Value);
 
-    status.Name.Should().Be(expected);
+    status.Name.ShouldBe(expected);
 }
 ```
 
@@ -91,7 +89,7 @@ public void CreateUserWithEmptyNameThrows(string? name)
 {
     var act = () => new UserBuilder().WithFullName(name!).Build();
 
-    act.Should().Throw<ArgumentException>();
+    Should.Throw<ArgumentException>(() => act());
 }
 ```
 
@@ -109,88 +107,35 @@ public void CreateUserWithInvalidEmailThrows(string email)
 {
     var act = () => new UserBuilder().WithEmailAddress(email).Build();
 
-    act.Should().Throw<ArgumentException>();
+    Should.Throw<ArgumentException>(() => act());
 }
-```
-
-## Mocks
-
-Create mocks in `[SetUp]`; never share mutable mock state across tests:
-```csharp
-private IMyService _myService = null!;
-
-[SetUp]
-public void SetUp() => _myService = Substitute.For<IMyService>();
 ```
 
 ## Exception assertions
 
-Always use a lambda + `.Should().Throw<T>()` — never `Assert.Throws`:
+Always use `Should.Throw<T>()` with a lambda — never `Assert.Throws`:
 ```csharp
-var act = () => new Section(500, 100);
-
-act.Should().Throw<ArgumentException>();
+Should.Throw<ArgumentException>(() => new Section(500, 100));
 ```
 
-## Snapshot testing with Verify.NUnit
-
-Use Verify for integration tests and any test that validates complex output (multi-line strings, JSON responses, serialized objects). Verify stores approved snapshots in `.verified.txt` files next to the test source.
-
+When validating the exception message or properties, assert on the caught exception:
 ```csharp
-[Test]
-public async Task GetConfigurationMatchesSnapshot()
-{
-    var response = await _client.GetAsync("/configuration");
-    var body = await response.Content.ReadAsStringAsync();
-
-    var settings = new VerifySettings();
-    settings.ScrubLinesContaining("time-dependent content");
-    await Verify(body, settings);
-}
+var ex = Should.Throw<ArgumentException>(() => new Section(500, 100));
+ex.Message.ShouldContain("start");
 ```
 
-- On first run, Verify creates a `.received.txt` file — review it and rename/copy to `.verified.txt` to approve.
-- Commit `.verified.txt` files alongside the tests.
-- Do **not** use Verify for simple unit tests — use explicit FluentAssertions there.
+## Snapshot tests (Angular code generation)
 
-## Integration tests
+This repository tests Angular code generation by comparing rendered output against reference `.txt` files in `Angular/FilesToBeGenerated/`. Comparison is whitespace-agnostic — all whitespace is stripped before comparing.
 
-- Inherit from `IntegrationFixtureBase` (in `Api.Tests/Infrastructure/Api/`) which wraps `WebApplicationFactory`, `TestDatabase` (Testcontainers SQL Server), and per-test scope management.
-- Seed data in a `[SetUp]` method using the builder pattern (e.g. `new UserBuilder().With*().Build()`) and `AddAndSaveChanges(entity)`.
-- Use `Client.GetAsync<T>(url)` / `Client.PostAsync<TRequest, TResponse>(url, body)` helpers from the test HTTP client.
-- Assert response bodies with `await Verify(response)` (Verify.NUnit snapshot files).
-- Mark integration test classes with `[Category("integration")]` so they can be filtered in CI: `dotnet test --filter "Category=integration"`.
-
-```csharp
-[Category("integration")]
-public class ProductsControllerFixture : IntegrationFixtureBase
-{
-    private Product _product = null!;
-
-    [SetUp]
-    public void SetUp()
-    {
-        _product = new ProductBuilder()
-            .WithName("Test Product")
-            .WithCode("BKXX001");
-        AddAndSaveChanges(_product);
-    }
-
-    [Test]
-    public async Task TestGetById()
-    {
-        var response = await Client.GetAsync<GetProductDetails.Response>($"api/products/{_product.Id}");
-
-        await Verify(response);
-    }
-}
-```
+When changing Razor templates, update the corresponding `.txt` snapshot files. To verify output, run the test and inspect the assertion failure message which shows actual vs. expected content.
 
 ## What NOT to do
 
 - Do not use underscores in test method names.
 - Do not add `[TestFixture]` to classes whose names end with `Fixture`.
 - Do not write `// Arrange`, `// Act`, `// Assert` comments.
-- Do not use `Assert.That` — use FluentAssertions only.
+- Do not use `Assert.That` — use Shouldly only.
 - Do not leave empty catch blocks.
 - Do not write separate `[Test]` methods for cases that differ only in input values — use `[TestCase]` or `[TestCaseSource]` instead. **Always check for this before writing any new `[Test]` method.**
+- Do not test implementation details — assert on observable behavior and public API output, not on internal state or private method calls.
