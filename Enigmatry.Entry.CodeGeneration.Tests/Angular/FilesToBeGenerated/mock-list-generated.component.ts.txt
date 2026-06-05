@@ -51,7 +51,7 @@ export class MockListGeneratedComponent implements OnInit {
         { id: 'edit', name: $localize `:@@:Edit` },
         { id: 'delete', name: $localize `:@@:Delete` }
     ];
-  @Input() rowContextMenuFormatter: RowContextMenuFormatter;
+  @Input() rowContextMenuFormatter: RowContextMenuFormatter<ListMockItem>;
   
   @Input() rowFocusVisible: boolean;
   @Input() rowClassFormatter: RowClassFormatter;

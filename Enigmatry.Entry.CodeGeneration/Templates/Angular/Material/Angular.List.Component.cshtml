@@ -43,7 +43,7 @@ export class @Model.AngularComponentName() implements OnInit {
 
   @@Input() showContextMenu = @Model.Row.ShowContextMenu.ToString().ToLower();
   @@Input() contextMenuItems: ContextMenuItem[] = @Html.CreateContextMenuItems(Model.Row.ContextMenuItems, Options.EnableI18N);
-  @@Input() rowContextMenuFormatter: RowContextMenuFormatter;
+  @@Input() rowContextMenuFormatter: RowContextMenuFormatter@(Html.Raw($"<{Model.ComponentInfo.ModelType}>"));
   
   @@Input() rowFocusVisible: boolean;
   @@Input() rowClassFormatter: RowClassFormatter;
