@@ -118,7 +118,7 @@ public class FormControlGroupBuilder<T> : BaseControlBuilder<FormControlGroup, F
 
     public CustomFormControlBuilder CustomFormControl(string propertyName)
     {
-        return GetOrCreateBuilder(propertyName, propName => new CustomFormControlBuilder(propName));
+        return GetOrCreateBuilder(propertyName, name => new CustomFormControlBuilder(name));
     }
 
     public FormControlGroupBuilder<T> FormControlGroup(string name)

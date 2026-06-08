@@ -62,6 +62,30 @@ public static class AngularFormlyValidationHtmlHelperExtensions
         return html.Raw($"{String.Join(",\r\n", messages.Values)}\r\n");
     }
 
+    public static string AngularValidators(this IHtmlHelper html, FormControl control)
+    {
+        var validators = new List<string>();
+        foreach (var rule in control.ValidationRules)
+        {
+            if (rule.FormlyRuleName == "required")
+            {
+                validators.Add("Validators.required");
+            }
+            else
+            {
+                var valueOption = rule.FormlyTemplateOptions
+                    .FirstOrDefault(x => x.StartsWith($"{rule.FormlyRuleName}: "));
+                if (valueOption != null)
+                {
+                    var value = valueOption[(rule.FormlyRuleName.Length + 2)..];
+                    validators.Add($"Validators.{rule.FormlyRuleName}({value})");
+                }
+            }
+        }
+
+        return validators.Count > 0 ? $"[{String.Join(", ", validators)}]" : "[]";
+    }
+
     public static IHtmlContent ImportValidators(this IHtmlHelper html, FeatureModule module, string validatorsPath) =>
         module.HasFormValidators
             ? html.ImportStatement(

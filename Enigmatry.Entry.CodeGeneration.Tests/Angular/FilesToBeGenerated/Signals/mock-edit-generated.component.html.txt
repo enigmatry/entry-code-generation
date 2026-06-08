@@ -1,12 +1,191 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" [class.entry-form-readonly]="isReadonly" class="entry-mock-edit-form entry-form">
-    <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
-    <ng-template [ngIf]="formButtonsTemplate" [ngIfElse]="defaultFormButtonsTpl">
-        <ng-template [ngTemplateOutlet]="formButtonsTemplate"></ng-template>
-    </ng-template>
-    <ng-template #defaultFormButtonsTpl>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" [class.entry-form-readonly]="isReadonly()" class="entry-mock-edit-form entry-form">
+<button mat-button type="button"
+        class="entry-reset-form-btn-field entry-button primary-button"
+        [disabled]="isDisabled('resetFormBtn', false)"
+        (click)="buttonClick.emit('resetFormBtn')">Reset</button>
+<div class="entry-field-group" [ngClass]="{ 'group-wrapper-readonly': isReadonly() }">
+@if (!isHidden('name', true)) {
+<mat-form-field class="entry-name-field entry-input" appearance="outline" floatLabel="always">
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name" type="text" [placeholder]="'Some / Name'" autocomplete="off" cdkFocusInitial [readonly]="isDisabled('name', false)">
+@if (form.get('name')?.hasError('required')) {
+    <mat-error>CUSTOM_VALIDATION_MESSAGE</mat-error>
+}@if (form.get('name')?.hasError('maxLength')) {
+    <mat-error>CUSTOM_VALIDATION_MESSAGE</mat-error>
+}@if (form.get('name')?.hasError('pattern')) {
+    <mat-error>${field?.templateOptions?.label}:property-name: is not in valid format</mat-error>
+}</mat-form-field>
+}
+@if (!isHidden('description', true)) {
+<entry-redactor formControlName="description" class="entry-description-field entry-redactor"></entry-redactor>
+}
+@if (!isHidden('date', true)) {
+<mat-form-field class="entry-date-field entry-datepicker">
+    <mat-label>Date</mat-label>
+    <input matInput [matDatepicker]="picker_date" formControlName="date" [placeholder]="'Date'">
+    <mat-datepicker-toggle matIconSuffix [for]="picker_date"></mat-datepicker-toggle>
+    <mat-datepicker #picker_date></mat-datepicker>
+</mat-form-field>
+}
+@if (!isHidden('money', true)) {
+<mat-form-field class="entry-money-field entry-input">
+    <mat-label>Money</mat-label>
+    <input matInput formControlName="money" type="text" [placeholder]="'Money'" [readonly]="isDisabled('money', false)">
+@if (form.get('money')?.hasError('max')) {
+    <mat-error>${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:</mat-error>
+}</mat-form-field>
+}
+@if (!isHidden('amount', true)) {
+<mat-form-field class="entry-amount-field entry-input">
+    <mat-label>Amount</mat-label>
+    <input matInput formControlName="amount" type="text" [placeholder]="'Amount'" [readonly]="isDisabled('amount', false)">
+    <mat-hint>Don't panic if it is 0</mat-hint>
+@if (form.get('amount')?.hasError('required')) {
+    <mat-error>${field?.templateOptions?.label}:property-name: is required</mat-error>
+}@if (form.get('amount')?.hasError('min')) {
+    <mat-error>CUSTOM_VALIDATION_MESSAGE</mat-error>
+}@if (form.get('amount')?.hasError('max')) {
+    <mat-error>CUSTOM_VALIDATION_MESSAGE</mat-error>
+}</mat-form-field>
+}
+@if (!isHidden('formStatus', true)) {
+<mat-form-field class="entry-form-status-field entry-select">
+    <mat-label>Form status</mat-label>
+    <mat-select formControlName="formStatus">
+        @for (let option of formStatusOptions(); track option.value) {
+            <mat-option [value]="option.value">{{option.displayName}}</mat-option>
+        }
+    </mat-select>
+</mat-form-field>
+}
+@if (!isHidden('mockRadio', true)) {
+<mat-radio-group formControlName="mockRadio" class="entry-mock-radio-field entry-radio">
+    @for (let option of mockRadioOptions(); track option.value) {
+        <mat-radio-button [value]="option.value">{{option.displayName}}</mat-radio-button>
+    }
+</mat-radio-group>
+}
+@if (!isHidden('mockBoolSelect', true)) {
+<mat-form-field class="entry-mock-bool-select-field entry-select">
+    <mat-label>BoolSelect</mat-label>
+    <mat-select formControlName="mockBoolSelect">
+        @for (let option of mockBoolSelectOptions(); track option.value) {
+            <mat-option [value]="option.value">{{option.displayName}}</mat-option>
+        }
+    </mat-select>
+</mat-form-field>
+}
+@if (!isHidden('mockMultiCheckbox', true)) {
+<div class="entry-mock-multi-checkbox-field entry-multicheckbox">
+    @for (let option of mockMultiCheckboxOptions(); track option.value) {
+        <mat-checkbox [value]="option.value">{{option.displayName}}</mat-checkbox>
+    }
+</div>
+}
+@if (!isHidden('multiCheckboxWithStringIds', true)) {
+<div class="entry-multi-checkbox-with-string-ids-field entry-multicheckbox">
+    @for (let option of multiCheckboxWithStringIdsOptions(); track option.value) {
+        <mat-checkbox [value]="option.value">{{option.displayName}}</mat-checkbox>
+    }
+</div>
+}
+@if (!isHidden('categoryId', true)) {
+<mat-form-field class="entry-category-id-field entry-select">
+    <mat-label>Category</mat-label>
+    <mat-select formControlName="categoryId">
+        @for (let option of categoryIdOptions(); track option.value) {
+            <mat-option [value]="option.value">{{option.displayName}}</mat-option>
+        }
+    </mat-select>
+</mat-form-field>
+}
+@if (!isHidden('types', true)) {
+<mat-form-field class="entry-types-field entry-select">
+    <mat-label>Types</mat-label>
+    <mat-select formControlName="types" multiple>
+        <mat-option>SelectAll</mat-option>
+        @for (let option of typesOptions(); track option.value) {
+            <mat-option [value]="option.value">{{option.displayName}}</mat-option>
+        }
+    </mat-select>
+</mat-form-field>
+}
+@if (!isHidden('password', true)) {
+<mat-form-field class="entry-password-field entry-input">
+    <mat-label>Password</mat-label>
+    <input matInput formControlName="password" type="password" [placeholder]="'Password'" [readonly]="isDisabled('password', false)">
+</mat-form-field>
+}
+@if (!isHidden('isActive', true)) {
+<mat-checkbox formControlName="isActive" class="entry-is-active-field entry-checkbox">Active</mat-checkbox>
+}
+@if (!isHidden('addresses', true)) {
+<ng-container formArrayName="addresses">
+    @for (let control of form.get('addresses')?.controls ?? []; track $index) {
+        <ng-container [formGroupName]="$index">
+@if (!isHidden('city', true)) {
+<mat-form-field class="entry-city-field entry-input">
+    <mat-label>City</mat-label>
+    <input matInput formControlName="city" type="text" [placeholder]="'City'" [readonly]="isDisabled('city', false)">
+</mat-form-field>
+}
+@if (!isHidden('street', true)) {
+<mat-form-field class="entry-street-field entry-input">
+    <mat-label>Street</mat-label>
+    <input matInput formControlName="street" type="text" [placeholder]="'Street'" [readonly]="isDisabled('street', false)">
+</mat-form-field>
+}
+@if (!isHidden('houseNumber', true)) {
+<mat-form-field class="entry-house-number-field entry-input">
+    <mat-label>House number</mat-label>
+    <input matInput formControlName="houseNumber" type="text" [placeholder]="'House number'" [readonly]="isDisabled('houseNumber', false)">
+</mat-form-field>
+}
+@if (!isHidden('verified', true)) {
+<mat-checkbox formControlName="verified" class="entry-verified-field entry-checkbox">Verified</mat-checkbox>
+}
+        </ng-container>
+    }
+</ng-container>
+}
+@if (!isHidden('dateAndTime', true)) {
+<mat-form-field class="entry-date-and-time-field entry-datetimepicker">
+    <mat-label>Date and time</mat-label>
+    <input matInput [matDatetimepicker]="picker_dateAndTime" formControlName="dateAndTime" [placeholder]="'Date and time'">
+    <mat-datetimepicker-toggle matIconSuffix [for]="picker_dateAndTime"></mat-datetimepicker-toggle>
+    <mat-datetimepicker #picker_dateAndTime></mat-datetimepicker>
+</mat-form-field>
+}
+</div>
+@if (!isHidden('email1', true)) {
+<mat-form-field class="entry-email1-field entry-input">
+    <mat-label>Email 1</mat-label>
+    <input matInput formControlName="email1" type="text" [placeholder]="'Email 1'" [readonly]="isDisabled('email1', false)">
+@if (form.get('email1')?.hasError('pattern')) {
+    <mat-error>CUSTOM_VALIDATION_MESSAGE</mat-error>
+}@if (form.get('email1')?.hasError('maxLength')) {
+    <mat-error>${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters</mat-error>
+}</mat-form-field>
+}
+@if (!isHidden('email2', true)) {
+<mat-form-field class="entry-email2-field entry-input">
+    <mat-label>Email 2</mat-label>
+    <input matInput formControlName="email2" type="text" [placeholder]="'Email 2'" [readonly]="isDisabled('email2', false)">
+@if (form.get('email2')?.hasError('pattern')) {
+    <mat-error>Invalid email address format</mat-error>
+}@if (form.get('email2')?.hasError('maxLength')) {
+    <mat-error>${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters</mat-error>
+}</mat-form-field>
+}
+
+    <ng-content *ngTemplateOutlet="formButtonsTemplate() ?? defaultActionsTemplate"></ng-content>
+    <ng-template #defaultActionsTemplate>
         <div class="action-buttons">
-            <button mat-button entry-submit-button *ngIf="!isReadonly" [disabled]="saveButtonDisabled" type="submit">{{saveButtonText}}</button>
-            <button mat-button entry-cancel-button *ngIf="!isReadonly" type="button" (click)="cancel.emit()">{{cancelButtonText}}</button>
+            @if (!isReadonly()) {
+            <button mat-button entry-submit-button [disabled]="saveButtonDisabled()" type="submit">{{saveButtonText()}}</button>
+            <button mat-button entry-cancel-button type="button" (click)="cancel.emit()">{{cancelButtonText()}}</button>
+            }
         </div>
     </ng-template>
 </form>

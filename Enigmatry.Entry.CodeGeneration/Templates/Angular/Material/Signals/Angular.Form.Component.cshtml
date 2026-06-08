@@ -1,47 +1,30 @@
-﻿@using Enigmatry.Entry.CodeGeneration
+@using Enigmatry.Entry.CodeGeneration
 @using Enigmatry.Entry.CodeGeneration.Angular
 @using Enigmatry.Entry.CodeGeneration.Configuration
 @using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls
+@using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Array
 @using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular
 @using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
 @model Enigmatry.Entry.CodeGeneration.Configuration.Form.FormComponentModel;
 @inject CodeGeneratorOptions Options;
-
-@functions {
-    void InitializeSelectInputs()
-    {
-        foreach (var select in Model.FormControlsOfType<SelectControlBase>())
-        {
-            SelectInputOptions(select);
-        }
-    }
-
-    void SelectInputOptions(SelectControlBase select)
-    {
-        if (select.Options.HasDynamicValues)
-        {
-            @:protected readonly @(select.PropertyName)Callback = input@(Html.Raw("<Observable<unknown[]>>"))([]);
-            @:private readonly @(select.PropertyName)Options = toSignal(@(select.PropertyName)Callback, { initialValue: [] });
-        }
-        else
-        {
-            @:private readonly @(select.PropertyName)Options = toSignal(@Html.JsArray(select.Options.FixedOptions, option => $"{{ {option.GetValueExpression()}, displayName: {(@Html.Localize(option.DisplayName, Options.EnableI18N))} }}"), { initialValue: [] });
-        }
-
-        if (select.Options.HasCustomValueAndDisplayKeys)
-        {
-            @:protected readonly @(select.PropertyName)OptionsConfiguration = input@(Html.Raw("<SelectConfiguration>"))({ valueProperty: '@(select.Options.OptionValueKey)', labelProperty: '@(select.Options.OptionDisplayKey)', sortProperty: '@(select.Options.OptionSortKey)' });
-        }
-        else
-        {
-            @:protected readonly @(select.PropertyName)OptionsConfiguration = input@(Html.Raw("<SelectConfiguration>"))(Html.Raw(select.Options.DefaultOptionsAsString));
-        }
-    }
+import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, LOCALE_ID, signal, TemplateRef } from '@@angular/core';
+import { toSignal } from '@@angular/core/rxjs-interop';
+import { input, model, output } from '@@angular/core';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@@angular/forms';
+import { I@(Model.ComponentInfo.ModelType) } from '@Options.ApiClientTsImportPath';
+@{
+    var entryFormImports = "IFieldExpressionDictionary, IFieldPropertyExpressionDictionary, SelectConfiguration, sortOptions";
+    if (Model.HasAnyAsyncValidators()) entryFormImports += ", ENTRY_ASYNC_VALIDATOR_RESOLVER";
+}
+import { @Html.Raw(entryFormImports) } from '@@enigmatry/entry-form';
+@if (Model.FormControlsOfType<SelectControlBase>().Any(s => s.Options.HasDynamicValues))
+{
+@:import { Observable } from 'rxjs';
 }
 
 @@Component({
   selector: '@Model.AngularComponentSelector(Options.GeneratedComponentPrefix)',
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './@(Model.AngularComponentFileName()).html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -53,39 +36,56 @@ export class @Model.AngularComponentName() {
     protected readonly saveButtonDisabled = input@(Html.Raw("<boolean>"))(false);
     protected readonly formButtonsTemplate = input@(Html.Raw("<TemplateRef<unknown> | null | undefined>"))();
 
-    protected readonly fieldsHideExpressions = input@(Html.Raw($"<I{Model.ComponentInfo.ModelType} | undefined>"))();
-    protected readonly fieldsLabelExpressions = input@(Html.Raw($"<I{Model.ComponentInfo.ModelType} | undefined>"))();
-    protected readonly fieldsPropertyExpressions = input@(Html.Raw($"<I{Model.ComponentInfo.ModelType} | undefined>"))();
-    protected readonly fieldsDisableExpressions = input@(Html.Raw($"<I{Model.ComponentInfo.ModelType} | undefined>"))();
-    protected readonly fieldsRequiredExpressions = input@(Html.Raw($"<I{Model.ComponentInfo.ModelType} | undefined>"))();
+    protected readonly fieldsHideExpressions = input@(Html.Raw($"<IFieldExpressionDictionary<I{Model.ComponentInfo.ModelType}> | undefined>"))();
+    protected readonly fieldsLabelExpressions = input@(Html.Raw($"<IFieldPropertyExpressionDictionary<I{Model.ComponentInfo.ModelType}> | undefined>"))();
+    protected readonly fieldsPropertyExpressions = input@(Html.Raw($"<IFieldPropertyExpressionDictionary<I{Model.ComponentInfo.ModelType}> | undefined>"))();
+    protected readonly fieldsDisableExpressions = input@(Html.Raw($"<IFieldExpressionDictionary<I{Model.ComponentInfo.ModelType}> | undefined>"))();
+    protected readonly fieldsRequiredExpressions = input@(Html.Raw($"<IFieldExpressionDictionary<I{Model.ComponentInfo.ModelType}> | undefined>"))();
 
-    @{
-        InitializeSelectInputs();
-    }
-
+@Html.AllSelectInputDeclarations(Model, Options.EnableI18N)
     protected readonly save = output@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>"))();
     protected readonly cancel = output@(Html.Raw("<void>"))();
     protected readonly buttonClick = output@(Html.Raw("<string>"))();
-    
-    protected readonly form = new FormGroup({});
-    protected readonly fields: FormlyFieldConfig[] = [];
-     
-    private readonly localeId = inject@(Html.Raw("<string>"))(LOCALE_ID);
-    private readonly fieldTypeResolver = inject@(Html.Raw("<FieldTypeResolver>"))(ENTRY_FIELD_TYPE_RESOLVER, { optional: true });
 
-    protected readonly onSubmit = () => {
+    private readonly destroyRef = inject(DestroyRef);
+    private readonly localeId = inject@(Html.Raw("<string>"))(LOCALE_ID);
+@if (Model.HasAnyAsyncValidators())
+{
+@:    private readonly asyncValidatorResolver = inject(ENTRY_ASYNC_VALIDATOR_RESOLVER, { optional: true });
+}
+
+    protected readonly form = new FormGroup({
+@Html.AllFormControlDeclarations(Model)    });
+
+@Html.AllArrayItemFactoryMethods(Model)
+    constructor() {
+        effect(() => {
+            this.form.patchValue(this.model() as any, { emitEvent: false }); // `as any` required: API model type doesn't match typed FormGroup shape
+        });
+        effect(() => {
+            if (this.isReadonly()) {
+                this.form.disable({ emitEvent: false });
+            } else {
+                this.form.enable({ emitEvent: false });
+@Html.ReEnableStaticReadonlyControls(Model)
+            }
+        });
+    }
+
+    protected readonly onSubmit = (): void => {
         if (this.form.valid) {
-            const throttledSave = toSignal(toObservable(this.save).pipe(throttleTime(500)));
-            throttledSave(model);
+            this.save.emit(this.form.getRawValue() as I@(Model.ComponentInfo.ModelType));
         }
     };
-    
-    protected readonly isDisabled = (propertyName: string, isReadOnlyProperty: boolean) => {
-        return this.isReadonly() || (this.fieldsDisableExpressions()?.[propertyName] ? this.fieldsDisableExpressions()[propertyName](this.model()) : isReadOnlyProperty);
+
+    protected readonly isHidden = (propertyName: string, staticVisible: boolean): boolean => {
+        if (!staticVisible) return true;
+        return this.fieldsHideExpressions()?.[propertyName]?.(this.model()) ?? false;
     };
 
-    private readonly resolveFieldType = (type: string, isControlReadonly: boolean): string =>
-        this.fieldTypeResolver ? this.fieldTypeResolver(type, this.isReadonly() || isControlReadonly) : type;
-
-    private readonly applyOptionally = @(Html.Raw("<T>"))(value: T, apply: boolean): T | undefined => apply ? value : undefined;
+    protected readonly isDisabled = (propertyName: string, staticReadonly: boolean): boolean => {
+        return this.isReadonly() || (this.fieldsDisableExpressions()?.[propertyName]
+            ? this.fieldsDisableExpressions()![propertyName](this.model())
+            : staticReadonly);
+    };
 }
