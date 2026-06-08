@@ -8,7 +8,7 @@
 import { ChangeDetectionStrategy, Component, computed, EventEmitter, Input, OnInit, Output, 
     TemplateRef, viewChild, ViewChild } from '@@angular/core';
 import { EntryTableComponent, PagedData, SortDirection, CellTemplate, ContextMenuItem, RowContextMenuFormatter, RowClassFormatter,
-    RowSelectionFormatter, ColumnDef, PageEvent, SortEvent } from '@@enigmatry/entry-components/table';
+    RowSelectionFormatter, ColumnDefinition, PageEvent, SortEvent } from '@@enigmatry/entry-components/table';
 
 import { @(Model.ComponentInfo.ModelType) } from '@Options.ApiClientTsImportPath';
 
@@ -49,7 +49,7 @@ export class @Model.AngularComponentName() implements OnInit {
   @@Input() rowClassFormatter: RowClassFormatter;
   @@Input() rowSelectionFormatter: RowSelectionFormatter = {};
 
-  @@Input() columns: ColumnDef[] = [];
+  @@Input() columns: ColumnDefinition[] = [];
 
   @@Output() pageChange = new EventEmitter@(Html.Raw("<PageEvent>"))();
   @@Output() sortChange = new EventEmitter@(Html.Raw("<SortEvent>"))();
