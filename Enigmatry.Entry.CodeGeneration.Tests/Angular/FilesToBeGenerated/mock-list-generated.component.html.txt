@@ -1,15 +1,16 @@
 
-<entry-table 
+
+<entry-table
                 class="entry-mock-list-table entry-table"
-                [columns]="columns" 
-                [data]="data" 
+                [columns]="columns"
+                [data]="data"
                 [showPaginator]="showPaginator"
                 [showFirstLastButtons]="showFirstLastButtons"
                 [pageSizeOptions]="pageSizeOptions"
                 [hidePageSize]="hidePageSize"
                 [sortActive]="defaultSort.sortBy ?? ''"
                 [sortDirection]="defaultSort.sortDirection ?? ''"
-                [multiSelectable]="multiSelectable" 
+                [multiSelectable]="multiSelectable"
                 [rowSelectable]="rowSelectable"
                 [showSelectAllCheckbox]="showSelectAllCheckbox"
                 [rowSelected]="rowSelected"

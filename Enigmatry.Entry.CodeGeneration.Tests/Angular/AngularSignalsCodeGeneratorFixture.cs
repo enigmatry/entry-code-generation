@@ -30,4 +30,5 @@ public class AngularSignalsCodeGeneratorFixture : AngularCodeGeneratorFixtureBas
         AssertGeneratedFileContent(inMemoryTemplateWriter.FilesToWrite);
     }
 
+
 }

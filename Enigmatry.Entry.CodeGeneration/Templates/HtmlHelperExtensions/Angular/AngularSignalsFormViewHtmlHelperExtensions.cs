@@ -1,6 +1,7 @@
 using Enigmatry.Entry.CodeGeneration.Configuration;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Array;
+using Humanizer;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -56,10 +57,68 @@ public static class AngularSignalsFormViewHtmlHelperExtensions
             SelectFormControl selectField => htmlHelper.RenderSelectField(selectField),
             MultiCheckboxFormControl multiCheckboxField => htmlHelper.RenderMultiCheckboxField(multiCheckboxField),
             RadioGroupFormControl radioGroupField => htmlHelper.RenderRadioGroupField(radioGroupField),
+            TextareaFormControl textareaField => htmlHelper.RenderTextareaField(textareaField),
+            AutocompleteFormControl autocompleteField => htmlHelper.RenderAutocompleteField(autocompleteField),
             CheckboxFormControl checkboxField => htmlHelper.RenderCheckboxField(checkboxField),
             InputControlBase inputField => htmlHelper.RenderInputField(inputField),
+            CustomFormControl customField => htmlHelper.RenderCustomField(customField),
             _ => htmlHelper.RenderGenericField(field)
         };
+    }
+
+    private static IHtmlContent RenderTextareaField(this IHtmlHelper htmlHelper, TextareaFormControl field)
+    {
+        var placeholderAttribute = field.Placeholder.Value.HasContent()
+            ? $" [placeholder]=\"'{field.Placeholder.Value}'\""
+            : "";
+        var rowsAttribute = field.Rows > 0 ? $" rows=\"{field.Rows}\"" : "";
+        var colsAttribute = field.Cols > 0 ? $" cols=\"{field.Cols}\"" : "";
+        var autoResizeAttributes = field.AutoResize
+            ? " cdkTextareaAutosize" +
+              (field.AutoResizeMinRows > 0 ? $" cdkAutosizeMinRows=\"{field.AutoResizeMinRows}\"" : "") +
+              (field.AutoResizeMaxRows > 0 ? $" cdkAutosizeMaxRows=\"{field.AutoResizeMaxRows}\"" : "")
+            : "";
+        var autocompleteAttribute = field.ShouldAutocomplete == false ? " autocomplete=\"off\"" : "";
+        var validationErrors = String.Concat(field.ValidationRules.Select(validationRule =>
+            $"@if (form.get('{field.PropertyName}')?.hasError('{validationRule.FormlyRuleName}')) {{\r\n" +
+            $"    <mat-error>{(validationRule.HasCustomMessage ? validationRule.CustomMessage : validationRule.FormlyValidationMessage)}</mat-error>\r\n" +
+            $"}}"));
+
+        return htmlHelper.Raw(
+            $"@if (!isHidden('{field.PropertyName}', {field.Visible.ToString().ToLower()})) {{\r\n" +
+            $"<mat-form-field class=\"{field.StackedClasses()}\">\r\n" +
+            $"    <mat-label>{field.Label.Value}</mat-label>\r\n" +
+            $"    <textarea matInput formControlName=\"{field.PropertyName}\"{placeholderAttribute}{rowsAttribute}{colsAttribute}{autocompleteAttribute}{autoResizeAttributes} [readonly]=\"isDisabled('{field.PropertyName}', {field.Readonly.ToString().ToLower()})\"></textarea>\r\n" +
+            validationErrors +
+            $"</mat-form-field>\r\n" +
+            $"}}\r\n");
+    }
+
+    private static IHtmlContent RenderAutocompleteField(this IHtmlHelper htmlHelper, AutocompleteFormControl field)
+    {
+        var appearanceAttribute = field.Appearance.HasValue
+            ? $" appearance=\"{field.Appearance!.Value.ToString().ToLower()}\""
+            : "";
+        var placeholderAttribute = field.Placeholder.Value.HasContent()
+            ? $" [placeholder]=\"'{field.Placeholder.Value}'\""
+            : "";
+        var propertyNameCapitalized = Char.ToUpper(field.PropertyName[0]) + field.PropertyName.Substring(1);
+        return htmlHelper.Raw(
+            $"@if (!isHidden('{field.PropertyName}', {field.Visible.ToString().ToLower()})) {{\r\n" +
+            $"<mat-form-field class=\"{field.StackedClasses()}\"{appearanceAttribute}>\r\n" +
+            $"    <mat-label>{field.Label.Value}</mat-label>\r\n" +
+            $"    <input type=\"text\" matInput formControlName=\"{field.PropertyName}\"\r\n" +
+            $"        [matAutocomplete]=\"{field.PropertyName}Auto\"{placeholderAttribute}\r\n" +
+            $"        [readonly]=\"isDisabled('{field.PropertyName}', {field.Readonly.ToString().ToLower()})\">\r\n" +
+            $"    <mat-autocomplete #{field.PropertyName}Auto=\"matAutocomplete\"\r\n" +
+            $"        [autoActiveFirstOption]=\"true\"\r\n" +
+            $"        [displayWith]=\"display{propertyNameCapitalized}\">\r\n" +
+            $"        @for (option of {field.PropertyName}Options(); track option.value) {{\r\n" +
+            $"            <mat-option [value]=\"option.value\">{{{{option.displayName}}}}</mat-option>\r\n" +
+            $"        }}\r\n" +
+            $"    </mat-autocomplete>\r\n" +
+            $"</mat-form-field>\r\n" +
+            $"}}\r\n");
     }
 
     private static IHtmlContent RenderInputField(this IHtmlHelper htmlHelper, InputControlBase field)
@@ -208,6 +267,17 @@ public static class AngularSignalsFormViewHtmlHelperExtensions
         return htmlHelper.Raw(
             $"@if (!isHidden('{field.PropertyName}', {field.Visible.ToString().ToLower()})) {{\r\n" +
             $"<{editorTagName} formControlName=\"{field.PropertyName}\" class=\"{field.StackedClasses()}\"></{editorTagName}>\r\n" +
+            $"}}\r\n");
+    }
+
+    private static IHtmlContent RenderCustomField(this IHtmlHelper htmlHelper, CustomFormControl field)
+    {
+        var metadataAttributes = String.Concat(field.Metadata.Select(kv => $" {kv.Key}=\"{kv.Value}\""));
+        var classes = $"entry-{field.PropertyName.Kebaberize()}-field {field.ControlTypeName}";
+        return htmlHelper.Raw(
+            $"@if (!isHidden('{field.PropertyName}', {field.Visible.ToString().ToLower()})) {{\r\n" +
+            $"<{field.ControlTypeName} formControlName=\"{field.PropertyName}\" class=\"{classes}\"{metadataAttributes}" +
+            $" [readonly]=\"isDisabled('{field.PropertyName}', {field.Readonly.ToString().ToLower()})\"></{field.ControlTypeName}>\r\n" +
             $"}}\r\n");
     }
 

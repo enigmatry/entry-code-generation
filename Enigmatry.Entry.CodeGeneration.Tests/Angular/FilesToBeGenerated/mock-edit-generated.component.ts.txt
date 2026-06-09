@@ -70,6 +70,8 @@ import { map, throttleTime } from 'rxjs/operators';
             get typesOptions(): any[] { return this.typesOptions$.value; }
             set typesOptions(value: any[]) { this.typesOptions$.next(value); }
             @Input() typesOptionsConfiguration: SelectConfiguration = {};
+            @Input() regionOptions: any[] = [{ value: 'EU', displayName: $localize `:@@region.europe:Europe` }, { value: 'NA', displayName: $localize `:@@region.na:North America` }, { value: 'AP', displayName: $localize `:@@region.ap:Asia Pacific` }];
+            @Input() regionOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
 
     _isReadonly: boolean;
     form = new FormGroup({});
@@ -490,6 +492,77 @@ defaultValue: true,
             attributes: {  },
         hidden: !true,
             typeFormatDef: { name: 'boolean' }
+        },
+        },
+        {
+        key: 'notes',
+        type: this.resolveFieldType('textarea', false),
+        focus: false,
+className: `entry-notes-field entry-textarea`,
+        hideExpression: this.fieldsHideExpressions?.['notes'] ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['notes'] ? this.fieldsDisableExpressions['notes'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['notes'] ? this.fieldsRequiredExpressions['notes'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['notes'] ? this.fieldsLabelExpressions['notes'](model) : $localize `:@@test.mock-edit.notes.label:Notes`),
+        'model.notes': (model) => (this.fieldsPropertyExpressions?.['notes'] ? this.fieldsPropertyExpressions['notes'](model) : model.notes),
+        },
+        templateOptions: {
+        label: $localize `:@@test.mock-edit.notes.label:Notes`,
+        placeholder: $localize `:@@test.mock-edit.notes.placeholder:Notes`,
+        description: ``,
+            rows: 4,
+            cols: 0,
+            autosize: false,
+            autosizeMinRows: 0,
+            autosizeMaxRows: 0,
+            attributes: {  },
+        hidden: !true,
+            typeFormatDef: undefined
+        },
+        },
+        {
+        key: 'region',
+        type: this.resolveFieldType('autocomplete', false),
+        focus: false,
+className: `entry-region-field entry-autocomplete`,
+        hideExpression: this.fieldsHideExpressions?.['region'] ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['region'] ? this.fieldsDisableExpressions['region'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['region'] ? this.fieldsRequiredExpressions['region'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['region'] ? this.fieldsLabelExpressions['region'](model) : $localize `:@@test.mock-edit.region.label:Region`),
+        'model.region': (model) => (this.fieldsPropertyExpressions?.['region'] ? this.fieldsPropertyExpressions['region'](model) : model.region),
+        },
+        templateOptions: {
+        label: $localize `:@@test.mock-edit.region.label:Region`,
+        placeholder: $localize `:@@test.mock-edit.region.placeholder:Region`,
+        description: ``,
+            options: of(this.regionOptions).pipe(map(opts => sortOptions(opts, this.regionOptionsConfiguration.valueProperty, this.regionOptionsConfiguration.sortProperty, this._localeId))),
+            valueProp: this.regionOptionsConfiguration.valueProperty,
+            labelProp: this.regionOptionsConfiguration.labelProperty,
+            attributes: {  },
+        hidden: !true,
+            typeFormatDef: undefined
+        },
+        },
+        {
+        key: 'fileUpload',
+        type: this.resolveFieldType('entry-file-input', false),
+        focus: false,
+className: `entry-file-upload-field entry-entry-file-input`,
+        hideExpression: this.fieldsHideExpressions?.['fileUpload'] ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['fileUpload'] ? this.fieldsDisableExpressions['fileUpload'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['fileUpload'] ? this.fieldsRequiredExpressions['fileUpload'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['fileUpload'] ? this.fieldsLabelExpressions['fileUpload'](model) : $localize `:@@test.mock-edit.file-upload.label:File upload`),
+        'model.fileUpload': (model) => (this.fieldsPropertyExpressions?.['fileUpload'] ? this.fieldsPropertyExpressions['fileUpload'](model) : model.fileUpload),
+        },
+        templateOptions: {
+        label: $localize `:@@test.mock-edit.file-upload.label:File upload`,
+        placeholder: $localize `:@@test.mock-edit.file-upload.placeholder:File upload`,
+        description: ``,
+            attributes: {  },
+        hidden: !true,
+            typeFormatDef: undefined
         },
         },
         {

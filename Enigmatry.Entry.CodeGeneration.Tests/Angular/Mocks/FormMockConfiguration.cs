@@ -145,6 +145,26 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
             .WithDefaultValue(true);
 
         formGroup
+            .TextareaFormControl(x => x.Notes)
+            .WithLabel("Notes")
+            .WithRows(4);
+
+        formGroup
+            .AutocompleteFormControl(x => x.Region)
+            .WithLabel("Region")
+            .WithOptions(options => options.WithFixedValues(new[]
+            {
+                new SelectOption("EU", "Europe", "region.europe"),
+                new SelectOption("NA", "North America", "region.na"),
+                new SelectOption("AP", "Asia Pacific", "region.ap")
+            }));
+
+        formGroup
+            .CustomFormControl(x => x.FileUpload)
+            .WithCustomControlType("entry-file-input")
+            .WithLabel("File upload");
+
+        formGroup
             .ArrayFormControl(x => x.Addresses)
             .WithCustomControlType("array-field")
             .WithCustomWrapper("array-wrapper")

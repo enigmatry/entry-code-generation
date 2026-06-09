@@ -22,6 +22,9 @@ public class FormMock
     public IEnumerable<string> MultiCheckboxWithStringIds { get; set; } = Enumerable.Empty<string>();
     public IEnumerable<FormAddressMock> Addresses { get; set; } = Enumerable.Empty<FormAddressMock>();
     public DateTimeOffset DateAndTime { get; set; }
+    public string Notes { get; set; } = String.Empty;
+    public string Region { get; set; } = String.Empty;
+    public string FileUpload { get; set; } = String.Empty;
 }
 
 public class FormAddressMock

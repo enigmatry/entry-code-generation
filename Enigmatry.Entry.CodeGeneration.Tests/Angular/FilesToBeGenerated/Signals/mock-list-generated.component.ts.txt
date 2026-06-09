@@ -39,18 +39,18 @@ export class MockListGeneratedComponent {
     protected readonly noResultTemplate = input<TemplateRef<unknown> | null>();
     protected readonly showContextMenu = input<boolean>(true);
     protected readonly contextMenuItems = input<ContextMenuItem[]>([
-        { id: 'edit', name: $localize `:@@:Edit` },
-        { id: 'delete', name: $localize `:@@:Delete` }
-    ]);
+		{ id: 'edit', name: $localize `:@@:Edit` },
+		{ id: 'delete', name: $localize `:@@:Delete` }
+	]);
     protected readonly rowContextMenuFormatter = input<RowContextMenuFormatter>();
     protected readonly rowFocusVisible = input<boolean>();
     protected readonly rowClassFormatter = input<RowClassFormatter>();
     protected readonly rowSelectionFormatter = input<RowSelectionFormatter>({});
     protected readonly columns = input<ColumnDefinition[]>([
-        { field: 'id', hide: true, sortable: true },
-        { field: 'name', header: $localize `:@@CUSTOM_TRANSLATION_ID:Name`, hide: false, sortable: true, cellTemplate: this.nameTemplate, class: 'name-custom-class', customProperties: { codeSystem: 'ABC' }, sortProperties: { id: 'User.Name' } },
-        { field: 'date', header: $localize `:@@test.mock-list.date:Date`, hide: false, sortable: true, type: 'date', typeParameter: { name: 'date', format: 'mediumDate', timezone: 'UTC', locale: 'en' } }
-    ]);
+		{ field: 'id', hide: true, sortable: true },
+		{ field: 'name', header: $localize `:@@CUSTOM_TRANSLATION_ID:Name`, hide: false, sortable: true, cellTemplate: this.nameTemplate, class: 'name-custom-class', customProperties: 		{ codeSystem: 'ABC' }, sortProperties: 		{ id: 'User.Name' } },
+		{ field: 'date', header: $localize `:@@test.mock-list.date:Date`, hide: false, sortable: true, type: 'date', typeParameter: { name: 'date', format: 'mediumDate', timezone: 'UTC', locale: 'en' } }
+	]);
 
     protected readonly pageChange = output<PageEvent>();
     protected readonly sortChange = output<SortEvent>();
@@ -58,5 +58,5 @@ export class MockListGeneratedComponent {
     protected readonly contextMenuItemSelected = output<{ itemId: string; rowData: ListMockItem }>();
     protected readonly rowClick = output<ListMockItem>();
 
-    protected readonly nameTemplate = viewChild<TemplateRef<unknown>>('nameTemplate');
+	protected readonly nameTemplate = viewChild<TemplateRef<unknown>>('nameTemplate');
 }

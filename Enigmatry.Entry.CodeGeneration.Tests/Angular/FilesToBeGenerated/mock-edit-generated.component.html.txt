@@ -5,8 +5,12 @@
     </ng-template>
     <ng-template #defaultFormButtonsTpl>
         <div class="action-buttons">
-            <button mat-button entry-submit-button *ngIf="!isReadonly" [disabled]="saveButtonDisabled" type="submit">{{saveButtonText}}</button>
-            <button mat-button entry-cancel-button *ngIf="!isReadonly" type="button" (click)="cancel.emit()">{{cancelButtonText}}</button>
+            <button mat-button entry-submit-button *ngIf="!isReadonly" [disabled]="saveButtonDisabled" type="submit">
+                {{saveButtonText}}
+            </button>
+            <button mat-button entry-cancel-button *ngIf="!isReadonly" type="button" (click)="cancel.emit()">
+                {{cancelButtonText}}
+            </button>
         </div>
     </ng-template>
 </form>

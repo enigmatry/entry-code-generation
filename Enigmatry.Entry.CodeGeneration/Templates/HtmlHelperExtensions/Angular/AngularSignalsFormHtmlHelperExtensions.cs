@@ -135,6 +135,16 @@ public static class AngularSignalsFormHtmlHelperExtensions
             lines.Add($"    protected readonly {select.PropertyName}OptionsConfiguration = input<SelectConfiguration>({select.Options.DefaultOptionsAsString});");
         }
 
+        if (select is AutocompleteFormControl)
+        {
+            var propertyNameCapitalized = Char.ToUpper(select.PropertyName[0]) + select.PropertyName.Substring(1);
+            var valueKey = select.Options.HasCustomValueAndDisplayKeys ? select.Options.OptionValueKey : "value";
+            var displayKey = select.Options.HasCustomValueAndDisplayKeys ? select.Options.OptionDisplayKey : "displayName";
+            lines.Add($"    protected readonly display{propertyNameCapitalized} = (value: unknown): string =>");
+            lines.Add($"        (this.{select.PropertyName}Options() as Record<string, unknown>[])");
+            lines.Add($"            .find(option => option['{valueKey}'] === value)?.['{displayKey}'] as string ?? '';");
+        }
+
         return htmlHelper.Raw(String.Join("\r\n", lines) + "\r\n");
     }
 

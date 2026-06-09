@@ -55,6 +55,11 @@ export class MockEditGeneratedComponent {
     protected readonly typesCallback = input<Observable<unknown[]>>([]);
     private readonly typesOptions = toSignal(this.typesCallback(), { initialValue: [] });
     protected readonly typesOptionsConfiguration = input<SelectConfiguration>({});
+    private readonly regionOptions = signal([{ value: 'EU', displayName: $localize `:@@region.europe:Europe` }, { value: 'NA', displayName: $localize `:@@region.na:North America` }, { value: 'AP', displayName: $localize `:@@region.ap:Asia Pacific` }]);
+    protected readonly regionOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' });
+    protected readonly displayRegion = (value: unknown): string =>
+        (this.regionOptions() as Record<string, unknown>[])
+            .find(option => option['value'] === value)?.['displayName'] as string ?? '';
 
     protected readonly save = output<IFormMock>();
     protected readonly cancel = output<void>();
@@ -80,6 +85,9 @@ export class MockEditGeneratedComponent {
         types: new FormControl<unknown[] | null>(null),
         password: new FormControl<string | null>(null),
         isActive: new FormControl<boolean>(true),
+        notes: new FormControl<string | null>(null),
+        region: new FormControl(null),
+        fileUpload: new FormControl(null),
         addresses: new FormArray<FormGroup>([]),
         dateAndTime: new FormControl(null, { updateOn: 'blur' }),
         email1: new FormControl<string | null>(null, { validators: [Validators.pattern(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/), Validators.maxLength(50)] }),
@@ -119,7 +127,7 @@ export class MockEditGeneratedComponent {
 
     protected readonly isHidden = (propertyName: string, staticVisible: boolean): boolean => {
         if (!staticVisible) { 
-			return true;
+			return true; 
 		}
 
         return this.fieldsHideExpressions()?.[propertyName]?.(this.model()) ?? false;
