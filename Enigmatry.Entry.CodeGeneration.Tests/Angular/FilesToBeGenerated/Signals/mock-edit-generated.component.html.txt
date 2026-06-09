@@ -1,10 +1,10 @@
 
-<form [formGroup]="form" (ngSubmit)="onSubmit()" [class.entry-form-readonly]="isReadonly()" class="entry-mock-edit-form entry-form">
+<form [formGroup]="form" (submit)="onSubmit($event)" [class.entry-form-readonly]="isReadonly()" class="entry-mock-edit-form entry-form">
 <button mat-button type="button"
         class="entry-reset-form-btn-field entry-button primary-button"
         [disabled]="isDisabled('resetFormBtn', false)"
         (click)="buttonClick.emit('resetFormBtn')">Reset</button>
-<div class="entry-field-group" [ngClass]="{ 'group-wrapper-readonly': isReadonly() }">
+<div class="entry-field-group" [class.group-wrapper-readonly]="isReadonly()">
 @if (!isHidden('name', true)) {
 <mat-form-field class="entry-name-field entry-input" appearance="outline" floatLabel="always">
     <mat-label>Name</mat-label>
@@ -53,7 +53,7 @@
 <mat-form-field class="entry-form-status-field entry-select">
     <mat-label>Form status</mat-label>
     <mat-select formControlName="formStatus">
-        @for (let option of formStatusOptions(); track option.value) {
+        @for (option offormStatusOptions(); track option.value) {
             <mat-option [value]="option.value">{{option.displayName}}</mat-option>
         }
     </mat-select>
@@ -61,7 +61,7 @@
 }
 @if (!isHidden('mockRadio', true)) {
 <mat-radio-group formControlName="mockRadio" class="entry-mock-radio-field entry-radio">
-    @for (let option of mockRadioOptions(); track option.value) {
+    @for (option ofmockRadioOptions(); track option.value) {
         <mat-radio-button [value]="option.value">{{option.displayName}}</mat-radio-button>
     }
 </mat-radio-group>
@@ -70,7 +70,7 @@
 <mat-form-field class="entry-mock-bool-select-field entry-select">
     <mat-label>BoolSelect</mat-label>
     <mat-select formControlName="mockBoolSelect">
-        @for (let option of mockBoolSelectOptions(); track option.value) {
+        @for (option ofmockBoolSelectOptions(); track option.value) {
             <mat-option [value]="option.value">{{option.displayName}}</mat-option>
         }
     </mat-select>
@@ -78,14 +78,14 @@
 }
 @if (!isHidden('mockMultiCheckbox', true)) {
 <div class="entry-mock-multi-checkbox-field entry-multicheckbox">
-    @for (let option of mockMultiCheckboxOptions(); track option.value) {
+    @for (option ofmockMultiCheckboxOptions(); track option.value) {
         <mat-checkbox [value]="option.value">{{option.displayName}}</mat-checkbox>
     }
 </div>
 }
 @if (!isHidden('multiCheckboxWithStringIds', true)) {
 <div class="entry-multi-checkbox-with-string-ids-field entry-multicheckbox">
-    @for (let option of multiCheckboxWithStringIdsOptions(); track option.value) {
+    @for (option ofmultiCheckboxWithStringIdsOptions(); track option.value) {
         <mat-checkbox [value]="option.value">{{option.displayName}}</mat-checkbox>
     }
 </div>
@@ -94,7 +94,7 @@
 <mat-form-field class="entry-category-id-field entry-select">
     <mat-label>Category</mat-label>
     <mat-select formControlName="categoryId">
-        @for (let option of categoryIdOptions(); track option.value) {
+        @for (option ofcategoryIdOptions(); track option.value) {
             <mat-option [value]="option.value">{{option.displayName}}</mat-option>
         }
     </mat-select>
@@ -105,7 +105,7 @@
     <mat-label>Types</mat-label>
     <mat-select formControlName="types" multiple>
         <mat-option>SelectAll</mat-option>
-        @for (let option of typesOptions(); track option.value) {
+        @for (option oftypesOptions(); track option.value) {
             <mat-option [value]="option.value">{{option.displayName}}</mat-option>
         }
     </mat-select>
@@ -122,7 +122,7 @@
 }
 @if (!isHidden('addresses', true)) {
 <ng-container formArrayName="addresses">
-    @for (let control of form.get('addresses')?.controls ?? []; track $index) {
+    @for (control of form.get('addresses')?.controls ?? []; track $index) {
         <ng-container [formGroupName]="$index">
 @if (!isHidden('city', true)) {
 <mat-form-field class="entry-city-field entry-input">
@@ -179,7 +179,7 @@
 }</mat-form-field>
 }
 
-    <ng-content *ngTemplateOutlet="formButtonsTemplate() ?? defaultActionsTemplate"></ng-content>
+    <ng-container *ngTemplateOutlet="formButtonsTemplate() ?? defaultActionsTemplate"></ng-container>
     <ng-template #defaultActionsTemplate>
         <div class="action-buttons">
             @if (!isReadonly()) {

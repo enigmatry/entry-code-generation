@@ -2,9 +2,9 @@
 @using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Template
 @model Enigmatry.Entry.CodeGeneration.Configuration.Form.FormComponentModel;
 
-<form [formGroup]="form" (ngSubmit)="onSubmit()" [class.entry-form-readonly]="isReadonly()" @Html.FormCssClass(Model)>
+<form [formGroup]="form" (submit)="onSubmit($event)" [class.entry-form-readonly]="isReadonly()" @Html.FormCssClass(Model)>
 @Html.RenderFormControls(Model.FormControls)
-    <ng-content *ngTemplateOutlet="formButtonsTemplate() ?? defaultActionsTemplate"></ng-content>
+    <ng-container *ngTemplateOutlet="formButtonsTemplate() ?? defaultActionsTemplate"></ng-container>
     <ng-template #defaultActionsTemplate>
         <div class="action-buttons">
             @@if (!isReadonly()) {

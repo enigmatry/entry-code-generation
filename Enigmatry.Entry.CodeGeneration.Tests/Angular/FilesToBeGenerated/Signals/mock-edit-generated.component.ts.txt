@@ -10,6 +10,7 @@
 // @ts-nocheck
 // @ts-ignore
 // @ts-expect-error
+import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, LOCALE_ID, signal, TemplateRef } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { input, model, output } from '@angular/core';
@@ -20,7 +21,7 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-g-mock-edit',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgTemplateOutlet],
   templateUrl: './mock-edit-generated.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -109,7 +110,8 @@ export class MockEditGeneratedComponent {
         });
     }
 
-    protected readonly onSubmit = (): void => {
+    protected readonly onSubmit = (event: Event): void => {
+        event.preventDefault();
         if (this.form.valid) {
             this.save.emit(this.form.getRawValue() as IFormMock);
         }

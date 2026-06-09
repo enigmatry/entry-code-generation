@@ -7,6 +7,7 @@
 @using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
 @model Enigmatry.Entry.CodeGeneration.Configuration.Form.FormComponentModel;
 @inject CodeGeneratorOptions Options;
+import { NgTemplateOutlet } from '@@angular/common';
 import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, LOCALE_ID, signal, TemplateRef } from '@@angular/core';
 import { toSignal } from '@@angular/core/rxjs-interop';
 import { input, model, output } from '@@angular/core';
@@ -14,7 +15,10 @@ import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } fr
 import { I@(Model.ComponentInfo.ModelType) } from '@Options.ApiClientTsImportPath';
 @{
     var entryFormImports = "IFieldExpressionDictionary, IFieldPropertyExpressionDictionary, SelectConfiguration, sortOptions";
-    if (Model.HasAnyAsyncValidators()) entryFormImports += ", ENTRY_ASYNC_VALIDATOR_RESOLVER";
+    if (Model.HasAnyAsyncValidators())
+    {
+        entryFormImports += ", ENTRY_ASYNC_VALIDATOR_RESOLVER";
+    }
 }
 import { @Html.Raw(entryFormImports) } from '@@enigmatry/entry-form';
 @if (Model.FormControlsOfType<SelectControlBase>().Any(selectControl => selectControl.Options.HasDynamicValues))
@@ -24,7 +28,7 @@ import { @Html.Raw(entryFormImports) } from '@@enigmatry/entry-form';
 
 @@Component({
   selector: '@Model.AngularComponentSelector(Options.GeneratedComponentPrefix)',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgTemplateOutlet],
   templateUrl: './@(Model.AngularComponentFileName()).html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -72,7 +76,8 @@ export class @Model.AngularComponentName() {
         });
     }
 
-    protected readonly onSubmit = (): void => {
+    protected readonly onSubmit = (event: Event): void => {
+        event.preventDefault();
         if (this.form.valid) {
             this.save.emit(this.form.getRawValue() as I@(Model.ComponentInfo.ModelType));
         }
