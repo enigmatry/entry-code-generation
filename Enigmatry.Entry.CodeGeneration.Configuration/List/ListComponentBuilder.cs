@@ -88,7 +88,8 @@ public class ListComponentBuilder<T> : BaseComponentBuilder<ListComponentModel>
         return new ListComponentModel(componentInfo, columns)
         {
             Row = _rowInfoBuilder.Build(componentInfo),
-            Pagination = _paginationInfoBuilder.Build()
+            Pagination = _paginationInfoBuilder.Build(),
+            WithSignals = _withSignals
         };
     }
 

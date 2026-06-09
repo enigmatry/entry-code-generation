@@ -8,6 +8,7 @@ public class ListComponentModel : IComponentModel
     public IList<ColumnDefinition> Columns { get; }
     public PaginationInfo Pagination { get; set; } = new PaginationInfo();
     public RowInfo Row { get; set; } = new RowInfo();
+    public bool? WithSignals { get; set; }
 
     public ListComponentModel(ComponentInfo componentInfo, IEnumerable<ColumnDefinition> columns)
     {

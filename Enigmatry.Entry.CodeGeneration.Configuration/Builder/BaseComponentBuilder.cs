@@ -10,6 +10,7 @@ public abstract class BaseComponentBuilder<T> : IComponentBuilder<T> where T : I
 {
     protected readonly Type _modelType;
     protected readonly ComponentInfoBuilder _componentInfoBuilder;
+    protected bool? _withSignals;
 
     protected BaseComponentBuilder(Type modelType)
     {
@@ -28,6 +29,12 @@ public abstract class BaseComponentBuilder<T> : IComponentBuilder<T> where T : I
     /// </summary>
     /// <returns>An instance of <see cref="FeatureInfoBuilder" /> to further configure the component's feature.</returns>
     public FeatureInfoBuilder Feature() => _componentInfoBuilder.Feature();
+
+    /// <summary>
+    /// Override the global signals setting for this specific component.
+    /// When set, this takes precedence over <see cref="CodeGeneratorOptions.WithSignals"/>.
+    /// </summary>
+    public void WithSignals(bool enabled = true) => _withSignals = enabled;
 
     public abstract T Build();
 }

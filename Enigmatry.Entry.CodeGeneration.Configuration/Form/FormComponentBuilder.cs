@@ -151,7 +151,7 @@ public class FormComponentBuilder<T> : BaseComponentBuilder<FormComponentModel>
         var componentInfo = _componentInfoBuilder.Build();
         var formControls = BuildFormControls(componentInfo).ToList();
 
-        return new FormComponentModel(componentInfo, formControls, _validationRules);
+        return new FormComponentModel(componentInfo, formControls, _validationRules) { WithSignals = _withSignals };
     }
 
     private IEnumerable<FormControl> BuildFormControls(ComponentInfo componentInfo)

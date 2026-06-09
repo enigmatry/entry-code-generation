@@ -29,7 +29,8 @@ public class AngularComponentGenerator : IComponentGenerator
     {
         var componentDirectory = Path.Combine(outputDir, component.AngularComponentDirectory());
 
-        foreach (var templateInfo in _angularSettings.GetComponentTemplates(options.WithSignals))
+        var useSignals = component.WithSignals ?? options.WithSignals;
+        foreach (var templateInfo in _angularSettings.GetComponentTemplates(useSignals))
         {
             var templatePath = templateInfo.TemplatePath.FormatWith(GetTemplateNameFor(component));
 

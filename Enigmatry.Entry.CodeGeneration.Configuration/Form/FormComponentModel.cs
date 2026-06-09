@@ -8,6 +8,7 @@ public class FormComponentModel : IComponentModel
     public ComponentInfo ComponentInfo { get; }
     public IList<FormControl> FormControls { get; }
     public IList<IFormlyValidationRule> ValidationRules { get; }
+    public bool? WithSignals { get; set; }
 
     public FormComponentModel(
         ComponentInfo componentInfo,

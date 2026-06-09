@@ -3,4 +3,5 @@
 public interface IComponentModel
 {
     ComponentInfo ComponentInfo { get; }
+    bool? WithSignals { get; }
 }
