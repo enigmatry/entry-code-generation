@@ -17,7 +17,7 @@ import { I@(Model.ComponentInfo.ModelType) } from '@Options.ApiClientTsImportPat
     if (Model.HasAnyAsyncValidators()) entryFormImports += ", ENTRY_ASYNC_VALIDATOR_RESOLVER";
 }
 import { @Html.Raw(entryFormImports) } from '@@enigmatry/entry-form';
-@if (Model.FormControlsOfType<SelectControlBase>().Any(s => s.Options.HasDynamicValues))
+@if (Model.FormControlsOfType<SelectControlBase>().Any(selectControl => selectControl.Options.HasDynamicValues))
 {
 @:import { Observable } from 'rxjs';
 }
@@ -79,7 +79,10 @@ export class @Model.AngularComponentName() {
     };
 
     protected readonly isHidden = (propertyName: string, staticVisible: boolean): boolean => {
-        if (!staticVisible) return true;
+        if (!staticVisible) { 
+			return true; 
+		}
+
         return this.fieldsHideExpressions()?.[propertyName]?.(this.model()) ?? false;
     };
 

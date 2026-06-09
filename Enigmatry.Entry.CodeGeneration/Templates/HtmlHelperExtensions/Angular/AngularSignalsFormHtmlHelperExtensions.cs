@@ -21,7 +21,9 @@ public static class AngularSignalsFormHtmlHelperExtensions
             {
                 case FormControlGroup group:
                     foreach (var child in group.FormControls.FlatFormControls())
+                    {
                         yield return child;
+                    }
                     break;
                 case ButtonFormControl:
                     break;
@@ -33,7 +35,7 @@ public static class AngularSignalsFormHtmlHelperExtensions
     }
 
     public static bool HasAnyAsyncValidators(this FormComponentModel model) =>
-        model.FlatFormControls().Any(c => c.Validators.Any());
+        model.FlatFormControls().Any(control => control.Validators.Any());
 
     public static string GetTypeScriptTypeAnnotation(this FormControl control) => control switch
     {
@@ -52,10 +54,12 @@ public static class AngularSignalsFormHtmlHelperExtensions
         _ => "null"
     };
 
-    public static IHtmlContent FormControlDeclaration(this IHtmlHelper html, FormControl control, string indent = "        ")
+    public static IHtmlContent FormControlDeclaration(this IHtmlHelper htmlHelper, FormControl control, string indent = "        ")
     {
         if (control is ArrayFormControl array)
-            return html.Raw($"{indent}{array.PropertyName}: new FormArray<FormGroup>([]),\r\n");
+        {
+            return htmlHelper.Raw($"{indent}{array.PropertyName}: new FormArray<FormGroup>([]),\r\n");
+        }
 
         var typeAnnotation = control.GetTypeScriptTypeAnnotation();
         var initialValue = control.GetInitialValue();
@@ -63,29 +67,29 @@ public static class AngularSignalsFormHtmlHelperExtensions
             ? $"{{ value: {initialValue}, disabled: true }}"
             : initialValue;
 
-        var options = BuildFormControlOptions(html, control);
+        var options = BuildFormControlOptions(htmlHelper, control);
 
         var declaration = options.Count > 0
             ? $"{indent}{control.PropertyName}: new FormControl{typeAnnotation}({valueExpression}, {{ {String.Join(", ", options)} }}),"
             : $"{indent}{control.PropertyName}: new FormControl{typeAnnotation}({valueExpression}),";
 
-        return html.Raw(declaration + "\r\n");
+        return htmlHelper.Raw(declaration + "\r\n");
     }
 
-    public static IHtmlContent AllFormControlDeclarations(this IHtmlHelper html, FormComponentModel model) =>
-        html.Raw(String.Concat(model.FlatFormControls().Select(c => html.FormControlDeclaration(c).ToString())));
+    public static IHtmlContent AllFormControlDeclarations(this IHtmlHelper htmlHelper, FormComponentModel model) =>
+        htmlHelper.Raw(String.Concat(model.FlatFormControls().Select(control => htmlHelper.FormControlDeclaration(control).ToString())));
 
-    public static IHtmlContent ArrayItemFactoryMethod(this IHtmlHelper html, ArrayFormControl arrayControl)
+    public static IHtmlContent ArrayItemFactoryMethod(this IHtmlHelper htmlHelper, ArrayFormControl arrayControl)
     {
         var group = (FormControlGroup)arrayControl.FormControlGroup;
         var propertyName = arrayControl.PropertyName;
         var methodName = Char.ToUpper(propertyName[0]) + propertyName.Substring(1);
 
         var childDeclarations = group.FormControls
-            .Where(c => c is not ButtonFormControl)
-            .Select(c => html.FormControlDeclaration(c, "            ").ToString());
+            .Where(control => control is not ButtonFormControl)
+            .Select(control => htmlHelper.FormControlDeclaration(control, "            ").ToString());
 
-        return html.Raw(
+        return htmlHelper.Raw(
             $"    protected readonly create{methodName}Item = (): FormGroup => {{\r\n" +
             $"        return new FormGroup({{\r\n" +
             String.Concat(childDeclarations) +
@@ -93,20 +97,20 @@ public static class AngularSignalsFormHtmlHelperExtensions
             $"    }};\r\n");
     }
 
-    public static IHtmlContent AllArrayItemFactoryMethods(this IHtmlHelper html, FormComponentModel model) =>
-        html.Raw(String.Concat(model.FlatFormControls().OfType<ArrayFormControl>()
-            .Select(array => html.ArrayItemFactoryMethod(array).ToString())));
+    public static IHtmlContent AllArrayItemFactoryMethods(this IHtmlHelper htmlHelper, FormComponentModel model) =>
+        htmlHelper.Raw(String.Concat(model.FlatFormControls().OfType<ArrayFormControl>()
+            .Select(array => htmlHelper.ArrayItemFactoryMethod(array).ToString())));
 
-    public static IHtmlContent ReEnableStaticReadonlyControls(this IHtmlHelper html, FormComponentModel model)
+    public static IHtmlContent ReEnableStaticReadonlyControls(this IHtmlHelper htmlHelper, FormComponentModel model)
     {
         var lines = model.FlatFormControls()
-            .Where(c => c.Readonly && c is not ArrayFormControl)
-            .Select(c => $"                this.form.get('{c.PropertyName}')?.disable({{ emitEvent: false }});");
+            .Where(control => control.Readonly && control is not ArrayFormControl)
+            .Select(control => $"                this.form.get('{control.PropertyName}')?.disable({{ emitEvent: false }});");
 
-        return html.Raw(String.Join("\r\n", lines));
+        return htmlHelper.Raw(String.Join("\r\n", lines));
     }
 
-    public static IHtmlContent SelectInputDeclarations(this IHtmlHelper html, SelectControlBase select, bool enableI18N)
+    public static IHtmlContent SelectInputDeclarations(this IHtmlHelper htmlHelper, SelectControlBase select, bool enableI18N)
     {
         var lines = new List<string>();
 
@@ -117,8 +121,8 @@ public static class AngularSignalsFormHtmlHelperExtensions
         }
         else
         {
-            var options = html.JsArray(select.Options.FixedOptions,
-                option => $"{{ {option.GetValueExpression()}, displayName: {html.Localize(option.DisplayName, enableI18N)} }}");
+            var options = htmlHelper.JsArray(select.Options.FixedOptions,
+                option => $"{{ {option.GetValueExpression()}, displayName: {htmlHelper.Localize(option.DisplayName, enableI18N)} }}");
             lines.Add($"    private readonly {select.PropertyName}Options = signal({options});");
         }
 
@@ -131,24 +135,26 @@ public static class AngularSignalsFormHtmlHelperExtensions
             lines.Add($"    protected readonly {select.PropertyName}OptionsConfiguration = input<SelectConfiguration>({select.Options.DefaultOptionsAsString});");
         }
 
-        return html.Raw(String.Join("\r\n", lines) + "\r\n");
+        return htmlHelper.Raw(String.Join("\r\n", lines) + "\r\n");
     }
 
-    public static IHtmlContent AllSelectInputDeclarations(this IHtmlHelper html, FormComponentModel model, bool enableI18N) =>
-        html.Raw(String.Concat(model.FormControlsOfType<SelectControlBase>()
-            .Select(select => html.SelectInputDeclarations(select, enableI18N).ToString())));
+    public static IHtmlContent AllSelectInputDeclarations(this IHtmlHelper htmlHelper, FormComponentModel model, bool enableI18N) =>
+        htmlHelper.Raw(String.Concat(model.FormControlsOfType<SelectControlBase>()
+            .Select(select => htmlHelper.SelectInputDeclarations(select, enableI18N).ToString())));
 
-    private static List<string> BuildFormControlOptions(IHtmlHelper html, FormControl control)
+    private static List<string> BuildFormControlOptions(IHtmlHelper htmlHelper, FormControl control)
     {
         var options = new List<string>();
 
         if (control.ValidationRules.Any())
-            options.Add($"validators: {html.AngularValidators(control)}");
+        {
+            options.Add($"validators: {htmlHelper.AngularValidators(control)}");
+        }
 
         if (control.Validators.Any())
         {
             var asyncValidatorParts = String.Join(", ",
-                control.Validators.Select(v => $"this.asyncValidatorResolver('{v.Name.Camelize()}')"));
+                control.Validators.Select(validator => $"this.asyncValidatorResolver('{validator.Name.Camelize()}')"));
             options.Add($"asyncValidators: this.asyncValidatorResolver ? [{asyncValidatorParts}] : []");
         }
 

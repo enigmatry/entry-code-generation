@@ -33,7 +33,7 @@ This is a **dotnet global tool** (`entry-codegen`) that generates Angular UI com
 2. **`ConfigurationScanner`** — reflects over the target assembly, discovers all `IComponentConfiguration<>` implementations, and calls `Configure(builder)` on each.
 3. **Builders** — `ListComponentBuilder<T>` / `FormComponentBuilder<T>` collect configuration and `.Build()` into `ListComponentModel` / `FormComponentModel`.
 4. **`CodeGenerator`** — orchestrates scanning → building → rendering.
-5. **Razor templates** (`Templates/Angular/Material/`) — render component models into Angular TypeScript/HTML via `Enigmatry.Entry.TemplatingEngine.Razor`.
+5. **Razor templates** (`Templates/Angular/Material/`) — render component models into Angular TypeScript/HTML via `Enigmatry.Entry.TemplatingEngine.Razor`. The `Signals/` subfolder contains the active templates; the non-signals templates at the root of that folder are **deprecated** and must not be modified.
 6. **`ITemplateWriter`** — writes to disk (`InMemoryTemplateWriter` is used in tests).
 
 **Projects:**

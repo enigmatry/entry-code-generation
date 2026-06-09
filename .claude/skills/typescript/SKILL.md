@@ -24,7 +24,7 @@ description: TypeScript 5.x / ES2022 coding conventions — type safety, async p
 ## Type System
 
 - No `any` (implicit or explicit) — use `unknown` plus narrowing.
-- **Exception**: Angular's `FormGroup.patchValue()` and similar framework APIs may require `as any` casts due to framework typing limitations. Document with a comment when used.
+- When a framework API forces a type mismatch (e.g. `FormGroup.patchValue()` with a typed model), use a double cast through `unknown`: `value as unknown as TargetType`. Never use `as any`.
 - Use discriminated unions for state machines and realtime events.
 - Centralize shared type contracts; do not duplicate shapes.
 - Express intent with utility types (`Readonly`, `Partial`, `Record`, `NonNullable`, etc.).
@@ -76,7 +76,8 @@ ngOnDestroy(): void { ... }
 
 ## What NOT to do
 
-- Do not use `any` except where framework APIs require it (document with a comment).
+- Do not use `any` — not even for framework API mismatches; use `as unknown as TargetType` instead.
+- Do not use inline branching — `if (x) return y;` must always use braces: `if (x) { return y; }`. Follow with an empty line before the next statement (guard-clause style).
 - Do not use `void` to discard a Promise.
 - Do not leave empty catch blocks.
 - Do not use regular method syntax for class methods (use readonly arrow properties).

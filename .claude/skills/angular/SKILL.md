@@ -21,7 +21,7 @@ private readonly items = toSignal(this.itemsCallback(), { initialValue: [] });
 
 constructor() {
     effect(() => {
-        this.form.patchValue(this.model() as any, { emitEvent: false });
+        this.form.patchValue(this.model() as unknown as typeof this.form.value, { emitEvent: false });
     });
 }
 

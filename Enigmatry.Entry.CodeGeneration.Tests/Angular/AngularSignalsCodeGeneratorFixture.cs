@@ -26,7 +26,7 @@ public class AngularSignalsCodeGeneratorFixture : AngularCodeGeneratorFixtureBas
         var inMemoryTemplateWriter = (InMemoryTemplateWriter)GetService<ITemplateWriter>();
 
         inMemoryTemplateWriter.FilesToWrite.ShouldNotBeEmpty();
-        AssertGeneratedFileNames(inMemoryTemplateWriter.FilesToWrite.Select(x => x.Path).ToList());
+        AssertGeneratedFileNames(inMemoryTemplateWriter.FilesToWrite.Select(file => file.Path).ToList());
         AssertGeneratedFileContent(inMemoryTemplateWriter.FilesToWrite);
     }
 

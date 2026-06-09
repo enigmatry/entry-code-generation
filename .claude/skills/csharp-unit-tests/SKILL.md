@@ -139,3 +139,4 @@ When changing Razor templates, update the corresponding `.txt` snapshot files. T
 - Do not leave empty catch blocks.
 - Do not write separate `[Test]` methods for cases that differ only in input values — use `[TestCase]` or `[TestCaseSource]` instead. **Always check for this before writing any new `[Test]` method.**
 - Do not test implementation details — assert on observable behavior and public API output, not on internal state or private method calls.
+- Do not use inline branching — `if (x) return y;` and `foreach (...) statement;` must always use braces.
