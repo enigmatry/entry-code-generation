@@ -58,13 +58,13 @@ import { map, throttleTime } from 'rxjs/operators';
             @Input() mockBoolSelectOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
             @Input() mockMultiCheckboxOptions: any[] = [{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
             @Input() mockMultiCheckboxOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
-            @Input() multiCheckboxWithStringIdsOptions: any[] = [{ value: 'value_1', displayName: $localize `:@@translation_Id_1:Label 1` }, { value: -9, displayName: $localize `:@@translation_Id_3:Label 3` }, { value: 1234567, displayName: $localize `:@@translation_Id_4:Label 4` }, { value: 2, displayName: $localize `:@@translation_Id_5:Label 5` }, { value: null, displayName: $localize `:@@translation_Id_6:Label 6` }];
+            @Input() multiCheckboxWithStringIdsOptions: any[] = [{ value: 'value_1', displayName: $localize `:@@translation_Id_1:Label 1`, group: $localize `:@@group.multi-checkbox-with-string-ids:Group A` }, { value: -9, displayName: $localize `:@@translation_Id_3:Label 3`, group: $localize `:@@group.multi-checkbox-with-string-ids:Group A` }, { value: 1234567, displayName: $localize `:@@translation_Id_4:Label 4` }, { value: 2, displayName: $localize `:@@translation_Id_5:Label 5` }, { value: null, displayName: $localize `:@@translation_Id_6:Label 6` }];
             @Input() multiCheckboxWithStringIdsOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
             private categoryIdOptions$ = new BehaviorSubject<any[]>([]);
             @Input()
             get categoryIdOptions(): any[] { return this.categoryIdOptions$.value; }
             set categoryIdOptions(value: any[]) { this.categoryIdOptions$.next(value); }
-            @Input() categoryIdOptionsConfiguration: SelectConfiguration = { valueProperty: 'id', labelProperty: 'categoryName', sortProperty: 'categoryName' };
+            @Input() categoryIdOptionsConfiguration: SelectConfiguration = { valueProperty: 'id', labelProperty: 'categoryName', sortProperty: 'categoryName', groupProperty: 'categoryGroup' };
             private typesOptions$ = new BehaviorSubject<any[]>([]);
             @Input()
             get typesOptions(): any[] { return this.typesOptions$.value; }
@@ -291,9 +291,10 @@ className: `entry-form-status-field entry-select`,
         label: $localize `:@@test.mock-edit.form-status.label:Form status`,
         placeholder: $localize `:@@test.mock-edit.form-status.placeholder:Form status`,
         description: ``,
-            options: of(this.formStatusOptions).pipe(map(opts => sortOptions(opts, this.formStatusOptionsConfiguration.valueProperty, this.formStatusOptionsConfiguration.sortProperty, this._localeId))),
+            options: of(this.formStatusOptions).pipe(map(opts => sortOptions(opts, this.formStatusOptionsConfiguration.valueProperty, this.formStatusOptionsConfiguration.sortProperty, this._localeId, this.formStatusOptionsConfiguration.groupProperty))),
             valueProp: this.formStatusOptionsConfiguration.valueProperty,
             labelProp: this.formStatusOptionsConfiguration.labelProperty,
+            groupProp: this.formStatusOptionsConfiguration.groupProperty,
             attributes: {  },
         hidden: !true,
             typeFormatDef: undefined
@@ -315,9 +316,10 @@ className: `entry-mock-radio-field entry-radio`,
         label: $localize `:@@test.mock-edit.mock-radio.label:Radio`,
         placeholder: $localize `:@@test.mock-edit.mock-radio.placeholder:Radio`,
         description: ``,
-            options: of(this.mockRadioOptions).pipe(map(opts => sortOptions(opts, this.mockRadioOptionsConfiguration.valueProperty, this.mockRadioOptionsConfiguration.sortProperty, this._localeId))),
+            options: of(this.mockRadioOptions).pipe(map(opts => sortOptions(opts, this.mockRadioOptionsConfiguration.valueProperty, this.mockRadioOptionsConfiguration.sortProperty, this._localeId, this.mockRadioOptionsConfiguration.groupProperty))),
             valueProp: this.mockRadioOptionsConfiguration.valueProperty,
             labelProp: this.mockRadioOptionsConfiguration.labelProperty,
+            groupProp: this.mockRadioOptionsConfiguration.groupProperty,
             attributes: {  },
         hidden: !true,
             typeFormatDef: undefined
@@ -339,9 +341,10 @@ className: `entry-mock-bool-select-field entry-select`,
         label: $localize `:@@test.mock-edit.mock-bool-select.label:BoolSelect`,
         placeholder: $localize `:@@test.mock-edit.mock-bool-select.placeholder:BoolSelect`,
         description: ``,
-            options: of(this.mockBoolSelectOptions).pipe(map(opts => sortOptions(opts, this.mockBoolSelectOptionsConfiguration.valueProperty, this.mockBoolSelectOptionsConfiguration.sortProperty, this._localeId))),
+            options: of(this.mockBoolSelectOptions).pipe(map(opts => sortOptions(opts, this.mockBoolSelectOptionsConfiguration.valueProperty, this.mockBoolSelectOptionsConfiguration.sortProperty, this._localeId, this.mockBoolSelectOptionsConfiguration.groupProperty))),
             valueProp: this.mockBoolSelectOptionsConfiguration.valueProperty,
             labelProp: this.mockBoolSelectOptionsConfiguration.labelProperty,
+            groupProp: this.mockBoolSelectOptionsConfiguration.groupProperty,
             attributes: {  },
         hidden: !true,
             typeFormatDef: { name: 'boolean' }
@@ -364,9 +367,10 @@ className: `entry-mock-multi-checkbox-field entry-multicheckbox`,
         placeholder: $localize `:@@test.mock-edit.mock-multi-checkbox.placeholder:MultiCheckbox`,
         description: ``,
             type: 'array',
-            options: of(this.mockMultiCheckboxOptions).pipe(map(opts => sortOptions(opts, this.mockMultiCheckboxOptionsConfiguration.valueProperty, this.mockMultiCheckboxOptionsConfiguration.sortProperty, this._localeId))),
+            options: of(this.mockMultiCheckboxOptions).pipe(map(opts => sortOptions(opts, this.mockMultiCheckboxOptionsConfiguration.valueProperty, this.mockMultiCheckboxOptionsConfiguration.sortProperty, this._localeId, this.mockMultiCheckboxOptionsConfiguration.groupProperty))),
             valueProp: this.mockMultiCheckboxOptionsConfiguration.valueProperty,
             labelProp: this.mockMultiCheckboxOptionsConfiguration.labelProperty,
+            groupProp: this.mockMultiCheckboxOptionsConfiguration.groupProperty,
             attributes: {  },
         hidden: !true,
             typeFormatDef: undefined
@@ -389,9 +393,10 @@ className: `entry-multi-checkbox-with-string-ids-field entry-multicheckbox`,
         placeholder: $localize `:@@test.mock-edit.multi-checkbox-with-string-ids.placeholder:MultiCheckbox`,
         description: ``,
             type: 'array',
-            options: of(this.multiCheckboxWithStringIdsOptions).pipe(map(opts => sortOptions(opts, this.multiCheckboxWithStringIdsOptionsConfiguration.valueProperty, this.multiCheckboxWithStringIdsOptionsConfiguration.sortProperty, this._localeId))),
+            options: of(this.multiCheckboxWithStringIdsOptions).pipe(map(opts => sortOptions(opts, this.multiCheckboxWithStringIdsOptionsConfiguration.valueProperty, this.multiCheckboxWithStringIdsOptionsConfiguration.sortProperty, this._localeId, this.multiCheckboxWithStringIdsOptionsConfiguration.groupProperty))),
             valueProp: this.multiCheckboxWithStringIdsOptionsConfiguration.valueProperty,
             labelProp: this.multiCheckboxWithStringIdsOptionsConfiguration.labelProperty,
+            groupProp: this.multiCheckboxWithStringIdsOptionsConfiguration.groupProperty,
             attributes: {  },
         hidden: !true,
             typeFormatDef: undefined
@@ -413,9 +418,10 @@ className: `entry-category-id-field entry-select`,
         label: $localize `:@@test.mock-edit.category-id.label:Category`,
         placeholder: $localize `:@@test.mock-edit.category-id.placeholder:Category`,
         description: ``,
-            options: this.categoryIdOptions$.pipe(map(opts => sortOptions(opts, this.categoryIdOptionsConfiguration.valueProperty, this.categoryIdOptionsConfiguration.sortProperty, this._localeId))),
+            options: this.categoryIdOptions$.pipe(map(opts => sortOptions(opts, this.categoryIdOptionsConfiguration.valueProperty, this.categoryIdOptionsConfiguration.sortProperty, this._localeId, this.categoryIdOptionsConfiguration.groupProperty))),
             valueProp: this.categoryIdOptionsConfiguration.valueProperty,
             labelProp: this.categoryIdOptionsConfiguration.labelProperty,
+            groupProp: this.categoryIdOptionsConfiguration.groupProperty,
             attributes: {  },
         hidden: !true,
 metadata: { entityType: 'Category', filter: 'category_name' },
@@ -438,9 +444,10 @@ className: `entry-types-field entry-select`,
         label: $localize `:@@test.mock-edit.types.label:Types`,
         placeholder: $localize `:@@test.mock-edit.types.placeholder:Types`,
         description: ``,
-            options: this.typesOptions$.pipe(map(opts => sortOptions(opts, this.typesOptionsConfiguration.valueProperty, this.typesOptionsConfiguration.sortProperty, this._localeId))),
+            options: this.typesOptions$.pipe(map(opts => sortOptions(opts, this.typesOptionsConfiguration.valueProperty, this.typesOptionsConfiguration.sortProperty, this._localeId, this.typesOptionsConfiguration.groupProperty))),
             valueProp: this.typesOptionsConfiguration.valueProperty,
             labelProp: this.typesOptionsConfiguration.labelProperty,
+            groupProp: this.typesOptionsConfiguration.groupProperty,
             multiple: true,
             selectAllOption: $localize `:@@select-all-option.select-all:SelectAll`,
             attributes: {  },

@@ -4,6 +4,7 @@ public class SelectOption(object? value, string displayName, string translationI
 {
     public object? Value { get; } = value;
     public I18NString DisplayName { get; } = new(translationId, displayName);
+    public I18NString? Group { get; set; }
 
     public SelectOption(object? value, string displayName)
         : this(value, displayName, String.Empty)
