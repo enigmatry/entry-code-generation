@@ -1,6 +1,7 @@
 using Enigmatry.Entry.CodeGeneration.Configuration;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Array;
+using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 using Humanizer;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -79,10 +80,7 @@ public static class AngularSignalsFormViewHtmlHelperExtensions
               (field.AutoResizeMaxRows > 0 ? $" cdkAutosizeMaxRows=\"{field.AutoResizeMaxRows}\"" : "")
             : "";
         var autocompleteAttribute = field.ShouldAutocomplete == false ? " autocomplete=\"off\"" : "";
-        var validationErrors = String.Concat(field.ValidationRules.Select(validationRule =>
-            $"@if (form.get('{field.PropertyName}')?.hasError('{validationRule.FormlyRuleName}')) {{\r\n" +
-            $"    <mat-error>{(validationRule.HasCustomMessage ? validationRule.CustomMessage : validationRule.FormlyValidationMessage)}</mat-error>\r\n" +
-            $"}}"));
+        var validationErrors = htmlHelper.RenderValidationErrors(field);
 
         return htmlHelper.Raw(
             $"@if (!isHidden('{field.PropertyName}', {field.Visible.ToString().ToLower()})) {{\r\n" +
@@ -138,10 +136,7 @@ public static class AngularSignalsFormViewHtmlHelperExtensions
         var hintLine = field.Hint.Value.HasContent()
             ? $"    <mat-hint>{field.Hint.Value}</mat-hint>\r\n"
             : "";
-        var validationErrors = String.Concat(field.ValidationRules.Select(validationRule =>
-            $"@if (form.get('{field.PropertyName}')?.hasError('{validationRule.FormlyRuleName}')) {{\r\n" +
-            $"    <mat-error>{(validationRule.HasCustomMessage ? validationRule.CustomMessage : validationRule.FormlyValidationMessage)}</mat-error>\r\n" +
-            $"}}"));
+        var validationErrors = htmlHelper.RenderValidationErrors(field);
 
         return htmlHelper.Raw(
             $"@if (!isHidden('{field.PropertyName}', {field.Visible.ToString().ToLower()})) {{\r\n" +
@@ -216,7 +211,9 @@ public static class AngularSignalsFormViewHtmlHelperExtensions
             $"@if (!isHidden('{field.PropertyName}', {field.Visible.ToString().ToLower()})) {{\r\n" +
             $"<div class=\"{field.StackedClasses()}\">\r\n" +
             $"    @for (option of {field.PropertyName}Options(); track option.value) {{\r\n" +
-            $"        <mat-checkbox [value]=\"option.value\">{{{{option.displayName}}}}</mat-checkbox>\r\n" +
+            $"        <mat-checkbox [checked]=\"isOptionSelected('{field.PropertyName}', option.value)\"\r\n" +
+            $"                      [disabled]=\"isDisabled('{field.PropertyName}', {field.Readonly.ToString().ToLower()})\"\r\n" +
+            $"                      (change)=\"toggleOption('{field.PropertyName}', option.value, $event.checked)\">{{{{option.displayName}}}}</mat-checkbox>\r\n" +
             $"    }}\r\n" +
             $"</div>\r\n" +
             $"}}\r\n");
@@ -280,6 +277,21 @@ public static class AngularSignalsFormViewHtmlHelperExtensions
             $" [readonly]=\"isDisabled('{field.PropertyName}', {field.Readonly.ToString().ToLower()})\"></{field.ControlTypeName}>\r\n" +
             $"}}\r\n");
     }
+
+    private static string RenderValidationErrors(this IHtmlHelper htmlHelper, FormControl field) =>
+        String.Concat(field.ValidationRules.Select(validationRule =>
+            $"@if (form.get('{field.PropertyName}')?.hasError('{validationRule.AngularErrorKey()}')) {{\r\n" +
+            $"    <mat-error>{(validationRule.HasCustomMessage ? validationRule.CustomMessage : validationRule.FormlyValidationMessage)}</mat-error>\r\n" +
+            $"}}"));
+
+    // Angular's built-in Validators.minLength/maxLength report their errors under
+    // all-lowercase keys, unlike the camelCase rule names used for the validator factories.
+    private static string AngularErrorKey(this IFormlyValidationRule validationRule) => validationRule.FormlyRuleName switch
+    {
+        "minLength" => "minlength",
+        "maxLength" => "maxlength",
+        _ => validationRule.FormlyRuleName
+    };
 
     private static IHtmlContent RenderGenericField(this IHtmlHelper htmlHelper, FormControl field) =>
         htmlHelper.Raw(

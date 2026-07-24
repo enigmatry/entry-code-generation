@@ -8,8 +8,11 @@
 @model Enigmatry.Entry.CodeGeneration.Configuration.Form.FormComponentModel;
 @inject CodeGeneratorOptions Options;
 import { NgTemplateOutlet } from '@@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, LOCALE_ID, signal, TemplateRef } from '@@angular/core';
-import { toSignal } from '@@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, LOCALE_ID, signal, TemplateRef } from '@@angular/core';
+@if (Model.FormControlsOfType<SelectControlBase>().Any(selectControl => selectControl.Options.HasDynamicValues))
+{
+@:import { toObservable, toSignal } from '@@angular/core/rxjs-interop';
+}
 import { input, model, output } from '@@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@@angular/forms';
 import { I@(Model.ComponentInfo.ModelType) } from '@Options.ApiClientTsImportPath';
@@ -23,7 +26,7 @@ import { I@(Model.ComponentInfo.ModelType) } from '@Options.ApiClientTsImportPat
 import { @Html.Raw(entryFormImports) } from '@@enigmatry/entry-form';
 @if (Model.FormControlsOfType<SelectControlBase>().Any(selectControl => selectControl.Options.HasDynamicValues))
 {
-@:import { Observable } from 'rxjs';
+@:import { Observable, of, switchMap } from 'rxjs';
 }
 
 @@Component({
@@ -96,4 +99,4 @@ export class @Model.AngularComponentName() {
             ? this.fieldsDisableExpressions()![propertyName](this.model())
             : staticReadonly);
     };
-}
+@Html.MultiCheckboxHelperMethods(Model)}

@@ -116,14 +116,14 @@ public static class AngularSignalsFormHtmlHelperExtensions
 
         if (select.Options.HasDynamicValues)
         {
-            lines.Add($"    protected readonly {select.PropertyName}Callback = input<Observable<unknown[]>>([]);");
-            lines.Add($"    private readonly {select.PropertyName}Options = toSignal(this.{select.PropertyName}Callback(), {{ initialValue: [] }});");
+            lines.Add($"    protected readonly {select.PropertyName}Callback = input<Observable<unknown[]> | null>(null);");
+            lines.Add($"    private readonly {select.PropertyName}RawOptions = toSignal(toObservable(this.{select.PropertyName}Callback).pipe(switchMap(callback => callback ?? of([]))), {{ initialValue: [] }});");
         }
         else
         {
             var options = htmlHelper.JsArray(select.Options.FixedOptions,
                 option => $"{{ {option.GetValueExpression()}, displayName: {htmlHelper.Localize(option.DisplayName, enableI18N)} }}");
-            lines.Add($"    private readonly {select.PropertyName}Options = signal({options});");
+            lines.Add($"    private readonly {select.PropertyName}RawOptions = signal({options});");
         }
 
         if (select.Options.HasCustomValueAndDisplayKeys)
@@ -135,14 +135,17 @@ public static class AngularSignalsFormHtmlHelperExtensions
             lines.Add($"    protected readonly {select.PropertyName}OptionsConfiguration = input<SelectConfiguration>({select.Options.DefaultOptionsAsString});");
         }
 
+        lines.Add($"    protected readonly {select.PropertyName}Options = computed(() => {{");
+        lines.Add($"        const configuration = this.{select.PropertyName}OptionsConfiguration();");
+        lines.Add($"        const options = sortOptions(this.{select.PropertyName}RawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];");
+        lines.Add($"        return options.map(option => ({{ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }}));");
+        lines.Add($"    }});");
+
         if (select is AutocompleteFormControl)
         {
             var propertyNameCapitalized = Char.ToUpper(select.PropertyName[0]) + select.PropertyName.Substring(1);
-            var valueKey = select.Options.HasCustomValueAndDisplayKeys ? select.Options.OptionValueKey : "value";
-            var displayKey = select.Options.HasCustomValueAndDisplayKeys ? select.Options.OptionDisplayKey : "displayName";
             lines.Add($"    protected readonly display{propertyNameCapitalized} = (value: unknown): string =>");
-            lines.Add($"        (this.{select.PropertyName}Options() as Record<string, unknown>[])");
-            lines.Add($"            .find(option => option['{valueKey}'] === value)?.['{displayKey}'] as string ?? '';");
+            lines.Add($"        (this.{select.PropertyName}Options().find(option => option.value === value)?.displayName as string) ?? '';");
         }
 
         return htmlHelper.Raw(String.Join("\r\n", lines) + "\r\n");
@@ -151,6 +154,26 @@ public static class AngularSignalsFormHtmlHelperExtensions
     public static IHtmlContent AllSelectInputDeclarations(this IHtmlHelper htmlHelper, FormComponentModel model, bool enableI18N) =>
         htmlHelper.Raw(String.Concat(model.FormControlsOfType<SelectControlBase>()
             .Select(select => htmlHelper.SelectInputDeclarations(select, enableI18N).ToString())));
+
+    public static IHtmlContent MultiCheckboxHelperMethods(this IHtmlHelper htmlHelper, FormComponentModel model)
+    {
+        if (!model.FormControlsOfType<MultiCheckboxFormControl>().Any())
+        {
+            return htmlHelper.Raw("");
+        }
+
+        return htmlHelper.Raw(
+            "\r\n" +
+            "    protected readonly isOptionSelected = (propertyName: string, value: unknown): boolean =>\r\n" +
+            "        ((this.form.get(propertyName)?.value as unknown[] | null) ?? []).includes(value);\r\n" +
+            "\r\n" +
+            "    protected readonly toggleOption = (propertyName: string, value: unknown, checked: boolean): void => {\r\n" +
+            "        const control = this.form.get(propertyName);\r\n" +
+            "        const currentValues = (control?.value as unknown[] | null) ?? [];\r\n" +
+            "        control?.setValue(checked ? [...currentValues, value] : currentValues.filter(item => item !== value));\r\n" +
+            "        control?.markAsDirty();\r\n" +
+            "    };\r\n");
+    }
 
     private static List<string> BuildFormControlOptions(IHtmlHelper htmlHelper, FormControl control)
     {

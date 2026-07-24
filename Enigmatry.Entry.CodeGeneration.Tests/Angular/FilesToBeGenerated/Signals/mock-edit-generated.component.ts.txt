@@ -11,13 +11,13 @@
 // @ts-ignore
 // @ts-expect-error
 import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, LOCALE_ID, signal, TemplateRef } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, LOCALE_ID, signal, TemplateRef } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { input, model, output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IFormMock } from 'src/app/api/api-reference';
 import { IFieldExpressionDictionary, IFieldPropertyExpressionDictionary, SelectConfiguration, sortOptions, ENTRY_ASYNC_VALIDATOR_RESOLVER } from '@enigmatry/entry-form';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-g-mock-edit',
@@ -39,27 +39,66 @@ export class MockEditGeneratedComponent {
     protected readonly fieldsDisableExpressions = input<IFieldExpressionDictionary<IFormMock> | undefined>();
     protected readonly fieldsRequiredExpressions = input<IFieldExpressionDictionary<IFormMock> | undefined>();
 
-    private readonly formStatusOptions = signal([{ value: null, displayName: $localize `:@@empty-option.none:None` }, { value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }]);
+    private readonly formStatusRawOptions = signal([{ value: null, displayName: $localize `:@@empty-option.none:None` }, { value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }]);
     protected readonly formStatusOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'value', labelProperty: 'displayName', sortProperty: 'displayName' });
-    private readonly mockRadioOptions = signal([{ value: 0, displayName: `First` }, { value: 1, displayName: `Second` }, { value: 2, displayName: `Third` }]);
+    protected readonly formStatusOptions = computed(() => {
+        const configuration = this.formStatusOptionsConfiguration();
+        const options = sortOptions(this.formStatusRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];
+        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }));
+    });
+    private readonly mockRadioRawOptions = signal([{ value: 0, displayName: `First` }, { value: 1, displayName: `Second` }, { value: 2, displayName: `Third` }]);
     protected readonly mockRadioOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' });
-    private readonly mockBoolSelectOptions = signal([{ value: true, displayName: $localize `:@@true-label:This is true` }, { value: false, displayName: $localize `:@@false-label:This is false` }]);
+    protected readonly mockRadioOptions = computed(() => {
+        const configuration = this.mockRadioOptionsConfiguration();
+        const options = sortOptions(this.mockRadioRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];
+        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }));
+    });
+    private readonly mockBoolSelectRawOptions = signal([{ value: true, displayName: $localize `:@@true-label:This is true` }, { value: false, displayName: $localize `:@@false-label:This is false` }]);
     protected readonly mockBoolSelectOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' });
-    private readonly mockMultiCheckboxOptions = signal([{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }]);
+    protected readonly mockBoolSelectOptions = computed(() => {
+        const configuration = this.mockBoolSelectOptionsConfiguration();
+        const options = sortOptions(this.mockBoolSelectRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];
+        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }));
+    });
+    private readonly mockMultiCheckboxRawOptions = signal([{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }]);
     protected readonly mockMultiCheckboxOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' });
-    private readonly multiCheckboxWithStringIdsOptions = signal([{ value: 'value_1', displayName: $localize `:@@translation_Id_1:Label 1` }, { value: -9, displayName: $localize `:@@translation_Id_3:Label 3` }, { value: 1234567, displayName: $localize `:@@translation_Id_4:Label 4` }, { value: 2, displayName: $localize `:@@translation_Id_5:Label 5` }, { value: null, displayName: $localize `:@@translation_Id_6:Label 6` }]);
+    protected readonly mockMultiCheckboxOptions = computed(() => {
+        const configuration = this.mockMultiCheckboxOptionsConfiguration();
+        const options = sortOptions(this.mockMultiCheckboxRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];
+        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }));
+    });
+    private readonly multiCheckboxWithStringIdsRawOptions = signal([{ value: 'value_1', displayName: $localize `:@@translation_Id_1:Label 1` }, { value: -9, displayName: $localize `:@@translation_Id_3:Label 3` }, { value: 1234567, displayName: $localize `:@@translation_Id_4:Label 4` }, { value: 2, displayName: $localize `:@@translation_Id_5:Label 5` }, { value: null, displayName: $localize `:@@translation_Id_6:Label 6` }]);
     protected readonly multiCheckboxWithStringIdsOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' });
-    protected readonly categoryIdCallback = input<Observable<unknown[]>>([]);
-    private readonly categoryIdOptions = toSignal(this.categoryIdCallback(), { initialValue: [] });
+    protected readonly multiCheckboxWithStringIdsOptions = computed(() => {
+        const configuration = this.multiCheckboxWithStringIdsOptionsConfiguration();
+        const options = sortOptions(this.multiCheckboxWithStringIdsRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];
+        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }));
+    });
+    protected readonly categoryIdCallback = input<Observable<unknown[]> | null>(null);
+    private readonly categoryIdRawOptions = toSignal(toObservable(this.categoryIdCallback).pipe(switchMap(callback => callback ?? of([]))), { initialValue: [] });
     protected readonly categoryIdOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'id', labelProperty: 'categoryName', sortProperty: 'categoryName' });
-    protected readonly typesCallback = input<Observable<unknown[]>>([]);
-    private readonly typesOptions = toSignal(this.typesCallback(), { initialValue: [] });
+    protected readonly categoryIdOptions = computed(() => {
+        const configuration = this.categoryIdOptionsConfiguration();
+        const options = sortOptions(this.categoryIdRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];
+        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }));
+    });
+    protected readonly typesCallback = input<Observable<unknown[]> | null>(null);
+    private readonly typesRawOptions = toSignal(toObservable(this.typesCallback).pipe(switchMap(callback => callback ?? of([]))), { initialValue: [] });
     protected readonly typesOptionsConfiguration = input<SelectConfiguration>({});
-    private readonly regionOptions = signal([{ value: 'EU', displayName: $localize `:@@region.europe:Europe` }, { value: 'NA', displayName: $localize `:@@region.na:North America` }, { value: 'AP', displayName: $localize `:@@region.ap:Asia Pacific` }]);
+    protected readonly typesOptions = computed(() => {
+        const configuration = this.typesOptionsConfiguration();
+        const options = sortOptions(this.typesRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];
+        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }));
+    });
+    private readonly regionRawOptions = signal([{ value: 'EU', displayName: $localize `:@@region.europe:Europe` }, { value: 'NA', displayName: $localize `:@@region.na:North America` }, { value: 'AP', displayName: $localize `:@@region.ap:Asia Pacific` }]);
     protected readonly regionOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' });
+    protected readonly regionOptions = computed(() => {
+        const configuration = this.regionOptionsConfiguration();
+        const options = sortOptions(this.regionRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];
+        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }));
+    });
     protected readonly displayRegion = (value: unknown): string =>
-        (this.regionOptions() as Record<string, unknown>[])
-            .find(option => option['value'] === value)?.['displayName'] as string ?? '';
+        (this.regionOptions().find(option => option.value === value)?.displayName as string) ?? '';
 
     protected readonly save = output<IFormMock>();
     protected readonly cancel = output<void>();
@@ -137,5 +176,15 @@ export class MockEditGeneratedComponent {
         return this.isReadonly() || (this.fieldsDisableExpressions()?.[propertyName]
             ? this.fieldsDisableExpressions()![propertyName](this.model())
             : staticReadonly);
+    };
+
+    protected readonly isOptionSelected = (propertyName: string, value: unknown): boolean =>
+        ((this.form.get(propertyName)?.value as unknown[] | null) ?? []).includes(value);
+
+    protected readonly toggleOption = (propertyName: string, value: unknown, checked: boolean): void => {
+        const control = this.form.get(propertyName);
+        const currentValues = (control?.value as unknown[] | null) ?? [];
+        control?.setValue(checked ? [...currentValues, value] : currentValues.filter(item => item !== value));
+        control?.markAsDirty();
     };
 }

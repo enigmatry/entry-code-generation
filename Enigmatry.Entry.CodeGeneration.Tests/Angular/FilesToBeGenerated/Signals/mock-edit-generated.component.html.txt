@@ -11,7 +11,7 @@
     <input matInput formControlName="name" type="text" [placeholder]="'Some / Name'" autocomplete="off" cdkFocusInitial [readonly]="isDisabled('name', false)">
 @if (form.get('name')?.hasError('required')) {
     <mat-error>CUSTOM_VALIDATION_MESSAGE</mat-error>
-}@if (form.get('name')?.hasError('maxLength')) {
+}@if (form.get('name')?.hasError('maxlength')) {
     <mat-error>CUSTOM_VALIDATION_MESSAGE</mat-error>
 }@if (form.get('name')?.hasError('pattern')) {
     <mat-error>${field?.templateOptions?.label}:property-name: is not in valid format</mat-error>
@@ -79,14 +79,18 @@
 @if (!isHidden('mockMultiCheckbox', true)) {
 <div class="entry-mock-multi-checkbox-field entry-multicheckbox">
     @for (option of mockMultiCheckboxOptions(); track option.value) {
-        <mat-checkbox [value]="option.value">{{option.displayName}}</mat-checkbox>
+        <mat-checkbox [checked]="isOptionSelected('mockMultiCheckbox', option.value)"
+                      [disabled]="isDisabled('mockMultiCheckbox', false)"
+                      (change)="toggleOption('mockMultiCheckbox', option.value, $event.checked)">{{option.displayName}}</mat-checkbox>
     }
 </div>
 }
 @if (!isHidden('multiCheckboxWithStringIds', true)) {
 <div class="entry-multi-checkbox-with-string-ids-field entry-multicheckbox">
     @for (option of multiCheckboxWithStringIdsOptions(); track option.value) {
-        <mat-checkbox [value]="option.value">{{option.displayName}}</mat-checkbox>
+        <mat-checkbox [checked]="isOptionSelected('multiCheckboxWithStringIds', option.value)"
+                      [disabled]="isDisabled('multiCheckboxWithStringIds', false)"
+                      (change)="toggleOption('multiCheckboxWithStringIds', option.value, $event.checked)">{{option.displayName}}</mat-checkbox>
     }
 </div>
 }
@@ -188,7 +192,7 @@
     <input matInput formControlName="email1" type="text" [placeholder]="'Email 1'" [readonly]="isDisabled('email1', false)">
 @if (form.get('email1')?.hasError('pattern')) {
     <mat-error>CUSTOM_VALIDATION_MESSAGE</mat-error>
-}@if (form.get('email1')?.hasError('maxLength')) {
+}@if (form.get('email1')?.hasError('maxlength')) {
     <mat-error>${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters</mat-error>
 }</mat-form-field>
 }
@@ -198,7 +202,7 @@
     <input matInput formControlName="email2" type="text" [placeholder]="'Email 2'" [readonly]="isDisabled('email2', false)">
 @if (form.get('email2')?.hasError('pattern')) {
     <mat-error>Invalid email address format</mat-error>
-}@if (form.get('email2')?.hasError('maxLength')) {
+}@if (form.get('email2')?.hasError('maxlength')) {
     <mat-error>${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters</mat-error>
 }</mat-form-field>
 }
