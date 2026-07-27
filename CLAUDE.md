@@ -64,6 +64,9 @@ The scanner instantiates these via reflection — no registration needed.
 ### Naming
 Use full, descriptive names — no abbreviations in C# identifiers (variables, parameters, methods, properties). For example: `propertyName` not `propName`, `initialValue` not `initVal`, `asyncValidatorParts` not `asyncParts`.
 
+### File organization
+One type per file, in all stacks (C#, TypeScript): every class, interface, enum, or record lives in its own file named after the type. Keep files focused — when a class grows beyond ~120 lines, split it into cohesive abstractions instead of letting it grow.
+
 ### Package management
 All NuGet versions are in `Directory.Packages.props`. Do **not** add `Version` attributes to `<PackageReference>` elements in individual `.csproj` files.
 

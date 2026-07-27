@@ -26,12 +26,3 @@ public class FormMock
     public string Region { get; set; } = String.Empty;
     public string FileUpload { get; set; } = String.Empty;
 }
-
-public class FormAddressMock
-{
-    public Guid Id { get; set; }
-    public string Street { get; set; } = String.Empty;
-    public string HouseNumber { get; set; } = String.Empty;
-    public string City { get; set; } = String.Empty;
-    public bool Verified { get; set; }
-}
