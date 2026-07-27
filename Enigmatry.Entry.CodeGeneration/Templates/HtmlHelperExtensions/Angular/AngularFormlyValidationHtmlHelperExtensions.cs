@@ -1,4 +1,4 @@
-﻿using Enigmatry.Entry.CodeGeneration.Configuration;
+using Enigmatry.Entry.CodeGeneration.Configuration;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript;
@@ -13,7 +13,7 @@ public static class AngularFormlyValidationHtmlHelperExtensions
     public static IHtmlContent AddValidationTemplateOptions(this IHtmlHelper html, FormControl control)
     {
         var templateOptions = control.ValidationRules
-            .SelectMany(x => x.FormlyTemplateOptions)
+            .SelectMany(x => x.TemplateOptions)
             .Distinct();
         return html.Raw($"{String.Join(",\r\n", templateOptions)},\r\n");
     }
@@ -29,8 +29,8 @@ public static class AngularFormlyValidationHtmlHelperExtensions
             .ValidationRules
             .Where(rule => rule.HasCustomMessage)
             .Select(x => enableI18N
-                ? $"{x.FormlyRuleName}: (err, field) => {AngularLocalization.Localize(x.MessageTranslationId, x.FormlyValidationMessage)}"
-                : $"{x.FormlyRuleName}: '{x.FormlyValidationMessage}'"
+                ? $"{x.RuleName}: (err, field) => {AngularLocalization.Localize(x.MessageTranslationId, x.ValidationMessage)}"
+                : $"{x.RuleName}: '{x.ValidationMessage}'"
             );
         return html.Raw($"{String.Join(",\r\n", validationMessages)}\r\n");
     }
@@ -46,44 +46,20 @@ public static class AngularFormlyValidationHtmlHelperExtensions
         {
             foreach (var rule in control.ValidationRules.Where(x => !x.HasCustomMessage))
             {
-                if (!messages.ContainsKey(rule.FormlyRuleName))
+                if (!messages.ContainsKey(rule.RuleName))
                 {
                     var message = enableI18N
-                        ? AngularLocalization.Localize(rule.MessageTranslationId, rule.FormlyValidationMessage)
-                        : $"`{rule.FormlyValidationMessage}`";
+                        ? AngularLocalization.Localize(rule.MessageTranslationId, rule.ValidationMessage)
+                        : $"`{rule.ValidationMessage}`";
                     messages.Add(
-                        rule.FormlyRuleName,
-                        $"{{ name: '{rule.FormlyRuleName}', message: (err, field) => {message} }}"
+                        rule.RuleName,
+                        $"{{ name: '{rule.RuleName}', message: (err, field) => {message} }}"
                     );
                 }
             }
         }
 
         return html.Raw($"{String.Join(",\r\n", messages.Values)}\r\n");
-    }
-
-    public static string AngularValidators(this IHtmlHelper html, FormControl control)
-    {
-        var validators = new List<string>();
-        foreach (var rule in control.ValidationRules)
-        {
-            if (rule.FormlyRuleName == "required")
-            {
-                validators.Add("Validators.required");
-            }
-            else
-            {
-                var valueOption = rule.FormlyTemplateOptions
-                    .FirstOrDefault(x => x.StartsWith($"{rule.FormlyRuleName}: "));
-                if (valueOption != null)
-                {
-                    var value = valueOption[(rule.FormlyRuleName.Length + 2)..];
-                    validators.Add($"Validators.{rule.FormlyRuleName}({value})");
-                }
-            }
-        }
-
-        return validators.Count > 0 ? $"[{String.Join(", ", validators)}]" : "[]";
     }
 
     public static IHtmlContent ImportValidators(this IHtmlHelper html, FeatureModule module, string validatorsPath) =>

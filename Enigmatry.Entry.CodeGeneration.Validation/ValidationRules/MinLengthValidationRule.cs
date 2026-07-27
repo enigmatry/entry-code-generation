@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
@@ -9,9 +9,9 @@ public class MinLengthValidationRule : ValidationRule<int>
         : base(value, propertyInfo, expression, String.Empty, "validators.minLength")
     { }
 
-    public override string FormlyRuleName => "minLength";
+    public override string RuleName => "minLength";
 
-    public override string FormlyValidationMessage => HasCustomMessage
+    public override string ValidationMessage => HasCustomMessage
         ? CustomMessage
         : "${field?.templateOptions?.label}:property-name: should have at least ${field?.templateOptions?.minLength}:min-value: characters";
 }

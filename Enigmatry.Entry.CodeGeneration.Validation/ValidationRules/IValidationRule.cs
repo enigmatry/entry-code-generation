@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
@@ -15,9 +15,9 @@ public interface IBaseValidationRule
 
 public interface IFormlyValidationRule : IBaseValidationRule
 {
-    string FormlyValidationMessage { get; }
-    string FormlyRuleName { get; }
-    string[] FormlyTemplateOptions { get; }
+    string ValidationMessage { get; }
+    string RuleName { get; }
+    string[] TemplateOptions { get; }
 
     void SetMessageTranslationId(string messageTranslationId);
 }

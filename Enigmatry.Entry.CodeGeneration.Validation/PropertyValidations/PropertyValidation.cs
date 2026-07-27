@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using System.Reflection;
 using Enigmatry.Entry.CodeGeneration.Validation.Helpers;
 using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
@@ -21,7 +21,7 @@ public class PropertyValidation<T, TProperty> : IPropertyValidation<T, TProperty
 
     public void AddOrReplace(IValidationRule rule)
     {
-        var existing = Rules.SingleOrDefault(x => x.FormlyRuleName == rule.FormlyRuleName);
+        var existing = Rules.SingleOrDefault(x => x.RuleName == rule.RuleName);
 
         if (existing != null)
         {

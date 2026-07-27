@@ -32,6 +32,7 @@ public abstract class BaseControlBuilder<TControl, TBuilder> : IControlBuilder
     protected bool _ignore;
     protected ValueUpdateTrigger? _valueUpdateTrigger;
     protected IEnumerable<KeyValuePair<string, string>> _metadata = new List<KeyValuePair<string, string>>();
+    protected FormControlImport? _import;
 
     protected BaseControlBuilder(PropertyInfo propertyInfo) : this(propertyInfo.Name)
     {
@@ -78,6 +79,19 @@ public abstract class BaseControlBuilder<TControl, TBuilder> : IControlBuilder
     public TBuilder WithLabel(string label)
     {
         _label = label;
+        return (TBuilder)this;
+    }
+
+    /// <summary>
+    /// Registers the Angular import (symbol and module path) that provides this control's component.
+    /// The generated standalone signals component adds it to its imports array. Ignored by the
+    /// deprecated non-signals templates.
+    /// </summary>
+    /// <param name="symbol">The exported symbol, e.g. "EntryFileInputComponent".</param>
+    /// <param name="importPath">The module path, e.g. "@enigmatry/entry-file-input".</param>
+    public TBuilder WithImport(string symbol, string importPath)
+    {
+        _import = new FormControlImport(symbol, importPath);
         return (TBuilder)this;
     }
 
@@ -339,6 +353,7 @@ public abstract class BaseControlBuilder<TControl, TBuilder> : IControlBuilder
         control.Ignore = _ignore;
         control.ValueUpdateTrigger = _valueUpdateTrigger ?? control.ValueUpdateTrigger;
         control.Metadata = _metadata;
+        control.Import = _import;
 
         return control;
     }

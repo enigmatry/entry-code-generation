@@ -23,14 +23,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDatetimepickerModule } from '@mat-datetimepicker/core';
+import { EntryFileInputComponent } from '@enigmatry/entry-file-input';
 import { IFormMock } from 'src/app/api/api-reference';
 import { IFieldExpressionDictionary, IFieldPropertyExpressionDictionary, SelectConfiguration, sortOptions, ENTRY_ASYNC_VALIDATOR_RESOLVER } from '@enigmatry/entry-form';
 import { Observable, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-g-mock-edit',
-  imports: [ReactiveFormsModule, NgTemplateOutlet, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatRadioModule, MatSelectModule, MatDatetimepickerModule],
+  imports: [ReactiveFormsModule, NgTemplateOutlet, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatRadioModule, MatSelectModule, MatTooltipModule, MatDatetimepickerModule, EntryFileInputComponent],
   templateUrl: './mock-edit-generated.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -47,6 +49,38 @@ export class MockEditGeneratedComponent {
     protected readonly fieldsPropertyExpressions = input<IFieldPropertyExpressionDictionary<IFormMock> | undefined>();
     protected readonly fieldsDisableExpressions = input<IFieldExpressionDictionary<IFormMock> | undefined>();
     protected readonly fieldsRequiredExpressions = input<IFieldExpressionDictionary<IFormMock> | undefined>();
+
+    private readonly defaultLabels: Record<string, string> = {
+        id: $localize `:@@test.mock-edit.id.label:Id`,
+        name: $localize `:@@test.mock-edit.name.label:Name`,
+        description: $localize `:@@test.mock-edit.description.label:Some Description`,
+        date: $localize `:@@test.mock-edit.date.label:Date`,
+        money: $localize `:@@test.mock-edit.money.label:Money`,
+        amount: $localize `:@@test.mock-edit.amount.label:Amount`,
+        formStatus: $localize `:@@test.mock-edit.form-status.label:Form status`,
+        mockRadio: $localize `:@@test.mock-edit.mock-radio.label:Radio`,
+        mockBoolSelect: $localize `:@@test.mock-edit.mock-bool-select.label:BoolSelect`,
+        mockMultiCheckbox: $localize `:@@test.mock-edit.mock-multi-checkbox.label:MultiCheckbox`,
+        multiCheckboxWithStringIds: $localize `:@@test.mock-edit.multi-checkbox-with-string-ids.label:MultiCheckbox`,
+        categoryId: $localize `:@@test.mock-edit.category-id.label:Category`,
+        types: $localize `:@@test.mock-edit.types.label:Types`,
+        password: $localize `:@@test.mock-edit.password.label:Password`,
+        isActive: $localize `:@@test.mock-edit.is-active.label:Active`,
+        notes: $localize `:@@test.mock-edit.notes.label:Notes`,
+        region: $localize `:@@test.mock-edit.region.label:Region`,
+        city: $localize `:@@test.mock-edit.city.label:City`,
+        street: $localize `:@@test.mock-edit.street.label:Street`,
+        houseNumber: $localize `:@@test.mock-edit.house-number.label:House number`,
+        verified: $localize `:@@test.mock-edit.verified.label:Verified`,
+        dateAndTime: $localize `:@@test.mock-edit.date-and-time.label:Date and time`,
+        email1: $localize `:@@test.mock-edit.email1.label:Email 1`,
+        email2: $localize `:@@test.mock-edit.email2.label:Email 2`,
+    };
+
+    protected readonly label = (propertyName: string): string => {
+        const labelExpression = this.fieldsLabelExpressions()?.[propertyName];
+        return labelExpression ? String(labelExpression(this.model())) : this.defaultLabels[propertyName] ?? '';
+    };
 
     private readonly formStatusRawOptions = signal([{ value: null, displayName: $localize `:@@empty-option.none:None` }, { value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }]);
     protected readonly formStatusOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'value', labelProperty: 'displayName', sortProperty: 'displayName' });
@@ -142,6 +176,14 @@ export class MockEditGeneratedComponent {
         email2: new FormControl<string | null>(null, { validators: [Validators.pattern(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/), Validators.maxLength(50)] }),
     });
 
+    private readonly regionFilterValue = toSignal(this.form.controls.region.valueChanges, { initialValue: null });
+    protected readonly regionFilteredOptions = computed(() => {
+        const filterValue = this.regionFilterValue();
+        const filterText = typeof filterValue === 'string' ? filterValue.toLowerCase() : '';
+        return this.regionOptions().filter(option =>
+            option.value === filterValue || String(option.displayName).toLowerCase().includes(filterText));
+    });
+
     protected readonly createAddressesItem = (): FormGroup => {
         return new FormGroup({
             id: new FormControl<string | null>(null),
@@ -170,7 +212,30 @@ export class MockEditGeneratedComponent {
         effect(() => {
             const model = this.model();
             this.resizeAddressesArray(model.addresses?.length ?? 0);
-            this.form.patchValue(model as unknown as typeof this.form.value, { emitEvent: false });
+            const propertyExpressions = this.fieldsPropertyExpressions();
+            const patchedModel = propertyExpressions
+                ? { ...model, ...Object.fromEntries(Object.entries(propertyExpressions).map(([propertyName, expression]) => [propertyName, expression(model)])) }
+                : model;
+            this.form.patchValue(patchedModel as unknown as typeof this.form.value, { emitEvent: false });
+        });
+        effect(() => {
+            const model = this.model();
+            const requiredExpressions = this.fieldsRequiredExpressions();
+            if (!requiredExpressions) {
+                return;
+            }
+            Object.entries(requiredExpressions).forEach(([propertyName, isRequired]) => {
+                const control = this.form.get(propertyName);
+                if (!control) {
+                    return;
+                }
+                if (isRequired(model)) {
+                    control.addValidators(Validators.required);
+                } else {
+                    control.removeValidators(Validators.required);
+                }
+                control.updateValueAndValidity({ emitEvent: false });
+            });
         });
         effect(() => {
             if (this.isReadonly()) {
@@ -211,6 +276,14 @@ export class MockEditGeneratedComponent {
         const control = this.form.get(propertyName);
         const currentValues = (control?.value as unknown[] | null) ?? [];
         control?.setValue(checked ? [...currentValues, value] : currentValues.filter(item => item !== value));
+        control?.markAsDirty();
+    };
+
+    protected readonly toggleSelectAll = (propertyName: string, options: { value: unknown; displayName: unknown }[]): void => {
+        const control = this.form.get(propertyName);
+        const values = options.map(option => option.value);
+        const selectedValues = ((control?.value as unknown[] | null) ?? []).filter(value => values.includes(value));
+        control?.setValue(selectedValues.length === values.length ? [] : values);
         control?.markAsDirty();
     };
 }

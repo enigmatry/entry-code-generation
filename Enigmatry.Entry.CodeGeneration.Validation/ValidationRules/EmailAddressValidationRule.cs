@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -15,7 +15,7 @@ public class EmailAddressValidationRule : PatternValidationRule
             "validators.pattern.emailAddress")
     { }
 
-    public override string FormlyValidationMessage => HasCustomMessage
+    public override string ValidationMessage => HasCustomMessage
         ? CustomMessage
         : String.Empty;
 }

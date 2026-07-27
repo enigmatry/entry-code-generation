@@ -1,4 +1,4 @@
-﻿using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Validators;
+using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Validators;
 using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
 using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 using Humanizer;
@@ -24,11 +24,17 @@ public abstract class FormControl
     public IList<IFormlyValidationRule> ValidationRules { get; private set; } = new List<IFormlyValidationRule>();
     public IEnumerable<CustomValidator> Validators { get; set; } = new List<CustomValidator>();
     public FormControlWrappers Wrappers { get; set; } = FormControlWrappers.Default;
-    public abstract string FormlyType { get; }
+    public abstract string ControlType { get; }
+
+    /// <summary>
+    /// Kept as an alias for the deprecated non-signals (Formly) templates, which must not be modified.
+    /// </summary>
+    public string FormlyType => ControlType;
     public IPropertyFormatter? Formatter { get; set; }
     public bool Ignore { get; set; }
     public ValueUpdateTrigger? ValueUpdateTrigger { get; set; }
     public IEnumerable<KeyValuePair<string, string>> Metadata { get; set; } = new List<KeyValuePair<string, string>>();
+    public FormControlImport? Import { get; set; }
 
     public virtual void ApplyValidationConfiguration(IEnumerable<IFormlyValidationRule> validationRules)
     {
@@ -43,14 +49,14 @@ public abstract class FormControl
                 $"{ComponentInfo.Feature.Name.Kebaberize()}" +
                 $".{ComponentInfo.Name.Kebaberize()}" +
                 $".{PropertyName.Kebaberize()}" +
-                $".{validationRule.FormlyRuleName.Kebaberize()}"
+                $".{validationRule.RuleName.Kebaberize()}"
             );
         }
     }
 
     public string StackedClasses()
     {
-        var classNameValue = $"entry-{PropertyName.Kebaberize()}-field entry-{FormlyType.Kebaberize()}";
+        var classNameValue = $"entry-{PropertyName.Kebaberize()}-field entry-{ControlType.Kebaberize()}";
 
         foreach (var className in ClassNames.Values)
         {

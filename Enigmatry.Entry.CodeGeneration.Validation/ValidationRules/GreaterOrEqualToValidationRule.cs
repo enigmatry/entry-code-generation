@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
@@ -10,16 +10,16 @@ public class GreaterOrEqualToValidationRule<T> : NumbericValidationRule<T>
         : base(value, propertyInfo, expression, String.Empty, "validators.min")
     { }
 
-    public override string FormlyRuleName => "min";
+    public override string RuleName => "min";
 
-    public override string[] FormlyTemplateOptions =>
+    public override string[] TemplateOptions =>
         new[]
         {
             "type: 'number'",
-            $"{FormlyRuleName}: {RuleAsString}"
+            $"{RuleName}: {RuleAsString}"
         };
 
-    public override string FormlyValidationMessage => HasCustomMessage
+    public override string ValidationMessage => HasCustomMessage
         ? CustomMessage
         : "${field?.templateOptions?.label}:property-name: value should be more than ${field?.templateOptions?.min}:min-value:";
 }

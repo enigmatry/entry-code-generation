@@ -3,12 +3,12 @@
 <button mat-button type="button"
         class="entry-reset-form-btn-field entry-button primary-button"
         [disabled]="isDisabled('resetFormBtn', false)"
-        (click)="buttonClick.emit('resetFormBtn')">Reset</button>
+        (click)="buttonClick.emit('resetFormBtn')" i18n="@@test.mock-edit.reset-form-btn.text">Reset</button>
 <div class="entry-field-group" [class.group-wrapper-readonly]="isReadonly()">
 @if (!isHidden('name', true)) {
-<mat-form-field class="entry-name-field entry-input" appearance="outline" floatLabel="always">
-    <mat-label>Name</mat-label>
-    <input matInput formControlName="name" type="text" [placeholder]="'Some / Name'" autocomplete="off" cdkFocusInitial [readonly]="isDisabled('name', false)">
+<mat-form-field class="entry-name-field entry-input" appearance="outline" floatLabel="always" matTooltip="Tooltip text" i18n-matTooltip="@@test.mock-edit.name.tooltip">
+    <mat-label>{{ label('name') }}</mat-label>
+    <input matInput formControlName="name" type="text" placeholder="Some / Name" i18n-placeholder="@@test.mock-edit.name.placeholder" autocomplete="off" cdkFocusInitial [readonly]="isDisabled('name', false)">
 @if (form.get('name')?.hasError('required')) {
     <mat-error i18n="@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID">CUSTOM_VALIDATION_MESSAGE</mat-error>
 }@if (form.get('name')?.hasError('maxlength')) {
@@ -22,25 +22,25 @@
 }
 @if (!isHidden('date', true)) {
 <mat-form-field class="entry-date-field entry-datepicker">
-    <mat-label>Date</mat-label>
-    <input matInput [matDatepicker]="picker_date" formControlName="date" [placeholder]="'Date'">
+    <mat-label>{{ label('date') }}</mat-label>
+    <input matInput [matDatepicker]="picker_date" formControlName="date" placeholder="Date" i18n-placeholder="@@test.mock-edit.date.placeholder">
     <mat-datepicker-toggle matIconSuffix [for]="picker_date"></mat-datepicker-toggle>
     <mat-datepicker #picker_date></mat-datepicker>
 </mat-form-field>
 }
 @if (!isHidden('money', true)) {
 <mat-form-field class="entry-money-field entry-input">
-    <mat-label>Money</mat-label>
-    <input matInput formControlName="money" type="number" [placeholder]="'Money'" [readonly]="isDisabled('money', false)">
+    <mat-label>{{ label('money') }}</mat-label>
+    <input matInput formControlName="money" type="number" placeholder="Money" i18n-placeholder="@@test.mock-edit.money.placeholder" [readonly]="isDisabled('money', false)">
 @if (form.get('money')?.hasError('max')) {
     <mat-error i18n="@@test.mock-edit.money.max">Money value should be less than 999.89</mat-error>
 }</mat-form-field>
 }
 @if (!isHidden('amount', true)) {
 <mat-form-field class="entry-amount-field entry-input">
-    <mat-label>Amount</mat-label>
-    <input matInput formControlName="amount" type="number" [placeholder]="'Amount'" [readonly]="isDisabled('amount', false)">
-    <mat-hint>Don't panic if it is 0</mat-hint>
+    <mat-label>{{ label('amount') }}</mat-label>
+    <input matInput formControlName="amount" type="number" placeholder="Amount" i18n-placeholder="@@test.mock-edit.amount.placeholder" [readonly]="isDisabled('amount', false)">
+    <mat-hint i18n="@@test.mock-edit.amount.hint">Don't panic if it is 0</mat-hint>
 @if (form.get('amount')?.hasError('required')) {
     <mat-error i18n="@@test.mock-edit.amount.required">Amount is required</mat-error>
 }@if (form.get('amount')?.hasError('min')) {
@@ -51,7 +51,7 @@
 }
 @if (!isHidden('formStatus', true)) {
 <mat-form-field class="entry-form-status-field entry-select">
-    <mat-label>Form status</mat-label>
+    <mat-label>{{ label('formStatus') }}</mat-label>
     <mat-select formControlName="formStatus">
         @for (option of formStatusOptions(); track option.value) {
             <mat-option [value]="option.value">{{option.displayName}}</mat-option>
@@ -68,7 +68,7 @@
 }
 @if (!isHidden('mockBoolSelect', true)) {
 <mat-form-field class="entry-mock-bool-select-field entry-select">
-    <mat-label>BoolSelect</mat-label>
+    <mat-label>{{ label('mockBoolSelect') }}</mat-label>
     <mat-select formControlName="mockBoolSelect">
         @for (option of mockBoolSelectOptions(); track option.value) {
             <mat-option [value]="option.value">{{option.displayName}}</mat-option>
@@ -96,8 +96,8 @@
 }
 @if (!isHidden('categoryId', true)) {
 <mat-form-field class="entry-category-id-field entry-select">
-    <mat-label>Category</mat-label>
-    <mat-select formControlName="categoryId">
+    <mat-label>{{ label('categoryId') }}</mat-label>
+    <mat-select formControlName="categoryId" entityType="Category" filter="category_name">
         @for (option of categoryIdOptions(); track option.value) {
             <mat-option [value]="option.value">{{option.displayName}}</mat-option>
         }
@@ -106,9 +106,9 @@
 }
 @if (!isHidden('types', true)) {
 <mat-form-field class="entry-types-field entry-select">
-    <mat-label>Types</mat-label>
+    <mat-label>{{ label('types') }}</mat-label>
     <mat-select formControlName="types" multiple>
-        <mat-option>SelectAll</mat-option>
+        <mat-option (click)="toggleSelectAll('types', typesOptions())" i18n="@@select-all-option.select-all">SelectAll</mat-option>
         @for (option of typesOptions(); track option.value) {
             <mat-option [value]="option.value">{{option.displayName}}</mat-option>
         }
@@ -117,29 +117,29 @@
 }
 @if (!isHidden('password', true)) {
 <mat-form-field class="entry-password-field entry-input">
-    <mat-label>Password</mat-label>
-    <input matInput formControlName="password" type="password" [placeholder]="'Password'" [readonly]="isDisabled('password', false)">
+    <mat-label>{{ label('password') }}</mat-label>
+    <input matInput formControlName="password" type="password" placeholder="Password" i18n-placeholder="@@test.mock-edit.password.placeholder" [readonly]="isDisabled('password', false)">
 </mat-form-field>
 }
 @if (!isHidden('isActive', true)) {
-<mat-checkbox formControlName="isActive" class="entry-is-active-field entry-checkbox">Active</mat-checkbox>
+<mat-checkbox formControlName="isActive" class="entry-is-active-field entry-checkbox">{{ label('isActive') }}</mat-checkbox>
 }
 @if (!isHidden('notes', true)) {
 <mat-form-field class="entry-notes-field entry-textarea">
-    <mat-label>Notes</mat-label>
-    <textarea matInput formControlName="notes" [placeholder]="'Notes'" rows="4" [readonly]="isDisabled('notes', false)"></textarea>
+    <mat-label>{{ label('notes') }}</mat-label>
+    <textarea matInput formControlName="notes" placeholder="Notes" i18n-placeholder="@@test.mock-edit.notes.placeholder" rows="4" [readonly]="isDisabled('notes', false)"></textarea>
 </mat-form-field>
 }
 @if (!isHidden('region', true)) {
 <mat-form-field class="entry-region-field entry-autocomplete">
-    <mat-label>Region</mat-label>
+    <mat-label>{{ label('region') }}</mat-label>
     <input type="text" matInput formControlName="region"
-        [matAutocomplete]="regionAuto" [placeholder]="'Region'"
+        [matAutocomplete]="regionAuto" placeholder="Region" i18n-placeholder="@@test.mock-edit.region.placeholder"
         [readonly]="isDisabled('region', false)">
     <mat-autocomplete #regionAuto="matAutocomplete"
         [autoActiveFirstOption]="true"
         [displayWith]="displayRegion">
-        @for (option of regionOptions(); track option.value) {
+        @for (option of regionFilteredOptions(); track option.value) {
             <mat-option [value]="option.value">{{option.displayName}}</mat-option>
         }
     </mat-autocomplete>
@@ -154,24 +154,24 @@
         <ng-container [formGroupName]="$index">
 @if (!isHidden('city', true)) {
 <mat-form-field class="entry-city-field entry-input">
-    <mat-label>City</mat-label>
-    <input matInput formControlName="city" type="text" [placeholder]="'City'" [readonly]="isDisabled('city', false)">
+    <mat-label>{{ label('city') }}</mat-label>
+    <input matInput formControlName="city" type="text" placeholder="City" i18n-placeholder="@@test.mock-edit.city.placeholder" [readonly]="isDisabled('city', false)">
 </mat-form-field>
 }
 @if (!isHidden('street', true)) {
 <mat-form-field class="entry-street-field entry-input">
-    <mat-label>Street</mat-label>
-    <input matInput formControlName="street" type="text" [placeholder]="'Street'" [readonly]="isDisabled('street', false)">
+    <mat-label>{{ label('street') }}</mat-label>
+    <input matInput formControlName="street" type="text" placeholder="Street" i18n-placeholder="@@test.mock-edit.street.placeholder" [readonly]="isDisabled('street', false)">
 </mat-form-field>
 }
 @if (!isHidden('houseNumber', true)) {
 <mat-form-field class="entry-house-number-field entry-input">
-    <mat-label>House number</mat-label>
-    <input matInput formControlName="houseNumber" type="text" [placeholder]="'House number'" [readonly]="isDisabled('houseNumber', false)">
+    <mat-label>{{ label('houseNumber') }}</mat-label>
+    <input matInput formControlName="houseNumber" type="text" placeholder="House number" i18n-placeholder="@@test.mock-edit.house-number.placeholder" [readonly]="isDisabled('houseNumber', false)">
 </mat-form-field>
 }
 @if (!isHidden('verified', true)) {
-<mat-checkbox formControlName="verified" class="entry-verified-field entry-checkbox">Verified</mat-checkbox>
+<mat-checkbox formControlName="verified" class="entry-verified-field entry-checkbox">{{ label('verified') }}</mat-checkbox>
 }
         </ng-container>
     }
@@ -179,8 +179,8 @@
 }
 @if (!isHidden('dateAndTime', true)) {
 <mat-form-field class="entry-date-and-time-field entry-datetimepicker">
-    <mat-label>Date and time</mat-label>
-    <input matInput [matDatetimepicker]="picker_dateAndTime" formControlName="dateAndTime" [placeholder]="'Date and time'">
+    <mat-label>{{ label('dateAndTime') }}</mat-label>
+    <input matInput [matDatetimepicker]="picker_dateAndTime" formControlName="dateAndTime" placeholder="Date and time" i18n-placeholder="@@test.mock-edit.date-and-time.placeholder">
     <mat-datetimepicker-toggle matIconSuffix [for]="picker_dateAndTime"></mat-datetimepicker-toggle>
     <mat-datetimepicker #picker_dateAndTime></mat-datetimepicker>
 </mat-form-field>
@@ -188,8 +188,8 @@
 </div>
 @if (!isHidden('email1', true)) {
 <mat-form-field class="entry-email1-field entry-input">
-    <mat-label>Email 1</mat-label>
-    <input matInput formControlName="email1" type="text" [placeholder]="'Email 1'" [readonly]="isDisabled('email1', false)">
+    <mat-label>{{ label('email1') }}</mat-label>
+    <input matInput formControlName="email1" type="text" placeholder="Email 1" i18n-placeholder="@@test.mock-edit.email1.placeholder" [readonly]="isDisabled('email1', false)">
 @if (form.get('email1')?.hasError('pattern')) {
     <mat-error i18n="@@test.mock-edit.email1.pattern">CUSTOM_VALIDATION_MESSAGE</mat-error>
 }@if (form.get('email1')?.hasError('maxlength')) {
@@ -198,8 +198,8 @@
 }
 @if (!isHidden('email2', true)) {
 <mat-form-field class="entry-email2-field entry-input">
-    <mat-label>Email 2</mat-label>
-    <input matInput formControlName="email2" type="text" [placeholder]="'Email 2'" [readonly]="isDisabled('email2', false)">
+    <mat-label>{{ label('email2') }}</mat-label>
+    <input matInput formControlName="email2" type="text" placeholder="Email 2" i18n-placeholder="@@test.mock-edit.email2.placeholder" [readonly]="isDisabled('email2', false)">
 @if (form.get('email2')?.hasError('pattern')) {
     <mat-error i18n="@@validators.pattern.emailAddress">Invalid email address format</mat-error>
 }@if (form.get('email2')?.hasError('maxlength')) {

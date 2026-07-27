@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using System.Reflection;
 using Humanizer;
 
@@ -14,9 +14,18 @@ public abstract class ValidationRule<TRule> : IValidationRule
     public LambdaExpression Expression { get; private set; }
     public PropertyInfo PropertyInfo { get; private set; }
     public string PropertyName => PropertyInfo.Name.Camelize();
-    public abstract string FormlyValidationMessage { get; }
-    public abstract string FormlyRuleName { get; }
-    public virtual string[] FormlyTemplateOptions => new[] { $"{FormlyRuleName}: {Rule}" };
+    public abstract string ValidationMessage { get; }
+    public abstract string RuleName { get; }
+    public virtual string[] TemplateOptions => new[] { $"{RuleName}: {Rule}" };
+
+    [Obsolete("Use ValidationMessage instead.")]
+    public string FormlyValidationMessage => ValidationMessage;
+
+    [Obsolete("Use RuleName instead.")]
+    public string FormlyRuleName => RuleName;
+
+    [Obsolete("Use TemplateOptions instead.")]
+    public string[] FormlyTemplateOptions => TemplateOptions;
 
 
     protected ValidationRule(

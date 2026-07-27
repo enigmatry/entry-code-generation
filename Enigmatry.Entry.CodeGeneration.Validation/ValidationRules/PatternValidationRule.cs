@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -15,9 +15,9 @@ public class PatternValidationRule : ValidationRule<Regex>
         : base(value, propertyInfo, expression, message, messageTranslationId)
     { }
 
-    public override string FormlyRuleName => "pattern";
+    public override string RuleName => "pattern";
 
-    public override string FormlyValidationMessage => HasCustomMessage
+    public override string ValidationMessage => HasCustomMessage
         ? CustomMessage
         : "${field?.templateOptions?.label}:property-name: is not in valid format";
 }

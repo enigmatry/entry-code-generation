@@ -1,4 +1,5 @@
 using System.Globalization;
+using Enigmatry.Entry.CodeGeneration.Configuration;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Array;
@@ -249,10 +250,20 @@ public static class AngularSignalsFormHtmlHelperExtensions
             imports.Add(("TextFieldModule", "@angular/cdk/text-field"));
         }
 
+        if (controls.Any(control => control.Tooltip.Value.HasContent()))
+        {
+            imports.Add(("MatTooltipModule", "@angular/material/tooltip"));
+        }
+
         if (controls.OfType<DateTimePickerFormControl>().Any())
         {
             imports.Add(("MatDatetimepickerModule", "@mat-datetimepicker/core"));
         }
+
+        imports.AddRange(controls
+            .Where(control => control.Import != null)
+            .Select(control => (control.Import!.Symbol, control.Import!.Path))
+            .Distinct());
 
         return imports;
     }
@@ -329,6 +340,66 @@ public static class AngularSignalsFormHtmlHelperExtensions
     public static IHtmlContent AllSelectInputDeclarations(this IHtmlHelper htmlHelper, FormComponentModel model, bool enableI18N) =>
         htmlHelper.Raw(String.Concat(model.FormControlsOfType<SelectControlBase>()
             .Select(select => htmlHelper.SelectInputDeclarations(select, enableI18N).ToString())));
+
+    public static IHtmlContent DefaultLabelDeclarations(this IHtmlHelper htmlHelper, FormComponentModel model, bool enableI18N)
+    {
+        var labelledControls = model.AllControlsIncludingArrayItems()
+            .Where(control => control is not ButtonFormControl and not ArrayFormControl and not FormControlGroup and not CustomFormControl)
+            .GroupBy(control => control.PropertyName)
+            .Select(propertyGroup => propertyGroup.First())
+            .ToList();
+
+        var labelEntries = labelledControls
+            .Select(control => $"        {control.PropertyName}: {htmlHelper.Localize(control.Label, enableI18N)},");
+
+        return htmlHelper.Raw(
+            "    private readonly defaultLabels: Record<string, string> = {\r\n" +
+            String.Concat(labelEntries.Select(entry => entry + "\r\n")) +
+            "    };\r\n" +
+            "\r\n" +
+            "    protected readonly label = (propertyName: string): string => {\r\n" +
+            "        const labelExpression = this.fieldsLabelExpressions()?.[propertyName];\r\n" +
+            "        return labelExpression ? String(labelExpression(this.model())) : this.defaultLabels[propertyName] ?? '';\r\n" +
+            "    };\r\n");
+    }
+
+    public static IHtmlContent AllAutocompleteFilterDeclarations(this IHtmlHelper htmlHelper, FormComponentModel model)
+    {
+        var autocompleteControls = model.FormControlsOfType<AutocompleteFormControl>().ToList();
+        if (autocompleteControls.Count == 0)
+        {
+            return htmlHelper.Raw("");
+        }
+
+        var declarations = autocompleteControls.Select(autocomplete =>
+            $"    private readonly {autocomplete.PropertyName}FilterValue = toSignal(this.form.controls.{autocomplete.PropertyName}.valueChanges, {{ initialValue: null }});\r\n" +
+            $"    protected readonly {autocomplete.PropertyName}FilteredOptions = computed(() => {{\r\n" +
+            $"        const filterValue = this.{autocomplete.PropertyName}FilterValue();\r\n" +
+            $"        const filterText = typeof filterValue === 'string' ? filterValue.toLowerCase() : '';\r\n" +
+            $"        return this.{autocomplete.PropertyName}Options().filter(option =>\r\n" +
+            $"            option.value === filterValue || String(option.displayName).toLowerCase().includes(filterText));\r\n" +
+            $"    }});\r\n");
+
+        return htmlHelper.Raw("\r\n" + String.Concat(declarations));
+    }
+
+    public static IHtmlContent SelectAllHelperMethod(this IHtmlHelper htmlHelper, FormComponentModel model)
+    {
+        if (!model.FormControlsOfType<MultiSelectFormControl>().Any(multiSelect => multiSelect.Options.SelectAllOption != null))
+        {
+            return htmlHelper.Raw("");
+        }
+
+        return htmlHelper.Raw(
+            "\r\n" +
+            "    protected readonly toggleSelectAll = (propertyName: string, options: { value: unknown; displayName: unknown }[]): void => {\r\n" +
+            "        const control = this.form.get(propertyName);\r\n" +
+            "        const values = options.map(option => option.value);\r\n" +
+            "        const selectedValues = ((control?.value as unknown[] | null) ?? []).filter(value => values.includes(value));\r\n" +
+            "        control?.setValue(selectedValues.length === values.length ? [] : values);\r\n" +
+            "        control?.markAsDirty();\r\n" +
+            "    };\r\n");
+    }
 
     public static IHtmlContent MultiCheckboxHelperMethods(this IHtmlHelper htmlHelper, FormComponentModel model)
     {

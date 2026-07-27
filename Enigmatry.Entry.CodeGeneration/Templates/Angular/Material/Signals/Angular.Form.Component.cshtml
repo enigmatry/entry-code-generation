@@ -9,9 +9,17 @@
 @inject CodeGeneratorOptions Options;
 import { NgTemplateOutlet } from '@@angular/common';
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, LOCALE_ID, signal, TemplateRef } from '@@angular/core';
-@if (Model.FormControlsOfType<SelectControlBase>().Any(selectControl => selectControl.Options.HasDynamicValues))
+@{
+    var hasDynamicSelects = Model.FormControlsOfType<SelectControlBase>().Any(selectControl => selectControl.Options.HasDynamicValues);
+    var hasAutocompleteControls = Model.FormControlsOfType<AutocompleteFormControl>().Any();
+}
+@if (hasDynamicSelects)
 {
 @:import { toObservable, toSignal } from '@@angular/core/rxjs-interop';
+}
+else if (hasAutocompleteControls)
+{
+@:import { toSignal } from '@@angular/core/rxjs-interop';
 }
 import { input, model, output } from '@@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@@angular/forms';
@@ -49,6 +57,7 @@ export class @Model.AngularComponentName() {
     protected readonly fieldsDisableExpressions = input@(Html.Raw($"<IFieldExpressionDictionary<I{Model.ComponentInfo.ModelType}> | undefined>"))();
     protected readonly fieldsRequiredExpressions = input@(Html.Raw($"<IFieldExpressionDictionary<I{Model.ComponentInfo.ModelType}> | undefined>"))();
 
+@Html.DefaultLabelDeclarations(Model, Options.EnableI18N)
 @Html.AllSelectInputDeclarations(Model, Options.EnableI18N)
     protected readonly save = output@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>"))();
     protected readonly cancel = output@(Html.Raw("<void>"))();
@@ -63,13 +72,36 @@ export class @Model.AngularComponentName() {
 
     protected readonly form = new FormGroup({
 @Html.AllFormControlDeclarations(Model)    });
-
+@Html.AllAutocompleteFilterDeclarations(Model)
 @Html.AllArrayItemFactoryMethods(Model)
 @Html.AllArrayResizeMethods(Model)
     constructor() {
         effect(() => {
             const model = this.model();
-@Html.ResizeArrayCalls(Model)            this.form.patchValue(model as unknown as typeof this.form.value, { emitEvent: false });
+@Html.ResizeArrayCalls(Model)            const propertyExpressions = this.fieldsPropertyExpressions();
+            const patchedModel = propertyExpressions
+                ? { ...model, ...Object.fromEntries(Object.entries(propertyExpressions).map(([propertyName, expression]) => [propertyName, expression(model)])) }
+                : model;
+            this.form.patchValue(patchedModel as unknown as typeof this.form.value, { emitEvent: false });
+        });
+        effect(() => {
+            const model = this.model();
+            const requiredExpressions = this.fieldsRequiredExpressions();
+            if (!requiredExpressions) {
+                return;
+            }
+            Object.entries(requiredExpressions).forEach(([propertyName, isRequired]) => {
+                const control = this.form.get(propertyName);
+                if (!control) {
+                    return;
+                }
+                if (isRequired(model)) {
+                    control.addValidators(Validators.required);
+                } else {
+                    control.removeValidators(Validators.required);
+                }
+                control.updateValueAndValidity({ emitEvent: false });
+            });
         });
         effect(() => {
             if (this.isReadonly()) {
@@ -101,4 +133,4 @@ export class @Model.AngularComponentName() {
             ? this.fieldsDisableExpressions()![propertyName](this.model())
             : staticReadonly);
     };
-@Html.MultiCheckboxHelperMethods(Model)}
+@Html.MultiCheckboxHelperMethods(Model)@Html.SelectAllHelperMethod(Model)}

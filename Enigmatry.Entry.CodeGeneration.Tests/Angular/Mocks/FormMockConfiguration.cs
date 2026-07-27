@@ -162,6 +162,7 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
         formGroup
             .CustomFormControl(x => x.FileUpload)
             .WithCustomControlType("entry-file-input")
+            .WithImport("EntryFileInputComponent", "@enigmatry/entry-file-input")
             .WithLabel("File upload");
 
         formGroup
