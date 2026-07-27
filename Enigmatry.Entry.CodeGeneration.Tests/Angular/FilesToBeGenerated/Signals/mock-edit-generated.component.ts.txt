@@ -15,13 +15,22 @@ import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, injec
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { input, model, output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatetimepickerModule } from '@mat-datetimepicker/core';
 import { IFormMock } from 'src/app/api/api-reference';
 import { IFieldExpressionDictionary, IFieldPropertyExpressionDictionary, SelectConfiguration, sortOptions, ENTRY_ASYNC_VALIDATOR_RESOLVER } from '@enigmatry/entry-form';
 import { Observable, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-g-mock-edit',
-  imports: [ReactiveFormsModule, NgTemplateOutlet],
+  imports: [ReactiveFormsModule, NgTemplateOutlet, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatRadioModule, MatSelectModule, MatDatetimepickerModule],
   templateUrl: './mock-edit-generated.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -113,8 +122,8 @@ export class MockEditGeneratedComponent {
         name: new FormControl<string | null>('DEFAULT NAME', { validators: [Validators.required, Validators.maxLength(50), Validators.pattern(/[A-Z]/)], asyncValidators: this.asyncValidatorResolver ? [this.asyncValidatorResolver('uniqueName'), this.asyncValidatorResolver('isEnsured')] : [], updateOn: 'blur' }),
         description: new FormControl<string | null>(null),
         date: new FormControl({ value: null, disabled: true }, { updateOn: 'blur' }),
-        money: new FormControl<string | null>(null, { validators: [Validators.max(999.99 - 0.1)] }),
-        amount: new FormControl<string | null>(null, { validators: [Validators.required, Validators.min(0 + 1), Validators.max(100)] }),
+        money: new FormControl<number | null>(null, { validators: [Validators.max(999.99 - 0.1)] }),
+        amount: new FormControl<number | null>(null, { validators: [Validators.required, Validators.min(0 + 1), Validators.max(100)] }),
         formStatus: new FormControl(null),
         mockRadio: new FormControl(null),
         mockBoolSelect: new FormControl(null),
@@ -143,9 +152,25 @@ export class MockEditGeneratedComponent {
         });
     };
 
+    private readonly resizeAddressesArray = (length: number): void => {
+        const formArray = this.form.get('addresses') as FormArray<FormGroup>;
+        while (formArray.length > length) {
+            formArray.removeAt(formArray.length - 1, { emitEvent: false });
+        }
+        while (formArray.length < length) {
+            const item = this.createAddressesItem();
+            if (this.form.disabled) {
+                item.disable({ emitEvent: false });
+            }
+            formArray.push(item, { emitEvent: false });
+        }
+    };
+
     constructor() {
         effect(() => {
-            this.form.patchValue(this.model() as unknown as typeof this.form.value, { emitEvent: false });
+            const model = this.model();
+            this.resizeAddressesArray(model.addresses?.length ?? 0);
+            this.form.patchValue(model as unknown as typeof this.form.value, { emitEvent: false });
         });
         effect(() => {
             if (this.isReadonly()) {
@@ -153,6 +178,7 @@ export class MockEditGeneratedComponent {
             } else {
                 this.form.enable({ emitEvent: false });
                 this.form.get('date')?.disable({ emitEvent: false });
+                (this.form.get('addresses') as FormArray<FormGroup>).controls.forEach(itemGroup => itemGroup.get('verified')?.disable({ emitEvent: false }));
             }
         });
     }

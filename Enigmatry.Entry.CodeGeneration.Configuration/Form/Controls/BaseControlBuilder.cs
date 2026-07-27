@@ -322,6 +322,7 @@ public abstract class BaseControlBuilder<TControl, TBuilder> : IControlBuilder
 
         control.ComponentInfo = componentInfo;
         control.PropertyName = _propertyName;
+        control.PropertyType = PropertyInfo?.PropertyType;
         control.Label = new I18NString(labelTranslationId, label);
         control.Placeholder = new I18NString(placeholderTranslationId, placeholder);
         control.Hint = new I18NString(hintTranslationId, _hint);

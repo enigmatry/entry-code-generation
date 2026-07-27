@@ -9,6 +9,7 @@ public abstract class FormControl
 {
     public ComponentInfo ComponentInfo { get; set; } = null!;
     public string PropertyName { get; set; } = String.Empty;
+    public System.Type? PropertyType { get; set; }
     public I18NString Label { get; set; } = I18NString.Empty;
     public I18NString Placeholder { get; set; } = I18NString.Empty;
     public I18NString Hint { get; set; } = I18NString.Empty;

@@ -10,11 +10,11 @@
     <mat-label>Name</mat-label>
     <input matInput formControlName="name" type="text" [placeholder]="'Some / Name'" autocomplete="off" cdkFocusInitial [readonly]="isDisabled('name', false)">
 @if (form.get('name')?.hasError('required')) {
-    <mat-error>CUSTOM_VALIDATION_MESSAGE</mat-error>
+    <mat-error i18n="@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID">CUSTOM_VALIDATION_MESSAGE</mat-error>
 }@if (form.get('name')?.hasError('maxlength')) {
-    <mat-error>CUSTOM_VALIDATION_MESSAGE</mat-error>
+    <mat-error i18n="@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID">CUSTOM_VALIDATION_MESSAGE</mat-error>
 }@if (form.get('name')?.hasError('pattern')) {
-    <mat-error>${field?.templateOptions?.label}:property-name: is not in valid format</mat-error>
+    <mat-error i18n="@@test.mock-edit.name.pattern">Name is not in valid format</mat-error>
 }</mat-form-field>
 }
 @if (!isHidden('description', true)) {
@@ -31,22 +31,22 @@
 @if (!isHidden('money', true)) {
 <mat-form-field class="entry-money-field entry-input">
     <mat-label>Money</mat-label>
-    <input matInput formControlName="money" type="text" [placeholder]="'Money'" [readonly]="isDisabled('money', false)">
+    <input matInput formControlName="money" type="number" [placeholder]="'Money'" [readonly]="isDisabled('money', false)">
 @if (form.get('money')?.hasError('max')) {
-    <mat-error>${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:</mat-error>
+    <mat-error i18n="@@test.mock-edit.money.max">Money value should be less than 999.89</mat-error>
 }</mat-form-field>
 }
 @if (!isHidden('amount', true)) {
 <mat-form-field class="entry-amount-field entry-input">
     <mat-label>Amount</mat-label>
-    <input matInput formControlName="amount" type="text" [placeholder]="'Amount'" [readonly]="isDisabled('amount', false)">
+    <input matInput formControlName="amount" type="number" [placeholder]="'Amount'" [readonly]="isDisabled('amount', false)">
     <mat-hint>Don't panic if it is 0</mat-hint>
 @if (form.get('amount')?.hasError('required')) {
-    <mat-error>${field?.templateOptions?.label}:property-name: is required</mat-error>
+    <mat-error i18n="@@test.mock-edit.amount.required">Amount is required</mat-error>
 }@if (form.get('amount')?.hasError('min')) {
-    <mat-error>CUSTOM_VALIDATION_MESSAGE</mat-error>
+    <mat-error i18n="@@test.mock-edit.amount.min">CUSTOM_VALIDATION_MESSAGE</mat-error>
 }@if (form.get('amount')?.hasError('max')) {
-    <mat-error>CUSTOM_VALIDATION_MESSAGE</mat-error>
+    <mat-error i18n="@@test.mock-edit.amount.max">CUSTOM_VALIDATION_MESSAGE</mat-error>
 }</mat-form-field>
 }
 @if (!isHidden('formStatus', true)) {
@@ -150,7 +150,7 @@
 }
 @if (!isHidden('addresses', true)) {
 <ng-container formArrayName="addresses">
-    @for (control of form.get('addresses')?.controls ?? []; track $index) {
+    @for (control of form.controls.addresses.controls; track $index) {
         <ng-container [formGroupName]="$index">
 @if (!isHidden('city', true)) {
 <mat-form-field class="entry-city-field entry-input">
@@ -191,9 +191,9 @@
     <mat-label>Email 1</mat-label>
     <input matInput formControlName="email1" type="text" [placeholder]="'Email 1'" [readonly]="isDisabled('email1', false)">
 @if (form.get('email1')?.hasError('pattern')) {
-    <mat-error>CUSTOM_VALIDATION_MESSAGE</mat-error>
+    <mat-error i18n="@@test.mock-edit.email1.pattern">CUSTOM_VALIDATION_MESSAGE</mat-error>
 }@if (form.get('email1')?.hasError('maxlength')) {
-    <mat-error>${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters</mat-error>
+    <mat-error i18n="@@test.mock-edit.email1.max-length">Email 1 value should be less than 50 characters</mat-error>
 }</mat-form-field>
 }
 @if (!isHidden('email2', true)) {
@@ -201,9 +201,9 @@
     <mat-label>Email 2</mat-label>
     <input matInput formControlName="email2" type="text" [placeholder]="'Email 2'" [readonly]="isDisabled('email2', false)">
 @if (form.get('email2')?.hasError('pattern')) {
-    <mat-error>Invalid email address format</mat-error>
+    <mat-error i18n="@@validators.pattern.emailAddress">Invalid email address format</mat-error>
 }@if (form.get('email2')?.hasError('maxlength')) {
-    <mat-error>${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters</mat-error>
+    <mat-error i18n="@@test.mock-edit.email2.max-length">Email 2 value should be less than 50 characters</mat-error>
 }</mat-form-field>
 }
 

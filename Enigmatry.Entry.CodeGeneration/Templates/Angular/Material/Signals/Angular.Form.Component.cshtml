@@ -15,7 +15,7 @@ import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, injec
 }
 import { input, model, output } from '@@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@@angular/forms';
-import { I@(Model.ComponentInfo.ModelType) } from '@Options.ApiClientTsImportPath';
+@Html.MaterialImportStatements(Model)import { I@(Model.ComponentInfo.ModelType) } from '@Options.ApiClientTsImportPath';
 @{
     var entryFormImports = "IFieldExpressionDictionary, IFieldPropertyExpressionDictionary, SelectConfiguration, sortOptions";
     if (Model.HasAnyAsyncValidators())
@@ -31,7 +31,7 @@ import { @Html.Raw(entryFormImports) } from '@@enigmatry/entry-form';
 
 @@Component({
   selector: '@Model.AngularComponentSelector(Options.GeneratedComponentPrefix)',
-  imports: [ReactiveFormsModule, NgTemplateOutlet],
+  imports: [@Html.Raw(Model.AngularImportsList())],
   templateUrl: './@(Model.AngularComponentFileName()).html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -65,9 +65,11 @@ export class @Model.AngularComponentName() {
 @Html.AllFormControlDeclarations(Model)    });
 
 @Html.AllArrayItemFactoryMethods(Model)
+@Html.AllArrayResizeMethods(Model)
     constructor() {
         effect(() => {
-            this.form.patchValue(this.model() as unknown as typeof this.form.value, { emitEvent: false });
+            const model = this.model();
+@Html.ResizeArrayCalls(Model)            this.form.patchValue(model as unknown as typeof this.form.value, { emitEvent: false });
         });
         effect(() => {
             if (this.isReadonly()) {
