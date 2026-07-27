@@ -75,6 +75,7 @@ export class @Model.AngularComponentName() {
 @Html.AllAutocompleteFilterDeclarations(Model)
 @Html.AllArrayItemFactoryMethods(Model)
 @Html.AllArrayResizeMethods(Model)
+@Html.AllArrayMutationMethods(Model)
     constructor() {
         effect(() => {
             const model = this.model();
@@ -133,4 +134,4 @@ export class @Model.AngularComponentName() {
             ? this.fieldsDisableExpressions()![propertyName](this.model())
             : staticReadonly);
     };
-@Html.MultiCheckboxHelperMethods(Model)@Html.SelectAllHelperMethod(Model)}
+@Html.MultiCheckboxHelperMethods(Model)@Html.SelectAllHelperMethod(Model)@Html.ReadonlyDisplayHelperMethods(Model)}

@@ -1,6 +1,7 @@
 ﻿using Enigmatry.Entry.CodeGeneration.Configuration;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
 
 namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.Mocks;
 
@@ -13,6 +14,8 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
             .HasName("MockEdit")
             .BelongsToFeature("Test")
             .OrderBy(OrderByType.Configuration);
+
+        builder.WithReadonlyDisplay();
             
         builder
             .FormControl(x => x.Id)
@@ -59,7 +62,8 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
         formGroup
             .FormControl(x => x.Money)
             .WithLabel("Money")
-            .WithPlaceholder("Money");
+            .WithPlaceholder("Money")
+            .WithFormat(new CurrencyPropertyFormatter());
 
         formGroup
             .FormControl(x => x.Amount)

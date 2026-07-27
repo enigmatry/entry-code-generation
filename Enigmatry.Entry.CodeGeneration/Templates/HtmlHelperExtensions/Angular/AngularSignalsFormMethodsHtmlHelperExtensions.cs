@@ -48,6 +48,24 @@ public static class AngularSignalsFormMethodsHtmlHelperExtensions
             "    };\r\n");
     }
 
+    public static IHtmlContent ReadonlyDisplayHelperMethods(this IHtmlHelper htmlHelper, FormComponentModel model)
+    {
+        if (!model.UseReadonlyDisplay)
+        {
+            return htmlHelper.Raw("");
+        }
+
+        return htmlHelper.Raw(
+            "\r\n" +
+            "    protected readonly readonlyValue = (propertyName: string): string =>\r\n" +
+            "        String(this.form.get(propertyName)?.value ?? '');\r\n" +
+            "\r\n" +
+            "    protected readonly selectedDisplayName = (value: unknown, options: { value: unknown; displayName: unknown }[]): string =>\r\n" +
+            "        Array.isArray(value)\r\n" +
+            "            ? value.map(item => options.find(option => option.value === item)?.displayName ?? item).join(', ')\r\n" +
+            "            : String(options.find(option => option.value === value)?.displayName ?? value ?? '');\r\n");
+    }
+
     public static IHtmlContent MultiCheckboxHelperMethods(this IHtmlHelper htmlHelper, FormComponentModel model)
     {
         if (!model.FormControlsOfType<MultiCheckboxFormControl>().Any())

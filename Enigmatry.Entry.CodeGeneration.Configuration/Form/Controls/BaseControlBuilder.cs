@@ -236,6 +236,11 @@ public abstract class BaseControlBuilder<TControl, TBuilder> : IControlBuilder
     /// </summary>
     /// <param name="wrapperName">Wrapper name to be matched on client side</param>
     /// <returns></returns>
+    /// <remarks>
+    /// Formly-only: the signals templates ignore wrappers. Migrate: 'form-field' is automatic
+    /// (mat-form-field), 'tooltip' is covered by <see cref="WithTooltipText"/>, and custom
+    /// composition is covered by a custom control with <see cref="WithImport"/>.
+    /// </remarks>
     public TBuilder WithCustomWrapper(string wrapperName)
     {
         return WithCustomWrappers(wrapperName);
@@ -246,6 +251,11 @@ public abstract class BaseControlBuilder<TControl, TBuilder> : IControlBuilder
     /// </summary>
     /// <param name="wrappersNames">Wrappers names to be matched on client side</param>
     /// <returns></returns>
+    /// <remarks>
+    /// Formly-only: the signals templates ignore wrappers. Migrate: 'form-field' is automatic
+    /// (mat-form-field), 'tooltip' is covered by <see cref="WithTooltipText"/>, and custom
+    /// composition is covered by a custom control with <see cref="WithImport"/>.
+    /// </remarks>
     public TBuilder WithCustomWrappers(params string[] wrappersNames)
     {
         _customWrappers.AddRange(wrappersNames);

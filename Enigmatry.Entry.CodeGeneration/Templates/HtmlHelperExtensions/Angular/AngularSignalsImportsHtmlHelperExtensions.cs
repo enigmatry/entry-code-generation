@@ -83,6 +83,11 @@ public static class AngularSignalsImportsHtmlHelperExtensions
             imports.Add(("MatDatetimepickerModule", "@mat-datetimepicker/core"));
         }
 
+        if (controls.Any(control => control.Formatter != null && control.Formatter.JsFormatterName.HasContent()))
+        {
+            imports.Add(("EntryFieldFormatDirective", "@enigmatry/entry-form"));
+        }
+
         imports.AddRange(controls
             .Where(control => control.Import != null)
             .Select(control => (control.Import!.Symbol, control.Import!.Path))

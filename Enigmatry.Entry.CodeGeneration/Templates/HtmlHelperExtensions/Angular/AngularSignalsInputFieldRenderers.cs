@@ -20,7 +20,7 @@ internal static class AngularSignalsInputFieldRenderers
             $"@if (!isHidden('{field.PropertyName}', {field.Visible.ToString().ToLower()})) {{\r\n" +
             $"<mat-form-field {field.FieldClassAttribute()}{field.AppearanceAttribute()}{floatLabelAttribute}{field.TooltipAttribute(enableI18N)}>\r\n" +
             $"    <mat-label>{{{{ label('{field.PropertyName}') }}}}</mat-label>\r\n" +
-            $"    <input matInput formControlName=\"{field.PropertyName}\" type=\"{inputType}\"{field.PlaceholderAttribute(enableI18N)}{autocompleteAttribute}{autofocusAttribute} [readonly]=\"isDisabled('{field.PropertyName}', {field.Readonly.ToString().ToLower()})\">\r\n" +
+            $"    <input matInput formControlName=\"{field.PropertyName}\" type=\"{inputType}\"{field.PlaceholderAttribute(enableI18N)}{autocompleteAttribute}{autofocusAttribute}{field.FormatAttribute()} [readonly]=\"isDisabled('{field.PropertyName}', {field.Readonly.ToString().ToLower()})\">\r\n" +
             field.HintLine(enableI18N) +
             htmlHelper.RenderValidationErrors(field, enableI18N) +
             $"</mat-form-field>\r\n" +
@@ -42,7 +42,7 @@ internal static class AngularSignalsInputFieldRenderers
             $"@if (!isHidden('{field.PropertyName}', {field.Visible.ToString().ToLower()})) {{\r\n" +
             $"<mat-form-field {field.FieldClassAttribute()}{field.TooltipAttribute(enableI18N)}>\r\n" +
             $"    <mat-label>{{{{ label('{field.PropertyName}') }}}}</mat-label>\r\n" +
-            $"    <textarea matInput formControlName=\"{field.PropertyName}\"{field.PlaceholderAttribute(enableI18N)}{rowsAttribute}{colsAttribute}{autocompleteAttribute}{autoResizeAttributes} [readonly]=\"isDisabled('{field.PropertyName}', {field.Readonly.ToString().ToLower()})\"></textarea>\r\n" +
+            $"    <textarea matInput formControlName=\"{field.PropertyName}\"{field.PlaceholderAttribute(enableI18N)}{rowsAttribute}{colsAttribute}{autocompleteAttribute}{autoResizeAttributes}{field.FormatAttribute()} [readonly]=\"isDisabled('{field.PropertyName}', {field.Readonly.ToString().ToLower()})\"></textarea>\r\n" +
             field.HintLine(enableI18N) +
             htmlHelper.RenderValidationErrors(field, enableI18N) +
             $"</mat-form-field>\r\n" +

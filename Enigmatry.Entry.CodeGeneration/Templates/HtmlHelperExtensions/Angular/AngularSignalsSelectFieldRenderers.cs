@@ -46,11 +46,14 @@ internal static class AngularSignalsSelectFieldRenderers
     internal static IHtmlContent RenderRadioGroupField(this IHtmlHelper htmlHelper, RadioGroupFormControl field, bool enableI18N) =>
         htmlHelper.Raw(
             $"@if (!isHidden('{field.PropertyName}', {field.Visible.ToString().ToLower()})) {{\r\n" +
-            $"<mat-radio-group formControlName=\"{field.PropertyName}\" {field.FieldClassAttribute()}{field.TooltipAttribute(enableI18N)}>\r\n" +
-            $"    @for (option of {field.PropertyName}Options(); track option.value) {{\r\n" +
-            $"        <mat-radio-button [value]=\"option.value\">{{{{option.displayName}}}}</mat-radio-button>\r\n" +
-            $"    }}\r\n" +
-            $"</mat-radio-group>\r\n" +
+            $"<div {field.FieldClassAttribute()}{field.TooltipAttribute(enableI18N)}>\r\n" +
+            $"    <label id=\"{field.PropertyName}RadioGroupLabel\" class=\"entry-radio-group-label\">{{{{ label('{field.PropertyName}') }}}}</label>\r\n" +
+            $"    <mat-radio-group formControlName=\"{field.PropertyName}\" aria-labelledby=\"{field.PropertyName}RadioGroupLabel\">\r\n" +
+            $"        @for (option of {field.PropertyName}Options(); track option.value) {{\r\n" +
+            $"            <mat-radio-button [value]=\"option.value\">{{{{option.displayName}}}}</mat-radio-button>\r\n" +
+            $"        }}\r\n" +
+            $"    </mat-radio-group>\r\n" +
+            $"</div>\r\n" +
             $"}}\r\n");
 
     internal static IHtmlContent RenderMultiCheckboxField(this IHtmlHelper htmlHelper, MultiCheckboxFormControl field, bool enableI18N) =>

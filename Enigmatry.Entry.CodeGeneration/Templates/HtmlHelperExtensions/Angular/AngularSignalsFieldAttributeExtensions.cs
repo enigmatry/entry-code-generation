@@ -50,6 +50,13 @@ internal static class AngularSignalsFieldAttributeExtensions
     internal static string MetadataAttributes(this FormControl field) =>
         String.Concat(field.Metadata.Select(metadataEntry => $" {metadataEntry.Key}=\"{metadataEntry.Value}\""));
 
+    // Requires the EntryFieldFormatDirective from @enigmatry/entry-form; the import is added
+    // by AngularSignalsImportsHtmlHelperExtensions when any control carries a formatter.
+    internal static string FormatAttribute(this FormControl field) =>
+        field.Formatter != null && field.Formatter.JsFormatterName.HasContent()
+            ? $" entryFieldFormat [entryFieldFormatDef]=\"{field.Formatter.ToJsObject()}\""
+            : "";
+
     internal static string I18NAttribute(this I18NString text, bool enableI18N) =>
         enableI18N && text.Key.HasContent() && text.Value.HasContent()
             ? $" i18n=\"@@{text.Key}\""

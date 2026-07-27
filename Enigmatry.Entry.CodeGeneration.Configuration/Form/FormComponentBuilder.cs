@@ -43,6 +43,7 @@ public class FormComponentBuilder<T> : BaseComponentBuilder<FormComponentModel>
 {
     private readonly FormControlGroupBuilder<T> _formGroup = new("form");
     private IEnumerable<IFormlyValidationRule> _validationRules = new List<IFormlyValidationRule>();
+    private bool _useReadonlyDisplay;
 
     public FormComponentBuilder() : base(typeof(T))
     {
@@ -151,7 +152,22 @@ public class FormComponentBuilder<T> : BaseComponentBuilder<FormComponentModel>
         var componentInfo = _componentInfoBuilder.Build();
         var formControls = BuildFormControls(componentInfo).ToList();
 
-        return new FormComponentModel(componentInfo, formControls, _validationRules) { WithSignals = _withSignals };
+        return new FormComponentModel(componentInfo, formControls, _validationRules)
+        {
+            WithSignals = _withSignals,
+            UseReadonlyDisplay = _useReadonlyDisplay
+        };
+    }
+
+    /// <summary>
+    /// When enabled, the generated signals component renders a plain label/value display
+    /// instead of disabled controls while the form is readonly. Replaces the Formly-era
+    /// ENTRY_FIELD_TYPE_RESOLVER runtime type swapping. Ignored by the non-signals templates.
+    /// </summary>
+    public FormComponentBuilder<T> WithReadonlyDisplay(bool enabled = true)
+    {
+        _useReadonlyDisplay = enabled;
+        return this;
     }
 
     private IEnumerable<FormControl> BuildFormControls(ComponentInfo componentInfo)

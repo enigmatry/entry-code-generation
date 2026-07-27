@@ -5,6 +5,14 @@
         [disabled]="isDisabled('resetFormBtn', false)"
         (click)="buttonClick.emit('resetFormBtn')" i18n="@@test.mock-edit.reset-form-btn.text">Reset</button>
 <div class="entry-field-group" [class.group-wrapper-readonly]="isReadonly()">
+@if (isReadonly()) {
+@if (!isHidden('name', true)) {
+<div class="entry-name-field entry-readonly-field">
+    <span class="entry-readonly-label">{{ label('name') }}</span>
+    <span class="entry-readonly-value">{{ readonlyValue('name') }}</span>
+</div>
+}
+} @else {
 @if (!isHidden('name', true)) {
 <mat-form-field class="entry-name-field entry-input" appearance="outline" floatLabel="always" matTooltip="Tooltip text" i18n-matTooltip="@@test.mock-edit.name.tooltip">
     <mat-label>{{ label('name') }}</mat-label>
@@ -17,9 +25,18 @@
     <mat-error i18n="@@test.mock-edit.name.pattern">Name is not in valid format</mat-error>
 }</mat-form-field>
 }
+}
 @if (!isHidden('description', true)) {
 <entry-redactor formControlName="description" class="entry-description-field entry-redactor"></entry-redactor>
 }
+@if (isReadonly()) {
+@if (!isHidden('date', true)) {
+<div class="entry-date-field entry-readonly-field">
+    <span class="entry-readonly-label">{{ label('date') }}</span>
+    <span class="entry-readonly-value">{{ readonlyValue('date') }}</span>
+</div>
+}
+} @else {
 @if (!isHidden('date', true)) {
 <mat-form-field class="entry-date-field entry-datepicker">
     <mat-label>{{ label('date') }}</mat-label>
@@ -28,14 +45,32 @@
     <mat-datepicker #picker_date></mat-datepicker>
 </mat-form-field>
 }
+}
+@if (isReadonly()) {
+@if (!isHidden('money', true)) {
+<div class="entry-money-field entry-readonly-field">
+    <span class="entry-readonly-label">{{ label('money') }}</span>
+    <span class="entry-readonly-value">{{ readonlyValue('money') }}</span>
+</div>
+}
+} @else {
 @if (!isHidden('money', true)) {
 <mat-form-field class="entry-money-field entry-input">
     <mat-label>{{ label('money') }}</mat-label>
-    <input matInput formControlName="money" type="number" placeholder="Money" i18n-placeholder="@@test.mock-edit.money.placeholder" [readonly]="isDisabled('money', false)">
+    <input matInput formControlName="money" type="number" placeholder="Money" i18n-placeholder="@@test.mock-edit.money.placeholder" entryFieldFormat [entryFieldFormatDef]="{ name: 'currency' }" [readonly]="isDisabled('money', false)">
 @if (form.get('money')?.hasError('max')) {
     <mat-error i18n="@@test.mock-edit.money.max">Money value should be less than 999.89</mat-error>
 }</mat-form-field>
 }
+}
+@if (isReadonly()) {
+@if (!isHidden('amount', true)) {
+<div class="entry-amount-field entry-readonly-field">
+    <span class="entry-readonly-label">{{ label('amount') }}</span>
+    <span class="entry-readonly-value">{{ readonlyValue('amount') }}</span>
+</div>
+}
+} @else {
 @if (!isHidden('amount', true)) {
 <mat-form-field class="entry-amount-field entry-input">
     <mat-label>{{ label('amount') }}</mat-label>
@@ -49,6 +84,15 @@
     <mat-error i18n="@@test.mock-edit.amount.max">CUSTOM_VALIDATION_MESSAGE</mat-error>
 }</mat-form-field>
 }
+}
+@if (isReadonly()) {
+@if (!isHidden('formStatus', true)) {
+<div class="entry-form-status-field entry-readonly-field">
+    <span class="entry-readonly-label">{{ label('formStatus') }}</span>
+    <span class="entry-readonly-value">{{ selectedDisplayName(form.get('formStatus')?.value, formStatusOptions()) }}</span>
+</div>
+}
+} @else {
 @if (!isHidden('formStatus', true)) {
 <mat-form-field class="entry-form-status-field entry-select">
     <mat-label>{{ label('formStatus') }}</mat-label>
@@ -59,13 +103,34 @@
     </mat-select>
 </mat-form-field>
 }
-@if (!isHidden('mockRadio', true)) {
-<mat-radio-group formControlName="mockRadio" class="entry-mock-radio-field entry-radio">
-    @for (option of mockRadioOptions(); track option.value) {
-        <mat-radio-button [value]="option.value">{{option.displayName}}</mat-radio-button>
-    }
-</mat-radio-group>
 }
+@if (isReadonly()) {
+@if (!isHidden('mockRadio', true)) {
+<div class="entry-mock-radio-field entry-readonly-field">
+    <span class="entry-readonly-label">{{ label('mockRadio') }}</span>
+    <span class="entry-readonly-value">{{ selectedDisplayName(form.get('mockRadio')?.value, mockRadioOptions()) }}</span>
+</div>
+}
+} @else {
+@if (!isHidden('mockRadio', true)) {
+<div class="entry-mock-radio-field entry-radio">
+    <label id="mockRadioRadioGroupLabel" class="entry-radio-group-label">{{ label('mockRadio') }}</label>
+    <mat-radio-group formControlName="mockRadio" aria-labelledby="mockRadioRadioGroupLabel">
+        @for (option of mockRadioOptions(); track option.value) {
+            <mat-radio-button [value]="option.value">{{option.displayName}}</mat-radio-button>
+        }
+    </mat-radio-group>
+</div>
+}
+}
+@if (isReadonly()) {
+@if (!isHidden('mockBoolSelect', true)) {
+<div class="entry-mock-bool-select-field entry-readonly-field">
+    <span class="entry-readonly-label">{{ label('mockBoolSelect') }}</span>
+    <span class="entry-readonly-value">{{ selectedDisplayName(form.get('mockBoolSelect')?.value, mockBoolSelectOptions()) }}</span>
+</div>
+}
+} @else {
 @if (!isHidden('mockBoolSelect', true)) {
 <mat-form-field class="entry-mock-bool-select-field entry-select">
     <mat-label>{{ label('mockBoolSelect') }}</mat-label>
@@ -76,6 +141,15 @@
     </mat-select>
 </mat-form-field>
 }
+}
+@if (isReadonly()) {
+@if (!isHidden('mockMultiCheckbox', true)) {
+<div class="entry-mock-multi-checkbox-field entry-readonly-field">
+    <span class="entry-readonly-label">{{ label('mockMultiCheckbox') }}</span>
+    <span class="entry-readonly-value">{{ selectedDisplayName(form.get('mockMultiCheckbox')?.value, mockMultiCheckboxOptions()) }}</span>
+</div>
+}
+} @else {
 @if (!isHidden('mockMultiCheckbox', true)) {
 <div class="entry-mock-multi-checkbox-field entry-multicheckbox">
     @for (option of mockMultiCheckboxOptions(); track option.value) {
@@ -85,6 +159,15 @@
     }
 </div>
 }
+}
+@if (isReadonly()) {
+@if (!isHidden('multiCheckboxWithStringIds', true)) {
+<div class="entry-multi-checkbox-with-string-ids-field entry-readonly-field">
+    <span class="entry-readonly-label">{{ label('multiCheckboxWithStringIds') }}</span>
+    <span class="entry-readonly-value">{{ selectedDisplayName(form.get('multiCheckboxWithStringIds')?.value, multiCheckboxWithStringIdsOptions()) }}</span>
+</div>
+}
+} @else {
 @if (!isHidden('multiCheckboxWithStringIds', true)) {
 <div class="entry-multi-checkbox-with-string-ids-field entry-multicheckbox">
     @for (option of multiCheckboxWithStringIdsOptions(); track option.value) {
@@ -94,6 +177,15 @@
     }
 </div>
 }
+}
+@if (isReadonly()) {
+@if (!isHidden('categoryId', true)) {
+<div class="entry-category-id-field entry-readonly-field">
+    <span class="entry-readonly-label">{{ label('categoryId') }}</span>
+    <span class="entry-readonly-value">{{ selectedDisplayName(form.get('categoryId')?.value, categoryIdOptions()) }}</span>
+</div>
+}
+} @else {
 @if (!isHidden('categoryId', true)) {
 <mat-form-field class="entry-category-id-field entry-select">
     <mat-label>{{ label('categoryId') }}</mat-label>
@@ -104,6 +196,15 @@
     </mat-select>
 </mat-form-field>
 }
+}
+@if (isReadonly()) {
+@if (!isHidden('types', true)) {
+<div class="entry-types-field entry-readonly-field">
+    <span class="entry-readonly-label">{{ label('types') }}</span>
+    <span class="entry-readonly-value">{{ selectedDisplayName(form.get('types')?.value, typesOptions()) }}</span>
+</div>
+}
+} @else {
 @if (!isHidden('types', true)) {
 <mat-form-field class="entry-types-field entry-select">
     <mat-label>{{ label('types') }}</mat-label>
@@ -115,21 +216,48 @@
     </mat-select>
 </mat-form-field>
 }
+}
 @if (!isHidden('password', true)) {
 <mat-form-field class="entry-password-field entry-input">
     <mat-label>{{ label('password') }}</mat-label>
     <input matInput formControlName="password" type="password" placeholder="Password" i18n-placeholder="@@test.mock-edit.password.placeholder" [readonly]="isDisabled('password', false)">
 </mat-form-field>
 }
+@if (isReadonly()) {
+@if (!isHidden('isActive', true)) {
+<div class="entry-is-active-field entry-readonly-field">
+    <span class="entry-readonly-label">{{ label('isActive') }}</span>
+    <span class="entry-readonly-value">{{ readonlyValue('isActive') }}</span>
+</div>
+}
+} @else {
 @if (!isHidden('isActive', true)) {
 <mat-checkbox formControlName="isActive" class="entry-is-active-field entry-checkbox">{{ label('isActive') }}</mat-checkbox>
 }
+}
+@if (isReadonly()) {
+@if (!isHidden('notes', true)) {
+<div class="entry-notes-field entry-readonly-field">
+    <span class="entry-readonly-label">{{ label('notes') }}</span>
+    <span class="entry-readonly-value">{{ readonlyValue('notes') }}</span>
+</div>
+}
+} @else {
 @if (!isHidden('notes', true)) {
 <mat-form-field class="entry-notes-field entry-textarea">
     <mat-label>{{ label('notes') }}</mat-label>
     <textarea matInput formControlName="notes" placeholder="Notes" i18n-placeholder="@@test.mock-edit.notes.placeholder" rows="4" [readonly]="isDisabled('notes', false)"></textarea>
 </mat-form-field>
 }
+}
+@if (isReadonly()) {
+@if (!isHidden('region', true)) {
+<div class="entry-region-field entry-readonly-field">
+    <span class="entry-readonly-label">{{ label('region') }}</span>
+    <span class="entry-readonly-value">{{ selectedDisplayName(form.get('region')?.value, regionOptions()) }}</span>
+</div>
+}
+} @else {
 @if (!isHidden('region', true)) {
 <mat-form-field class="entry-region-field entry-autocomplete">
     <mat-label>{{ label('region') }}</mat-label>
@@ -145,6 +273,7 @@
     </mat-autocomplete>
 </mat-form-field>
 }
+}
 @if (!isHidden('fileUpload', true)) {
 <entry-file-input formControlName="fileUpload" class="entry-file-upload-field entry-file-input" [readonly]="isDisabled('fileUpload', false)"></entry-file-input>
 }
@@ -152,31 +281,81 @@
 <ng-container formArrayName="addresses">
     @for (control of form.controls.addresses.controls; track $index) {
         <ng-container [formGroupName]="$index">
+@if (isReadonly()) {
+@if (!isHidden('city', true)) {
+<div class="entry-city-field entry-readonly-field">
+    <span class="entry-readonly-label">{{ label('city') }}</span>
+    <span class="entry-readonly-value">{{ readonlyValue('city') }}</span>
+</div>
+}
+} @else {
 @if (!isHidden('city', true)) {
 <mat-form-field class="entry-city-field entry-input">
     <mat-label>{{ label('city') }}</mat-label>
     <input matInput formControlName="city" type="text" placeholder="City" i18n-placeholder="@@test.mock-edit.city.placeholder" [readonly]="isDisabled('city', false)">
 </mat-form-field>
 }
+}
+@if (isReadonly()) {
+@if (!isHidden('street', true)) {
+<div class="entry-street-field entry-readonly-field">
+    <span class="entry-readonly-label">{{ label('street') }}</span>
+    <span class="entry-readonly-value">{{ readonlyValue('street') }}</span>
+</div>
+}
+} @else {
 @if (!isHidden('street', true)) {
 <mat-form-field class="entry-street-field entry-input">
     <mat-label>{{ label('street') }}</mat-label>
     <input matInput formControlName="street" type="text" placeholder="Street" i18n-placeholder="@@test.mock-edit.street.placeholder" [readonly]="isDisabled('street', false)">
 </mat-form-field>
 }
+}
+@if (isReadonly()) {
+@if (!isHidden('houseNumber', true)) {
+<div class="entry-house-number-field entry-readonly-field">
+    <span class="entry-readonly-label">{{ label('houseNumber') }}</span>
+    <span class="entry-readonly-value">{{ readonlyValue('houseNumber') }}</span>
+</div>
+}
+} @else {
 @if (!isHidden('houseNumber', true)) {
 <mat-form-field class="entry-house-number-field entry-input">
     <mat-label>{{ label('houseNumber') }}</mat-label>
     <input matInput formControlName="houseNumber" type="text" placeholder="House number" i18n-placeholder="@@test.mock-edit.house-number.placeholder" [readonly]="isDisabled('houseNumber', false)">
 </mat-form-field>
 }
+}
+@if (isReadonly()) {
+@if (!isHidden('verified', true)) {
+<div class="entry-verified-field entry-readonly-field">
+    <span class="entry-readonly-label">{{ label('verified') }}</span>
+    <span class="entry-readonly-value">{{ readonlyValue('verified') }}</span>
+</div>
+}
+} @else {
 @if (!isHidden('verified', true)) {
 <mat-checkbox formControlName="verified" class="entry-verified-field entry-checkbox">{{ label('verified') }}</mat-checkbox>
 }
+}
+            @if (!isReadonly()) {
+            <button mat-button type="button" class="entry-array-remove-button" (click)="removeAddressesItem($index)" i18n="@@test.mock-edit.addresses.remove-item">Remove</button>
+            }
         </ng-container>
+    }
+    @if (!isReadonly()) {
+    <button mat-button type="button" class="entry-array-add-button" (click)="addAddressesItem()" i18n="@@test.mock-edit.addresses.add-item">Add</button>
     }
 </ng-container>
 }
+@if (isReadonly()) {
+@if (!isHidden('dateAndTime', true)) {
+<div class="entry-date-and-time-field entry-readonly-field">
+    <span class="entry-readonly-label">{{ label('dateAndTime') }}</span>
+    <span class="entry-readonly-value">{{ readonlyValue('dateAndTime') }}</span>
+</div>
+}
+} @else {
 @if (!isHidden('dateAndTime', true)) {
 <mat-form-field class="entry-date-and-time-field entry-datetimepicker">
     <mat-label>{{ label('dateAndTime') }}</mat-label>
@@ -185,7 +364,16 @@
     <mat-datetimepicker #picker_dateAndTime></mat-datetimepicker>
 </mat-form-field>
 }
+}
 </div>
+@if (isReadonly()) {
+@if (!isHidden('email1', true)) {
+<div class="entry-email1-field entry-readonly-field">
+    <span class="entry-readonly-label">{{ label('email1') }}</span>
+    <span class="entry-readonly-value">{{ readonlyValue('email1') }}</span>
+</div>
+}
+} @else {
 @if (!isHidden('email1', true)) {
 <mat-form-field class="entry-email1-field entry-input">
     <mat-label>{{ label('email1') }}</mat-label>
@@ -196,6 +384,15 @@
     <mat-error i18n="@@test.mock-edit.email1.max-length">Email 1 value should be less than 50 characters</mat-error>
 }</mat-form-field>
 }
+}
+@if (isReadonly()) {
+@if (!isHidden('email2', true)) {
+<div class="entry-email2-field entry-readonly-field">
+    <span class="entry-readonly-label">{{ label('email2') }}</span>
+    <span class="entry-readonly-value">{{ readonlyValue('email2') }}</span>
+</div>
+}
+} @else {
 @if (!isHidden('email2', true)) {
 <mat-form-field class="entry-email2-field entry-input">
     <mat-label>{{ label('email2') }}</mat-label>
@@ -205,6 +402,7 @@
 }@if (form.get('email2')?.hasError('maxlength')) {
     <mat-error i18n="@@test.mock-edit.email2.max-length">Email 2 value should be less than 50 characters</mat-error>
 }</mat-form-field>
+}
 }
 
     <ng-container *ngTemplateOutlet="formButtonsTemplate() ?? defaultActionsTemplate"></ng-container>

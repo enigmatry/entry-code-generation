@@ -55,6 +55,27 @@ public static class AngularSignalsFormArrayHtmlHelperExtensions
         htmlHelper.Raw(String.Concat(model.FlatFormControls().OfType<ArrayFormControl>()
             .Select(array => htmlHelper.ArrayResizeMethod(array).ToString())));
 
+    public static IHtmlContent ArrayMutationMethods(this IHtmlHelper htmlHelper, ArrayFormControl arrayControl)
+    {
+        var propertyName = arrayControl.PropertyName;
+        var methodName = AngularSignalsFormModelExtensions.Capitalize(propertyName);
+
+        return htmlHelper.Raw(
+            $"    protected readonly add{methodName}Item = (): void => {{\r\n" +
+            $"        this.form.controls.{propertyName}.push(this.create{methodName}Item());\r\n" +
+            $"        this.form.markAsDirty();\r\n" +
+            $"    }};\r\n" +
+            $"\r\n" +
+            $"    protected readonly remove{methodName}Item = (index: number): void => {{\r\n" +
+            $"        this.form.controls.{propertyName}.removeAt(index);\r\n" +
+            $"        this.form.markAsDirty();\r\n" +
+            $"    }};\r\n");
+    }
+
+    public static IHtmlContent AllArrayMutationMethods(this IHtmlHelper htmlHelper, FormComponentModel model) =>
+        htmlHelper.Raw(String.Concat(model.FlatFormControls().OfType<ArrayFormControl>()
+            .Select(array => htmlHelper.ArrayMutationMethods(array).ToString())));
+
     public static IHtmlContent ResizeArrayCalls(this IHtmlHelper htmlHelper, FormComponentModel model)
     {
         var lines = model.FlatFormControls().OfType<ArrayFormControl>()

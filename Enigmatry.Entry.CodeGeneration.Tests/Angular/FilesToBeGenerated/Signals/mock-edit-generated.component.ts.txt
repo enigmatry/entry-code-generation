@@ -25,6 +25,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDatetimepickerModule } from '@mat-datetimepicker/core';
+import { EntryFieldFormatDirective } from '@enigmatry/entry-form';
 import { EntryFileInputComponent } from '@enigmatry/entry-file-input';
 import { IFormMock } from 'src/app/api/api-reference';
 import { IFieldExpressionDictionary, IFieldPropertyExpressionDictionary, SelectConfiguration, sortOptions, ENTRY_ASYNC_VALIDATOR_RESOLVER } from '@enigmatry/entry-form';
@@ -32,7 +33,7 @@ import { Observable, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-g-mock-edit',
-  imports: [ReactiveFormsModule, NgTemplateOutlet, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatRadioModule, MatSelectModule, MatTooltipModule, MatDatetimepickerModule, EntryFileInputComponent],
+  imports: [ReactiveFormsModule, NgTemplateOutlet, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatRadioModule, MatSelectModule, MatTooltipModule, MatDatetimepickerModule, EntryFieldFormatDirective, EntryFileInputComponent],
   templateUrl: './mock-edit-generated.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -208,6 +209,16 @@ export class MockEditGeneratedComponent {
         }
     };
 
+    protected readonly addAddressesItem = (): void => {
+        this.form.controls.addresses.push(this.createAddressesItem());
+        this.form.markAsDirty();
+    };
+
+    protected readonly removeAddressesItem = (index: number): void => {
+        this.form.controls.addresses.removeAt(index);
+        this.form.markAsDirty();
+    };
+
     constructor() {
         effect(() => {
             const model = this.model();
@@ -286,4 +297,12 @@ export class MockEditGeneratedComponent {
         control?.setValue(selectedValues.length === values.length ? [] : values);
         control?.markAsDirty();
     };
+
+    protected readonly readonlyValue = (propertyName: string): string =>
+        String(this.form.get(propertyName)?.value ?? '');
+
+    protected readonly selectedDisplayName = (value: unknown, options: { value: unknown; displayName: unknown }[]): string =>
+        Array.isArray(value)
+            ? value.map(item => options.find(option => option.value === item)?.displayName ?? item).join(', ')
+            : String(options.find(option => option.value === value)?.displayName ?? value ?? '');
 }

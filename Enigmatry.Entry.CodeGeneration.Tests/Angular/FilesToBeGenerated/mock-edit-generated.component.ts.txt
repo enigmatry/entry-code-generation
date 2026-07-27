@@ -242,7 +242,7 @@ className: `entry-money-field entry-input`,
             type: 'number',
 max: 999.99 - 0.1,
 
-            typeFormatDef: { name: 'number' }
+            typeFormatDef: { name: 'currency' }
         },
         },
         {

@@ -5,7 +5,7 @@
 @inject CodeGeneratorOptions Options;
 
 <form [formGroup]="form" (submit)="onSubmit($event)" [class.entry-form-readonly]="isReadonly()" @Html.FormCssClass(Model)>
-@Html.RenderFormControls(Model.FormControls, Options.EnableI18N)
+@Html.RenderFormControls(Model.FormControls, new FormViewRenderContext(Options.EnableI18N, Model.UseReadonlyDisplay))
     <ng-container *ngTemplateOutlet="formButtonsTemplate() ?? defaultActionsTemplate"></ng-container>
     <ng-template #defaultActionsTemplate>
         <div class="action-buttons">
