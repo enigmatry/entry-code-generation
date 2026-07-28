@@ -6,5 +6,6 @@ public class FormAddressMock
     public string Street { get; set; } = String.Empty;
     public string HouseNumber { get; set; } = String.Empty;
     public string City { get; set; } = String.Empty;
+    public string Country { get; set; } = String.Empty;
     public bool Verified { get; set; }
 }

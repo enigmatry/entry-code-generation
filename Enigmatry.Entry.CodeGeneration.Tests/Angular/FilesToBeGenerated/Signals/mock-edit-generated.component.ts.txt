@@ -11,10 +11,9 @@
 // @ts-ignore
 // @ts-expect-error
 import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, LOCALE_ID, signal, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, LOCALE_ID, model, output, signal, TemplateRef } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { input, model, output } from '@angular/core';
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -25,15 +24,15 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDatetimepickerModule } from '@mat-datetimepicker/core';
-import { EntryFieldFormatDirective } from '@enigmatry/entry-form';
+import { EntryRedactorComponent } from '@enigmatry/entry-redactor';
 import { EntryFileInputComponent } from '@enigmatry/entry-file-input';
 import { IFormMock } from 'src/app/api/api-reference';
-import { IFieldExpressionDictionary, IFieldPropertyExpressionDictionary, SelectConfiguration, sortOptions, ENTRY_ASYNC_VALIDATOR_RESOLVER } from '@enigmatry/entry-form';
+import { IFieldExpressionDictionary, IFieldPropertyExpressionDictionary, SelectConfiguration, sortOptions, ENTRY_ASYNC_VALIDATOR_RESOLVER, EntryFieldFormatDirective } from '@enigmatry/entry-form';
 import { Observable, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-g-mock-edit',
-  imports: [ReactiveFormsModule, NgTemplateOutlet, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatRadioModule, MatSelectModule, MatTooltipModule, MatDatetimepickerModule, EntryFieldFormatDirective, EntryFileInputComponent],
+  imports: [ReactiveFormsModule, NgTemplateOutlet, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatRadioModule, MatSelectModule, MatTooltipModule, MatDatetimepickerModule, EntryFieldFormatDirective, EntryRedactorComponent, EntryFileInputComponent],
   templateUrl: './mock-edit-generated.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -69,13 +68,15 @@ export class MockEditGeneratedComponent {
         isActive: $localize `:@@test.mock-edit.is-active.label:Active`,
         notes: $localize `:@@test.mock-edit.notes.label:Notes`,
         region: $localize `:@@test.mock-edit.region.label:Region`,
-        city: $localize `:@@test.mock-edit.city.label:City`,
-        street: $localize `:@@test.mock-edit.street.label:Street`,
-        houseNumber: $localize `:@@test.mock-edit.house-number.label:House number`,
-        verified: $localize `:@@test.mock-edit.verified.label:Verified`,
         dateAndTime: $localize `:@@test.mock-edit.date-and-time.label:Date and time`,
         email1: $localize `:@@test.mock-edit.email1.label:Email 1`,
         email2: $localize `:@@test.mock-edit.email2.label:Email 2`,
+        'addresses.id': $localize `:@@test.mock-edit.id.label:Id`,
+        'addresses.city': $localize `:@@test.mock-edit.city.label:City`,
+        'addresses.country': $localize `:@@test.mock-edit.country.label:Country`,
+        'addresses.street': $localize `:@@test.mock-edit.street.label:Street`,
+        'addresses.houseNumber': $localize `:@@test.mock-edit.house-number.label:House number`,
+        'addresses.verified': $localize `:@@test.mock-edit.verified.label:Verified`,
     };
 
     protected readonly label = (propertyName: string): string => {
@@ -143,12 +144,18 @@ export class MockEditGeneratedComponent {
     });
     protected readonly displayRegion = (value: unknown): string =>
         (this.regionOptions().find(option => option.value === value)?.displayName as string) ?? '';
+    private readonly addressesCountryRawOptions = signal([{ value: 'NL', displayName: $localize `:@@country.nl:Netherlands` }, { value: 'RS', displayName: $localize `:@@country.rs:Serbia` }]);
+    protected readonly addressesCountryOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' });
+    protected readonly addressesCountryOptions = computed(() => {
+        const configuration = this.addressesCountryOptionsConfiguration();
+        const options = sortOptions(this.addressesCountryRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];
+        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }));
+    });
 
     protected readonly save = output<IFormMock>();
     protected readonly cancel = output<void>();
     protected readonly buttonClick = output<string>();
 
-    private readonly destroyRef = inject(DestroyRef);
     private readonly localeId = inject<string>(LOCALE_ID);
     private readonly asyncValidatorResolver = inject(ENTRY_ASYNC_VALIDATOR_RESOLVER, { optional: true });
 
@@ -189,6 +196,7 @@ export class MockEditGeneratedComponent {
         return new FormGroup({
             id: new FormControl<string | null>(null),
             city: new FormControl<string | null>('Amsterdam'),
+            country: new FormControl(null),
             street: new FormControl<string | null>(null),
             houseNumber: new FormControl<string | null>(null),
             verified: new FormControl<boolean>({ value: false, disabled: true }),
@@ -257,6 +265,24 @@ export class MockEditGeneratedComponent {
                 (this.form.get('addresses') as FormArray<FormGroup>).controls.forEach(itemGroup => itemGroup.get('verified')?.disable({ emitEvent: false }));
             }
         });
+        effect(() => {
+            const model = this.model();
+            const disableExpressions = this.fieldsDisableExpressions();
+            if (!disableExpressions) {
+                return;
+            }
+            Object.entries(disableExpressions).forEach(([propertyName, isDisabled]) => {
+                const control = this.form.get(propertyName);
+                if (!control) {
+                    return;
+                }
+                if (isDisabled(model) || this.isReadonly()) {
+                    control.disable({ emitEvent: false });
+                } else {
+                    control.enable({ emitEvent: false });
+                }
+            });
+        });
     }
 
     protected readonly onSubmit = (event: Event): void => {
@@ -280,26 +306,24 @@ export class MockEditGeneratedComponent {
             : staticReadonly);
     };
 
-    protected readonly isOptionSelected = (propertyName: string, value: unknown): boolean =>
-        ((this.form.get(propertyName)?.value as unknown[] | null) ?? []).includes(value);
+    protected readonly isOptionSelected = (control: AbstractControl | null, value: unknown): boolean =>
+        ((control?.value as unknown[] | null) ?? []).includes(value);
 
-    protected readonly toggleOption = (propertyName: string, value: unknown, checked: boolean): void => {
-        const control = this.form.get(propertyName);
+    protected readonly toggleOption = (control: AbstractControl | null, value: unknown, checked: boolean): void => {
         const currentValues = (control?.value as unknown[] | null) ?? [];
         control?.setValue(checked ? [...currentValues, value] : currentValues.filter(item => item !== value));
         control?.markAsDirty();
     };
 
-    protected readonly toggleSelectAll = (propertyName: string, options: { value: unknown; displayName: unknown }[]): void => {
-        const control = this.form.get(propertyName);
+    protected readonly toggleSelectAll = (control: AbstractControl | null, options: { value: unknown; displayName: unknown }[]): void => {
         const values = options.map(option => option.value);
         const selectedValues = ((control?.value as unknown[] | null) ?? []).filter(value => values.includes(value));
         control?.setValue(selectedValues.length === values.length ? [] : values);
         control?.markAsDirty();
     };
 
-    protected readonly readonlyValue = (propertyName: string): string =>
-        String(this.form.get(propertyName)?.value ?? '');
+    protected readonly readonlyValue = (control: AbstractControl | null): string =>
+        String(control?.value ?? '');
 
     protected readonly selectedDisplayName = (value: unknown, options: { value: unknown; displayName: unknown }[]): string =>
         Array.isArray(value)

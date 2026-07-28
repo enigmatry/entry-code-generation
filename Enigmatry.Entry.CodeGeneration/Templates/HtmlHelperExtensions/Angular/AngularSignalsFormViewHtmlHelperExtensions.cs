@@ -41,31 +41,30 @@ public static class AngularSignalsFormViewHtmlHelperExtensions
             return htmlHelper.Raw("");
         }
 
-        var enableI18N = context.EnableI18N;
         var controlMarkup = field switch
         {
             ArrayFormControl arrayControl => htmlHelper.RenderArrayField(arrayControl, context),
-            RichTextInputFormControl richTextField => htmlHelper.RenderRichTextField(richTextField, enableI18N),
-            DatepickerFormControl datepickerField => htmlHelper.RenderDatepickerField(datepickerField, enableI18N),
-            DateTimePickerFormControl dateTimePickerField => htmlHelper.RenderDateTimePickerField(dateTimePickerField, enableI18N),
-            MultiSelectFormControl multiSelectField => htmlHelper.RenderMultiSelectField(multiSelectField, enableI18N),
-            SelectFormControl selectField => htmlHelper.RenderSelectField(selectField, enableI18N),
-            MultiCheckboxFormControl multiCheckboxField => htmlHelper.RenderMultiCheckboxField(multiCheckboxField, enableI18N),
-            RadioGroupFormControl radioGroupField => htmlHelper.RenderRadioGroupField(radioGroupField, enableI18N),
-            TextareaFormControl textareaField => htmlHelper.RenderTextareaField(textareaField, enableI18N),
-            AutocompleteFormControl autocompleteField => htmlHelper.RenderAutocompleteField(autocompleteField, enableI18N),
-            CheckboxFormControl checkboxField => htmlHelper.RenderCheckboxField(checkboxField, enableI18N),
-            InputControlBase inputField => htmlHelper.RenderInputField(inputField, enableI18N),
-            CustomFormControl customField => htmlHelper.RenderCustomField(customField, enableI18N),
-            _ => htmlHelper.RenderGenericField(field)
+            RichTextInputFormControl richTextField => htmlHelper.RenderRichTextField(richTextField, context),
+            DatepickerFormControl datepickerField => htmlHelper.RenderDatepickerField(datepickerField, context),
+            DateTimePickerFormControl dateTimePickerField => htmlHelper.RenderDateTimePickerField(dateTimePickerField, context),
+            MultiSelectFormControl multiSelectField => htmlHelper.RenderMultiSelectField(multiSelectField, context),
+            SelectFormControl selectField => htmlHelper.RenderSelectField(selectField, context),
+            MultiCheckboxFormControl multiCheckboxField => htmlHelper.RenderMultiCheckboxField(multiCheckboxField, context),
+            RadioGroupFormControl radioGroupField => htmlHelper.RenderRadioGroupField(radioGroupField, context),
+            TextareaFormControl textareaField => htmlHelper.RenderTextareaField(textareaField, context),
+            AutocompleteFormControl autocompleteField => htmlHelper.RenderAutocompleteField(autocompleteField, context),
+            CheckboxFormControl checkboxField => htmlHelper.RenderCheckboxField(checkboxField, context),
+            InputControlBase inputField => htmlHelper.RenderInputField(inputField, context),
+            CustomFormControl customField => htmlHelper.RenderCustomField(customField, context),
+            _ => htmlHelper.RenderGenericField(field, context)
         };
 
         return htmlHelper.WrapWithReadonlyDisplay(field, controlMarkup, context);
     }
 
-    private static IHtmlContent RenderGenericField(this IHtmlHelper htmlHelper, FormControl field) =>
+    private static IHtmlContent RenderGenericField(this IHtmlHelper htmlHelper, FormControl field, FormViewRenderContext context) =>
         htmlHelper.Raw(
-            $"@if (!isHidden('{field.PropertyName}', {field.Visible.ToString().ToLower()})) {{\r\n" +
+            $"@if (!isHidden('{context.Key(field)}', {field.Visible.ToString().ToLower()})) {{\r\n" +
             $"<input formControlName=\"{field.PropertyName}\" {field.FieldClassAttribute()}>\r\n" +
             $"}}\r\n");
 
@@ -74,11 +73,18 @@ public static class AngularSignalsFormViewHtmlHelperExtensions
         var group = (FormControlGroup)arrayControl.FormControlGroup;
         var propertyName = arrayControl.PropertyName;
         var methodName = AngularSignalsFormModelExtensions.Capitalize(propertyName);
-        var innerControls = htmlHelper.RenderFormControls(group.FormControls, context).ToString();
+        var itemGroupVariable = $"{propertyName}ItemGroup";
+        var itemContext = context with
+        {
+            FormGroupAccessor = itemGroupVariable,
+            ControlKeyPrefix = $"{propertyName}.",
+            MemberNamePrefix = propertyName
+        };
+        var innerControls = htmlHelper.RenderFormControls(group.FormControls, itemContext).ToString();
         return htmlHelper.Raw(
-            $"@if (!isHidden('{propertyName}', {arrayControl.Visible.ToString().ToLower()})) {{\r\n" +
+            $"@if (!isHidden('{context.Key(arrayControl)}', {arrayControl.Visible.ToString().ToLower()})) {{\r\n" +
             $"<ng-container formArrayName=\"{propertyName}\">\r\n" +
-            $"    @for (control of form.controls.{propertyName}.controls; track $index) {{\r\n" +
+            $"    @for ({itemGroupVariable} of form.controls.{propertyName}.controls; track $index) {{\r\n" +
             $"        <ng-container [formGroupName]=\"$index\">\r\n" +
             innerControls +
             $"            @if (!isReadonly()) {{\r\n" +

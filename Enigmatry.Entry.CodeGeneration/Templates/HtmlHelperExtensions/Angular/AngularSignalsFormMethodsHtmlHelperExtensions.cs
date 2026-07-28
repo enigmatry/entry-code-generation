@@ -10,14 +10,8 @@ public static class AngularSignalsFormMethodsHtmlHelperExtensions
 {
     public static IHtmlContent DefaultLabelDeclarations(this IHtmlHelper htmlHelper, FormComponentModel model, bool enableI18N)
     {
-        var labelledControls = model.AllControlsIncludingArrayItems()
-            .Where(control => control is not ButtonFormControl and not ArrayFormControl and not FormControlGroup and not CustomFormControl)
-            .GroupBy(control => control.PropertyName)
-            .Select(propertyGroup => propertyGroup.First())
-            .ToList();
-
-        var labelEntries = labelledControls
-            .Select(control => $"        {control.PropertyName}: {htmlHelper.Localize(control.Label, enableI18N)},");
+        var labelEntries = model.LabelledControlsWithKeys()
+            .Select(entry => $"        {entry.Key}: {htmlHelper.Localize(entry.Control.Label, enableI18N)},");
 
         return htmlHelper.Raw(
             "    private readonly defaultLabels: Record<string, string> = {\r\n" +
@@ -30,17 +24,38 @@ public static class AngularSignalsFormMethodsHtmlHelperExtensions
             "    };\r\n");
     }
 
+    // Array-item children are namespaced by their array's property name ('addresses.city'),
+    // matching FormViewRenderContext.Key, so they never collide with a root control.
+    private static IEnumerable<(string Key, FormControl Control)> LabelledControlsWithKeys(this FormComponentModel model)
+    {
+        static bool IsLabelled(FormControl control) =>
+            control is not ButtonFormControl and not ArrayFormControl and not FormControlGroup and not CustomFormControl;
+
+        foreach (var control in model.FlatFormControls().Where(IsLabelled))
+        {
+            yield return (control.PropertyName, control);
+        }
+
+        foreach (var array in model.FlatFormControls().OfType<ArrayFormControl>())
+        {
+            var children = ((FormControlGroup)array.FormControlGroup).FormControls;
+            foreach (var child in children.FlatFormControls().Where(IsLabelled))
+            {
+                yield return ($"'{array.PropertyName}.{child.PropertyName}'", child);
+            }
+        }
+    }
+
     public static IHtmlContent SelectAllHelperMethod(this IHtmlHelper htmlHelper, FormComponentModel model)
     {
-        if (!model.FormControlsOfType<MultiSelectFormControl>().Any(multiSelect => multiSelect.Options.SelectAllOption != null))
+        if (!model.AllControlsIncludingArrayItems().OfType<MultiSelectFormControl>().Any(multiSelect => multiSelect.Options.SelectAllOption != null))
         {
             return htmlHelper.Raw("");
         }
 
         return htmlHelper.Raw(
             "\r\n" +
-            "    protected readonly toggleSelectAll = (propertyName: string, options: { value: unknown; displayName: unknown }[]): void => {\r\n" +
-            "        const control = this.form.get(propertyName);\r\n" +
+            "    protected readonly toggleSelectAll = (control: AbstractControl | null, options: { value: unknown; displayName: unknown }[]): void => {\r\n" +
             "        const values = options.map(option => option.value);\r\n" +
             "        const selectedValues = ((control?.value as unknown[] | null) ?? []).filter(value => values.includes(value));\r\n" +
             "        control?.setValue(selectedValues.length === values.length ? [] : values);\r\n" +
@@ -57,8 +72,8 @@ public static class AngularSignalsFormMethodsHtmlHelperExtensions
 
         return htmlHelper.Raw(
             "\r\n" +
-            "    protected readonly readonlyValue = (propertyName: string): string =>\r\n" +
-            "        String(this.form.get(propertyName)?.value ?? '');\r\n" +
+            "    protected readonly readonlyValue = (control: AbstractControl | null): string =>\r\n" +
+            "        String(control?.value ?? '');\r\n" +
             "\r\n" +
             "    protected readonly selectedDisplayName = (value: unknown, options: { value: unknown; displayName: unknown }[]): string =>\r\n" +
             "        Array.isArray(value)\r\n" +
@@ -68,18 +83,17 @@ public static class AngularSignalsFormMethodsHtmlHelperExtensions
 
     public static IHtmlContent MultiCheckboxHelperMethods(this IHtmlHelper htmlHelper, FormComponentModel model)
     {
-        if (!model.FormControlsOfType<MultiCheckboxFormControl>().Any())
+        if (!model.AllControlsIncludingArrayItems().OfType<MultiCheckboxFormControl>().Any())
         {
             return htmlHelper.Raw("");
         }
 
         return htmlHelper.Raw(
             "\r\n" +
-            "    protected readonly isOptionSelected = (propertyName: string, value: unknown): boolean =>\r\n" +
-            "        ((this.form.get(propertyName)?.value as unknown[] | null) ?? []).includes(value);\r\n" +
+            "    protected readonly isOptionSelected = (control: AbstractControl | null, value: unknown): boolean =>\r\n" +
+            "        ((control?.value as unknown[] | null) ?? []).includes(value);\r\n" +
             "\r\n" +
-            "    protected readonly toggleOption = (propertyName: string, value: unknown, checked: boolean): void => {\r\n" +
-            "        const control = this.form.get(propertyName);\r\n" +
+            "    protected readonly toggleOption = (control: AbstractControl | null, value: unknown, checked: boolean): void => {\r\n" +
             "        const currentValues = (control?.value as unknown[] | null) ?? [];\r\n" +
             "        control?.setValue(checked ? [...currentValues, value] : currentValues.filter(item => item !== value));\r\n" +
             "        control?.markAsDirty();\r\n" +

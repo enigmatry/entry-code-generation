@@ -8,9 +8,16 @@ namespace Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 
 public static class AngularSignalsImportsHtmlHelperExtensions
 {
+    private const string EntryFormPackage = "@enigmatry/entry-form";
+
+    // Symbols from @enigmatry/entry-form are skipped here: the component template always emits
+    // its own import statement for that package (expression dictionary types etc.), and the
+    // component-import symbols are merged into it via HasFormattedControls.
     public static IHtmlContent MaterialImportStatements(this IHtmlHelper htmlHelper, FormComponentModel model) =>
         htmlHelper.Raw(String.Concat(model.MaterialImports()
-            .Select(import => $"import {{ {import.Symbol} }} from '{import.Path}';\r\n")));
+            .Where(import => import.Path != EntryFormPackage)
+            .GroupBy(import => import.Path)
+            .Select(pathGroup => $"import {{ {String.Join(", ", pathGroup.Select(import => import.Symbol).Distinct())} }} from '{pathGroup.Key}';\r\n")));
 
     public static string AngularImportsList(this FormComponentModel model) =>
         String.Join(", ", new[] { "ReactiveFormsModule", "NgTemplateOutlet" }
@@ -83,9 +90,9 @@ public static class AngularSignalsImportsHtmlHelperExtensions
             imports.Add(("MatDatetimepickerModule", "@mat-datetimepicker/core"));
         }
 
-        if (controls.Any(control => control.Formatter != null && control.Formatter.JsFormatterName.HasContent()))
+        if (model.HasFormattedControls())
         {
-            imports.Add(("EntryFieldFormatDirective", "@enigmatry/entry-form"));
+            imports.Add(("EntryFieldFormatDirective", EntryFormPackage));
         }
 
         imports.AddRange(controls

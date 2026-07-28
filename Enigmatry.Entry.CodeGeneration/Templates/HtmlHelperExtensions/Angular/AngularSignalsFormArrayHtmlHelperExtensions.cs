@@ -84,7 +84,9 @@ public static class AngularSignalsFormArrayHtmlHelperExtensions
         return htmlHelper.Raw(String.Concat(lines.Select(line => line + "\r\n")));
     }
 
-    public static IHtmlContent ReEnableStaticReadonlyControls(this IHtmlHelper htmlHelper, FormComponentModel model)
+    // Re-applies the disabled state to statically readonly controls after the blanket
+    // form.enable() that runs when the form leaves readonly mode.
+    public static IHtmlContent DisableStaticReadonlyControls(this IHtmlHelper htmlHelper, FormComponentModel model)
     {
         var lines = model.FlatFormControls()
             .Where(control => control.Readonly && control is not ArrayFormControl)

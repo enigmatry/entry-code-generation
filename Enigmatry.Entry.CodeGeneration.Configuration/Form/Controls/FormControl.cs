@@ -27,7 +27,9 @@ public abstract class FormControl
     public abstract string ControlType { get; }
 
     /// <summary>
-    /// Kept as an alias for the deprecated non-signals (Formly) templates, which must not be modified.
+    /// Deprecated: use <see cref="ControlType"/> instead. Deliberately not marked [Obsolete]:
+    /// the deprecated non-signals (Formly) templates reference it and the runtime-compiled Razor
+    /// engine treats the obsolete warning as a compile error.
     /// </summary>
     public string FormlyType => ControlType;
     public IPropertyFormatter? Formatter { get; set; }

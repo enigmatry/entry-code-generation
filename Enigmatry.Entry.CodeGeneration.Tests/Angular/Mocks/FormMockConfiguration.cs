@@ -50,6 +50,7 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
         formGroup
             .RichTextInputFormControl(x => x.Description)
             .WithEditor(RichTextEditor.Redactor)
+            .WithImport("EntryRedactorComponent", "@enigmatry/entry-redactor")
             .WithLabel("Some Description");
 
         formGroup
@@ -183,6 +184,14 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
                     config
                         .InputFormControl(x => x.City)
                         .WithDefaultValue("Amsterdam");
+                    config
+                        .SelectFormControl(x => x.Country)
+                        .WithLabel("Country")
+                        .WithOptions(options => options.WithFixedValues(new[]
+                        {
+                            new SelectOption("NL", "Netherlands", "country.nl"),
+                            new SelectOption("RS", "Serbia", "country.rs")
+                        }));
                     config
                         .InputFormControl(x => x.Street);
                     config

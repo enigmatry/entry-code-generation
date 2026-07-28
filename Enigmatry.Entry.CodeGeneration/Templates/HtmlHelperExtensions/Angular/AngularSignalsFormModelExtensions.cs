@@ -1,3 +1,4 @@
+using Enigmatry.Entry.CodeGeneration.Configuration;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Array;
@@ -59,7 +60,21 @@ public static class AngularSignalsFormModelExtensions
     }
 
     public static bool HasAnyAsyncValidators(this FormComponentModel model) =>
-        model.FlatFormControls().Any(control => control.Validators.Any());
+        model.AllControlsIncludingArrayItems().Any(control => control.Validators.Any());
+
+    public static bool HasDynamicSelectControls(this FormComponentModel model) =>
+        model.AllControlsIncludingArrayItems().OfType<SelectControlBase>().Any(select => select.Options.HasDynamicValues);
+
+    public static bool HasAutocompleteControls(this FormComponentModel model) =>
+        model.AllControlsIncludingArrayItems().OfType<AutocompleteFormControl>().Any();
+
+    public static bool HasFormattedControls(this FormComponentModel model) =>
+        model.AllControlsIncludingArrayItems().Any(control => control.Formatter != null && control.Formatter.JsFormatterName.HasContent());
+
+    public static bool HasControlValueHelperMethods(this FormComponentModel model) =>
+        model.UseReadonlyDisplay
+        || model.AllControlsIncludingArrayItems().OfType<MultiCheckboxFormControl>().Any()
+        || model.AllControlsIncludingArrayItems().OfType<MultiSelectFormControl>().Any(multiSelect => multiSelect.Options.SelectAllOption != null);
 
     private static readonly HashSet<System.Type> NumericPropertyTypes = new()
     {

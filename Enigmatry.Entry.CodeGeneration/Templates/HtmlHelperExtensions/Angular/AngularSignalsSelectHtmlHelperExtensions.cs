@@ -1,5 +1,6 @@
 using Enigmatry.Entry.CodeGeneration.Configuration.Form;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Array;
 using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,34 +9,38 @@ namespace Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 
 public static class AngularSignalsSelectHtmlHelperExtensions
 {
-    public static IHtmlContent SelectInputDeclarations(this IHtmlHelper htmlHelper, SelectControlBase select, bool enableI18N)
+    public static IHtmlContent SelectInputDeclarations(this IHtmlHelper htmlHelper, SelectControlBase select, bool enableI18N, string memberNamePrefix = "")
     {
+        string MemberName(string suffix) => memberNamePrefix.Length == 0
+            ? $"{select.PropertyName}{suffix}"
+            : $"{memberNamePrefix}{AngularSignalsFormModelExtensions.Capitalize(select.PropertyName)}{suffix}";
+
         var lines = new List<string>();
 
         if (select.Options.HasDynamicValues)
         {
-            lines.Add($"    protected readonly {select.PropertyName}Callback = input<Observable<unknown[]> | null>(null);");
-            lines.Add($"    private readonly {select.PropertyName}RawOptions = toSignal(toObservable(this.{select.PropertyName}Callback).pipe(switchMap(callback => callback ?? of([]))), {{ initialValue: [] }});");
+            lines.Add($"    protected readonly {MemberName("Callback")} = input<Observable<unknown[]> | null>(null);");
+            lines.Add($"    private readonly {MemberName("RawOptions")} = toSignal(toObservable(this.{MemberName("Callback")}).pipe(switchMap(callback => callback ?? of([]))), {{ initialValue: [] }});");
         }
         else
         {
             var options = htmlHelper.JsArray(select.Options.FixedOptions,
                 option => $"{{ {option.GetValueExpression()}, displayName: {htmlHelper.Localize(option.DisplayName, enableI18N)} }}");
-            lines.Add($"    private readonly {select.PropertyName}RawOptions = signal({options});");
+            lines.Add($"    private readonly {MemberName("RawOptions")} = signal({options});");
         }
 
         if (select.Options.HasCustomValueAndDisplayKeys)
         {
-            lines.Add($"    protected readonly {select.PropertyName}OptionsConfiguration = input<SelectConfiguration>({{ valueProperty: '{select.Options.OptionValueKey}', labelProperty: '{select.Options.OptionDisplayKey}', sortProperty: '{select.Options.OptionSortKey}' }});");
+            lines.Add($"    protected readonly {MemberName("OptionsConfiguration")} = input<SelectConfiguration>({{ valueProperty: '{select.Options.OptionValueKey}', labelProperty: '{select.Options.OptionDisplayKey}', sortProperty: '{select.Options.OptionSortKey}' }});");
         }
         else
         {
-            lines.Add($"    protected readonly {select.PropertyName}OptionsConfiguration = input<SelectConfiguration>({select.Options.DefaultOptionsAsString});");
+            lines.Add($"    protected readonly {MemberName("OptionsConfiguration")} = input<SelectConfiguration>({select.Options.DefaultOptionsAsString});");
         }
 
-        lines.Add($"    protected readonly {select.PropertyName}Options = computed(() => {{");
-        lines.Add($"        const configuration = this.{select.PropertyName}OptionsConfiguration();");
-        lines.Add($"        const options = sortOptions(this.{select.PropertyName}RawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];");
+        lines.Add($"    protected readonly {MemberName("Options")} = computed(() => {{");
+        lines.Add($"        const configuration = this.{MemberName("OptionsConfiguration")}();");
+        lines.Add($"        const options = sortOptions(this.{MemberName("RawOptions")}() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];");
         lines.Add($"        return options.map(option => ({{ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }}));");
         lines.Add($"    }});");
 
@@ -43,15 +48,39 @@ public static class AngularSignalsSelectHtmlHelperExtensions
         {
             var propertyNameCapitalized = AngularSignalsFormModelExtensions.Capitalize(select.PropertyName);
             lines.Add($"    protected readonly display{propertyNameCapitalized} = (value: unknown): string =>");
-            lines.Add($"        (this.{select.PropertyName}Options().find(option => option.value === value)?.displayName as string) ?? '';");
+            lines.Add($"        (this.{MemberName("Options")}().find(option => option.value === value)?.displayName as string) ?? '';");
         }
 
         return htmlHelper.Raw(String.Join("\r\n", lines) + "\r\n");
     }
 
     public static IHtmlContent AllSelectInputDeclarations(this IHtmlHelper htmlHelper, FormComponentModel model, bool enableI18N) =>
-        htmlHelper.Raw(String.Concat(model.FormControlsOfType<SelectControlBase>()
-            .Select(select => htmlHelper.SelectInputDeclarations(select, enableI18N).ToString())));
+        htmlHelper.Raw(String.Concat(model.SelectControlsWithMemberPrefixes()
+            .Select(entry => htmlHelper.SelectInputDeclarations(entry.Select, enableI18N, entry.MemberNamePrefix).ToString())));
+
+    internal static IEnumerable<(SelectControlBase Select, string MemberNamePrefix)> SelectControlsWithMemberPrefixes(this FormComponentModel model)
+    {
+        foreach (var select in model.FormControlsOfType<SelectControlBase>())
+        {
+            yield return (select, "");
+        }
+
+        foreach (var array in model.FlatFormControls().OfType<ArrayFormControl>())
+        {
+            var children = ((FormControlGroup)array.FormControlGroup).FormControls;
+            foreach (var select in children.FlatFormControls().OfType<SelectControlBase>())
+            {
+                if (select is AutocompleteFormControl)
+                {
+                    throw new InvalidOperationException(
+                        $"Autocomplete controls are not supported inside array items (per-row filtering state cannot be generated). " +
+                        $"Property '{array.PropertyName}.{select.PropertyName}' on component '{model.ComponentInfo.Name}'.");
+                }
+
+                yield return (select, array.PropertyName);
+            }
+        }
+    }
 
     public static IHtmlContent AllAutocompleteFilterDeclarations(this IHtmlHelper htmlHelper, FormComponentModel model)
     {

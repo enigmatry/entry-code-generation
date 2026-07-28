@@ -34,7 +34,7 @@ public static class AngularSignalsValidationHtmlHelperExtensions
         return validators.Count > 0 ? $"[{String.Join(", ", validators)}]" : "[]";
     }
 
-    internal static string RenderValidationErrors(this IHtmlHelper htmlHelper, FormControl field, bool enableI18N) =>
+    internal static string RenderValidationErrors(this IHtmlHelper htmlHelper, FormControl field, FormViewRenderContext context) =>
         String.Concat(field.ValidationRules.Select(validationRule =>
         {
             var rawMessage = validationRule.HasCustomMessage ? validationRule.CustomMessage : validationRule.ValidationMessage;
@@ -49,10 +49,10 @@ public static class AngularSignalsValidationHtmlHelperExtensions
                   $".{field.ComponentInfo.Name.Kebaberize()}" +
                   $".{field.PropertyName.Kebaberize()}" +
                   $".{validationRule.RuleName.Kebaberize()}";
-            var i18nAttribute = enableI18N && translationId.HasContent() ? $" i18n=\"@@{translationId}\"" : "";
+            var i18nAttribute = context.EnableI18N && translationId.HasContent() ? $" i18n=\"@@{translationId}\"" : "";
 
             return
-                $"@if (form.get('{field.PropertyName}')?.hasError('{validationRule.AngularErrorKey()}')) {{\r\n" +
+                $"@if ({context.FormGroupAccessor}.get('{field.PropertyName}')?.hasError('{validationRule.AngularErrorKey()}')) {{\r\n" +
                 $"    <mat-error{i18nAttribute}>{message}</mat-error>\r\n" +
                 $"}}";
         }));

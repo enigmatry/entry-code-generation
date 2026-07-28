@@ -8,10 +8,15 @@
 @model Enigmatry.Entry.CodeGeneration.Configuration.Form.FormComponentModel;
 @inject CodeGeneratorOptions Options;
 import { NgTemplateOutlet } from '@@angular/common';
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, LOCALE_ID, signal, TemplateRef } from '@@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, LOCALE_ID, model, output, signal, TemplateRef } from '@@angular/core';
 @{
-    var hasDynamicSelects = Model.FormControlsOfType<SelectControlBase>().Any(selectControl => selectControl.Options.HasDynamicValues);
-    var hasAutocompleteControls = Model.FormControlsOfType<AutocompleteFormControl>().Any();
+    var hasDynamicSelects = Model.HasDynamicSelectControls();
+    var hasAutocompleteControls = Model.HasAutocompleteControls();
+    var formsImports = "FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators";
+    if (Model.HasControlValueHelperMethods())
+    {
+        formsImports = "AbstractControl, " + formsImports;
+    }
 }
 @if (hasDynamicSelects)
 {
@@ -21,8 +26,7 @@ else if (hasAutocompleteControls)
 {
 @:import { toSignal } from '@@angular/core/rxjs-interop';
 }
-import { input, model, output } from '@@angular/core';
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@@angular/forms';
+import { @Html.Raw(formsImports) } from '@@angular/forms';
 @Html.MaterialImportStatements(Model)import { I@(Model.ComponentInfo.ModelType) } from '@Options.ApiClientTsImportPath';
 @{
     var entryFormImports = "IFieldExpressionDictionary, IFieldPropertyExpressionDictionary, SelectConfiguration, sortOptions";
@@ -30,9 +34,13 @@ import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } fr
     {
         entryFormImports += ", ENTRY_ASYNC_VALIDATOR_RESOLVER";
     }
+    if (Model.HasFormattedControls())
+    {
+        entryFormImports += ", EntryFieldFormatDirective";
+    }
 }
 import { @Html.Raw(entryFormImports) } from '@@enigmatry/entry-form';
-@if (Model.FormControlsOfType<SelectControlBase>().Any(selectControl => selectControl.Options.HasDynamicValues))
+@if (hasDynamicSelects)
 {
 @:import { Observable, of, switchMap } from 'rxjs';
 }
@@ -63,7 +71,6 @@ export class @Model.AngularComponentName() {
     protected readonly cancel = output@(Html.Raw("<void>"))();
     protected readonly buttonClick = output@(Html.Raw("<string>"))();
 
-    private readonly destroyRef = inject(DestroyRef);
     private readonly localeId = inject@(Html.Raw("<string>"))(LOCALE_ID);
 @if (Model.HasAnyAsyncValidators())
 {
@@ -109,8 +116,26 @@ export class @Model.AngularComponentName() {
                 this.form.disable({ emitEvent: false });
             } else {
                 this.form.enable({ emitEvent: false });
-@Html.ReEnableStaticReadonlyControls(Model)
+@Html.DisableStaticReadonlyControls(Model)
             }
+        });
+        effect(() => {
+            const model = this.model();
+            const disableExpressions = this.fieldsDisableExpressions();
+            if (!disableExpressions) {
+                return;
+            }
+            Object.entries(disableExpressions).forEach(([propertyName, isDisabled]) => {
+                const control = this.form.get(propertyName);
+                if (!control) {
+                    return;
+                }
+                if (isDisabled(model) || this.isReadonly()) {
+                    control.disable({ emitEvent: false });
+                } else {
+                    control.enable({ emitEvent: false });
+                }
+            });
         });
     }
 

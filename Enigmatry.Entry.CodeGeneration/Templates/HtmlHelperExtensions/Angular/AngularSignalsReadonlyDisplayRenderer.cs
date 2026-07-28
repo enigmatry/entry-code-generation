@@ -20,10 +20,10 @@ internal static class AngularSignalsReadonlyDisplayRenderer
 
         return htmlHelper.Raw(
             $"@if (isReadonly()) {{\r\n" +
-            $"@if (!isHidden('{field.PropertyName}', {field.Visible.ToString().ToLower()})) {{\r\n" +
+            $"@if (!isHidden('{context.Key(field)}', {field.Visible.ToString().ToLower()})) {{\r\n" +
             $"<div class=\"entry-{field.PropertyName.Kebaberize()}-field entry-readonly-field\">\r\n" +
-            $"    <span class=\"entry-readonly-label\">{{{{ label('{field.PropertyName}') }}}}</span>\r\n" +
-            $"    <span class=\"entry-readonly-value\">{{{{ {field.ReadonlyValueExpression()} }}}}</span>\r\n" +
+            $"    <span class=\"entry-readonly-label\">{{{{ label('{context.Key(field)}') }}}}</span>\r\n" +
+            $"    <span class=\"entry-readonly-value\">{{{{ {field.ReadonlyValueExpression(context)} }}}}</span>\r\n" +
             $"</div>\r\n" +
             $"}}\r\n" +
             $"}} @else {{\r\n" +
@@ -45,7 +45,7 @@ internal static class AngularSignalsReadonlyDisplayRenderer
         _ => false
     };
 
-    private static string ReadonlyValueExpression(this FormControl field) => field is SelectControlBase
-        ? $"selectedDisplayName(form.get('{field.PropertyName}')?.value, {field.PropertyName}Options())"
-        : $"readonlyValue('{field.PropertyName}')";
+    private static string ReadonlyValueExpression(this FormControl field, FormViewRenderContext context) => field is SelectControlBase
+        ? $"selectedDisplayName({context.FormGroupAccessor}.get('{field.PropertyName}')?.value, {context.MemberName(field, "Options")}())"
+        : $"readonlyValue({context.FormGroupAccessor}.get('{field.PropertyName}'))";
 }
