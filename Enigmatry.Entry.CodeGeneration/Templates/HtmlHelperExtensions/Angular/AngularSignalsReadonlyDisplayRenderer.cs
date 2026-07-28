@@ -33,7 +33,7 @@ internal static class AngularSignalsReadonlyDisplayRenderer
 
     // Password stays masked (never displayed), rich text and custom controls keep their own
     // readonly handling, arrays/groups/buttons are structural.
-    private static bool SupportsReadonlyDisplay(this FormControl field) => field switch
+    internal static bool SupportsReadonlyDisplay(this FormControl field) => field switch
     {
         PasswordFormControl => false,
         RichTextInputFormControl => false,
@@ -45,7 +45,16 @@ internal static class AngularSignalsReadonlyDisplayRenderer
         _ => false
     };
 
-    private static string ReadonlyValueExpression(this FormControl field, FormViewRenderContext context) => field is SelectControlBase
-        ? $"selectedDisplayName({context.FormGroupAccessor}.get('{field.PropertyName}')?.value, {context.MemberName(field, "Options")}())"
-        : $"readonlyValue({context.FormGroupAccessor}.get('{field.PropertyName}'))";
+    private static string ReadonlyValueExpression(this FormControl field, FormViewRenderContext context)
+    {
+        if (field is SelectControlBase)
+        {
+            return $"selectedDisplayName({context.FormGroupAccessor}.get('{field.PropertyName}')?.value, {context.MemberName(field, "Options")}())";
+        }
+
+        var pipeExpression = field.Formatter?.PipeExpression();
+        return pipeExpression != null
+            ? $"({context.FormGroupAccessor}.get('{field.PropertyName}')?.value | {pipeExpression}) ?? ''"
+            : $"readonlyValue({context.FormGroupAccessor}.get('{field.PropertyName}'))";
+    }
 }

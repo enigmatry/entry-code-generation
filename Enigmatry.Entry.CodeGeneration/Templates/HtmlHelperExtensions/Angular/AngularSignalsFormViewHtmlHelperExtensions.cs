@@ -14,25 +14,37 @@ public static class AngularSignalsFormViewHtmlHelperExtensions
     private static IHtmlContent RenderFormControl(this IHtmlHelper htmlHelper, FormControl control, FormViewRenderContext context) => control switch
     {
         FormControlGroup group => htmlHelper.RenderFormControlGroup(group, context),
-        ButtonFormControl button => htmlHelper.RenderFormButton(button, context.EnableI18N),
+        ButtonFormControl button => htmlHelper.RenderFormButton(button, context),
         _ => htmlHelper.RenderFormField(control, context)
     };
 
     private static IHtmlContent RenderFormControlGroup(this IHtmlHelper htmlHelper, FormControlGroup group, FormViewRenderContext context)
     {
+        // The CreateUiSection type has no Formly type registry to resolve against anymore;
+        // it is kept as a CSS class so consumers keep their styling hook.
+        var baseClasses = group.WrapperElement.HasContent() ? $"entry-field-group {group.WrapperElement}" : "entry-field-group";
         var staticClasses = group.ClassNames.Values
             .Where(classNameEntry => classNameEntry.When == ApplyWhen.Always)
-            .Aggregate("entry-field-group", (current, classNameEntry) => current + $" {classNameEntry.Value}");
+            .Aggregate(baseClasses, (current, classNameEntry) => current + $" {classNameEntry.Value}");
         var innerContent = htmlHelper.RenderFormControls(group.FormControls, context).ToString();
         return htmlHelper.Raw($"<div class=\"{staticClasses}\"{group.ConditionalClassBindings()}>\r\n{innerContent}</div>\r\n");
     }
 
-    private static IHtmlContent RenderFormButton(this IHtmlHelper htmlHelper, ButtonFormControl button, bool enableI18N) =>
-        htmlHelper.Raw(
+    private static IHtmlContent RenderFormButton(this IHtmlHelper htmlHelper, ButtonFormControl button, FormViewRenderContext context)
+    {
+        if (!button.Visible)
+        {
+            return htmlHelper.Raw("");
+        }
+
+        return htmlHelper.Raw(
+            $"@if (!isHidden('{context.Key(button)}', {button.Visible.ToString().ToLower()})) {{\r\n" +
             $"<button mat-button type=\"button\"\r\n" +
-            $"        {button.FieldClassAttribute()}\r\n" +
-            $"        [disabled]=\"isDisabled('{button.PropertyName}', {button.Readonly.ToString().ToLower()})\"\r\n" +
-            $"        (click)=\"buttonClick.emit('{button.PropertyName}')\"{button.Text.I18NAttribute(enableI18N)}>{button.Text.Value}</button>\r\n");
+            $"        {button.FieldClassAttribute()}{button.TooltipAttribute(context.EnableI18N)}\r\n" +
+            $"        [disabled]=\"isDisabled('{context.Key(button)}', {button.Readonly.ToString().ToLower()})\"\r\n" +
+            $"        (click)=\"buttonClick.emit('{button.PropertyName}')\"{button.Text.I18NAttribute(context.EnableI18N)}>{button.Text.Value.EscapeHtmlText()}</button>\r\n" +
+            $"}}\r\n");
+    }
 
     private static IHtmlContent RenderFormField(this IHtmlHelper htmlHelper, FormControl field, FormViewRenderContext context)
     {

@@ -26,6 +26,11 @@ public static class AngularSignalsValidationHtmlHelperExtensions
                 if (valueOption != null)
                 {
                     var value = valueOption[(rule.RuleName.Length + 2)..];
+                    if (rule.RuleName == "pattern")
+                    {
+                        value = AsRegexOrStringLiteral(value);
+                    }
+
                     validators.Add($"Validators.{rule.RuleName}({value})");
                 }
             }
@@ -33,6 +38,11 @@ public static class AngularSignalsValidationHtmlHelperExtensions
 
         return validators.Count > 0 ? $"[{String.Join(", ", validators)}]" : "[]";
     }
+
+    // A slash-delimited pattern passes through as a regex literal; anything else (the plain text of
+    // a .NET Regex) must become a quoted string or the generated TypeScript would not compile.
+    private static string AsRegexOrStringLiteral(string pattern) =>
+        Regex.IsMatch(pattern, "^/.*/[a-z]*$") ? pattern : $"'{pattern.EscapeTsSingleQuoted()}'";
 
     internal static string RenderValidationErrors(this IHtmlHelper htmlHelper, FormControl field, FormViewRenderContext context) =>
         String.Concat(field.ValidationRules.Select(validationRule =>
@@ -53,9 +63,11 @@ public static class AngularSignalsValidationHtmlHelperExtensions
 
             return
                 $"@if ({context.FormGroupAccessor}.get('{field.PropertyName}')?.hasError('{validationRule.AngularErrorKey()}')) {{\r\n" +
-                $"    <mat-error{i18nAttribute}>{message}</mat-error>\r\n" +
+                $"    <mat-error{i18nAttribute}>{message.EscapeHtmlText()}</mat-error>\r\n" +
                 $"}}";
-        }));
+        })) +
+        field.AsyncValidatorErrors(context) +
+        field.DynamicRequiredError(context);
 
     // Angular's built-in Validators.minLength/maxLength report their errors under
     // all-lowercase keys, unlike the camelCase rule names used for the validator factories.

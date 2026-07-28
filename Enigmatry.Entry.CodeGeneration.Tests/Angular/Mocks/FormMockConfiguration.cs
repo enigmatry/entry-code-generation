@@ -187,6 +187,7 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
                     config
                         .SelectFormControl(x => x.Country)
                         .WithLabel("Country")
+                        .WithDefaultValue("NL")
                         .WithOptions(options => options.WithFixedValues(new[]
                         {
                             new SelectOption("NL", "Netherlands", "country.nl"),

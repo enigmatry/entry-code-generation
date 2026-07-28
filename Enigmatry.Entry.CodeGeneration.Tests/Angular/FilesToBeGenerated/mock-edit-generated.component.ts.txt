@@ -626,6 +626,7 @@ defaultValue: 'Amsterdam',
         type: this.resolveFieldType('select', false),
         focus: false,
 className: `entry-country-field entry-select`,
+defaultValue: 'NL',
         hideExpression: this.fieldsHideExpressions?.['country'] ?? false,
         expressionProperties: {
         'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['country'] ? this.fieldsDisableExpressions['country'](model) : false)),

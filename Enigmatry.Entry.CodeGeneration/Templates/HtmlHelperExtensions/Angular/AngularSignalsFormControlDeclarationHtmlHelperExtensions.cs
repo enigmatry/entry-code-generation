@@ -24,11 +24,11 @@ public static class AngularSignalsFormControlDeclarationHtmlHelperExtensions
     public static string GetInitialValue(this FormControl control) => control switch
     {
         InputControlBase { DefaultValue: not null } input when input.IsNumeric() => AsJsLiteral(input.DefaultValue),
-        InputControlBase input when input.DefaultValue != null => $"'{EscapeSingleQuotes(input.DefaultValue)}'",
+        InputControlBase input when input.DefaultValue != null => $"'{input.DefaultValue.EscapeTsSingleQuoted()}'",
         CheckboxFormControl { DefaultValue: not null } checkbox => checkbox.DefaultValue.Value.ToString().ToLower(),
         CheckboxFormControl => "false",
-        SelectFormControl { DefaultValue: not null } select => AsJsLiteral(select.DefaultValue),
-        RadioGroupFormControl { DefaultValue: not null } radioGroup => AsJsLiteral(radioGroup.DefaultValue),
+        SelectFormControl { DefaultValue: not null } select => DefaultValueForPropertyType(select, select.DefaultValue),
+        RadioGroupFormControl { DefaultValue: not null } radioGroup => DefaultValueForPropertyType(radioGroup, radioGroup.DefaultValue),
         DatepickerFormControl { DefaultValue: not null } datepicker => $"'{datepicker.DefaultValue.Value.ToString("O", CultureInfo.InvariantCulture)}'",
         DateTimePickerFormControl { DefaultValue: not null } dateTimePicker => $"'{dateTimePicker.DefaultValue.Value.ToString("O", CultureInfo.InvariantCulture)}'",
         _ => "null"
@@ -37,9 +37,29 @@ public static class AngularSignalsFormControlDeclarationHtmlHelperExtensions
     private static string AsJsLiteral(string value) =>
         value is "true" or "false" || decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out _)
             ? value
-            : $"'{EscapeSingleQuotes(value)}'";
+            : $"'{value.EscapeTsSingleQuoted()}'";
 
-    private static string EscapeSingleQuotes(string value) => value.Replace("'", "\\'");
+    // A select/radio default is configured as text; the property type decides whether it stays a
+    // quoted string — a string option value such as "123" must not silently become the number 123.
+    private static string DefaultValueForPropertyType(FormControl control, string defaultValue)
+    {
+        var propertyType = control.PropertyType == null
+            ? null
+            : Nullable.GetUnderlyingType(control.PropertyType) ?? control.PropertyType;
+
+        if (propertyType == typeof(bool) && defaultValue is "true" or "false")
+        {
+            return defaultValue;
+        }
+
+        var isNumericProperty = propertyType != null && (propertyType.IsEnum || control.IsNumeric());
+        if (isNumericProperty && decimal.TryParse(defaultValue, NumberStyles.Number, CultureInfo.InvariantCulture, out _))
+        {
+            return defaultValue;
+        }
+
+        return $"'{defaultValue.EscapeTsSingleQuoted()}'";
+    }
 
     public static IHtmlContent FormControlDeclaration(this IHtmlHelper htmlHelper, FormControl control, string indent = "        ")
     {

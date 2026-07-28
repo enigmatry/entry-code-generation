@@ -10,10 +10,10 @@
 // @ts-nocheck
 // @ts-ignore
 // @ts-expect-error
-import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input, LOCALE_ID, model, output, signal, TemplateRef } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NgTemplateOutlet, DatePipe, CurrencyPipe } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -32,7 +32,7 @@ import { Observable, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-g-mock-edit',
-  imports: [ReactiveFormsModule, NgTemplateOutlet, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatRadioModule, MatSelectModule, MatTooltipModule, MatDatetimepickerModule, EntryFieldFormatDirective, EntryRedactorComponent, EntryFileInputComponent],
+  imports: [ReactiveFormsModule, NgTemplateOutlet, DatePipe, CurrencyPipe, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatRadioModule, MatSelectModule, MatTooltipModule, MatDatetimepickerModule, EntryFieldFormatDirective, EntryRedactorComponent, EntryFileInputComponent],
   templateUrl: './mock-edit-generated.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -68,6 +68,7 @@ export class MockEditGeneratedComponent {
         isActive: $localize `:@@test.mock-edit.is-active.label:Active`,
         notes: $localize `:@@test.mock-edit.notes.label:Notes`,
         region: $localize `:@@test.mock-edit.region.label:Region`,
+        fileUpload: $localize `:@@test.mock-edit.file-upload.label:File upload`,
         dateAndTime: $localize `:@@test.mock-edit.date-and-time.label:Date and time`,
         email1: $localize `:@@test.mock-edit.email1.label:Email 1`,
         email2: $localize `:@@test.mock-edit.email2.label:Email 2`,
@@ -81,7 +82,7 @@ export class MockEditGeneratedComponent {
 
     protected readonly label = (propertyName: string): string => {
         const labelExpression = this.fieldsLabelExpressions()?.[propertyName];
-        return labelExpression ? String(labelExpression(this.model())) : this.defaultLabels[propertyName] ?? '';
+        return labelExpression ? String(labelExpression(this.currentModel())) : this.defaultLabels[propertyName] ?? '';
     };
 
     private readonly formStatusRawOptions = signal([{ value: null, displayName: $localize `:@@empty-option.none:None` }, { value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }]);
@@ -184,6 +185,14 @@ export class MockEditGeneratedComponent {
         email2: new FormControl<string | null>(null, { validators: [Validators.pattern(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/), Validators.maxLength(50)] }),
     });
 
+    private readonly formValue = toSignal(this.form.valueChanges, { initialValue: null });
+    // Live view of the model: the model input merged with the current (raw) form value, so
+    // hide/disable/required/label/property expressions react to user edits, matching Formly.
+    private readonly currentModel = computed<IFormMock>(() => {
+        this.formValue();
+        return { ...this.model(), ...this.form.getRawValue() } as IFormMock;
+    });
+
     private readonly regionFilterValue = toSignal(this.form.controls.region.valueChanges, { initialValue: null });
     protected readonly regionFilteredOptions = computed(() => {
         const filterValue = this.regionFilterValue();
@@ -196,7 +205,7 @@ export class MockEditGeneratedComponent {
         return new FormGroup({
             id: new FormControl<string | null>(null),
             city: new FormControl<string | null>('Amsterdam'),
-            country: new FormControl(null),
+            country: new FormControl('NL'),
             street: new FormControl<string | null>(null),
             houseNumber: new FormControl<string | null>(null),
             verified: new FormControl<boolean>({ value: false, disabled: true }),
@@ -231,14 +240,19 @@ export class MockEditGeneratedComponent {
         effect(() => {
             const model = this.model();
             this.resizeAddressesArray(model.addresses?.length ?? 0);
-            const propertyExpressions = this.fieldsPropertyExpressions();
-            const patchedModel = propertyExpressions
-                ? { ...model, ...Object.fromEntries(Object.entries(propertyExpressions).map(([propertyName, expression]) => [propertyName, expression(model)])) }
-                : model;
-            this.form.patchValue(patchedModel as unknown as typeof this.form.value, { emitEvent: false });
+            this.form.patchValue(model as unknown as typeof this.form.value, { emitEvent: false });
         });
         effect(() => {
-            const model = this.model();
+            const propertyExpressions = this.fieldsPropertyExpressions();
+            if (!propertyExpressions) {
+                return;
+            }
+            const model = this.currentModel();
+            const expressionValues = Object.fromEntries(Object.entries(propertyExpressions).map(([propertyName, expression]) => [propertyName, expression(model)]));
+            this.form.patchValue(expressionValues as unknown as typeof this.form.value, { emitEvent: false });
+        });
+        effect(() => {
+            const model = this.currentModel();
             const requiredExpressions = this.fieldsRequiredExpressions();
             if (!requiredExpressions) {
                 return;
@@ -266,7 +280,7 @@ export class MockEditGeneratedComponent {
             }
         });
         effect(() => {
-            const model = this.model();
+            const model = this.currentModel();
             const disableExpressions = this.fieldsDisableExpressions();
             if (!disableExpressions) {
                 return;
@@ -285,24 +299,30 @@ export class MockEditGeneratedComponent {
         });
     }
 
+    private lastSubmitTime = 0;
+
     protected readonly onSubmit = (event: Event): void => {
         event.preventDefault();
-        if (this.form.valid) {
-            this.save.emit(this.form.getRawValue() as IFormMock);
+        if (!this.form.valid || Date.now() - this.lastSubmitTime < 500) {
+            return;
         }
+        this.lastSubmitTime = Date.now();
+        const mergedModel = { ...this.model(), ...this.form.getRawValue() } as IFormMock;
+        this.model.set(mergedModel);
+        this.save.emit(mergedModel);
     };
 
     protected readonly isHidden = (propertyName: string, staticVisible: boolean): boolean => {
-        if (!staticVisible) { 
-			return true; 
+        if (!staticVisible) {
+			return true;
 		}
 
-        return this.fieldsHideExpressions()?.[propertyName]?.(this.model()) ?? false;
+        return this.fieldsHideExpressions()?.[propertyName]?.(this.currentModel()) ?? false;
     };
 
     protected readonly isDisabled = (propertyName: string, staticReadonly: boolean): boolean => {
         return this.isReadonly() || (this.fieldsDisableExpressions()?.[propertyName]
-            ? this.fieldsDisableExpressions()![propertyName](this.model())
+            ? this.fieldsDisableExpressions()![propertyName](this.currentModel())
             : staticReadonly);
     };
 

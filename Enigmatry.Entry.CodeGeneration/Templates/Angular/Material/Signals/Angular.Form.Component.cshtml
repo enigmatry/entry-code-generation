@@ -7,11 +7,9 @@
 @using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
 @model Enigmatry.Entry.CodeGeneration.Configuration.Form.FormComponentModel;
 @inject CodeGeneratorOptions Options;
-import { NgTemplateOutlet } from '@@angular/common';
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input, LOCALE_ID, model, output, signal, TemplateRef } from '@@angular/core';
 @{
     var hasDynamicSelects = Model.HasDynamicSelectControls();
-    var hasAutocompleteControls = Model.HasAutocompleteControls();
     var formsImports = "FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators";
     if (Model.HasControlValueHelperMethods())
     {
@@ -22,7 +20,7 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, input, LO
 {
 @:import { toObservable, toSignal } from '@@angular/core/rxjs-interop';
 }
-else if (hasAutocompleteControls)
+else
 {
 @:import { toSignal } from '@@angular/core/rxjs-interop';
 }
@@ -79,6 +77,14 @@ export class @Model.AngularComponentName() {
 
     protected readonly form = new FormGroup({
 @Html.AllFormControlDeclarations(Model)    });
+
+    private readonly formValue = toSignal(this.form.valueChanges, { initialValue: null });
+    // Live view of the model: the model input merged with the current (raw) form value, so
+    // hide/disable/required/label/property expressions react to user edits, matching Formly.
+    private readonly currentModel = computed@(Html.Raw($"<I{Model.ComponentInfo.ModelType}>"))(() => {
+        this.formValue();
+        return { ...this.model(), ...this.form.getRawValue() } as I@(Model.ComponentInfo.ModelType);
+    });
 @Html.AllAutocompleteFilterDeclarations(Model)
 @Html.AllArrayItemFactoryMethods(Model)
 @Html.AllArrayResizeMethods(Model)
@@ -86,14 +92,19 @@ export class @Model.AngularComponentName() {
     constructor() {
         effect(() => {
             const model = this.model();
-@Html.ResizeArrayCalls(Model)            const propertyExpressions = this.fieldsPropertyExpressions();
-            const patchedModel = propertyExpressions
-                ? { ...model, ...Object.fromEntries(Object.entries(propertyExpressions).map(([propertyName, expression]) => [propertyName, expression(model)])) }
-                : model;
-            this.form.patchValue(patchedModel as unknown as typeof this.form.value, { emitEvent: false });
+@Html.ResizeArrayCalls(Model)            this.form.patchValue(model as unknown as typeof this.form.value, { emitEvent: false });
         });
         effect(() => {
-            const model = this.model();
+            const propertyExpressions = this.fieldsPropertyExpressions();
+            if (!propertyExpressions) {
+                return;
+            }
+            const model = this.currentModel();
+            const expressionValues = Object.fromEntries(Object.entries(propertyExpressions).map(([propertyName, expression]) => [propertyName, expression(model)]));
+            this.form.patchValue(expressionValues as unknown as typeof this.form.value, { emitEvent: false });
+        });
+        effect(() => {
+            const model = this.currentModel();
             const requiredExpressions = this.fieldsRequiredExpressions();
             if (!requiredExpressions) {
                 return;
@@ -120,7 +131,7 @@ export class @Model.AngularComponentName() {
             }
         });
         effect(() => {
-            const model = this.model();
+            const model = this.currentModel();
             const disableExpressions = this.fieldsDisableExpressions();
             if (!disableExpressions) {
                 return;
@@ -139,24 +150,30 @@ export class @Model.AngularComponentName() {
         });
     }
 
+    private lastSubmitTime = 0;
+
     protected readonly onSubmit = (event: Event): void => {
         event.preventDefault();
-        if (this.form.valid) {
-            this.save.emit(this.form.getRawValue() as I@(Model.ComponentInfo.ModelType));
+        if (!this.form.valid || Date.now() - this.lastSubmitTime < 500) {
+            return;
         }
+        this.lastSubmitTime = Date.now();
+        const mergedModel = { ...this.model(), ...this.form.getRawValue() } as @Html.Raw($"I{Model.ComponentInfo.ModelType}");
+        this.model.set(mergedModel);
+        this.save.emit(mergedModel);
     };
 
     protected readonly isHidden = (propertyName: string, staticVisible: boolean): boolean => {
-        if (!staticVisible) { 
-			return true; 
+        if (!staticVisible) {
+			return true;
 		}
 
-        return this.fieldsHideExpressions()?.[propertyName]?.(this.model()) ?? false;
+        return this.fieldsHideExpressions()?.[propertyName]?.(this.currentModel()) ?? false;
     };
 
     protected readonly isDisabled = (propertyName: string, staticReadonly: boolean): boolean => {
         return this.isReadonly() || (this.fieldsDisableExpressions()?.[propertyName]
-            ? this.fieldsDisableExpressions()![propertyName](this.model())
+            ? this.fieldsDisableExpressions()![propertyName](this.currentModel())
             : staticReadonly);
     };
 @Html.MultiCheckboxHelperMethods(Model)@Html.SelectAllHelperMethod(Model)@Html.ReadonlyDisplayHelperMethods(Model)}

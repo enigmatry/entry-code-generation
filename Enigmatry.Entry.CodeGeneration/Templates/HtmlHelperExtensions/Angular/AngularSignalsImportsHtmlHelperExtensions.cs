@@ -20,7 +20,7 @@ public static class AngularSignalsImportsHtmlHelperExtensions
             .Select(pathGroup => $"import {{ {String.Join(", ", pathGroup.Select(import => import.Symbol).Distinct())} }} from '{pathGroup.Key}';\r\n")));
 
     public static string AngularImportsList(this FormComponentModel model) =>
-        String.Join(", ", new[] { "ReactiveFormsModule", "NgTemplateOutlet" }
+        String.Join(", ", new[] { "ReactiveFormsModule" }
             .Concat(model.MaterialImports().Select(import => import.Symbol)));
 
     private static IReadOnlyList<(string Symbol, string Path)> MaterialImports(this FormComponentModel model)
@@ -35,7 +35,21 @@ public static class AngularSignalsImportsHtmlHelperExtensions
             is (InputControlBase and not RichTextInputFormControl)
             or AutocompleteFormControl or DatepickerFormControl or DateTimePickerFormControl);
 
-        var imports = new List<(string Symbol, string Path)>();
+        var imports = new List<(string Symbol, string Path)>
+        {
+            // The form-buttons ng-container in the view template.
+            ("NgTemplateOutlet", "@angular/common")
+        };
+
+        if (model.UseReadonlyDisplay)
+        {
+            imports.AddRange(controls
+                .Where(control => control.SupportsReadonlyDisplay() && control is not SelectControlBase)
+                .Select(control => control.Formatter?.PipeSymbol())
+                .Where(pipeSymbol => pipeSymbol != null)
+                .Distinct()
+                .Select(pipeSymbol => (pipeSymbol!, "@angular/common")));
+        }
 
         if (controls.OfType<AutocompleteFormControl>().Any())
         {

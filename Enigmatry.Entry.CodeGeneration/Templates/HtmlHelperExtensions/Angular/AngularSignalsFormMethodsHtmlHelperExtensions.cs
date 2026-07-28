@@ -11,7 +11,7 @@ public static class AngularSignalsFormMethodsHtmlHelperExtensions
     public static IHtmlContent DefaultLabelDeclarations(this IHtmlHelper htmlHelper, FormComponentModel model, bool enableI18N)
     {
         var labelEntries = model.LabelledControlsWithKeys()
-            .Select(entry => $"        {entry.Key}: {htmlHelper.Localize(entry.Control.Label, enableI18N)},");
+            .Select(entry => $"        {entry.Key}: {htmlHelper.LocalizeEscaped(entry.Control.Label, enableI18N)},");
 
         return htmlHelper.Raw(
             "    private readonly defaultLabels: Record<string, string> = {\r\n" +
@@ -20,7 +20,7 @@ public static class AngularSignalsFormMethodsHtmlHelperExtensions
             "\r\n" +
             "    protected readonly label = (propertyName: string): string => {\r\n" +
             "        const labelExpression = this.fieldsLabelExpressions()?.[propertyName];\r\n" +
-            "        return labelExpression ? String(labelExpression(this.model())) : this.defaultLabels[propertyName] ?? '';\r\n" +
+            "        return labelExpression ? String(labelExpression(this.currentModel())) : this.defaultLabels[propertyName] ?? '';\r\n" +
             "    };\r\n");
     }
 
@@ -29,7 +29,7 @@ public static class AngularSignalsFormMethodsHtmlHelperExtensions
     private static IEnumerable<(string Key, FormControl Control)> LabelledControlsWithKeys(this FormComponentModel model)
     {
         static bool IsLabelled(FormControl control) =>
-            control is not ButtonFormControl and not ArrayFormControl and not FormControlGroup and not CustomFormControl;
+            control is not ButtonFormControl and not ArrayFormControl and not FormControlGroup;
 
         foreach (var control in model.FlatFormControls().Where(IsLabelled))
         {

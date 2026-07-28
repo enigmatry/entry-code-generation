@@ -1,3 +1,4 @@
+using Enigmatry.Entry.CodeGeneration.Configuration;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 using Humanizer;
 using Microsoft.AspNetCore.Html;
@@ -14,13 +15,14 @@ internal static class AngularSignalsInputFieldRenderers
             ? $" floatLabel=\"{field.FloatLabel!.Value.ToString().ToLower()}\""
             : "";
         var autocompleteAttribute = field.ShouldAutocomplete == false ? " autocomplete=\"off\"" : "";
-        var autofocusAttribute = field.Autofocus ? " cdkFocusInitial" : "";
+        // cdkFocusInitial only takes effect inside a CDK focus trap; the native attribute covers plain pages.
+        var autofocusAttribute = field.Autofocus ? " autofocus cdkFocusInitial" : "";
 
         return htmlHelper.Raw(
             $"@if (!isHidden('{context.Key(field)}', {field.Visible.ToString().ToLower()})) {{\r\n" +
             $"<mat-form-field {field.FieldClassAttribute()}{field.AppearanceAttribute()}{floatLabelAttribute}{field.TooltipAttribute(context.EnableI18N)}>\r\n" +
             $"    <mat-label>{{{{ label('{context.Key(field)}') }}}}</mat-label>\r\n" +
-            $"    <input matInput formControlName=\"{field.PropertyName}\" type=\"{inputType}\"{field.PlaceholderAttribute(context.EnableI18N)}{autocompleteAttribute}{autofocusAttribute}{field.FormatAttribute()} [readonly]=\"isDisabled('{context.Key(field)}', {field.Readonly.ToString().ToLower()})\">\r\n" +
+            $"    <input matInput formControlName=\"{field.PropertyName}\" type=\"{inputType}\"{field.PlaceholderAttribute(context.EnableI18N)}{autocompleteAttribute}{autofocusAttribute}{field.FormatAttribute()}{field.MetadataAttributes()} [readonly]=\"isDisabled('{context.Key(field)}', {field.Readonly.ToString().ToLower()})\">\r\n" +
             field.HintLine(context.EnableI18N) +
             htmlHelper.RenderValidationErrors(field, context) +
             $"</mat-form-field>\r\n" +
@@ -37,12 +39,16 @@ internal static class AngularSignalsInputFieldRenderers
               (field.AutoResizeMaxRows > 0 ? $" cdkAutosizeMaxRows=\"{field.AutoResizeMaxRows}\"" : "")
             : "";
         var autocompleteAttribute = field.ShouldAutocomplete == false ? " autocomplete=\"off\"" : "";
+        var floatLabelAttribute = field.FloatLabel.HasValue
+            ? $" floatLabel=\"{field.FloatLabel!.Value.ToString().ToLower()}\""
+            : "";
+        var autofocusAttribute = field.Autofocus ? " autofocus cdkFocusInitial" : "";
 
         return htmlHelper.Raw(
             $"@if (!isHidden('{context.Key(field)}', {field.Visible.ToString().ToLower()})) {{\r\n" +
-            $"<mat-form-field {field.FieldClassAttribute()}{field.TooltipAttribute(context.EnableI18N)}>\r\n" +
+            $"<mat-form-field {field.FieldClassAttribute()}{field.AppearanceAttribute()}{floatLabelAttribute}{field.TooltipAttribute(context.EnableI18N)}>\r\n" +
             $"    <mat-label>{{{{ label('{context.Key(field)}') }}}}</mat-label>\r\n" +
-            $"    <textarea matInput formControlName=\"{field.PropertyName}\"{field.PlaceholderAttribute(context.EnableI18N)}{rowsAttribute}{colsAttribute}{autocompleteAttribute}{autoResizeAttributes}{field.FormatAttribute()} [readonly]=\"isDisabled('{context.Key(field)}', {field.Readonly.ToString().ToLower()})\"></textarea>\r\n" +
+            $"    <textarea matInput formControlName=\"{field.PropertyName}\"{field.PlaceholderAttribute(context.EnableI18N)}{rowsAttribute}{colsAttribute}{autocompleteAttribute}{autoResizeAttributes}{autofocusAttribute}{field.FormatAttribute()}{field.MetadataAttributes()} [readonly]=\"isDisabled('{context.Key(field)}', {field.Readonly.ToString().ToLower()})\"></textarea>\r\n" +
             field.HintLine(context.EnableI18N) +
             htmlHelper.RenderValidationErrors(field, context) +
             $"</mat-form-field>\r\n" +
@@ -52,7 +58,8 @@ internal static class AngularSignalsInputFieldRenderers
     internal static IHtmlContent RenderCheckboxField(this IHtmlHelper htmlHelper, CheckboxFormControl field, FormViewRenderContext context) =>
         htmlHelper.Raw(
             $"@if (!isHidden('{context.Key(field)}', {field.Visible.ToString().ToLower()})) {{\r\n" +
-            $"<mat-checkbox formControlName=\"{field.PropertyName}\" {field.FieldClassAttribute()}{field.TooltipAttribute(context.EnableI18N)}>{{{{ label('{context.Key(field)}') }}}}</mat-checkbox>\r\n" +
+            $"<mat-checkbox formControlName=\"{field.PropertyName}\" {field.FieldClassAttribute()}{field.TooltipAttribute(context.EnableI18N)}{field.MetadataAttributes()}>{{{{ label('{context.Key(field)}') }}}}</mat-checkbox>\r\n" +
+            field.HintLine(context.EnableI18N) +
             htmlHelper.RenderValidationErrors(field, context) +
             $"}}\r\n");
 
@@ -61,19 +68,34 @@ internal static class AngularSignalsInputFieldRenderers
         var editorTagName = $"entry-{field.Editor.ToString().ToLower()}";
         return htmlHelper.Raw(
             $"@if (!isHidden('{context.Key(field)}', {field.Visible.ToString().ToLower()})) {{\r\n" +
-            $"<{editorTagName} formControlName=\"{field.PropertyName}\" {field.FieldClassAttribute()}{field.TooltipAttribute(context.EnableI18N)}></{editorTagName}>\r\n" +
+            $"<div {field.FieldClassAttribute()}{field.TooltipAttribute(context.EnableI18N)}>\r\n" +
+            field.FieldLabelLine(context) +
+            $"    <{editorTagName} formControlName=\"{field.PropertyName}\"></{editorTagName}>\r\n" +
+            field.HintLine(context.EnableI18N) +
             htmlHelper.RenderValidationErrors(field, context) +
+            $"</div>\r\n" +
             $"}}\r\n");
     }
 
+    // Custom control components must expose a readonly input (alongside the WithImport requirement);
+    // the reactive-forms disabled state is handled by the component-level effects.
     internal static IHtmlContent RenderCustomField(this IHtmlHelper htmlHelper, CustomFormControl field, FormViewRenderContext context)
     {
         var classes = $"entry-{field.PropertyName.Kebaberize()}-field {field.ControlTypeName}";
         return htmlHelper.Raw(
             $"@if (!isHidden('{context.Key(field)}', {field.Visible.ToString().ToLower()})) {{\r\n" +
-            $"<{field.ControlTypeName} formControlName=\"{field.PropertyName}\" class=\"{classes}\"{field.ConditionalClassBindings()}{field.MetadataAttributes()}{field.TooltipAttribute(context.EnableI18N)}" +
+            $"<div class=\"{classes}\"{field.ConditionalClassBindings()}{field.TooltipAttribute(context.EnableI18N)}>\r\n" +
+            field.FieldLabelLine(context) +
+            $"    <{field.ControlTypeName} formControlName=\"{field.PropertyName}\"{field.MetadataAttributes()}" +
             $" [readonly]=\"isDisabled('{context.Key(field)}', {field.Readonly.ToString().ToLower()})\"></{field.ControlTypeName}>\r\n" +
+            field.HintLine(context.EnableI18N) +
             htmlHelper.RenderValidationErrors(field, context) +
+            $"</div>\r\n" +
             $"}}\r\n");
     }
+
+    private static string FieldLabelLine(this FormControl field, FormViewRenderContext context) =>
+        field.Label.Value.HasContent()
+            ? $"    <label class=\"entry-field-label\">{{{{ label('{context.Key(field)}') }}}}</label>\r\n"
+            : "";
 }

@@ -1,3 +1,4 @@
+using Enigmatry.Entry.CodeGeneration.Configuration;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Array;
@@ -25,7 +26,7 @@ public static class AngularSignalsSelectHtmlHelperExtensions
         else
         {
             var options = htmlHelper.JsArray(select.Options.FixedOptions,
-                option => $"{{ {option.GetValueExpression()}, displayName: {htmlHelper.Localize(option.DisplayName, enableI18N)} }}");
+                option => $"{{ {SelectOptionValueExpression(option)}, displayName: {htmlHelper.LocalizeEscaped(option.DisplayName, enableI18N)} }}");
             lines.Add($"    private readonly {MemberName("RawOptions")} = signal({options});");
         }
 
@@ -52,6 +53,24 @@ public static class AngularSignalsSelectHtmlHelperExtensions
         }
 
         return htmlHelper.Raw(String.Join("\r\n", lines) + "\r\n");
+    }
+
+    // Signals-side mirror of SelectOption.GetValueExpression with string escaping; the shared
+    // helper stays untouched because the deprecated Formly templates rely on its exact output.
+    private static string SelectOptionValueExpression(SelectOption option)
+    {
+        var value = option.Value;
+        if (value != null && value.IsNumeric())
+        {
+            return $"value: {(value is Enum ? (int)value : value)}";
+        }
+
+        if (value is bool boolValue)
+        {
+            return $"value: {boolValue.ToString().ToLowerInvariant()}";
+        }
+
+        return $"value: {(value == null ? "null" : $"'{value.ToString()!.EscapeTsSingleQuoted()}'")}";
     }
 
     public static IHtmlContent AllSelectInputDeclarations(this IHtmlHelper htmlHelper, FormComponentModel model, bool enableI18N) =>

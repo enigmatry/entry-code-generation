@@ -1,10 +1,12 @@
 
 <form [formGroup]="form" (submit)="onSubmit($event)" [class.entry-form-readonly]="isReadonly()" class="entry-mock-edit-form entry-form">
+@if (!isHidden('resetFormBtn', true)) {
 <button mat-button type="button"
         class="entry-reset-form-btn-field entry-button primary-button"
         [disabled]="isDisabled('resetFormBtn', false)"
         (click)="buttonClick.emit('resetFormBtn')" i18n="@@test.mock-edit.reset-form-btn.text">Reset</button>
-<div class="entry-field-group" [class.group-wrapper-readonly]="isReadonly()">
+}
+<div class="entry-field-group group-type" [class.group-wrapper-readonly]="isReadonly()">
 @if (isReadonly()) {
 @if (!isHidden('name', true)) {
 <div class="entry-name-field entry-readonly-field">
@@ -16,24 +18,33 @@
 @if (!isHidden('name', true)) {
 <mat-form-field class="entry-name-field entry-input" appearance="outline" floatLabel="always" matTooltip="Tooltip text" i18n-matTooltip="@@test.mock-edit.name.tooltip">
     <mat-label>{{ label('name') }}</mat-label>
-    <input matInput formControlName="name" type="text" placeholder="Some / Name" i18n-placeholder="@@test.mock-edit.name.placeholder" autocomplete="off" cdkFocusInitial [readonly]="isDisabled('name', false)">
+    <input matInput formControlName="name" type="text" placeholder="Some / Name" i18n-placeholder="@@test.mock-edit.name.placeholder" autocomplete="off" autofocus cdkFocusInitial [readonly]="isDisabled('name', false)">
 @if (form.get('name')?.hasError('required')) {
     <mat-error i18n="@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID">CUSTOM_VALIDATION_MESSAGE</mat-error>
 }@if (form.get('name')?.hasError('maxlength')) {
     <mat-error i18n="@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID">CUSTOM_VALIDATION_MESSAGE</mat-error>
 }@if (form.get('name')?.hasError('pattern')) {
     <mat-error i18n="@@test.mock-edit.name.pattern">Name is not in valid format</mat-error>
+}@if (form.get('name')?.hasError('uniqueName')) {
+    <mat-error i18n="@@validators.unique-name">Unique name validation failed</mat-error>
+}@if (form.get('name')?.hasError('isEnsured')) {
+    <mat-error i18n="@@validators.is-ensured">Is ensured validation failed</mat-error>
 }</mat-form-field>
 }
 }
 @if (!isHidden('description', true)) {
-<entry-redactor formControlName="description" class="entry-description-field entry-redactor"></entry-redactor>
+<div class="entry-description-field entry-redactor">
+    <label class="entry-field-label">{{ label('description') }}</label>
+    <entry-redactor formControlName="description"></entry-redactor>
+@if (form.get('description')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.description.required">Some Description is required</mat-error>
+}</div>
 }
 @if (isReadonly()) {
 @if (!isHidden('date', true)) {
 <div class="entry-date-field entry-readonly-field">
     <span class="entry-readonly-label">{{ label('date') }}</span>
-    <span class="entry-readonly-value">{{ readonlyValue(form.get('date')) }}</span>
+    <span class="entry-readonly-value">{{ (form.get('date')?.value | date) ?? '' }}</span>
 </div>
 }
 } @else {
@@ -43,14 +54,16 @@
     <input matInput [matDatepicker]="picker_date" formControlName="date" placeholder="Date" i18n-placeholder="@@test.mock-edit.date.placeholder">
     <mat-datepicker-toggle matIconSuffix [for]="picker_date"></mat-datepicker-toggle>
     <mat-datepicker #picker_date></mat-datepicker>
-</mat-form-field>
+@if (form.get('date')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.date.required">Date is required</mat-error>
+}</mat-form-field>
 }
 }
 @if (isReadonly()) {
 @if (!isHidden('money', true)) {
 <div class="entry-money-field entry-readonly-field">
     <span class="entry-readonly-label">{{ label('money') }}</span>
-    <span class="entry-readonly-value">{{ readonlyValue(form.get('money')) }}</span>
+    <span class="entry-readonly-value">{{ (form.get('money')?.value | currency) ?? '' }}</span>
 </div>
 }
 } @else {
@@ -60,6 +73,8 @@
     <input matInput formControlName="money" type="number" placeholder="Money" i18n-placeholder="@@test.mock-edit.money.placeholder" entryFieldFormat [entryFieldFormatDef]="{ name: 'currency' }" [readonly]="isDisabled('money', false)">
 @if (form.get('money')?.hasError('max')) {
     <mat-error i18n="@@test.mock-edit.money.max">Money value should be less than 999.89</mat-error>
+}@if (form.get('money')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.money.required">Money is required</mat-error>
 }</mat-form-field>
 }
 }
@@ -101,7 +116,9 @@
             <mat-option [value]="option.value">{{option.displayName}}</mat-option>
         }
     </mat-select>
-</mat-form-field>
+@if (form.get('formStatus')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.form-status.required">Form status is required</mat-error>
+}</mat-form-field>
 }
 }
 @if (isReadonly()) {
@@ -120,7 +137,9 @@
             <mat-radio-button [value]="option.value">{{option.displayName}}</mat-radio-button>
         }
     </mat-radio-group>
-</div>
+@if (form.get('mockRadio')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.mock-radio.required">Radio is required</mat-error>
+}</div>
 }
 }
 @if (isReadonly()) {
@@ -139,7 +158,9 @@
             <mat-option [value]="option.value">{{option.displayName}}</mat-option>
         }
     </mat-select>
-</mat-form-field>
+@if (form.get('mockBoolSelect')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.mock-bool-select.required">BoolSelect is required</mat-error>
+}</mat-form-field>
 }
 }
 @if (isReadonly()) {
@@ -157,7 +178,9 @@
                       [disabled]="isDisabled('mockMultiCheckbox', false)"
                       (change)="toggleOption(form.get('mockMultiCheckbox'), option.value, $event.checked)">{{option.displayName}}</mat-checkbox>
     }
-</div>
+@if (form.get('mockMultiCheckbox')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.mock-multi-checkbox.required">MultiCheckbox is required</mat-error>
+}</div>
 }
 }
 @if (isReadonly()) {
@@ -175,7 +198,9 @@
                       [disabled]="isDisabled('multiCheckboxWithStringIds', false)"
                       (change)="toggleOption(form.get('multiCheckboxWithStringIds'), option.value, $event.checked)">{{option.displayName}}</mat-checkbox>
     }
-</div>
+@if (form.get('multiCheckboxWithStringIds')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.multi-checkbox-with-string-ids.required">MultiCheckbox is required</mat-error>
+}</div>
 }
 }
 @if (isReadonly()) {
@@ -194,7 +219,9 @@
             <mat-option [value]="option.value">{{option.displayName}}</mat-option>
         }
     </mat-select>
-</mat-form-field>
+@if (form.get('categoryId')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.category-id.required">Category is required</mat-error>
+}</mat-form-field>
 }
 }
 @if (isReadonly()) {
@@ -214,14 +241,18 @@
             <mat-option [value]="option.value">{{option.displayName}}</mat-option>
         }
     </mat-select>
-</mat-form-field>
+@if (form.get('types')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.types.required">Types is required</mat-error>
+}</mat-form-field>
 }
 }
 @if (!isHidden('password', true)) {
 <mat-form-field class="entry-password-field entry-input">
     <mat-label>{{ label('password') }}</mat-label>
     <input matInput formControlName="password" type="password" placeholder="Password" i18n-placeholder="@@test.mock-edit.password.placeholder" [readonly]="isDisabled('password', false)">
-</mat-form-field>
+@if (form.get('password')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.password.required">Password is required</mat-error>
+}</mat-form-field>
 }
 @if (isReadonly()) {
 @if (!isHidden('isActive', true)) {
@@ -233,7 +264,9 @@
 } @else {
 @if (!isHidden('isActive', true)) {
 <mat-checkbox formControlName="isActive" class="entry-is-active-field entry-checkbox">{{ label('isActive') }}</mat-checkbox>
-}
+@if (form.get('isActive')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.is-active.required">Active is required</mat-error>
+}}
 }
 @if (isReadonly()) {
 @if (!isHidden('notes', true)) {
@@ -247,7 +280,9 @@
 <mat-form-field class="entry-notes-field entry-textarea">
     <mat-label>{{ label('notes') }}</mat-label>
     <textarea matInput formControlName="notes" placeholder="Notes" i18n-placeholder="@@test.mock-edit.notes.placeholder" rows="4" [readonly]="isDisabled('notes', false)"></textarea>
-</mat-form-field>
+@if (form.get('notes')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.notes.required">Notes is required</mat-error>
+}</mat-form-field>
 }
 }
 @if (isReadonly()) {
@@ -271,11 +306,18 @@
             <mat-option [value]="option.value">{{option.displayName}}</mat-option>
         }
     </mat-autocomplete>
-</mat-form-field>
+@if (form.get('region')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.region.required">Region is required</mat-error>
+}</mat-form-field>
 }
 }
 @if (!isHidden('fileUpload', true)) {
-<entry-file-input formControlName="fileUpload" class="entry-file-upload-field entry-file-input" [readonly]="isDisabled('fileUpload', false)"></entry-file-input>
+<div class="entry-file-upload-field entry-file-input">
+    <label class="entry-field-label">{{ label('fileUpload') }}</label>
+    <entry-file-input formControlName="fileUpload" [readonly]="isDisabled('fileUpload', false)"></entry-file-input>
+@if (form.get('fileUpload')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.file-upload.required">File upload is required</mat-error>
+}</div>
 }
 @if (!isHidden('addresses', true)) {
 <ng-container formArrayName="addresses">
@@ -293,7 +335,9 @@
 <mat-form-field class="entry-city-field entry-input">
     <mat-label>{{ label('addresses.city') }}</mat-label>
     <input matInput formControlName="city" type="text" placeholder="City" i18n-placeholder="@@test.mock-edit.city.placeholder" [readonly]="isDisabled('addresses.city', false)">
-</mat-form-field>
+@if (addressesItemGroup.get('city')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.city.required">City is required</mat-error>
+}</mat-form-field>
 }
 }
 @if (isReadonly()) {
@@ -312,7 +356,9 @@
             <mat-option [value]="option.value">{{option.displayName}}</mat-option>
         }
     </mat-select>
-</mat-form-field>
+@if (addressesItemGroup.get('country')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.country.required">Country is required</mat-error>
+}</mat-form-field>
 }
 }
 @if (isReadonly()) {
@@ -327,7 +373,9 @@
 <mat-form-field class="entry-street-field entry-input">
     <mat-label>{{ label('addresses.street') }}</mat-label>
     <input matInput formControlName="street" type="text" placeholder="Street" i18n-placeholder="@@test.mock-edit.street.placeholder" [readonly]="isDisabled('addresses.street', false)">
-</mat-form-field>
+@if (addressesItemGroup.get('street')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.street.required">Street is required</mat-error>
+}</mat-form-field>
 }
 }
 @if (isReadonly()) {
@@ -342,7 +390,9 @@
 <mat-form-field class="entry-house-number-field entry-input">
     <mat-label>{{ label('addresses.houseNumber') }}</mat-label>
     <input matInput formControlName="houseNumber" type="text" placeholder="House number" i18n-placeholder="@@test.mock-edit.house-number.placeholder" [readonly]="isDisabled('addresses.houseNumber', false)">
-</mat-form-field>
+@if (addressesItemGroup.get('houseNumber')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.house-number.required">House number is required</mat-error>
+}</mat-form-field>
 }
 }
 @if (isReadonly()) {
@@ -355,7 +405,9 @@
 } @else {
 @if (!isHidden('addresses.verified', true)) {
 <mat-checkbox formControlName="verified" class="entry-verified-field entry-checkbox">{{ label('addresses.verified') }}</mat-checkbox>
-}
+@if (addressesItemGroup.get('verified')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.verified.required">Verified is required</mat-error>
+}}
 }
             @if (!isReadonly()) {
             <button mat-button type="button" class="entry-array-remove-button" (click)="removeAddressesItem($index)" i18n="@@test.mock-edit.addresses.remove-item">Remove</button>
@@ -371,7 +423,7 @@
 @if (!isHidden('dateAndTime', true)) {
 <div class="entry-date-and-time-field entry-readonly-field">
     <span class="entry-readonly-label">{{ label('dateAndTime') }}</span>
-    <span class="entry-readonly-value">{{ readonlyValue(form.get('dateAndTime')) }}</span>
+    <span class="entry-readonly-value">{{ (form.get('dateAndTime')?.value | date) ?? '' }}</span>
 </div>
 }
 } @else {
@@ -381,7 +433,9 @@
     <input matInput [matDatetimepicker]="picker_dateAndTime" formControlName="dateAndTime" placeholder="Date and time" i18n-placeholder="@@test.mock-edit.date-and-time.placeholder">
     <mat-datetimepicker-toggle matIconSuffix [for]="picker_dateAndTime"></mat-datetimepicker-toggle>
     <mat-datetimepicker #picker_dateAndTime></mat-datetimepicker>
-</mat-form-field>
+@if (form.get('dateAndTime')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.date-and-time.required">Date and time is required</mat-error>
+}</mat-form-field>
 }
 }
 </div>
@@ -401,6 +455,8 @@
     <mat-error i18n="@@test.mock-edit.email1.pattern">CUSTOM_VALIDATION_MESSAGE</mat-error>
 }@if (form.get('email1')?.hasError('maxlength')) {
     <mat-error i18n="@@test.mock-edit.email1.max-length">Email 1 value should be less than 50 characters</mat-error>
+}@if (form.get('email1')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.email1.required">Email 1 is required</mat-error>
 }</mat-form-field>
 }
 }
@@ -420,6 +476,8 @@
     <mat-error i18n="@@validators.pattern.emailAddress">Invalid email address format</mat-error>
 }@if (form.get('email2')?.hasError('maxlength')) {
     <mat-error i18n="@@test.mock-edit.email2.max-length">Email 2 value should be less than 50 characters</mat-error>
+}@if (form.get('email2')?.hasError('required')) {
+    <mat-error i18n="@@test.mock-edit.email2.required">Email 2 is required</mat-error>
 }</mat-form-field>
 }
 }

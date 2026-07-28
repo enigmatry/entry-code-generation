@@ -8,4 +8,5 @@ public class FormAddressMock
     public string City { get; set; } = String.Empty;
     public string Country { get; set; } = String.Empty;
     public bool Verified { get; set; }
+    public List<FormAddressMock> NestedAddresses { get; set; } = new();
 }

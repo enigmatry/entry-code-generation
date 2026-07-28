@@ -50,6 +50,21 @@ public class SignalsFormComponentValidatorFixture
     }
 
     [Test]
+    public void Validate_NestedArrayInsideArrayItem_Throws()
+    {
+        var builder = new FormComponentBuilder<FormMock>();
+        builder.Component().HasName("MockEdit").BelongsToFeature("Test");
+        builder.ArrayFormControl(x => x.Addresses)
+            .WithItemConfiguration(itemConfiguration =>
+                itemConfiguration.ArrayFormControl(x => x.NestedAddresses).WithItemConfiguration(_ => { }));
+
+        var exception = Should.Throw<InvalidOperationException>(() => SignalsFormComponentValidator.Validate(builder.Build()));
+
+        exception.Message.ShouldContain("addresses");
+        exception.Message.ShouldContain("Nested arrays are not supported");
+    }
+
+    [Test]
     public void Validate_MockConfiguration_Passes()
     {
         var builder = new FormComponentBuilder<FormMock>();
