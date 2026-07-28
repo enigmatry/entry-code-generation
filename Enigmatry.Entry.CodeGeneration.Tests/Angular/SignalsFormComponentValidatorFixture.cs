@@ -7,10 +7,10 @@ using Shouldly;
 namespace Enigmatry.Entry.CodeGeneration.Tests.Angular;
 
 [Category("unit")]
-public class SignalsFormComponentValidatorFixture
+internal sealed class SignalsFormComponentValidatorFixture
 {
     [Test]
-    public void Validate_RichTextControlWithoutImport_Throws()
+    public void RichTextWithoutImportThrows()
     {
         var builder = new FormComponentBuilder<FormMock>();
         builder.Component().HasName("MockEdit").BelongsToFeature("Test");
@@ -23,7 +23,7 @@ public class SignalsFormComponentValidatorFixture
     }
 
     [Test]
-    public void Validate_CustomControlWithoutImport_Throws()
+    public void CustomControlWithoutImportThrows()
     {
         var builder = new FormComponentBuilder<FormMock>();
         builder.Component().HasName("MockEdit").BelongsToFeature("Test");
@@ -36,7 +36,7 @@ public class SignalsFormComponentValidatorFixture
     }
 
     [Test]
-    public void Validate_AutocompleteInsideArrayItem_Throws()
+    public void AutocompleteInsideArrayItemThrows()
     {
         var builder = new FormComponentBuilder<FormMock>();
         builder.Component().HasName("MockEdit").BelongsToFeature("Test");
@@ -50,7 +50,7 @@ public class SignalsFormComponentValidatorFixture
     }
 
     [Test]
-    public void Validate_NestedArrayInsideArrayItem_Throws()
+    public void NestedArrayInsideArrayItemThrows()
     {
         var builder = new FormComponentBuilder<FormMock>();
         builder.Component().HasName("MockEdit").BelongsToFeature("Test");
@@ -65,7 +65,7 @@ public class SignalsFormComponentValidatorFixture
     }
 
     [Test]
-    public void Validate_MockConfiguration_Passes()
+    public void MockConfigurationPasses()
     {
         var builder = new FormComponentBuilder<FormMock>();
         new FormMockConfiguration().Configure(builder);
