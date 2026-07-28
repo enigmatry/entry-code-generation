@@ -27,6 +27,7 @@ Short, easy to understand, explanation of the tool ...
   * [Form component configuration](#form-component-configuration)
 * [FAQ](#faq)
 * [Examples](#examples)
+* [Migrating from Formly to signals-based generation](MIGRATION.md)
 
 ## Glossary
 
