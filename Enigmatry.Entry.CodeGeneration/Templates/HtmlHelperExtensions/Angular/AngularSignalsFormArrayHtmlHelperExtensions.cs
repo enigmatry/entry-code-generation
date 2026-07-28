@@ -14,8 +14,10 @@ public static class AngularSignalsFormArrayHtmlHelperExtensions
         var propertyName = arrayControl.PropertyName;
         var methodName = AngularSignalsFormModelExtensions.Capitalize(propertyName);
 
+        // FlatFormControls flattens nested groups and skips buttons, matching how the view
+        // renderer emits the item's controls against the row FormGroup.
         var childDeclarations = group.FormControls
-            .Where(control => control is not ButtonFormControl)
+            .FlatFormControls()
             .Select(control => htmlHelper.FormControlDeclaration(control, "            ").ToString());
 
         return htmlHelper.Raw(
@@ -94,7 +96,8 @@ public static class AngularSignalsFormArrayHtmlHelperExtensions
 
         var arrayItemLines = model.FlatFormControls().OfType<ArrayFormControl>()
             .SelectMany(array => ((FormControlGroup)array.FormControlGroup).FormControls
-                .Where(child => child.Readonly && child is not ButtonFormControl)
+                .FlatFormControls()
+                .Where(child => child.Readonly && child is not ArrayFormControl)
                 .Select(child =>
                     $"                (this.form.get('{array.PropertyName}') as FormArray<FormGroup>).controls" +
                     $".forEach(itemGroup => itemGroup.get('{child.PropertyName}')?.disable({{ emitEvent: false }}));"));

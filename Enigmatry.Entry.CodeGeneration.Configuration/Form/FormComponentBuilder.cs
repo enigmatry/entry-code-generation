@@ -170,6 +170,16 @@ public class FormComponentBuilder<T> : BaseComponentBuilder<FormComponentModel>
         return this;
     }
 
+    /// <summary>
+    /// Override the global signals setting for this specific component.
+    /// When set, this takes precedence over CodeGeneratorOptions.WithSignals.
+    /// </summary>
+    public FormComponentBuilder<T> WithSignals(bool enabled = true)
+    {
+        _withSignals = enabled;
+        return this;
+    }
+
     private IEnumerable<FormControl> BuildFormControls(ComponentInfo componentInfo)
     {
         var formControls = _formGroup.BuildFormControls(componentInfo);

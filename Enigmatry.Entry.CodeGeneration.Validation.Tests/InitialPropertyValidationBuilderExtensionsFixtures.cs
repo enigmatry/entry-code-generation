@@ -243,8 +243,8 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
 
         _validationConfiguration.ValidationRules.Count().ShouldBe(2);
 
-        AssertNumbercMinValidationRule(GetRuleByFormlyRuleName("min"), MinIntField, true);
-        AssertNumbercMaxValidationRule(GetRuleByFormlyRuleName("max"), MinIntField, true);
+        AssertNumbercMinValidationRule(GetRuleByRuleName("min"), MinIntField, true);
+        AssertNumbercMaxValidationRule(GetRuleByRuleName("max"), MinIntField, true);
     }
 
     [Test]
@@ -256,8 +256,8 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
 
         _validationConfiguration.ValidationRules.Count().ShouldBe(2);
 
-        AssertNumbercMinValidationRule(GetRuleByFormlyRuleName("min"), MinDoubleField, true);
-        AssertNumbercMaxValidationRule(GetRuleByFormlyRuleName("max"), MinDoubleField, true);
+        AssertNumbercMinValidationRule(GetRuleByRuleName("min"), MinDoubleField, true);
+        AssertNumbercMaxValidationRule(GetRuleByRuleName("max"), MinDoubleField, true);
     }
 
     [TestCase("MESSAGE", "")]
@@ -319,9 +319,9 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
         return _validationConfiguration.ValidationRules.Single(x => x.PropertyName == propertyName.Camelize());
     }
 
-    private IFormlyValidationRule GetRuleByFormlyRuleName(string RuleName)
+    private IFormlyValidationRule GetRuleByRuleName(string ruleName)
     {
-        return _validationConfiguration.ValidationRules.Single(x => x.RuleName == RuleName);
+        return _validationConfiguration.ValidationRules.Single(x => x.RuleName == ruleName);
     }
 
     private static string GetIncrement<T>()

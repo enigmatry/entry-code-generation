@@ -1,4 +1,5 @@
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+using Humanizer;
 
 namespace Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 
@@ -26,4 +27,13 @@ public record FormViewRenderContext(bool EnableI18N, bool UseReadonlyDisplay)
     public string MemberName(FormControl field, string suffix) => MemberNamePrefix.Length == 0
         ? $"{field.PropertyName}{suffix}"
         : $"{MemberNamePrefix}{AngularSignalsFormModelExtensions.Capitalize(field.PropertyName)}{suffix}";
+
+    /// <summary>
+    /// Property segment of a translation id minted at render time, e.g. "mock-radio" at root or
+    /// "addresses.city" inside the addresses array — so an array child never collides with a
+    /// root control of the same name.
+    /// </summary>
+    public string TranslationIdSegment(FormControl field) => MemberNamePrefix.Length == 0
+        ? field.PropertyName.Kebaberize()
+        : $"{MemberNamePrefix.Kebaberize()}.{field.PropertyName.Kebaberize()}";
 }

@@ -314,8 +314,8 @@ export class MockEditGeneratedComponent {
 
     protected readonly isHidden = (propertyName: string, staticVisible: boolean): boolean => {
         if (!staticVisible) {
-			return true;
-		}
+            return true;
+        }
 
         return this.fieldsHideExpressions()?.[propertyName]?.(this.currentModel()) ?? false;
     };

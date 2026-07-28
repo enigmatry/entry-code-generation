@@ -84,18 +84,13 @@ public static class AngularSignalsSelectHtmlHelperExtensions
             yield return (select, "");
         }
 
+        // Autocomplete controls inside array items are rejected up front by
+        // SignalsFormComponentValidator, so every select yielded here can be declared.
         foreach (var array in model.FlatFormControls().OfType<ArrayFormControl>())
         {
             var children = ((FormControlGroup)array.FormControlGroup).FormControls;
             foreach (var select in children.FlatFormControls().OfType<SelectControlBase>())
             {
-                if (select is AutocompleteFormControl)
-                {
-                    throw new InvalidOperationException(
-                        $"Autocomplete controls are not supported inside array items (per-row filtering state cannot be generated). " +
-                        $"Property '{array.PropertyName}.{select.PropertyName}' on component '{model.ComponentInfo.Name}'.");
-                }
-
                 yield return (select, array.PropertyName);
             }
         }

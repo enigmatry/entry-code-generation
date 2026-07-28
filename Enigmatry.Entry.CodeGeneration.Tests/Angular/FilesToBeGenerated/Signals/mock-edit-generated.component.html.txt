@@ -336,7 +336,7 @@
     <mat-label>{{ label('addresses.city') }}</mat-label>
     <input matInput formControlName="city" type="text" placeholder="City" i18n-placeholder="@@test.mock-edit.city.placeholder" [readonly]="isDisabled('addresses.city', false)">
 @if (addressesItemGroup.get('city')?.hasError('required')) {
-    <mat-error i18n="@@test.mock-edit.city.required">City is required</mat-error>
+    <mat-error i18n="@@test.mock-edit.addresses.city.required">City is required</mat-error>
 }</mat-form-field>
 }
 }
@@ -357,7 +357,7 @@
         }
     </mat-select>
 @if (addressesItemGroup.get('country')?.hasError('required')) {
-    <mat-error i18n="@@test.mock-edit.country.required">Country is required</mat-error>
+    <mat-error i18n="@@test.mock-edit.addresses.country.required">Country is required</mat-error>
 }</mat-form-field>
 }
 }
@@ -374,7 +374,7 @@
     <mat-label>{{ label('addresses.street') }}</mat-label>
     <input matInput formControlName="street" type="text" placeholder="Street" i18n-placeholder="@@test.mock-edit.street.placeholder" [readonly]="isDisabled('addresses.street', false)">
 @if (addressesItemGroup.get('street')?.hasError('required')) {
-    <mat-error i18n="@@test.mock-edit.street.required">Street is required</mat-error>
+    <mat-error i18n="@@test.mock-edit.addresses.street.required">Street is required</mat-error>
 }</mat-form-field>
 }
 }
@@ -391,7 +391,7 @@
     <mat-label>{{ label('addresses.houseNumber') }}</mat-label>
     <input matInput formControlName="houseNumber" type="text" placeholder="House number" i18n-placeholder="@@test.mock-edit.house-number.placeholder" [readonly]="isDisabled('addresses.houseNumber', false)">
 @if (addressesItemGroup.get('houseNumber')?.hasError('required')) {
-    <mat-error i18n="@@test.mock-edit.house-number.required">House number is required</mat-error>
+    <mat-error i18n="@@test.mock-edit.addresses.house-number.required">House number is required</mat-error>
 }</mat-form-field>
 }
 }
@@ -406,7 +406,7 @@
 @if (!isHidden('addresses.verified', true)) {
 <mat-checkbox formControlName="verified" class="entry-verified-field entry-checkbox">{{ label('addresses.verified') }}</mat-checkbox>
 @if (addressesItemGroup.get('verified')?.hasError('required')) {
-    <mat-error i18n="@@test.mock-edit.verified.required">Verified is required</mat-error>
+    <mat-error i18n="@@test.mock-edit.addresses.verified.required">Verified is required</mat-error>
 }}
 }
             @if (!isReadonly()) {

@@ -32,7 +32,7 @@ internal static class AngularSignalsDefaultErrorRenderers
         var translationId =
             $"{field.ComponentInfo.Feature.Name.Kebaberize()}" +
             $".{field.ComponentInfo.Name.Kebaberize()}" +
-            $".{field.PropertyName.Kebaberize()}" +
+            $".{context.TranslationIdSegment(field)}" +
             $".required";
         var i18nAttribute = context.EnableI18N ? $" i18n=\"@@{translationId}\"" : "";
 

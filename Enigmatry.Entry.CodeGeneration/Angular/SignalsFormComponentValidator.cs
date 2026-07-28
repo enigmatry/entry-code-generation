@@ -13,9 +13,6 @@ public static class SignalsFormComponentValidator
 {
     public static void Validate(FormComponentModel model)
     {
-        // Throws for autocomplete controls inside array items, which the declarations cannot support.
-        _ = model.SelectControlsWithMemberPrefixes().ToList();
-
         foreach (var array in model.FlatFormControls().OfType<ArrayFormControl>())
         {
             var children = ((FormControlGroup)array.FormControlGroup).FormControls;
@@ -24,6 +21,14 @@ public static class SignalsFormComponentValidator
                 throw new InvalidOperationException(
                     $"Array control '{array.PropertyName}' on component '{model.ComponentInfo.Name}' contains a nested array control. " +
                     $"Nested arrays are not supported by the signals templates (item factories and declarations only descend one level).");
+            }
+
+            var autocomplete = children.FlatFormControls().OfType<AutocompleteFormControl>().FirstOrDefault();
+            if (autocomplete != null)
+            {
+                throw new InvalidOperationException(
+                    $"Autocomplete controls are not supported inside array items (per-row filtering state cannot be generated). " +
+                    $"Property '{array.PropertyName}.{autocomplete.PropertyName}' on component '{model.ComponentInfo.Name}'.");
             }
         }
 

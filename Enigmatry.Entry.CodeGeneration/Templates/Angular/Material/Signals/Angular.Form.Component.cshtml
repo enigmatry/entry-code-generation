@@ -36,6 +36,7 @@ import { @Html.Raw(formsImports) } from '@@angular/forms';
     {
         entryFormImports += ", EntryFieldFormatDirective";
     }
+    entryFormImports += Model.EntryFormImportSymbols();
 }
 import { @Html.Raw(entryFormImports) } from '@@enigmatry/entry-form';
 @if (hasDynamicSelects)
@@ -165,8 +166,8 @@ export class @Model.AngularComponentName() {
 
     protected readonly isHidden = (propertyName: string, staticVisible: boolean): boolean => {
         if (!staticVisible) {
-			return true;
-		}
+            return true;
+        }
 
         return this.fieldsHideExpressions()?.[propertyName]?.(this.currentModel()) ?? false;
     };

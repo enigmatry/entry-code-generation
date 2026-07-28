@@ -10,6 +10,7 @@ using NUnit.Framework;
 
 namespace Enigmatry.Entry.CodeGeneration.Tests;
 
+[Category("unit")]
 public abstract class CodeGenerationFixtureBase
 {
     private IHost _host = null!;

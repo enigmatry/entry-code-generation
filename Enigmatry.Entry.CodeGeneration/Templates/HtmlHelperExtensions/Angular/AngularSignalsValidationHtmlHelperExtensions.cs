@@ -57,7 +57,7 @@ public static class AngularSignalsValidationHtmlHelperExtensions
                 ? validationRule.MessageTranslationId
                 : $"{field.ComponentInfo.Feature.Name.Kebaberize()}" +
                   $".{field.ComponentInfo.Name.Kebaberize()}" +
-                  $".{field.PropertyName.Kebaberize()}" +
+                  $".{context.TranslationIdSegment(field)}" +
                   $".{validationRule.RuleName.Kebaberize()}";
             var i18nAttribute = context.EnableI18N && translationId.HasContent() ? $" i18n=\"@@{translationId}\"" : "";
 

@@ -12,7 +12,7 @@ public static class AngularSignalsImportsHtmlHelperExtensions
 
     // Symbols from @enigmatry/entry-form are skipped here: the component template always emits
     // its own import statement for that package (expression dictionary types etc.), and the
-    // component-import symbols are merged into it via HasFormattedControls.
+    // component-import symbols are merged into it via EntryFormImportSymbols.
     public static IHtmlContent MaterialImportStatements(this IHtmlHelper htmlHelper, FormComponentModel model) =>
         htmlHelper.Raw(String.Concat(model.MaterialImports()
             .Where(import => import.Path != EntryFormPackage)
@@ -23,14 +23,29 @@ public static class AngularSignalsImportsHtmlHelperExtensions
         String.Join(", ", new[] { "ReactiveFormsModule" }
             .Concat(model.MaterialImports().Select(import => import.Symbol)));
 
+    /// <summary>
+    /// Symbols registered via WithImport that live in the @enigmatry/entry-form package, rendered
+    /// as ", Symbol" suffixes. The component template appends them to its own entry-form import
+    /// statement because <see cref="MaterialImportStatements"/> skips that package.
+    /// </summary>
+    public static string EntryFormImportSymbols(this FormComponentModel model)
+    {
+        var alreadyImportedSymbols = model.HasFormattedControls()
+            ? new[] { "EntryFieldFormatDirective" }
+            : Array.Empty<string>();
+
+        return String.Concat(model.AllControlsIncludingArrayItems()
+            .Where(control => control.Import != null && control.Import.Path == EntryFormPackage)
+            .Select(control => control.Import!.Symbol)
+            .Distinct()
+            .Except(alreadyImportedSymbols)
+            .Select(symbol => $", {symbol}"));
+    }
+
     private static IReadOnlyList<(string Symbol, string Path)> MaterialImports(this FormComponentModel model)
     {
         var controls = model.AllControlsIncludingArrayItems().ToList();
 
-        var usesFormField = controls.Any(control => control
-            is (InputControlBase and not RichTextInputFormControl)
-            or SelectFormControl or MultiSelectFormControl or AutocompleteFormControl
-            or DatepickerFormControl or DateTimePickerFormControl);
         var usesMatInput = controls.Any(control => control
             is (InputControlBase and not RichTextInputFormControl)
             or AutocompleteFormControl or DatepickerFormControl or DateTimePickerFormControl);
@@ -69,10 +84,10 @@ public static class AngularSignalsImportsHtmlHelperExtensions
             imports.Add(("MatDatepickerModule", "@angular/material/datepicker"));
         }
 
-        if (usesFormField)
-        {
-            imports.Add(("MatFormFieldModule", "@angular/material/form-field"));
-        }
+        // Always imported: every rendered field can emit <mat-error> (DynamicRequiredError covers
+        // controls without a static required rule), and checkbox/radio/multicheckbox/rich-text/custom
+        // renderers emit mat-error/mat-hint without a surrounding mat-form-field.
+        imports.Add(("MatFormFieldModule", "@angular/material/form-field"));
 
         if (usesMatInput)
         {

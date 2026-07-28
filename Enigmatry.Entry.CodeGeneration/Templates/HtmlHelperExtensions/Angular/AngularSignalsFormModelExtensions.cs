@@ -93,5 +93,7 @@ public static class AngularSignalsFormModelExtensions
         return NumericPropertyTypes.Contains(Nullable.GetUnderlyingType(propertyType) ?? propertyType);
     }
 
-    internal static string Capitalize(string propertyName) => Char.ToUpper(propertyName[0]) + propertyName.Substring(1);
+    internal static string Capitalize(string propertyName) => propertyName.Length == 0
+        ? propertyName
+        : Char.ToUpperInvariant(propertyName[0]) + propertyName[1..];
 }
