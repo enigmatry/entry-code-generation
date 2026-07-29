@@ -20,8 +20,26 @@ public record FormViewRenderContext(bool EnableI18N, bool UseReadonlyDisplay)
     /// <summary>Prefix for generated component member names, e.g. "addresses" turns cityOptions into addressesCityOptions.</summary>
     public string MemberNamePrefix { get; init; } = "";
 
+    /// <summary>
+    /// Trailing argument for isHidden/label/isDisabled calls: empty at root; inside an array row
+    /// the current row item, so expressions for array children evaluate per row (Formly parity —
+    /// a nested field's expression received the nested model).
+    /// </summary>
+    public string ExpressionArgument { get; init; } = "";
+
     /// <summary>Key a control is looked up under in the labels map and the expression-dictionary inputs.</summary>
     public string Key(FormControl field) => $"{ControlKeyPrefix}{field.PropertyName}";
+
+    /// <summary>Generated isHidden(...) call for the control, with the row item appended inside an array.</summary>
+    public string IsHiddenCall(FormControl field) =>
+        $"isHidden('{Key(field)}', {field.Visible.ToString().ToLower()}{ExpressionArgument})";
+
+    /// <summary>Generated isDisabled(...) call for the control, with the row item appended inside an array.</summary>
+    public string IsDisabledCall(FormControl field) =>
+        $"isDisabled('{Key(field)}', {field.Readonly.ToString().ToLower()}{ExpressionArgument})";
+
+    /// <summary>Generated label(...) call for the control, with the row item appended inside an array.</summary>
+    public string LabelCall(FormControl field) => $"label('{Key(field)}'{ExpressionArgument})";
 
     /// <summary>Name of a generated component member belonging to the control (e.g. suffix "Options").</summary>
     public string MemberName(FormControl field, string suffix) => MemberNamePrefix.Length == 0

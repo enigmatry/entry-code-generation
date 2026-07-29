@@ -9,12 +9,12 @@ public class IsRequiredValidationRule : ValidationRule<bool>
         : base(true, propertyInfo, expression, String.Empty, "validators.required")
     { }
 
-    public override string RuleName => "required";
+    public override string FormlyRuleName => "required";
 
-    public override string[] TemplateOptions =>
+    public override string[] FormlyTemplateOptions =>
         new[] { $"{RuleName}: {Rule.ToString().ToLowerInvariant()}" };
 
-    public override string ValidationMessage => HasCustomMessage
+    public override string FormlyValidationMessage => HasCustomMessage
         ? CustomMessage
         : "${field?.templateOptions?.label}:property-name: is required";
 }

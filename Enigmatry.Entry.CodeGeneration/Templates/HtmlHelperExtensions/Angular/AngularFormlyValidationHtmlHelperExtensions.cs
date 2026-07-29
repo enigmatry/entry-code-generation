@@ -1,7 +1,8 @@
-using Enigmatry.Entry.CodeGeneration.Configuration;
-using Enigmatry.Entry.CodeGeneration.Configuration.Form;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+using Enigmatry.Entry.CodeGeneration.Configuration.Form;
+using Enigmatry.Entry.CodeGeneration.Configuration;
 using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript;
+using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 using Humanizer;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,7 +14,7 @@ public static class AngularFormlyValidationHtmlHelperExtensions
     public static IHtmlContent AddValidationTemplateOptions(this IHtmlHelper html, FormControl control)
     {
         var templateOptions = control.ValidationRules
-            .SelectMany(x => x.TemplateOptions)
+            .SelectMany(x => x.GetTemplateOptions())
             .Distinct();
         return html.Raw($"{String.Join(",\r\n", templateOptions)},\r\n");
     }
@@ -29,8 +30,8 @@ public static class AngularFormlyValidationHtmlHelperExtensions
             .ValidationRules
             .Where(rule => rule.HasCustomMessage)
             .Select(x => enableI18N
-                ? $"{x.RuleName}: (err, field) => {AngularLocalization.Localize(x.MessageTranslationId, x.ValidationMessage)}"
-                : $"{x.RuleName}: '{x.ValidationMessage}'"
+                ? $"{x.GetRuleName()}: (err, field) => {AngularLocalization.Localize(x.MessageTranslationId, x.GetValidationMessage())}"
+                : $"{x.GetRuleName()}: '{x.GetValidationMessage()}'"
             );
         return html.Raw($"{String.Join(",\r\n", validationMessages)}\r\n");
     }
@@ -46,14 +47,14 @@ public static class AngularFormlyValidationHtmlHelperExtensions
         {
             foreach (var rule in control.ValidationRules.Where(x => !x.HasCustomMessage))
             {
-                if (!messages.ContainsKey(rule.RuleName))
+                if (!messages.ContainsKey(rule.GetRuleName()))
                 {
                     var message = enableI18N
-                        ? AngularLocalization.Localize(rule.MessageTranslationId, rule.ValidationMessage)
-                        : $"`{rule.ValidationMessage}`";
+                        ? AngularLocalization.Localize(rule.MessageTranslationId, rule.GetValidationMessage())
+                        : $"`{rule.GetValidationMessage()}`";
                     messages.Add(
-                        rule.RuleName,
-                        $"{{ name: '{rule.RuleName}', message: (err, field) => {message} }}"
+                        rule.GetRuleName(),
+                        $"{{ name: '{rule.GetRuleName()}', message: (err, field) => {message} }}"
                     );
                 }
             }

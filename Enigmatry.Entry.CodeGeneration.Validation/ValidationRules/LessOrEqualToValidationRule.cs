@@ -10,16 +10,16 @@ public class LessOrEqualToValidationRule<T> : NumbericValidationRule<T>
         : base(value, propertyInfo, expression, String.Empty, "validators.max")
     { }
 
-    public override string RuleName => "max";
+    public override string FormlyRuleName => "max";
 
-    public override string[] TemplateOptions =>
+    public override string[] FormlyTemplateOptions =>
         new[]
         {
             "type: 'number'",
             $"{RuleName}: {RuleAsString}"
         };
 
-    public override string ValidationMessage => HasCustomMessage
+    public override string FormlyValidationMessage => HasCustomMessage
         ? CustomMessage
         : "${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.max}:max-value:";
 }

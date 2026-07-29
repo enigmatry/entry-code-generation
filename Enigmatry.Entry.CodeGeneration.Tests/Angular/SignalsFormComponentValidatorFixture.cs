@@ -65,11 +65,46 @@ internal sealed class SignalsFormComponentValidatorFixture
     }
 
     [Test]
-    public void MockConfigurationPasses()
+    public void CollidingSelectMemberNamesThrow()
+    {
+        var builder = new FormComponentBuilder<FormCollisionMock>();
+        builder.Component().HasName("MockEdit").BelongsToFeature("Test");
+        builder.SelectFormControl(x => x.AddressesCountry);
+        builder.ArrayFormControl(x => x.Addresses)
+            .WithItemConfiguration(itemConfiguration => itemConfiguration.SelectFormControl(x => x.Country));
+
+        var exception = Should.Throw<InvalidOperationException>(() => SignalsFormComponentValidator.Validate(builder.Build()));
+
+        exception.Message.ShouldContain("addressesCountry");
+        exception.Message.ShouldContain("addresses.country");
+        exception.Message.ShouldContain("colliding member names");
+    }
+
+    [Test]
+    public void RuleWithoutRuleValueTemplateOptionWarns()
+    {
+        var builder = new FormComponentBuilder<FormMock>();
+        builder.Component().HasName("MockEdit").BelongsToFeature("Test");
+        builder.InputFormControl(x => x.Name);
+        var model = builder.Build();
+        model.FormControls.Single(control => control.PropertyName == "name").ValidationRules.Add(new UnsupportedValidationRuleMock());
+
+        var warnings = SignalsFormComponentValidator.Validate(model);
+
+        var warning = warnings.ShouldHaveSingleItem();
+        warning.ShouldContain("nameCheck");
+        warning.ShouldContain("MockEdit.name");
+        warning.ShouldContain("ENTRY_ASYNC_VALIDATOR_RESOLVER");
+    }
+
+    [Test]
+    public void MockConfigurationPassesWithoutWarnings()
     {
         var builder = new FormComponentBuilder<FormMock>();
         new FormMockConfiguration().Configure(builder);
 
-        Should.NotThrow(() => SignalsFormComponentValidator.Validate(builder.Build()));
+        var warnings = SignalsFormComponentValidator.Validate(builder.Build());
+
+        warnings.ShouldBeEmpty();
     }
 }

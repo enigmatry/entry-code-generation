@@ -21,7 +21,7 @@ public class PropertyValidation<T, TProperty> : IPropertyValidation<T, TProperty
 
     public void AddOrReplace(IValidationRule rule)
     {
-        var existing = Rules.SingleOrDefault(x => x.RuleName == rule.RuleName);
+        var existing = Rules.SingleOrDefault(x => x.GetRuleName() == rule.GetRuleName());
 
         if (existing != null)
         {

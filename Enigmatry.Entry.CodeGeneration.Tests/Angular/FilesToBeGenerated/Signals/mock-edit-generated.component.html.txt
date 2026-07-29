@@ -7,6 +7,7 @@
         (click)="buttonClick.emit('resetFormBtn')" i18n="@@test.mock-edit.reset-form-btn.text">Reset</button>
 }
 <div class="entry-field-group group-type" [class.group-wrapper-readonly]="isReadonly()">
+    <label class="entry-field-group-label" i18n="@@test.mock-edit.group-name.label">Group name</label>
 @if (isReadonly()) {
 @if (!isHidden('name', true)) {
 <div class="entry-name-field entry-readonly-field">
@@ -35,10 +36,13 @@
 @if (!isHidden('description', true)) {
 <div class="entry-description-field entry-redactor">
     <label class="entry-field-label">{{ label('description') }}</label>
-    <entry-redactor formControlName="description"></entry-redactor>
+    <entry-redactor formControlName="description" placeholder="Some Description" i18n-placeholder="@@test.mock-edit.description.placeholder"></entry-redactor>
+@if (form.get('description')?.touched) {
 @if (form.get('description')?.hasError('required')) {
     <mat-error i18n="@@test.mock-edit.description.required">Some Description is required</mat-error>
-}</div>
+}
+}
+</div>
 }
 @if (isReadonly()) {
 @if (!isHidden('date', true)) {
@@ -137,9 +141,12 @@
             <mat-radio-button [value]="option.value">{{option.displayName}}</mat-radio-button>
         }
     </mat-radio-group>
+@if (form.get('mockRadio')?.touched) {
 @if (form.get('mockRadio')?.hasError('required')) {
     <mat-error i18n="@@test.mock-edit.mock-radio.required">Radio is required</mat-error>
-}</div>
+}
+}
+</div>
 }
 }
 @if (isReadonly()) {
@@ -178,9 +185,12 @@
                       [disabled]="isDisabled('mockMultiCheckbox', false)"
                       (change)="toggleOption(form.get('mockMultiCheckbox'), option.value, $event.checked)">{{option.displayName}}</mat-checkbox>
     }
+@if (form.get('mockMultiCheckbox')?.touched) {
 @if (form.get('mockMultiCheckbox')?.hasError('required')) {
     <mat-error i18n="@@test.mock-edit.mock-multi-checkbox.required">MultiCheckbox is required</mat-error>
-}</div>
+}
+}
+</div>
 }
 }
 @if (isReadonly()) {
@@ -198,9 +208,12 @@
                       [disabled]="isDisabled('multiCheckboxWithStringIds', false)"
                       (change)="toggleOption(form.get('multiCheckboxWithStringIds'), option.value, $event.checked)">{{option.displayName}}</mat-checkbox>
     }
+@if (form.get('multiCheckboxWithStringIds')?.touched) {
 @if (form.get('multiCheckboxWithStringIds')?.hasError('required')) {
     <mat-error i18n="@@test.mock-edit.multi-checkbox-with-string-ids.required">MultiCheckbox is required</mat-error>
-}</div>
+}
+}
+</div>
 }
 }
 @if (isReadonly()) {
@@ -236,7 +249,7 @@
 <mat-form-field class="entry-types-field entry-select">
     <mat-label>{{ label('types') }}</mat-label>
     <mat-select formControlName="types" multiple>
-        <mat-option (click)="toggleSelectAll(form.get('types'), typesOptions())" i18n="@@select-all-option.select-all">SelectAll</mat-option>
+        <mat-option (onSelectionChange)="$event.isUserInput && toggleSelectAll(form.get('types'), typesOptions())" i18n="@@select-all-option.select-all">SelectAll</mat-option>
         @for (option of typesOptions(); track option.value) {
             <mat-option [value]="option.value">{{option.displayName}}</mat-option>
         }
@@ -258,15 +271,18 @@
 @if (!isHidden('isActive', true)) {
 <div class="entry-is-active-field entry-readonly-field">
     <span class="entry-readonly-label">{{ label('isActive') }}</span>
-    <span class="entry-readonly-value">{{ readonlyValue(form.get('isActive')) }}</span>
+    <span class="entry-readonly-value">{{ readonlyBooleanValue(form.get('isActive')) }}</span>
 </div>
 }
 } @else {
 @if (!isHidden('isActive', true)) {
 <mat-checkbox formControlName="isActive" class="entry-is-active-field entry-checkbox">{{ label('isActive') }}</mat-checkbox>
+@if (form.get('isActive')?.touched) {
 @if (form.get('isActive')?.hasError('required')) {
     <mat-error i18n="@@test.mock-edit.is-active.required">Active is required</mat-error>
-}}
+}
+}
+}
 }
 @if (isReadonly()) {
 @if (!isHidden('notes', true)) {
@@ -314,43 +330,47 @@
 @if (!isHidden('fileUpload', true)) {
 <div class="entry-file-upload-field entry-file-input">
     <label class="entry-field-label">{{ label('fileUpload') }}</label>
-    <entry-file-input formControlName="fileUpload" [readonly]="isDisabled('fileUpload', false)"></entry-file-input>
+    <entry-file-input formControlName="fileUpload" placeholder="File upload" i18n-placeholder="@@test.mock-edit.file-upload.placeholder" [readonly]="isDisabled('fileUpload', false)"></entry-file-input>
+@if (form.get('fileUpload')?.touched) {
 @if (form.get('fileUpload')?.hasError('required')) {
     <mat-error i18n="@@test.mock-edit.file-upload.required">File upload is required</mat-error>
-}</div>
+}
+}
+</div>
 }
 @if (!isHidden('addresses', true)) {
+<div class="entry-addresses-field entry-array-field array-field">
 <ng-container formArrayName="addresses">
     @for (addressesItemGroup of form.controls.addresses.controls; track $index) {
         <ng-container [formGroupName]="$index">
 @if (isReadonly()) {
-@if (!isHidden('addresses.city', true)) {
+@if (!isHidden('addresses.city', true, currentModel().addresses?.[$index])) {
 <div class="entry-city-field entry-readonly-field">
-    <span class="entry-readonly-label">{{ label('addresses.city') }}</span>
+    <span class="entry-readonly-label">{{ label('addresses.city', currentModel().addresses?.[$index]) }}</span>
     <span class="entry-readonly-value">{{ readonlyValue(addressesItemGroup.get('city')) }}</span>
 </div>
 }
 } @else {
-@if (!isHidden('addresses.city', true)) {
+@if (!isHidden('addresses.city', true, currentModel().addresses?.[$index])) {
 <mat-form-field class="entry-city-field entry-input">
-    <mat-label>{{ label('addresses.city') }}</mat-label>
-    <input matInput formControlName="city" type="text" placeholder="City" i18n-placeholder="@@test.mock-edit.city.placeholder" [readonly]="isDisabled('addresses.city', false)">
+    <mat-label>{{ label('addresses.city', currentModel().addresses?.[$index]) }}</mat-label>
+    <input matInput formControlName="city" type="text" placeholder="City" i18n-placeholder="@@test.mock-edit.city.placeholder" [readonly]="isDisabled('addresses.city', false, currentModel().addresses?.[$index])">
 @if (addressesItemGroup.get('city')?.hasError('required')) {
     <mat-error i18n="@@test.mock-edit.addresses.city.required">City is required</mat-error>
 }</mat-form-field>
 }
 }
 @if (isReadonly()) {
-@if (!isHidden('addresses.country', true)) {
+@if (!isHidden('addresses.country', true, currentModel().addresses?.[$index])) {
 <div class="entry-country-field entry-readonly-field">
-    <span class="entry-readonly-label">{{ label('addresses.country') }}</span>
+    <span class="entry-readonly-label">{{ label('addresses.country', currentModel().addresses?.[$index]) }}</span>
     <span class="entry-readonly-value">{{ selectedDisplayName(addressesItemGroup.get('country')?.value, addressesCountryOptions()) }}</span>
 </div>
 }
 } @else {
-@if (!isHidden('addresses.country', true)) {
+@if (!isHidden('addresses.country', true, currentModel().addresses?.[$index])) {
 <mat-form-field class="entry-country-field entry-select">
-    <mat-label>{{ label('addresses.country') }}</mat-label>
+    <mat-label>{{ label('addresses.country', currentModel().addresses?.[$index]) }}</mat-label>
     <mat-select formControlName="country">
         @for (option of addressesCountryOptions(); track option.value) {
             <mat-option [value]="option.value">{{option.displayName}}</mat-option>
@@ -362,62 +382,66 @@
 }
 }
 @if (isReadonly()) {
-@if (!isHidden('addresses.street', true)) {
+@if (!isHidden('addresses.street', true, currentModel().addresses?.[$index])) {
 <div class="entry-street-field entry-readonly-field">
-    <span class="entry-readonly-label">{{ label('addresses.street') }}</span>
+    <span class="entry-readonly-label">{{ label('addresses.street', currentModel().addresses?.[$index]) }}</span>
     <span class="entry-readonly-value">{{ readonlyValue(addressesItemGroup.get('street')) }}</span>
 </div>
 }
 } @else {
-@if (!isHidden('addresses.street', true)) {
+@if (!isHidden('addresses.street', true, currentModel().addresses?.[$index])) {
 <mat-form-field class="entry-street-field entry-input">
-    <mat-label>{{ label('addresses.street') }}</mat-label>
-    <input matInput formControlName="street" type="text" placeholder="Street" i18n-placeholder="@@test.mock-edit.street.placeholder" [readonly]="isDisabled('addresses.street', false)">
+    <mat-label>{{ label('addresses.street', currentModel().addresses?.[$index]) }}</mat-label>
+    <input matInput formControlName="street" type="text" placeholder="Street" i18n-placeholder="@@test.mock-edit.street.placeholder" [readonly]="isDisabled('addresses.street', false, currentModel().addresses?.[$index])">
 @if (addressesItemGroup.get('street')?.hasError('required')) {
     <mat-error i18n="@@test.mock-edit.addresses.street.required">Street is required</mat-error>
 }</mat-form-field>
 }
 }
 @if (isReadonly()) {
-@if (!isHidden('addresses.houseNumber', true)) {
+@if (!isHidden('addresses.houseNumber', true, currentModel().addresses?.[$index])) {
 <div class="entry-house-number-field entry-readonly-field">
-    <span class="entry-readonly-label">{{ label('addresses.houseNumber') }}</span>
+    <span class="entry-readonly-label">{{ label('addresses.houseNumber', currentModel().addresses?.[$index]) }}</span>
     <span class="entry-readonly-value">{{ readonlyValue(addressesItemGroup.get('houseNumber')) }}</span>
 </div>
 }
 } @else {
-@if (!isHidden('addresses.houseNumber', true)) {
+@if (!isHidden('addresses.houseNumber', true, currentModel().addresses?.[$index])) {
 <mat-form-field class="entry-house-number-field entry-input">
-    <mat-label>{{ label('addresses.houseNumber') }}</mat-label>
-    <input matInput formControlName="houseNumber" type="text" placeholder="House number" i18n-placeholder="@@test.mock-edit.house-number.placeholder" [readonly]="isDisabled('addresses.houseNumber', false)">
+    <mat-label>{{ label('addresses.houseNumber', currentModel().addresses?.[$index]) }}</mat-label>
+    <input matInput formControlName="houseNumber" type="text" placeholder="House number" i18n-placeholder="@@test.mock-edit.house-number.placeholder" [readonly]="isDisabled('addresses.houseNumber', false, currentModel().addresses?.[$index])">
 @if (addressesItemGroup.get('houseNumber')?.hasError('required')) {
     <mat-error i18n="@@test.mock-edit.addresses.house-number.required">House number is required</mat-error>
 }</mat-form-field>
 }
 }
 @if (isReadonly()) {
-@if (!isHidden('addresses.verified', true)) {
+@if (!isHidden('addresses.verified', true, currentModel().addresses?.[$index])) {
 <div class="entry-verified-field entry-readonly-field">
-    <span class="entry-readonly-label">{{ label('addresses.verified') }}</span>
-    <span class="entry-readonly-value">{{ readonlyValue(addressesItemGroup.get('verified')) }}</span>
+    <span class="entry-readonly-label">{{ label('addresses.verified', currentModel().addresses?.[$index]) }}</span>
+    <span class="entry-readonly-value">{{ readonlyBooleanValue(addressesItemGroup.get('verified')) }}</span>
 </div>
 }
 } @else {
-@if (!isHidden('addresses.verified', true)) {
-<mat-checkbox formControlName="verified" class="entry-verified-field entry-checkbox">{{ label('addresses.verified') }}</mat-checkbox>
+@if (!isHidden('addresses.verified', true, currentModel().addresses?.[$index])) {
+<mat-checkbox formControlName="verified" class="entry-verified-field entry-checkbox">{{ label('addresses.verified', currentModel().addresses?.[$index]) }}</mat-checkbox>
+@if (addressesItemGroup.get('verified')?.touched) {
 @if (addressesItemGroup.get('verified')?.hasError('required')) {
     <mat-error i18n="@@test.mock-edit.addresses.verified.required">Verified is required</mat-error>
-}}
 }
-            @if (!isReadonly()) {
+}
+}
+}
+            @if (!isDisabled('addresses', false)) {
             <button mat-button type="button" class="entry-array-remove-button" (click)="removeAddressesItem($index)" i18n="@@test.mock-edit.addresses.remove-item">Remove</button>
             }
         </ng-container>
     }
-    @if (!isReadonly()) {
+    @if (!isDisabled('addresses', false)) {
     <button mat-button type="button" class="entry-array-add-button" (click)="addAddressesItem()" i18n="@@test.mock-edit.addresses.add-item">Add</button>
     }
 </ng-container>
+</div>
 }
 @if (isReadonly()) {
 @if (!isHidden('dateAndTime', true)) {

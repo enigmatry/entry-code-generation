@@ -20,9 +20,9 @@ internal static class AngularSignalsReadonlyDisplayRenderer
 
         return htmlHelper.Raw(
             $"@if (isReadonly()) {{\r\n" +
-            $"@if (!isHidden('{context.Key(field)}', {field.Visible.ToString().ToLower()})) {{\r\n" +
+            $"@if (!{context.IsHiddenCall(field)}) {{\r\n" +
             $"<div class=\"entry-{field.PropertyName.Kebaberize()}-field entry-readonly-field\">\r\n" +
-            $"    <span class=\"entry-readonly-label\">{{{{ label('{context.Key(field)}') }}}}</span>\r\n" +
+            $"    <span class=\"entry-readonly-label\">{{{{ {context.LabelCall(field)} }}}}</span>\r\n" +
             $"    <span class=\"entry-readonly-value\">{{{{ {field.ReadonlyValueExpression(context)} }}}}</span>\r\n" +
             $"</div>\r\n" +
             $"}}\r\n" +
@@ -50,6 +50,11 @@ internal static class AngularSignalsReadonlyDisplayRenderer
         if (field is SelectControlBase)
         {
             return $"selectedDisplayName({context.FormGroupAccessor}.get('{field.PropertyName}')?.value, {context.MemberName(field, "Options")}())";
+        }
+
+        if (field.Formatter?.JsFormatterName == "boolean")
+        {
+            return $"readonlyBooleanValue({context.FormGroupAccessor}.get('{field.PropertyName}'))";
         }
 
         var pipeExpression = field.Formatter?.PipeExpression();

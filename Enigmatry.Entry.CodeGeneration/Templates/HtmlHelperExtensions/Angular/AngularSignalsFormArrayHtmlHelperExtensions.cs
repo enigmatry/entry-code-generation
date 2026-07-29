@@ -20,11 +20,28 @@ public static class AngularSignalsFormArrayHtmlHelperExtensions
             .FlatFormControls()
             .Select(control => htmlHelper.FormControlDeclaration(control, "            ").ToString());
 
+        var readonlyChildDisables = arrayControl.ArrayItemControlsWithEffectiveReadonly()
+            .Where(entry => entry.EffectiveReadonly)
+            .Select(entry => $"        itemGroup.get('{entry.Control.PropertyName}')?.disable({{ emitEvent: false }});\r\n")
+            .ToList();
+
+        if (readonlyChildDisables.Count == 0)
+        {
+            return htmlHelper.Raw(
+                $"    protected readonly create{methodName}Item = (): FormGroup => {{\r\n" +
+                $"        return new FormGroup({{\r\n" +
+                String.Concat(childDeclarations) +
+                $"        }});\r\n" +
+                $"    }};\r\n");
+        }
+
         return htmlHelper.Raw(
             $"    protected readonly create{methodName}Item = (): FormGroup => {{\r\n" +
-            $"        return new FormGroup({{\r\n" +
+            $"        const itemGroup = new FormGroup({{\r\n" +
             String.Concat(childDeclarations) +
             $"        }});\r\n" +
+            String.Concat(readonlyChildDisables) +
+            $"        return itemGroup;\r\n" +
             $"    }};\r\n");
     }
 
@@ -45,7 +62,7 @@ public static class AngularSignalsFormArrayHtmlHelperExtensions
             $"        }}\r\n" +
             $"        while (formArray.length < length) {{\r\n" +
             $"            const item = this.create{methodName}Item();\r\n" +
-            $"            if (this.form.disabled) {{\r\n" +
+            $"            if (formArray.disabled) {{\r\n" +
             $"                item.disable({{ emitEvent: false }});\r\n" +
             $"            }}\r\n" +
             $"            formArray.push(item, {{ emitEvent: false }});\r\n" +
@@ -86,22 +103,16 @@ public static class AngularSignalsFormArrayHtmlHelperExtensions
         return htmlHelper.Raw(String.Concat(lines.Select(line => line + "\r\n")));
     }
 
-    // Re-applies the disabled state to statically readonly controls after the blanket
-    // form.enable() that runs when the form leaves readonly mode.
-    public static IHtmlContent DisableStaticReadonlyControls(this IHtmlHelper htmlHelper, FormComponentModel model)
+    // Emitted into the onSubmit merge so each array row keeps the unconfigured properties of the
+    // original model row (a plain getRawValue() spread would replace whole rows). Rows are
+    // matched by position: added rows merge with an empty object, removed rows are dropped.
+    public static IHtmlContent ArrayRowMergeProperties(this IHtmlHelper htmlHelper, FormComponentModel model)
     {
-        var lines = model.FlatFormControls()
-            .Where(control => control.Readonly && control is not ArrayFormControl)
-            .Select(control => $"                this.form.get('{control.PropertyName}')?.disable({{ emitEvent: false }});");
+        var properties = model.FlatFormControls().OfType<ArrayFormControl>()
+            .Select(array =>
+                $", {array.PropertyName}: rawValue.{array.PropertyName}" +
+                $".map((row, index) => ({{ ...(this.model().{array.PropertyName}?.[index] ?? {{}}), ...row }}))");
 
-        var arrayItemLines = model.FlatFormControls().OfType<ArrayFormControl>()
-            .SelectMany(array => ((FormControlGroup)array.FormControlGroup).FormControls
-                .FlatFormControls()
-                .Where(child => child.Readonly && child is not ArrayFormControl)
-                .Select(child =>
-                    $"                (this.form.get('{array.PropertyName}') as FormArray<FormGroup>).controls" +
-                    $".forEach(itemGroup => itemGroup.get('{child.PropertyName}')?.disable({{ emitEvent: false }}));"));
-
-        return htmlHelper.Raw(String.Join("\r\n", lines.Concat(arrayItemLines)));
+        return htmlHelper.Raw(String.Concat(properties));
     }
 }

@@ -1,5 +1,6 @@
-using Enigmatry.Entry.CodeGeneration.Configuration;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+using Enigmatry.Entry.CodeGeneration.Configuration;
+using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 using Humanizer;
 
 namespace Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
@@ -23,7 +24,7 @@ internal static class AngularSignalsDefaultErrorRenderers
 
     internal static string DynamicRequiredError(this FormControl field, FormViewRenderContext context)
     {
-        if (field.ValidationRules.Any(validationRule => validationRule.RuleName == "required"))
+        if (field.ValidationRules.Any(validationRule => validationRule.GetRuleName() == "required"))
         {
             return "";
         }

@@ -90,11 +90,11 @@ The Formly-specific names were renamed. The old names still compile so existing 
 |---|---|---|
 | `FormlyTypes` (class) | `ControlTypes` | `[Obsolete]` alias |
 | `FormControl.FormlyType` | `FormControl.ControlType` | plain alias (kept non-obsolete because the deprecated Razor templates reference it) |
-| `IFormlyValidationRule.FormlyRuleName` | `RuleName` | `[Obsolete]` alias |
-| `IFormlyValidationRule.FormlyValidationMessage` | `ValidationMessage` | `[Obsolete]` alias |
-| `IFormlyValidationRule.FormlyTemplateOptions` | `TemplateOptions` | `[Obsolete]` alias |
+| `IFormlyValidationRule.FormlyRuleName` | `GetRuleName()` extension / `ValidationRule<T>.RuleName` | unchanged, still the implementation surface |
+| `IFormlyValidationRule.FormlyValidationMessage` | `GetValidationMessage()` extension / `ValidationRule<T>.ValidationMessage` | unchanged, still the implementation surface |
+| `IFormlyValidationRule.FormlyTemplateOptions` | `GetTemplateOptions()` extension / `ValidationRule<T>.TemplateOptions` | unchanged, still the implementation surface |
 
-The interface names themselves (`IFormlyValidationRule`, etc.) are unchanged to preserve binary compatibility of the published `Enigmatry.Entry.CodeGeneration.Validation` package.
+The validation-rule contract is **fully source- and binary-compatible**: `IFormlyValidationRule` and the abstract members of `ValidationRule<TRule>` keep their original Formly-era names, so custom rule implementations and subclasses compile unchanged (and nothing is marked `[Obsolete]`, so warnings-as-errors builds are unaffected). The framework-neutral names are additive reads only: `GetRuleName()` / `GetValidationMessage()` / `GetTemplateOptions()` extension methods on the interface, and plain `RuleName` / `ValidationMessage` / `TemplateOptions` properties on `ValidationRule<TRule>`. The Formly-named members remain the abstract surface until the next major version.
 
 ### New required configuration: `WithImport`
 
@@ -167,13 +167,15 @@ export class UserEditPageComponent { }
 
 ### Model binding
 
-`model` is now a `model()` signal input and supports two-way binding. On submit the component merges the current form value into the model, updates it, and emits `save` — exactly like the Formly version (including the 500 ms submit throttle).
+`model` is now a `model()` signal input and supports two-way binding. On submit the component merges the current form value into the model, updates it, and emits `save` — exactly like the Formly version (including the 500 ms submit throttle). A submit attempt while the form is invalid marks all controls as touched so every validation message becomes visible.
 
 ```html
 <app-g-user-edit [(model)]="user" (save)="onSave($event)" (cancel)="onCancel()" />
 ```
 
 One-way `[model]="user"` still works; `save` carries the merged model either way.
+
+Array properties are merged **row by row on index**: unconfigured properties of an existing row survive the round trip, rows added in the UI are appended as new objects, and removing a row drops it (there is no identity tracking beyond the position).
 
 ### Inputs that kept their names and semantics
 
@@ -187,6 +189,12 @@ One-way `[model]="user"` still works; `save` carries the merged model either way
 ```
 
 They are signal inputs now, but the binding syntax from the parent is identical. Note the [array-item limitations](#known-limitations-of-the-signals-templates) below.
+
+Behavioral notes:
+
+- **`fieldsPropertyExpressions` results propagate.** When a calculated property changes a form value, dependent expressions (chained calculations, hide/label/disable/required expressions reading the calculated value) re-evaluate immediately. Expressions must return primitives or stable references — an expression returning a fresh object/array on every call never satisfies the change check and re-runs indefinitely (the Formly path had the same assign-per-cycle characteristic).
+- **Array-item children get the row as the expression argument.** For `'arrayProperty.childProperty'` keys, hide/label/disable expressions are called with the *current row item*, not the root model — matching Formly, where a nested field's expression received the nested model. Cast inside the lambda: `{ 'addresses.city': (model) => !(model as IAddress).verified }`.
+- **A hidden control is disabled.** Whether hidden statically (`IsVisible(false)`) or via `fieldsHideExpressions`, the control is disabled while hidden so it cannot keep an otherwise-valid form unsubmittable. Unlike Formly's default `resetOnHide`, the value is *not* cleared — it stays in the model and in `getRawValue()`.
 
 ### Select options — breaking changes
 
@@ -216,17 +224,20 @@ Selects nested inside array items get members prefixed with the array property: 
 
   The token is injected optionally: if it is not provided, named validators are skipped. A default error line (`<name> validation failed`, id `validators.<kebab-name>`) is generated for each named validator.
 - `fieldsRequiredExpressions` toggles `Validators.required` at runtime; a default "is required" error line is generated for every field that lacks a static required rule so the message has somewhere to appear.
+- **Custom rule shapes**: a rule that is not `required` and carries no exact `"<ruleName>: <value>"` template option cannot be turned into a generation-time validator. The tool now logs a **warning** naming the rule and field instead of dropping it silently; its `<mat-error>` markup is still generated and shows if a validator producing that error key is attached at runtime (typically `.WithValidators("<name>")` plus the resolver above).
+- **Error visibility**: errors rendered outside a `<mat-form-field>` (checkbox, radio, multi-checkbox, rich-text, custom controls) appear only after the control was touched — matching Material's behavior inside form fields — and a failed submit marks everything touched.
 
 ## Readonly behavior
 
-Setting `[isReadonly]="true"`:
+Enabled/disabled state is managed centrally per control from four inputs: the global `isReadonly` flag, static readonly (`.IsReadonly(true)` — including readonly configured on an enclosing `FormControlGroup`, which propagates to its children), `fieldsDisableExpressions`, and hidden state (hidden controls are disabled, see above). Setting `[isReadonly]="true"`:
 
-- disables the whole `FormGroup` (and re-applies `disabled` to statically-readonly controls when leaving readonly mode),
+- disables every control (statically-readonly controls stay disabled when readonly mode is left again),
 - inputs additionally get the native `readonly` attribute,
 - the action buttons are hidden,
+- array add/remove buttons disappear whenever the array control is disabled — readonly mode, `.IsReadonly(true)` on the array, or a disable expression for the array key,
 - the `entry-form-readonly` class is applied to the `<form>`.
 
-With `builder.WithReadonlyDisplay()` the component instead renders a plain label/value display (`entry-readonly-field` / `entry-readonly-label` / `entry-readonly-value`) for supported controls while readonly — selects show the option display name, formatted controls render through the equivalent Angular pipe. Password fields stay masked; rich-text and custom controls keep their interactive markup (custom controls receive `readonly` through their input).
+With `builder.WithReadonlyDisplay()` the component instead renders a plain label/value display (`entry-readonly-field` / `entry-readonly-label` / `entry-readonly-value`) for supported controls while readonly — selects show the option display name, formatted controls render through the equivalent Angular pipe, and boolean-formatted controls (checkboxes by default) display "Yes"/"No" instead of "true"/"false". Password fields stay masked; rich-text and custom controls keep their interactive markup (custom controls receive `readonly` through their input). `PercentPropertyFormatter.WithMultiplier(...)` is not reflected in the readonly display (the value renders through Angular's plain `percent` pipe).
 
 ## Formatting
 
@@ -240,11 +251,12 @@ Translation ids are preserved wherever a concept survived the migration — labe
 - New ids introduced by the signals output:
   - array buttons: `<feature>.<component>.<array>.add-item` / `.remove-item`,
   - default async-validator errors: `validators.<kebab-cased-name>`,
-  - dynamic "required" errors: `<feature>.<component>.<property>.required`; for array-item children the property segment is prefixed with the array (`...<array>.<child>.required`).
+  - dynamic "required" errors: `<feature>.<component>.<property>.required`; for array-item children the property segment is prefixed with the array (`...<array>.<child>.required`),
+  - readonly-display boolean values: `entry.readonly.boolean.yes` / `entry.readonly.boolean.no`.
 
 ## Styling hooks
 
-CSS hooks are preserved: every field carries `entry-<property>-field entry-<control-type>`, groups render as a `div.entry-field-group` (a `CreateUiSection(...)` type is appended as an extra class), and `WithClassName(..., ApplyWhen.FormIsReadonly)` becomes a `[class.x]="isReadonly()"` binding. New hooks: `entry-array-add-button`, `entry-array-remove-button`, and the readonly-display classes listed above.
+CSS hooks are preserved: every field carries `entry-<property>-field entry-<control-type>`, groups render as a `div.entry-field-group` (a `CreateUiSection(...)` type is appended as an extra class; a configured group label/hint renders as `label.entry-field-group-label` / `span.entry-field-group-hint`), and `WithClassName(..., ApplyWhen.FormIsReadonly)` becomes a `[class.x]="isReadonly()"` binding. Arrays are wrapped in a `div.entry-<property>-field.entry-array-field` that also carries the array's configured classes and custom control type name. Buttons render as `mat-button` unless `WithCustomControlType("mat-...")` names another Material button variant (`mat-raised-button`, `mat-flat-button`, ...) — a non-`mat-` type name only lands as a CSS class. New hooks: `entry-array-add-button`, `entry-array-remove-button`, and the readonly-display classes listed above.
 
 ## List (table) components
 
@@ -259,9 +271,12 @@ These are validated at generation time where possible — the tool throws a desc
 | Nested arrays (an `ArrayFormControl` inside another array's item) | Generation error |
 | `AutocompleteFormControl` inside an array item | Generation error (per-row filter state cannot be generated) |
 | Custom/rich-text control without `.WithImport(...)` | Generation error |
-| `fieldsHideExpressions` / `fieldsLabelExpressions` for array-item children | Supported with `'arrayProperty.childProperty'` keys |
+| A root select property named like an array-item select (`addressesCountry` next to `addresses[].country`) | Generation error (the generated members would collide) |
+| `fieldsHideExpressions` / `fieldsLabelExpressions` for array-item children | Supported with `'arrayProperty.childProperty'` keys; the expression receives the **row item** as its argument |
 | `fieldsPropertyExpressions` / `fieldsDisableExpressions` / `fieldsRequiredExpressions` for array-item children | Not supported (root-level controls only) |
+| Validation rule without a `"<ruleName>: <value>"` template option | No generated validator — logged as a warning; the message markup still renders for runtime-attached validators |
 | Overriding fixed select options via an input | Not supported — use dynamic values |
+| `PercentPropertyFormatter.WithMultiplier(...)` in the readonly display | Ignored (plain `percent` pipe) |
 | Formly wrappers | Ignored (see the wrapper migration table) |
 
 ## Step-by-step checklist
@@ -290,6 +305,8 @@ These are validated at generation time where possible — the tool throws a desc
 |---|---|
 | Generation fails: *"renders a custom element, but no import is configured"* | Add `.WithImport("<Symbol>", "<package>")` to the named control. |
 | Generation fails: *"Nested arrays are not supported"* / *"Autocomplete controls are not supported inside array items"* | Restructure the form — see [limitations](#known-limitations-of-the-signals-templates). |
+| Generation fails: *"generate colliding member names"* | A root select is named like an array-item select (`addressesCountry` vs `addresses[].country`) — rename one of the properties. |
+| Generation warns: *"no Angular validator is generated"* | The rule's template options carry no `"<ruleName>: <value>"` entry — attach the validator at runtime via `.WithValidators(...)` + `ENTRY_ASYNC_VALIDATOR_RESOLVER`, or add the template option. |
 | Angular compile error: *"Component X is standalone, and cannot be declared in an NgModule"* | A still-generated feature module declares a migrated component — migrate the whole feature and stop using its generated module. |
 | Dynamic select renders no options | The binding is now `[<prop>Callback]` and expects an `Observable<unknown[]>`, not an array. |
 | Async validator never runs | `ENTRY_ASYNC_VALIDATOR_RESOLVER` is not provided; the component skips async validators when the token is absent. |

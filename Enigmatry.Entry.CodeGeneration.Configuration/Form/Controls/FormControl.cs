@@ -51,7 +51,7 @@ public abstract class FormControl
                 $"{ComponentInfo.Feature.Name.Kebaberize()}" +
                 $".{ComponentInfo.Name.Kebaberize()}" +
                 $".{PropertyName.Kebaberize()}" +
-                $".{validationRule.RuleName.Kebaberize()}"
+                $".{validationRule.GetRuleName().Kebaberize()}"
             );
         }
     }

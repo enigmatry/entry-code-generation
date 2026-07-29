@@ -32,7 +32,10 @@ public class AngularComponentGenerator : IComponentGenerator
         var useSignals = component.WithSignals ?? options.WithSignals;
         if (useSignals && component is FormComponentModel formComponent)
         {
-            SignalsFormComponentValidator.Validate(formComponent);
+            foreach (var warning in SignalsFormComponentValidator.Validate(formComponent))
+            {
+                _logger.LogWarning("{ValidationWarning}", warning);
+            }
         }
 
         foreach (var templateInfo in _angularSettings.GetComponentTemplates(useSignals))

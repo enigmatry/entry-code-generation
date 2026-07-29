@@ -15,9 +15,9 @@ public class PatternValidationRule : ValidationRule<Regex>
         : base(value, propertyInfo, expression, message, messageTranslationId)
     { }
 
-    public override string RuleName => "pattern";
+    public override string FormlyRuleName => "pattern";
 
-    public override string ValidationMessage => HasCustomMessage
+    public override string FormlyValidationMessage => HasCustomMessage
         ? CustomMessage
         : "${field?.templateOptions?.label}:property-name: is not in valid format";
 }

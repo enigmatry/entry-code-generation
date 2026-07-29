@@ -9,9 +9,9 @@ public class MaxLengthValidationRule : ValidationRule<int>
         : base(value, propertyInfo, expression, String.Empty, "validators.maxLength")
     { }
 
-    public override string RuleName => "maxLength";
+    public override string FormlyRuleName => "maxLength";
 
-    public override string ValidationMessage => HasCustomMessage
+    public override string FormlyValidationMessage => HasCustomMessage
         ? CustomMessage
         : "${field?.templateOptions?.label}:property-name: value should be less than ${field?.templateOptions?.maxLength}:max-value: characters";
 }

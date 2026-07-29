@@ -26,8 +26,14 @@ public static class AngularSignalsFormViewHtmlHelperExtensions
         var staticClasses = group.ClassNames.Values
             .Where(classNameEntry => classNameEntry.When == ApplyWhen.Always)
             .Aggregate(baseClasses, (current, classNameEntry) => current + $" {classNameEntry.Value}");
+        var labelLine = group.Label.Value.HasContent()
+            ? $"    <label class=\"entry-field-group-label\"{group.Label.I18NAttribute(context.EnableI18N)}>{group.Label.Value.EscapeHtmlText()}</label>\r\n"
+            : "";
+        var hintLine = group.Hint.Value.HasContent()
+            ? $"    <span class=\"entry-field-group-hint\"{group.Hint.I18NAttribute(context.EnableI18N)}>{group.Hint.Value.EscapeHtmlText()}</span>\r\n"
+            : "";
         var innerContent = htmlHelper.RenderFormControls(group.FormControls, context).ToString();
-        return htmlHelper.Raw($"<div class=\"{staticClasses}\"{group.ConditionalClassBindings()}>\r\n{innerContent}</div>\r\n");
+        return htmlHelper.Raw($"<div class=\"{staticClasses}\"{group.ConditionalClassBindings()}>\r\n{labelLine}{innerContent}{hintLine}</div>\r\n");
     }
 
     private static IHtmlContent RenderFormButton(this IHtmlHelper htmlHelper, ButtonFormControl button, FormViewRenderContext context)
@@ -37,11 +43,16 @@ public static class AngularSignalsFormViewHtmlHelperExtensions
             return htmlHelper.Raw("");
         }
 
+        // A mat-* custom control type selects the Material button variant; any other custom type
+        // already lands as an entry-<type> CSS class through FieldClassAttribute.
+        var buttonVariant = button.ControlTypeName != null && button.ControlTypeName.StartsWith("mat-", StringComparison.Ordinal)
+            ? button.ControlTypeName
+            : "mat-button";
         return htmlHelper.Raw(
-            $"@if (!isHidden('{context.Key(button)}', {button.Visible.ToString().ToLower()})) {{\r\n" +
-            $"<button mat-button type=\"button\"\r\n" +
+            $"@if (!{context.IsHiddenCall(button)}) {{\r\n" +
+            $"<button {buttonVariant} type=\"button\"\r\n" +
             $"        {button.FieldClassAttribute()}{button.TooltipAttribute(context.EnableI18N)}\r\n" +
-            $"        [disabled]=\"isDisabled('{context.Key(button)}', {button.Readonly.ToString().ToLower()})\"\r\n" +
+            $"        [disabled]=\"{context.IsDisabledCall(button)}\"\r\n" +
             $"        (click)=\"buttonClick.emit('{button.PropertyName}')\"{button.Text.I18NAttribute(context.EnableI18N)}>{button.Text.Value.EscapeHtmlText()}</button>\r\n" +
             $"}}\r\n");
     }
@@ -76,38 +87,12 @@ public static class AngularSignalsFormViewHtmlHelperExtensions
 
     private static IHtmlContent RenderGenericField(this IHtmlHelper htmlHelper, FormControl field, FormViewRenderContext context) =>
         htmlHelper.Raw(
-            $"@if (!isHidden('{context.Key(field)}', {field.Visible.ToString().ToLower()})) {{\r\n" +
-            $"<input formControlName=\"{field.PropertyName}\" {field.FieldClassAttribute()}>\r\n" +
+            $"@if (!{context.IsHiddenCall(field)}) {{\r\n" +
+            $"<div {field.FieldClassAttribute()}{field.TooltipAttribute(context.EnableI18N)}>\r\n" +
+            field.FieldLabelLine(context) +
+            $"    <input formControlName=\"{field.PropertyName}\"{field.PlaceholderAttribute(context.EnableI18N)}{field.MetadataAttributes()} [readonly]=\"{context.IsDisabledCall(field)}\">\r\n" +
+            field.HintLine(context.EnableI18N) +
+            htmlHelper.RenderValidationErrorsWhenTouched(field, context) +
+            $"</div>\r\n" +
             $"}}\r\n");
-
-    private static IHtmlContent RenderArrayField(this IHtmlHelper htmlHelper, ArrayFormControl arrayControl, FormViewRenderContext context)
-    {
-        var group = (FormControlGroup)arrayControl.FormControlGroup;
-        var propertyName = arrayControl.PropertyName;
-        var methodName = AngularSignalsFormModelExtensions.Capitalize(propertyName);
-        var itemGroupVariable = $"{propertyName}ItemGroup";
-        var itemContext = context with
-        {
-            FormGroupAccessor = itemGroupVariable,
-            ControlKeyPrefix = $"{propertyName}.",
-            MemberNamePrefix = propertyName
-        };
-        var innerControls = htmlHelper.RenderFormControls(group.FormControls, itemContext).ToString();
-        return htmlHelper.Raw(
-            $"@if (!isHidden('{context.Key(arrayControl)}', {arrayControl.Visible.ToString().ToLower()})) {{\r\n" +
-            $"<ng-container formArrayName=\"{propertyName}\">\r\n" +
-            $"    @for ({itemGroupVariable} of form.controls.{propertyName}.controls; track $index) {{\r\n" +
-            $"        <ng-container [formGroupName]=\"$index\">\r\n" +
-            innerControls +
-            $"            @if (!isReadonly()) {{\r\n" +
-            $"            <button mat-button type=\"button\" class=\"entry-array-remove-button\" (click)=\"remove{methodName}Item($index)\"{arrayControl.RemoveButtonLabel.I18NAttribute(context.EnableI18N)}>{arrayControl.RemoveButtonLabel.Value}</button>\r\n" +
-            $"            }}\r\n" +
-            $"        </ng-container>\r\n" +
-            $"    }}\r\n" +
-            $"    @if (!isReadonly()) {{\r\n" +
-            $"    <button mat-button type=\"button\" class=\"entry-array-add-button\" (click)=\"add{methodName}Item()\"{arrayControl.AddButtonLabel.I18NAttribute(context.EnableI18N)}>{arrayControl.AddButtonLabel.Value}</button>\r\n" +
-            $"    }}\r\n" +
-            $"</ng-container>\r\n" +
-            $"}}\r\n");
-    }
 }

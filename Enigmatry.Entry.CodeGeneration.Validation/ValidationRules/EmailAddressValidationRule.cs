@@ -15,7 +15,7 @@ public class EmailAddressValidationRule : PatternValidationRule
             "validators.pattern.emailAddress")
     { }
 
-    public override string ValidationMessage => HasCustomMessage
+    public override string FormlyValidationMessage => HasCustomMessage
         ? CustomMessage
         : String.Empty;
 }

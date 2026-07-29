@@ -15,23 +15,22 @@ public static class AngularSignalsValidationHtmlHelperExtensions
         var validators = new List<string>();
         foreach (var rule in control.ValidationRules)
         {
-            if (rule.RuleName == "required")
+            if (rule.GetRuleName() == "required")
             {
                 validators.Add("Validators.required");
             }
             else
             {
-                var valueOption = rule.TemplateOptions
-                    .FirstOrDefault(templateOption => templateOption.StartsWith($"{rule.RuleName}: ", StringComparison.Ordinal));
+                var valueOption = rule.RuleValueTemplateOption();
                 if (valueOption != null)
                 {
-                    var value = valueOption[(rule.RuleName.Length + 2)..];
-                    if (rule.RuleName == "pattern")
+                    var value = valueOption[(rule.GetRuleName().Length + 2)..];
+                    if (rule.GetRuleName() == "pattern")
                     {
                         value = AsRegexOrStringLiteral(value);
                     }
 
-                    validators.Add($"Validators.{rule.RuleName}({value})");
+                    validators.Add($"Validators.{rule.GetRuleName()}({value})");
                 }
             }
         }
@@ -39,15 +38,36 @@ public static class AngularSignalsValidationHtmlHelperExtensions
         return validators.Count > 0 ? $"[{String.Join(", ", validators)}]" : "[]";
     }
 
+    // Whether a generation-time Angular validator can be produced for the rule: 'required', or an
+    // exact "RuleName: value" template option carrying the validator argument. Rules failing this
+    // are reported as warnings by SignalsFormComponentValidator instead of being dropped silently.
+    internal static bool TranslatesToAngularValidator(this IFormlyValidationRule validationRule) =>
+        validationRule.GetRuleName() == "required" || validationRule.RuleValueTemplateOption() != null;
+
+    private static string? RuleValueTemplateOption(this IFormlyValidationRule validationRule) =>
+        validationRule.GetTemplateOptions()
+            .FirstOrDefault(templateOption => templateOption.StartsWith($"{validationRule.GetRuleName()}: ", StringComparison.Ordinal));
+
     // A slash-delimited pattern passes through as a regex literal; anything else (the plain text of
     // a .NET Regex) must become a quoted string or the generated TypeScript would not compile.
     private static string AsRegexOrStringLiteral(string pattern) =>
         Regex.IsMatch(pattern, "^/.*/[a-z]*$") ? pattern : $"'{pattern.EscapeTsSingleQuoted()}'";
 
+    // Errors rendered outside a mat-form-field have no ErrorStateMatcher gating their visibility,
+    // so they are shown only once the control was touched (onSubmit marks all controls touched
+    // when submission fails, matching Material's error-state behavior inside form fields).
+    internal static string RenderValidationErrorsWhenTouched(this IHtmlHelper htmlHelper, FormControl field, FormViewRenderContext context)
+    {
+        var errors = htmlHelper.RenderValidationErrors(field, context);
+        return errors.Length == 0
+            ? ""
+            : $"@if ({context.FormGroupAccessor}.get('{field.PropertyName}')?.touched) {{\r\n{errors}\r\n}}\r\n";
+    }
+
     internal static string RenderValidationErrors(this IHtmlHelper htmlHelper, FormControl field, FormViewRenderContext context) =>
         String.Concat(field.ValidationRules.Select(validationRule =>
         {
-            var rawMessage = validationRule.HasCustomMessage ? validationRule.CustomMessage : validationRule.ValidationMessage;
+            var rawMessage = validationRule.HasCustomMessage ? validationRule.CustomMessage : validationRule.GetValidationMessage();
             var message = field.ResolvedValidationMessage(validationRule);
 
             // A message that got field-specific values interpolated into it can no longer share
@@ -58,7 +78,7 @@ public static class AngularSignalsValidationHtmlHelperExtensions
                 : $"{field.ComponentInfo.Feature.Name.Kebaberize()}" +
                   $".{field.ComponentInfo.Name.Kebaberize()}" +
                   $".{context.TranslationIdSegment(field)}" +
-                  $".{validationRule.RuleName.Kebaberize()}";
+                  $".{validationRule.GetRuleName().Kebaberize()}";
             var i18nAttribute = context.EnableI18N && translationId.HasContent() ? $" i18n=\"@@{translationId}\"" : "";
 
             return
@@ -71,11 +91,11 @@ public static class AngularSignalsValidationHtmlHelperExtensions
 
     // Angular's built-in Validators.minLength/maxLength report their errors under
     // all-lowercase keys, unlike the camelCase rule names used for the validator factories.
-    private static string AngularErrorKey(this IFormlyValidationRule validationRule) => validationRule.RuleName switch
+    private static string AngularErrorKey(this IFormlyValidationRule validationRule) => validationRule.GetRuleName() switch
     {
         "minLength" => "minlength",
         "maxLength" => "maxlength",
-        _ => validationRule.RuleName
+        _ => validationRule.GetRuleName()
     };
 
     // Default rule messages carry Formly-era runtime interpolations such as
@@ -83,7 +103,7 @@ public static class AngularSignalsValidationHtmlHelperExtensions
     // values are known at generation time, so they are resolved into plain text here.
     private static string ResolvedValidationMessage(this FormControl field, IFormlyValidationRule validationRule)
     {
-        var message = validationRule.HasCustomMessage ? validationRule.CustomMessage : validationRule.ValidationMessage;
+        var message = validationRule.HasCustomMessage ? validationRule.CustomMessage : validationRule.GetValidationMessage();
 
         return Regex.Replace(message, @"\$\{field\?\.templateOptions\?\.(\w+)\}:[\w-]+:", match =>
         {
@@ -93,7 +113,7 @@ public static class AngularSignalsValidationHtmlHelperExtensions
                 return field.Label.Value;
             }
 
-            var valueText = validationRule.TemplateOptions
+            var valueText = validationRule.GetTemplateOptions()
                 .FirstOrDefault(templateOption => templateOption.StartsWith($"{propertyReference}: ", StringComparison.Ordinal))
                 ?[(propertyReference.Length + 2)..];
 

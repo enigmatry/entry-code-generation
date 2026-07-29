@@ -18,9 +18,10 @@ public static class AngularSignalsFormMethodsHtmlHelperExtensions
             String.Concat(labelEntries.Select(entry => entry + "\r\n")) +
             "    };\r\n" +
             "\r\n" +
-            "    protected readonly label = (propertyName: string): string => {\r\n" +
+            "    // Array-item children pass the current row as arrayItemModel so label expressions evaluate per row.\r\n" +
+            "    protected readonly label = (propertyName: string, arrayItemModel?: unknown): string => {\r\n" +
             "        const labelExpression = this.fieldsLabelExpressions()?.[propertyName];\r\n" +
-            "        return labelExpression ? String(labelExpression(this.currentModel())) : this.defaultLabels[propertyName] ?? '';\r\n" +
+            $"        return labelExpression ? String(labelExpression((arrayItemModel ?? this.currentModel()) as I{model.ComponentInfo.ModelType})) : this.defaultLabels[propertyName] ?? '';\r\n" +
             "    };\r\n");
     }
 
@@ -63,17 +64,29 @@ public static class AngularSignalsFormMethodsHtmlHelperExtensions
             "    };\r\n");
     }
 
-    public static IHtmlContent ReadonlyDisplayHelperMethods(this IHtmlHelper htmlHelper, FormComponentModel model)
+    public static IHtmlContent ReadonlyDisplayHelperMethods(this IHtmlHelper htmlHelper, FormComponentModel model, bool enableI18N)
     {
         if (!model.UseReadonlyDisplay)
         {
             return htmlHelper.Raw("");
         }
 
+        var booleanValueMethod = "";
+        if (model.AllControlsIncludingArrayItems().Any(control => control.Formatter?.JsFormatterName == "boolean"))
+        {
+            var yesText = enableI18N ? "$localize`:@@entry.readonly.boolean.yes:Yes`" : "'Yes'";
+            var noText = enableI18N ? "$localize`:@@entry.readonly.boolean.no:No`" : "'No'";
+            booleanValueMethod =
+                "\r\n" +
+                "    protected readonly readonlyBooleanValue = (control: AbstractControl | null): string =>\r\n" +
+                $"        control?.value ? {yesText} : {noText};\r\n";
+        }
+
         return htmlHelper.Raw(
             "\r\n" +
             "    protected readonly readonlyValue = (control: AbstractControl | null): string =>\r\n" +
             "        String(control?.value ?? '');\r\n" +
+            booleanValueMethod +
             "\r\n" +
             "    protected readonly selectedDisplayName = (value: unknown, options: { value: unknown; displayName: unknown }[]): string =>\r\n" +
             "        Array.isArray(value)\r\n" +

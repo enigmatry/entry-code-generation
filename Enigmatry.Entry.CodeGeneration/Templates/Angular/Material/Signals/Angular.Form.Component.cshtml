@@ -86,6 +86,8 @@ export class @Model.AngularComponentName() {
         this.formValue();
         return { ...this.model(), ...this.form.getRawValue() } as I@(Model.ComponentInfo.ModelType);
     });
+
+@Html.ControlStateDeclarations(Model)
 @Html.AllAutocompleteFilterDeclarations(Model)
 @Html.AllArrayItemFactoryMethods(Model)
 @Html.AllArrayResizeMethods(Model)
@@ -101,8 +103,15 @@ export class @Model.AngularComponentName() {
                 return;
             }
             const model = this.currentModel();
-            const expressionValues = Object.fromEntries(Object.entries(propertyExpressions).map(([propertyName, expression]) => [propertyName, expression(model)]));
-            this.form.patchValue(expressionValues as unknown as typeof this.form.value, { emitEvent: false });
+            // setValue emits so currentModel recomputes and dependent (chained) expressions rerun;
+            // the equality guard is what terminates that loop.
+            Object.entries(propertyExpressions).forEach(([propertyName, expression]) => {
+                const control = this.form.get(propertyName);
+                const value = expression(model);
+                if (control && control.value !== value) {
+                    control.setValue(value);
+                }
+            });
         });
         effect(() => {
             const model = this.currentModel();
@@ -123,58 +132,64 @@ export class @Model.AngularComponentName() {
                 control.updateValueAndValidity({ emitEvent: false });
             });
         });
-        effect(() => {
-            if (this.isReadonly()) {
-                this.form.disable({ emitEvent: false });
-            } else {
-                this.form.enable({ emitEvent: false });
-@Html.DisableStaticReadonlyControls(Model)
-            }
-        });
+        // Single source of truth for enabled/disabled state: readonly mode, static readonly
+        // (including group readonly), disable expressions, and hidden state (a hidden control is
+        // disabled so it stops contributing to form validity, mirroring Formly's hidden fields).
         effect(() => {
             const model = this.currentModel();
+            const readonly = this.isReadonly();
+            const hideExpressions = this.fieldsHideExpressions();
             const disableExpressions = this.fieldsDisableExpressions();
-            if (!disableExpressions) {
-                return;
-            }
-            Object.entries(disableExpressions).forEach(([propertyName, isDisabled]) => {
-                const control = this.form.get(propertyName);
+            this.controlStates.forEach(({ key, staticVisible, staticReadonly }) => {
+                const control = this.form.get(key);
                 if (!control) {
                     return;
                 }
-                if (isDisabled(model) || this.isReadonly()) {
-                    control.disable({ emitEvent: false });
-                } else {
-                    control.enable({ emitEvent: false });
+                const hidden = !staticVisible || (hideExpressions?.[key]?.(model) ?? false);
+                const disableExpression = disableExpressions?.[key];
+                const disabled = readonly || hidden || (disableExpression ? disableExpression(model) : staticReadonly);
+                if (disabled !== control.disabled) {
+                    if (disabled) {
+                        control.disable({ emitEvent: false });
+                    } else {
+                        control.enable({ emitEvent: false });
+                    }
                 }
             });
-        });
+@Html.ReapplyArrayRowReadonlyLines(Model)        });
     }
 
     private lastSubmitTime = 0;
 
     protected readonly onSubmit = (event: Event): void => {
         event.preventDefault();
-        if (!this.form.valid || Date.now() - this.lastSubmitTime < 500) {
+        if (!this.form.valid) {
+            this.form.markAllAsTouched();
+            return;
+        }
+        if (Date.now() - this.lastSubmitTime < 500) {
             return;
         }
         this.lastSubmitTime = Date.now();
-        const mergedModel = { ...this.model(), ...this.form.getRawValue() } as @Html.Raw($"I{Model.ComponentInfo.ModelType}");
+        const rawValue = this.form.getRawValue();
+@Html.Raw($"        const mergedModel = {{ ...this.model(), ...rawValue{Html.ArrayRowMergeProperties(Model)} }} as I{Model.ComponentInfo.ModelType};")
         this.model.set(mergedModel);
         this.save.emit(mergedModel);
     };
 
-    protected readonly isHidden = (propertyName: string, staticVisible: boolean): boolean => {
+    // Array-item children pass the current row as arrayItemModel so their expressions evaluate
+    // per row (Formly parity: a nested field's expression received the nested model).
+    protected readonly isHidden = (propertyName: string, staticVisible: boolean, arrayItemModel?: unknown): boolean => {
         if (!staticVisible) {
             return true;
         }
 
-        return this.fieldsHideExpressions()?.[propertyName]?.(this.currentModel()) ?? false;
+        return this.fieldsHideExpressions()?.[propertyName]?.((arrayItemModel ?? this.currentModel()) as @Html.Raw($"I{Model.ComponentInfo.ModelType}")) ?? false;
     };
 
-    protected readonly isDisabled = (propertyName: string, staticReadonly: boolean): boolean => {
+    protected readonly isDisabled = (propertyName: string, staticReadonly: boolean, arrayItemModel?: unknown): boolean => {
         return this.isReadonly() || (this.fieldsDisableExpressions()?.[propertyName]
-            ? this.fieldsDisableExpressions()![propertyName](this.currentModel())
+            ? this.fieldsDisableExpressions()![propertyName]((arrayItemModel ?? this.currentModel()) as @Html.Raw($"I{Model.ComponentInfo.ModelType}"))
             : staticReadonly);
     };
-@Html.MultiCheckboxHelperMethods(Model)@Html.SelectAllHelperMethod(Model)@Html.ReadonlyDisplayHelperMethods(Model)}
+@Html.MultiCheckboxHelperMethods(Model)@Html.SelectAllHelperMethod(Model)@Html.ReadonlyDisplayHelperMethods(Model, Options.EnableI18N)}

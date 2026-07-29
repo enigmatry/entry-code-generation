@@ -9,9 +9,9 @@ public class MinLengthValidationRule : ValidationRule<int>
         : base(value, propertyInfo, expression, String.Empty, "validators.minLength")
     { }
 
-    public override string RuleName => "minLength";
+    public override string FormlyRuleName => "minLength";
 
-    public override string ValidationMessage => HasCustomMessage
+    public override string FormlyValidationMessage => HasCustomMessage
         ? CustomMessage
         : "${field?.templateOptions?.label}:property-name: should have at least ${field?.templateOptions?.minLength}:min-value: characters";
 }

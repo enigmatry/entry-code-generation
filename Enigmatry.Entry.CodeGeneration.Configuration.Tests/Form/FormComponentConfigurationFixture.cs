@@ -1,4 +1,5 @@
 using Enigmatry.Entry.CodeGeneration.Configuration.Form;
+using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 using Enigmatry.Entry.CodeGeneration.Validation;
 using JetBrains.Annotations;
 using NUnit.Framework;
@@ -35,13 +36,13 @@ public class FormComponentConfigurationFixture
 
         titleFormControl.ValidationRules.Count.ShouldBe(1);
         titleFormControl.ValidationRules.Single()
-            .RuleName
+            .GetRuleName()
             .ShouldBe("maxLength");
 
         var detailsFormControl = formComponent.FormControls.Single(x => x.PropertyName == nameof(ProjectDetails.Description).ToLowerInvariant());
         detailsFormControl.ValidationRules.Count.ShouldBe(1);
         detailsFormControl.ValidationRules.Single()
-            .RuleName
+            .GetRuleName()
             .ShouldBe("maxLength");
     }
 

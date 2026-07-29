@@ -10,16 +10,16 @@ public class GreaterThenValidationRule<T> : NumbericValidationRule<T>
         : base(value, propertyInfo, expression, String.Empty, "validators.min")
     { }
 
-    public override string RuleName => "min";
+    public override string FormlyRuleName => "min";
 
-    public override string[] TemplateOptions =>
+    public override string[] FormlyTemplateOptions =>
         new[]
         {
             "type: 'number'",
             $"{RuleName}: {RuleAsString} + {Increment}"
         };
 
-    public override string ValidationMessage => HasCustomMessage
+    public override string FormlyValidationMessage => HasCustomMessage
         ? CustomMessage
         : "${field?.templateOptions?.label}:property-name: value should be more than ${field?.templateOptions?.min}:min-value:";
 }

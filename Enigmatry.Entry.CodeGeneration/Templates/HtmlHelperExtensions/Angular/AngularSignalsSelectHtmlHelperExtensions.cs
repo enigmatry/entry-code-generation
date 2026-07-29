@@ -32,7 +32,7 @@ public static class AngularSignalsSelectHtmlHelperExtensions
 
         if (select.Options.HasCustomValueAndDisplayKeys)
         {
-            lines.Add($"    protected readonly {MemberName("OptionsConfiguration")} = input<SelectConfiguration>({{ valueProperty: '{select.Options.OptionValueKey}', labelProperty: '{select.Options.OptionDisplayKey}', sortProperty: '{select.Options.OptionSortKey}' }});");
+            lines.Add($"    protected readonly {MemberName("OptionsConfiguration")} = input<SelectConfiguration>({{ valueProperty: '{select.Options.OptionValueKey.EscapeTsSingleQuoted()}', labelProperty: '{select.Options.OptionDisplayKey.EscapeTsSingleQuoted()}', sortProperty: '{select.Options.OptionSortKey.EscapeTsSingleQuoted()}' }});");
         }
         else
         {

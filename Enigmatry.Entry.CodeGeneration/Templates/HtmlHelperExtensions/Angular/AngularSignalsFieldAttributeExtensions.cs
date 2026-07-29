@@ -42,6 +42,11 @@ internal static class AngularSignalsFieldAttributeExtensions
             ? $" matTooltip=\"{field.Tooltip.Value.EscapeHtmlAttributeValue()}\"{field.Tooltip.I18NAttributeFor("matTooltip", enableI18N)}"
             : "";
 
+    internal static string FieldLabelLine(this FormControl field, FormViewRenderContext context) =>
+        field.Label.Value.HasContent()
+            ? $"    <label class=\"entry-field-label\">{{{{ {context.LabelCall(field)} }}}}</label>\r\n"
+            : "";
+
     internal static string HintLine(this FormControl field, bool enableI18N) =>
         field.Hint.Value.HasContent()
             ? $"    <mat-hint{field.Hint.I18NAttribute(enableI18N)}>{field.Hint.Value.EscapeHtmlText()}</mat-hint>\r\n"
@@ -52,9 +57,11 @@ internal static class AngularSignalsFieldAttributeExtensions
 
     // Requires the EntryFieldFormatDirective from @enigmatry/entry-form; the import is added
     // by AngularSignalsImportsHtmlHelperExtensions when any control carries a formatter.
+    // ToJsObject is shared with the frozen Formly templates, so HTML-attribute escaping is
+    // applied here rather than inside the formatter.
     internal static string FormatAttribute(this FormControl field) =>
         field.Formatter != null && field.Formatter.JsFormatterName.HasContent()
-            ? $" entryFieldFormat [entryFieldFormatDef]=\"{field.Formatter.ToJsObject()}\""
+            ? $" entryFieldFormat [entryFieldFormatDef]=\"{field.Formatter.ToJsObject().EscapeHtmlAttributeValue()}\""
             : "";
 
     internal static string I18NAttribute(this I18NString text, bool enableI18N) =>

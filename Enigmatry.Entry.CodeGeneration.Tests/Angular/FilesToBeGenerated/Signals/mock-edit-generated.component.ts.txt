@@ -80,9 +80,10 @@ export class MockEditGeneratedComponent {
         'addresses.verified': $localize `:@@test.mock-edit.verified.label:Verified`,
     };
 
-    protected readonly label = (propertyName: string): string => {
+    // Array-item children pass the current row as arrayItemModel so label expressions evaluate per row.
+    protected readonly label = (propertyName: string, arrayItemModel?: unknown): string => {
         const labelExpression = this.fieldsLabelExpressions()?.[propertyName];
-        return labelExpression ? String(labelExpression(this.currentModel())) : this.defaultLabels[propertyName] ?? '';
+        return labelExpression ? String(labelExpression((arrayItemModel ?? this.currentModel()) as IFormMock)) : this.defaultLabels[propertyName] ?? '';
     };
 
     private readonly formStatusRawOptions = signal([{ value: null, displayName: $localize `:@@empty-option.none:None` }, { value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }]);
@@ -193,6 +194,32 @@ export class MockEditGeneratedComponent {
         return { ...this.model(), ...this.form.getRawValue() } as IFormMock;
     });
 
+    private readonly controlStates = [
+        { key: 'id', staticVisible: false, staticReadonly: false },
+        { key: 'name', staticVisible: true, staticReadonly: false },
+        { key: 'description', staticVisible: true, staticReadonly: false },
+        { key: 'date', staticVisible: true, staticReadonly: true },
+        { key: 'money', staticVisible: true, staticReadonly: false },
+        { key: 'amount', staticVisible: true, staticReadonly: false },
+        { key: 'formStatus', staticVisible: true, staticReadonly: false },
+        { key: 'mockRadio', staticVisible: true, staticReadonly: false },
+        { key: 'mockBoolSelect', staticVisible: true, staticReadonly: false },
+        { key: 'mockMultiCheckbox', staticVisible: true, staticReadonly: false },
+        { key: 'multiCheckboxWithStringIds', staticVisible: true, staticReadonly: false },
+        { key: 'categoryId', staticVisible: true, staticReadonly: false },
+        { key: 'types', staticVisible: true, staticReadonly: false },
+        { key: 'password', staticVisible: true, staticReadonly: false },
+        { key: 'isActive', staticVisible: true, staticReadonly: false },
+        { key: 'notes', staticVisible: true, staticReadonly: false },
+        { key: 'region', staticVisible: true, staticReadonly: false },
+        { key: 'fileUpload', staticVisible: true, staticReadonly: false },
+        { key: 'addresses', staticVisible: true, staticReadonly: false },
+        { key: 'dateAndTime', staticVisible: true, staticReadonly: false },
+        { key: 'email1', staticVisible: true, staticReadonly: false },
+        { key: 'email2', staticVisible: true, staticReadonly: false },
+    ];
+
+
     private readonly regionFilterValue = toSignal(this.form.controls.region.valueChanges, { initialValue: null });
     protected readonly regionFilteredOptions = computed(() => {
         const filterValue = this.regionFilterValue();
@@ -202,7 +229,7 @@ export class MockEditGeneratedComponent {
     });
 
     protected readonly createAddressesItem = (): FormGroup => {
-        return new FormGroup({
+        const itemGroup = new FormGroup({
             id: new FormControl<string | null>(null),
             city: new FormControl<string | null>('Amsterdam'),
             country: new FormControl('NL'),
@@ -210,6 +237,8 @@ export class MockEditGeneratedComponent {
             houseNumber: new FormControl<string | null>(null),
             verified: new FormControl<boolean>({ value: false, disabled: true }),
         });
+        itemGroup.get('verified')?.disable({ emitEvent: false });
+        return itemGroup;
     };
 
     private readonly resizeAddressesArray = (length: number): void => {
@@ -219,7 +248,7 @@ export class MockEditGeneratedComponent {
         }
         while (formArray.length < length) {
             const item = this.createAddressesItem();
-            if (this.form.disabled) {
+            if (formArray.disabled) {
                 item.disable({ emitEvent: false });
             }
             formArray.push(item, { emitEvent: false });
@@ -248,8 +277,15 @@ export class MockEditGeneratedComponent {
                 return;
             }
             const model = this.currentModel();
-            const expressionValues = Object.fromEntries(Object.entries(propertyExpressions).map(([propertyName, expression]) => [propertyName, expression(model)]));
-            this.form.patchValue(expressionValues as unknown as typeof this.form.value, { emitEvent: false });
+            // setValue emits so currentModel recomputes and dependent (chained) expressions rerun;
+            // the equality guard is what terminates that loop.
+            Object.entries(propertyExpressions).forEach(([propertyName, expression]) => {
+                const control = this.form.get(propertyName);
+                const value = expression(model);
+                if (control && control.value !== value) {
+                    control.setValue(value);
+                }
+            });
         });
         effect(() => {
             const model = this.currentModel();
@@ -270,32 +306,35 @@ export class MockEditGeneratedComponent {
                 control.updateValueAndValidity({ emitEvent: false });
             });
         });
-        effect(() => {
-            if (this.isReadonly()) {
-                this.form.disable({ emitEvent: false });
-            } else {
-                this.form.enable({ emitEvent: false });
-                this.form.get('date')?.disable({ emitEvent: false });
-                (this.form.get('addresses') as FormArray<FormGroup>).controls.forEach(itemGroup => itemGroup.get('verified')?.disable({ emitEvent: false }));
-            }
-        });
+        // Single source of truth for enabled/disabled state: readonly mode, static readonly
+        // (including group readonly), disable expressions, and hidden state (a hidden control is
+        // disabled so it stops contributing to form validity, mirroring Formly's hidden fields).
         effect(() => {
             const model = this.currentModel();
+            const readonly = this.isReadonly();
+            const hideExpressions = this.fieldsHideExpressions();
             const disableExpressions = this.fieldsDisableExpressions();
-            if (!disableExpressions) {
-                return;
-            }
-            Object.entries(disableExpressions).forEach(([propertyName, isDisabled]) => {
-                const control = this.form.get(propertyName);
+            this.controlStates.forEach(({ key, staticVisible, staticReadonly }) => {
+                const control = this.form.get(key);
                 if (!control) {
                     return;
                 }
-                if (isDisabled(model) || this.isReadonly()) {
-                    control.disable({ emitEvent: false });
-                } else {
-                    control.enable({ emitEvent: false });
+                const hidden = !staticVisible || (hideExpressions?.[key]?.(model) ?? false);
+                const disableExpression = disableExpressions?.[key];
+                const disabled = readonly || hidden || (disableExpression ? disableExpression(model) : staticReadonly);
+                if (disabled !== control.disabled) {
+                    if (disabled) {
+                        control.disable({ emitEvent: false });
+                    } else {
+                        control.enable({ emitEvent: false });
+                    }
                 }
             });
+            if (!this.form.controls.addresses.disabled) {
+                this.form.controls.addresses.controls.forEach(itemGroup => {
+                    itemGroup.get('verified')?.disable({ emitEvent: false });
+                });
+            }
         });
     }
 
@@ -303,26 +342,33 @@ export class MockEditGeneratedComponent {
 
     protected readonly onSubmit = (event: Event): void => {
         event.preventDefault();
-        if (!this.form.valid || Date.now() - this.lastSubmitTime < 500) {
+        if (!this.form.valid) {
+            this.form.markAllAsTouched();
+            return;
+        }
+        if (Date.now() - this.lastSubmitTime < 500) {
             return;
         }
         this.lastSubmitTime = Date.now();
-        const mergedModel = { ...this.model(), ...this.form.getRawValue() } as IFormMock;
+        const rawValue = this.form.getRawValue();
+        const mergedModel = { ...this.model(), ...rawValue, addresses: rawValue.addresses.map((row, index) => ({ ...(this.model().addresses?.[index] ?? {}), ...row })) } as IFormMock;
         this.model.set(mergedModel);
         this.save.emit(mergedModel);
     };
 
-    protected readonly isHidden = (propertyName: string, staticVisible: boolean): boolean => {
+    // Array-item children pass the current row as arrayItemModel so their expressions evaluate
+    // per row (Formly parity: a nested field's expression received the nested model).
+    protected readonly isHidden = (propertyName: string, staticVisible: boolean, arrayItemModel?: unknown): boolean => {
         if (!staticVisible) {
             return true;
         }
 
-        return this.fieldsHideExpressions()?.[propertyName]?.(this.currentModel()) ?? false;
+        return this.fieldsHideExpressions()?.[propertyName]?.((arrayItemModel ?? this.currentModel()) as IFormMock) ?? false;
     };
 
-    protected readonly isDisabled = (propertyName: string, staticReadonly: boolean): boolean => {
+    protected readonly isDisabled = (propertyName: string, staticReadonly: boolean, arrayItemModel?: unknown): boolean => {
         return this.isReadonly() || (this.fieldsDisableExpressions()?.[propertyName]
-            ? this.fieldsDisableExpressions()![propertyName](this.currentModel())
+            ? this.fieldsDisableExpressions()![propertyName]((arrayItemModel ?? this.currentModel()) as IFormMock)
             : staticReadonly);
     };
 
@@ -344,6 +390,9 @@ export class MockEditGeneratedComponent {
 
     protected readonly readonlyValue = (control: AbstractControl | null): string =>
         String(control?.value ?? '');
+
+    protected readonly readonlyBooleanValue = (control: AbstractControl | null): string =>
+        control?.value ? $localize`:@@entry.readonly.boolean.yes:Yes` : $localize`:@@entry.readonly.boolean.no:No`;
 
     protected readonly selectedDisplayName = (value: unknown, options: { value: unknown; displayName: unknown }[]): string =>
         Array.isArray(value)
