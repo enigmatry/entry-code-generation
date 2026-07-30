@@ -85,9 +85,13 @@ import { map, throttleTime } from 'rxjs/operators';
         }
         @if (control is SelectControlBase select)
         {
-            @:options: @(select.Options.HasDynamicValues ? String.Empty : "of(")this.@(select.PropertyName)Options@(select.Options.HasDynamicValues ? "$" : ")").pipe(map(opts => sortOptions(opts, this.@(select.PropertyName)OptionsConfiguration.valueProperty, this.@(select.PropertyName)OptionsConfiguration.sortProperty, this._localeId))),
+            @:options: @(select.Options.HasDynamicValues ? String.Empty : "of(")this.@(select.PropertyName)Options@(select.Options.HasDynamicValues ? "$" : ")").pipe(map(opts => sortOptions(opts, this.@(select.PropertyName)OptionsConfiguration.valueProperty, this.@(select.PropertyName)OptionsConfiguration.sortProperty, this._localeId@(select.Options.OptionGroupKey.HasContent() ? $", this.{select.PropertyName}OptionsConfiguration.groupProperty" : String.Empty)))),
             @:valueProp: this.@(select.PropertyName)OptionsConfiguration.valueProperty,
             @:labelProp: this.@(select.PropertyName)OptionsConfiguration.labelProperty,
+            if (select.Options.OptionGroupKey.HasContent())
+            {
+                @:groupProp: this.@(select.PropertyName)OptionsConfiguration.groupProperty,
+            }
         }
         @if (control is MultiSelectFormControl multiSelect)
         {
@@ -179,12 +183,12 @@ import { map, throttleTime } from 'rxjs/operators';
         }
         else
         {
-            @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => $"{{ {option.GetValueExpression()}, displayName: {(@Html.Localize(option.DisplayName, Options.EnableI18N))} }}");
+            @:@@Input() @(select.PropertyName)Options: any[] = @Html.JsArray(select.Options.FixedOptions, option => $"{{ {option.GetValueExpression()}, displayName: {(@Html.Localize(option.DisplayName, Options.EnableI18N))}{(option.Group != null ? $", group: {Html.Localize(option.Group, Options.EnableI18N)}" : String.Empty)} }}");
         }
 
         if (select.Options.HasCustomValueAndDisplayKeys)
         {
-            @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = { valueProperty: '@(select.Options.OptionValueKey)', labelProperty: '@(select.Options.OptionDisplayKey)', sortProperty: '@(select.Options.OptionSortKey)' };
+            @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = { valueProperty: '@(select.Options.OptionValueKey)', labelProperty: '@(select.Options.OptionDisplayKey)', sortProperty: '@(select.Options.OptionSortKey)'@Html.Raw(select.Options.OptionGroupKey.HasContent() ? $", groupProperty: '{select.Options.OptionGroupKey}'" : String.Empty) };
         }
         else
         {

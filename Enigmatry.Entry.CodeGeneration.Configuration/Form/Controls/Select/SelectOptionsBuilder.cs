@@ -9,6 +9,7 @@ public class SelectOptionsBuilder
     private string _valueKey = String.Empty;
     private string _displayKey = String.Empty;
     private string _sortKey = String.Empty;
+    private string? _groupKey;
     private bool _hasDynamicValues;
     private SelectOption? _emptyOption;
     private SelectOption? _selectAllOption;
@@ -47,6 +48,12 @@ public class SelectOptionsBuilder
         return this;
     }
 
+    public SelectOptionsBuilder WithGroupKey(string groupKey)
+    {
+        _groupKey = groupKey.Camelize();
+        return this;
+    }
+
     public SelectOptionsBuilder WithDynamicValues()
     {
         _hasDynamicValues = true;
@@ -73,6 +80,7 @@ public class SelectOptionsBuilder
             OptionValueKey = _valueKey,
             OptionDisplayKey = _displayKey,
             OptionSortKey = _sortKey,
+            OptionGroupKey = _groupKey,
             HasDynamicValues = _hasDynamicValues,
             EmptyOption = _emptyOption,
             SelectAllOption = _selectAllOption
@@ -81,9 +89,12 @@ public class SelectOptionsBuilder
 
     private SelectOption GetSelectOption<T>(T x, bool shouldGenerateTranslationKeys) where T : Enum
     {
+        var group = GetGroup<T>(x.ToString());
+        var groupI18N = group == null ? null : new I18NString($"enum.{typeof(T).Name}.group.{group}".Kebaberize(), group);
+
         return shouldGenerateTranslationKeys
-            ? new SelectOption(Convert.ToInt32(x), GetDisplayName<T>(x.ToString()), GetTranslationId(x))
-            : new SelectOption(Convert.ToInt32(x), GetDisplayName<T>(x.ToString()));
+            ? new SelectOption(Convert.ToInt32(x), GetDisplayName<T>(x.ToString()), GetTranslationId(x)) { Group = groupI18N }
+            : new SelectOption(Convert.ToInt32(x), GetDisplayName<T>(x.ToString())) { Group = groupI18N };
     }
 
     private string GetDisplayName<T>(string value) where T : Enum
@@ -99,6 +110,21 @@ public class SelectOptionsBuilder
         var customAttribute = field?.GetCustomAttributes(typeof(DescriptionAttribute), false);
 
         return customAttribute?.Length > 0 ? ((DescriptionAttribute)customAttribute[0]).Description : name;
+    }
+
+    private string? GetGroup<T>(string value) where T : Enum
+    {
+        var type = typeof(T);
+        var name = Enum
+            .GetNames(type)
+            .FirstOrDefault(enumValueName => enumValueName.Equals(value, StringComparison.CurrentCultureIgnoreCase));
+
+        if (name == null) { return null; }
+
+        var field = type.GetField(name);
+        var customAttribute = field?.GetCustomAttributes(typeof(SelectOptionGroupAttribute), false);
+
+        return customAttribute?.Length > 0 ? ((SelectOptionGroupAttribute)customAttribute[0]).Group : null;
     }
 
     private static string GetTranslationId<T>(T @enum) where T : Enum
