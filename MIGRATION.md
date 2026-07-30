@@ -50,7 +50,7 @@ Signals generation is opt-in via the CLI flag:
 
 ```bash
 entry-codegen -sa <your-assembly>.dll -dd <destination> --signals
-# short form: -s
+# short form: -sig
 ```
 
 The `--standalone-components` / `-stc` flag only affects the deprecated Formly module output and is ignored by the signals templates (signals components are always standalone).
@@ -175,7 +175,7 @@ export class UserEditPageComponent { }
 
 One-way `[model]="user"` still works; `save` carries the merged model either way.
 
-Array properties are merged **row by row on index**: unconfigured properties of an existing row survive the round trip, rows added in the UI are appended as new objects, and removing a row drops it (there is no identity tracking beyond the position).
+Array properties are merged **row by row**: the component tracks each row's original model object (kept aligned with the form rows on add and remove), so unconfigured properties of an existing row survive the round trip, rows added in the UI are appended as new objects, and removing any row — including a middle one — drops exactly that row's data.
 
 ### Inputs that kept their names and semantics
 
@@ -192,9 +192,9 @@ They are signal inputs now, but the binding syntax from the parent is identical.
 
 Behavioral notes:
 
-- **`fieldsPropertyExpressions` results propagate.** When a calculated property changes a form value, dependent expressions (chained calculations, hide/label/disable/required expressions reading the calculated value) re-evaluate immediately. Expressions must return primitives or stable references — an expression returning a fresh object/array on every call never satisfies the change check and re-runs indefinitely (the Formly path had the same assign-per-cycle characteristic).
-- **Array-item children get the row as the expression argument.** For `'arrayProperty.childProperty'` keys, hide/label/disable expressions are called with the *current row item*, not the root model — matching Formly, where a nested field's expression received the nested model. Cast inside the lambda: `{ 'addresses.city': (model) => !(model as IAddress).verified }`.
-- **A hidden control is disabled.** Whether hidden statically (`IsVisible(false)`) or via `fieldsHideExpressions`, the control is disabled while hidden so it cannot keep an otherwise-valid form unsubmittable. Unlike Formly's default `resetOnHide`, the value is *not* cleared — it stays in the model and in `getRawValue()`.
+- **`fieldsPropertyExpressions` results propagate.** When a calculated property changes a form value, dependent expressions (chained calculations, hide/label/disable/required expressions reading the calculated value) re-evaluate immediately. The change check uses `Object.is`, so `NaN` results are stable; expressions must still return primitives or stable references — an expression returning a fresh object/array on every call never satisfies the change check and re-runs indefinitely (the Formly path had the same assign-per-cycle characteristic).
+- **Array-item children get the row as the expression argument.** For `'arrayProperty.childProperty'` keys, hide/label/disable expressions are called with the *current row item* — the original model row merged with the row's current form values, so unconfigured row properties are visible too — matching Formly, where a nested field's expression received the nested model. Cast inside the lambda: `{ 'addresses.city': (model) => !(model as IAddress).verified }`.
+- **A hidden control is disabled.** Whether hidden statically (`IsVisible(false)`) or via `fieldsHideExpressions`, the control is disabled while hidden — this covers array-item children per row as well — so it cannot keep an otherwise-valid form unsubmittable. Unlike Formly's default `resetOnHide`, the value is *not* cleared — it stays in the model and in `getRawValue()`.
 
 ### Select options — breaking changes
 
@@ -224,12 +224,12 @@ Selects nested inside array items get members prefixed with the array property: 
 
   The token is injected optionally: if it is not provided, named validators are skipped. A default error line (`<name> validation failed`, id `validators.<kebab-name>`) is generated for each named validator.
 - `fieldsRequiredExpressions` toggles `Validators.required` at runtime; a default "is required" error line is generated for every field that lacks a static required rule so the message has somewhere to appear.
-- **Custom rule shapes**: a rule that is not `required` and carries no exact `"<ruleName>: <value>"` template option cannot be turned into a generation-time validator. The tool now logs a **warning** naming the rule and field instead of dropping it silently; its `<mat-error>` markup is still generated and shows if a validator producing that error key is attached at runtime (typically `.WithValidators("<name>")` plus the resolver above).
+- **Custom rule shapes**: a rule that is not `required` and carries no exact `"<ruleName>: <value>"` template option cannot be turned into a generation-time validator. The tool now logs a **warning** naming the rule and field instead of dropping it silently; its `<mat-error>` markup is still generated and shows if a validator producing that error key is attached at runtime (typically `.WithValidators("<name>")` plus the resolver above). A named validator that shares its error key with a configured rule renders only the rule's configured message — no duplicate default error line.
 - **Error visibility**: errors rendered outside a `<mat-form-field>` (checkbox, radio, multi-checkbox, rich-text, custom controls) appear only after the control was touched — matching Material's behavior inside form fields — and a failed submit marks everything touched.
 
 ## Readonly behavior
 
-Enabled/disabled state is managed centrally per control from four inputs: the global `isReadonly` flag, static readonly (`.IsReadonly(true)` — including readonly configured on an enclosing `FormControlGroup`, which propagates to its children), `fieldsDisableExpressions`, and hidden state (hidden controls are disabled, see above). Setting `[isReadonly]="true"`:
+Enabled/disabled state is managed centrally per control from four inputs combined with **OR semantics**: the global `isReadonly` flag, static readonly (`.IsReadonly(true)` — including readonly configured on an enclosing `FormControlGroup`, which propagates to its children, buttons, and manually-bound controls alike), `fieldsDisableExpressions`, and hidden state (hidden controls are disabled, see above). A control is enabled only when none of them applies — a disable expression returning `false` cannot re-enable a statically readonly control. Setting `[isReadonly]="true"`:
 
 - disables every control (statically-readonly controls stay disabled when readonly mode is left again),
 - inputs additionally get the native `readonly` attribute,
@@ -256,7 +256,7 @@ Translation ids are preserved wherever a concept survived the migration — labe
 
 ## Styling hooks
 
-CSS hooks are preserved: every field carries `entry-<property>-field entry-<control-type>`, groups render as a `div.entry-field-group` (a `CreateUiSection(...)` type is appended as an extra class; a configured group label/hint renders as `label.entry-field-group-label` / `span.entry-field-group-hint`), and `WithClassName(..., ApplyWhen.FormIsReadonly)` becomes a `[class.x]="isReadonly()"` binding. Arrays are wrapped in a `div.entry-<property>-field.entry-array-field` that also carries the array's configured classes and custom control type name. Buttons render as `mat-button` unless `WithCustomControlType("mat-...")` names another Material button variant (`mat-raised-button`, `mat-flat-button`, ...) — a non-`mat-` type name only lands as a CSS class. New hooks: `entry-array-add-button`, `entry-array-remove-button`, and the readonly-display classes listed above.
+CSS hooks are preserved: every field carries `entry-<property>-field entry-<control-type>`, groups render as a `div.entry-field-group` with `role="group"` and `aria-labelledby` when labeled (a `CreateUiSection(...)` type is appended as an extra class; a configured group label/hint renders as `label.entry-field-group-label` / `span.entry-field-group-hint`), and `WithClassName(..., ApplyWhen.FormIsReadonly)` becomes a `[class.x]="isReadonly()"` binding. Labels of controls rendered outside a `mat-form-field` (rich-text, custom, fallback) carry generated ids and the elements point back via `aria-labelledby`, so accessible names survive without native `label[for]` support. Arrays are wrapped in a `div.entry-<property>-field.entry-array-field` that also carries the array's configured classes and custom control type name. Buttons render as `mat-button` unless `WithCustomControlType("mat-...")` names another Material button variant (`mat-raised-button`, `mat-flat-button`, ...) — a non-`mat-` type name only lands as a CSS class. New hooks: `entry-array-add-button`, `entry-array-remove-button`, and the readonly-display classes listed above.
 
 ## List (table) components
 

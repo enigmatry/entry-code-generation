@@ -27,6 +27,16 @@ public record FormViewRenderContext(bool EnableI18N, bool UseReadonlyDisplay)
     /// </summary>
     public string ExpressionArgument { get; init; } = "";
 
+    /// <summary>
+    /// Readonly declared on an enclosing FormControlGroup (or array), so view-level bindings
+    /// (button [disabled], manual [readonly]/[disabled] attributes) honor group readonly the same
+    /// way the control-state effect does.
+    /// </summary>
+    public bool AncestorReadonly { get; init; }
+
+    /// <summary>Suffix for generated element ids ("-{{ $index }}" inside array rows) so label ids stay unique per row.</summary>
+    public string ElementIdSuffix { get; init; } = "";
+
     /// <summary>Key a control is looked up under in the labels map and the expression-dictionary inputs.</summary>
     public string Key(FormControl field) => $"{ControlKeyPrefix}{field.PropertyName}";
 
@@ -36,7 +46,7 @@ public record FormViewRenderContext(bool EnableI18N, bool UseReadonlyDisplay)
 
     /// <summary>Generated isDisabled(...) call for the control, with the row item appended inside an array.</summary>
     public string IsDisabledCall(FormControl field) =>
-        $"isDisabled('{Key(field)}', {field.Readonly.ToString().ToLower()}{ExpressionArgument})";
+        $"isDisabled('{Key(field)}', {(field.Readonly || AncestorReadonly).ToString().ToLower()}{ExpressionArgument})";
 
     /// <summary>Generated label(...) call for the control, with the row item appended inside an array.</summary>
     public string LabelCall(FormControl field) => $"label('{Key(field)}'{ExpressionArgument})";

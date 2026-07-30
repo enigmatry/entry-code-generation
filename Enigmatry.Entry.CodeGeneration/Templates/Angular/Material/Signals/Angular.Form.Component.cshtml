@@ -88,6 +88,7 @@ export class @Model.AngularComponentName() {
     });
 
 @Html.ControlStateDeclarations(Model)
+@Html.ArrayOriginalRowsDeclarations(Model)
 @Html.AllAutocompleteFilterDeclarations(Model)
 @Html.AllArrayItemFactoryMethods(Model)
 @Html.AllArrayResizeMethods(Model)
@@ -95,7 +96,7 @@ export class @Model.AngularComponentName() {
     constructor() {
         effect(() => {
             const model = this.model();
-@Html.ResizeArrayCalls(Model)            this.form.patchValue(model as unknown as typeof this.form.value, { emitEvent: false });
+@Html.RefreshOriginalRowsCalls(Model)@Html.ResizeArrayCalls(Model)            this.form.patchValue(model as unknown as typeof this.form.value, { emitEvent: false });
         });
         effect(() => {
             const propertyExpressions = this.fieldsPropertyExpressions();
@@ -104,11 +105,12 @@ export class @Model.AngularComponentName() {
             }
             const model = this.currentModel();
             // setValue emits so currentModel recomputes and dependent (chained) expressions rerun;
-            // the equality guard is what terminates that loop.
+            // the equality guard is what terminates that loop (Object.is, so a NaN result is
+            // treated as stable instead of looping forever).
             Object.entries(propertyExpressions).forEach(([propertyName, expression]) => {
                 const control = this.form.get(propertyName);
                 const value = expression(model);
-                if (control && control.value !== value) {
+                if (control && !Object.is(control.value, value)) {
                     control.setValue(value);
                 }
             });
@@ -146,8 +148,7 @@ export class @Model.AngularComponentName() {
                     return;
                 }
                 const hidden = !staticVisible || (hideExpressions?.[key]?.(model) ?? false);
-                const disableExpression = disableExpressions?.[key];
-                const disabled = readonly || hidden || (disableExpression ? disableExpression(model) : staticReadonly);
+                const disabled = readonly || hidden || staticReadonly || (disableExpressions?.[key]?.(model) ?? false);
                 if (disabled !== control.disabled) {
                     if (disabled) {
                         control.disable({ emitEvent: false });
@@ -156,7 +157,7 @@ export class @Model.AngularComponentName() {
                     }
                 }
             });
-@Html.ReapplyArrayRowReadonlyLines(Model)        });
+@Html.ArrayItemControlStateLines(Model)        });
     }
 
     private lastSubmitTime = 0;
@@ -188,8 +189,7 @@ export class @Model.AngularComponentName() {
     };
 
     protected readonly isDisabled = (propertyName: string, staticReadonly: boolean, arrayItemModel?: unknown): boolean => {
-        return this.isReadonly() || (this.fieldsDisableExpressions()?.[propertyName]
-            ? this.fieldsDisableExpressions()![propertyName]((arrayItemModel ?? this.currentModel()) as @Html.Raw($"I{Model.ComponentInfo.ModelType}"))
-            : staticReadonly);
+        return this.isReadonly() || staticReadonly
+            || (this.fieldsDisableExpressions()?.[propertyName]?.((arrayItemModel ?? this.currentModel()) as @Html.Raw($"I{Model.ComponentInfo.ModelType}")) ?? false);
     };
 @Html.MultiCheckboxHelperMethods(Model)@Html.SelectAllHelperMethod(Model)@Html.ReadonlyDisplayHelperMethods(Model, Options.EnableI18N)}

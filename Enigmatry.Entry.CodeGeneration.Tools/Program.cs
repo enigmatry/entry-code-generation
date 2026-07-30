@@ -62,12 +62,15 @@ internal class Program
             new Option<string>(["--validators-path", "-vlp"], "Destination of custom-validators.ts file"),
             new Option<bool>(["--enable-i18n", "-i"], "Enable i18n"),
             new Option<bool>(["--standalone-components", "-stc"], "With support for standalone components"),
-            new Option<bool>(["--signals", "-s"], "With support for signals")
+            // No single-char alias: "-s" would make the parser bundle "-sa"/"-stc" as "-s a"/"-s tc".
+            new Option<bool>(["--signals", "-sig"], "With support for signals")
         };
         rootCommand.Handler = CommandHandler.Create(RootCommandHandler);
         return rootCommand;
     }
 
+    // Parameters are bound to the options BY NAME (CommandHandler.Create), so each parameter
+    // must match its option's name — e.g. "signals" for --signals, not "withSignals".
     private static async Task<int> RootCommandHandler(
         string sourceAssembly,
         string destinationDirectory,
@@ -76,7 +79,7 @@ internal class Program
         string validatorsPath = "src/app/shared/validators/custom-validators",
         bool enableI18N = false,
         bool standaloneComponents = false,
-        bool withSignals = false)
+        bool signals = false)
     {
         _sourceAssembly = sourceAssembly;
         _destinationDirectory = destinationDirectory;
@@ -85,7 +88,7 @@ internal class Program
         _validatorsPath = validatorsPath;
         _enableI18n = enableI18N;
         _standaloneComponents = standaloneComponents;
-        _withSignals = withSignals;
+        _withSignals = signals;
 
         try
         {
@@ -98,6 +101,13 @@ internal class Program
 
             await codeGenerator.Generate();
             return 0;
+        }
+        catch (InvalidOperationException ex)
+        {
+            // Generation-time configuration errors (SignalsFormComponentValidator etc.) carry an
+            // actionable message; the stack trace would only bury it.
+            Log.Error("Code generation failed: {Message}", ex.Message);
+            return -1;
         }
         catch (Exception ex)
         {

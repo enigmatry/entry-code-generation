@@ -3,6 +3,7 @@ using Enigmatry.Entry.CodeGeneration.Configuration.Form;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Array;
 using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript;
+using Humanizer;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -36,7 +37,12 @@ public static class AngularSignalsSelectHtmlHelperExtensions
         }
         else
         {
-            lines.Add($"    protected readonly {MemberName("OptionsConfiguration")} = input<SelectConfiguration>({select.Options.DefaultOptionsAsString});");
+            // Signals-side mirror of SelectOptions.DefaultOptionsAsString with the consumer-provided
+            // sort key escaped; the shared property stays untouched for the deprecated Formly output.
+            var defaultConfiguration = select.Options.HasFixedValues
+                ? $"{{ valueProperty: 'value', labelProperty: 'displayName', sortProperty: '{select.Options.OptionSortKey.Camelize().EscapeTsSingleQuoted()}' }}"
+                : "{}";
+            lines.Add($"    protected readonly {MemberName("OptionsConfiguration")} = input<SelectConfiguration>({defaultConfiguration});");
         }
 
         lines.Add($"    protected readonly {MemberName("Options")} = computed(() => {{");

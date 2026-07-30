@@ -42,10 +42,21 @@ internal static class AngularSignalsFieldAttributeExtensions
             ? $" matTooltip=\"{field.Tooltip.Value.EscapeHtmlAttributeValue()}\"{field.Tooltip.I18NAttributeFor("matTooltip", enableI18N)}"
             : "";
 
+    // Label association for controls outside mat-form-field: the label carries an id and the
+    // rendered element points back via aria-labelledby (works for native inputs and custom
+    // elements alike, unlike label[for], which only associates with labelable elements).
     internal static string FieldLabelLine(this FormControl field, FormViewRenderContext context) =>
         field.Label.Value.HasContent()
-            ? $"    <label class=\"entry-field-label\">{{{{ {context.LabelCall(field)} }}}}</label>\r\n"
+            ? $"    <label id=\"{field.FieldLabelId(context)}\" class=\"entry-field-label\">{{{{ {context.LabelCall(field)} }}}}</label>\r\n"
             : "";
+
+    internal static string AriaLabelledByAttribute(this FormControl field, FormViewRenderContext context) =>
+        field.Label.Value.HasContent()
+            ? $" aria-labelledby=\"{field.FieldLabelId(context)}\""
+            : "";
+
+    private static string FieldLabelId(this FormControl field, FormViewRenderContext context) =>
+        $"{context.MemberName(field, "FieldLabel")}{context.ElementIdSuffix}";
 
     internal static string HintLine(this FormControl field, bool enableI18N) =>
         field.Hint.Value.HasContent()
@@ -57,11 +68,9 @@ internal static class AngularSignalsFieldAttributeExtensions
 
     // Requires the EntryFieldFormatDirective from @enigmatry/entry-form; the import is added
     // by AngularSignalsImportsHtmlHelperExtensions when any control carries a formatter.
-    // ToJsObject is shared with the frozen Formly templates, so HTML-attribute escaping is
-    // applied here rather than inside the formatter.
     internal static string FormatAttribute(this FormControl field) =>
         field.Formatter != null && field.Formatter.JsFormatterName.HasContent()
-            ? $" entryFieldFormat [entryFieldFormatDef]=\"{field.Formatter.ToJsObject().EscapeHtmlAttributeValue()}\""
+            ? $" entryFieldFormat [entryFieldFormatDef]=\"{field.Formatter.SignalsFormatterJsObject().EscapeHtmlAttributeValue()}\""
             : "";
 
     internal static string I18NAttribute(this I18NString text, bool enableI18N) =>

@@ -91,7 +91,7 @@ public static class AngularSignalsValidationHtmlHelperExtensions
 
     // Angular's built-in Validators.minLength/maxLength report their errors under
     // all-lowercase keys, unlike the camelCase rule names used for the validator factories.
-    private static string AngularErrorKey(this IFormlyValidationRule validationRule) => validationRule.GetRuleName() switch
+    internal static string AngularErrorKey(this IFormlyValidationRule validationRule) => validationRule.GetRuleName() switch
     {
         "minLength" => "minlength",
         "maxLength" => "maxlength",

@@ -20,29 +20,49 @@ public static class AngularSignalsControlStateHtmlHelperExtensions
             .Select(entry =>
                 $"        {{ key: '{entry.Control.PropertyName}', staticVisible: {entry.Control.Visible.ToString().ToLower()}, staticReadonly: {entry.EffectiveReadonly.ToString().ToLower()} }},");
 
+        var itemTables = model.FlatFormControls().OfType<ArrayFormControl>()
+            .Select(array =>
+                $"    private readonly {array.PropertyName}ItemControlStates = [\r\n" +
+                String.Concat(array.ArrayItemControlsWithEffectiveReadonly().Select(entry =>
+                    $"        {{ key: '{array.PropertyName}.{entry.Control.PropertyName}', controlName: '{entry.Control.PropertyName}', " +
+                    $"staticVisible: {entry.Control.Visible.ToString().ToLower()}, staticReadonly: {entry.EffectiveReadonly.ToString().ToLower()} }},\r\n")) +
+                $"    ];\r\n");
+
         return htmlHelper.Raw(
             "    private readonly controlStates = [\r\n" +
             String.Concat(entries.Select(entry => entry + "\r\n")) +
-            "    ];\r\n");
+            "    ];\r\n" +
+            String.Concat(itemTables));
     }
 
     /// <summary>
-    /// Lines that re-disable statically readonly array-item controls after their FormArray was
-    /// re-enabled (enable() on a parent cascades and wipes the per-row disabled state).
+    /// Per-row state lines for the control-state effect: array-item controls are re-evaluated per
+    /// row (hidden children are disabled so they stop blocking submission, statically readonly
+    /// children are re-disabled after enable() on the FormArray cascaded and wiped them). Skipped
+    /// while the array control itself is disabled — the cascade already covers every child.
     /// </summary>
-    public static IHtmlContent ReapplyArrayRowReadonlyLines(this IHtmlHelper htmlHelper, FormComponentModel model)
+    public static IHtmlContent ArrayItemControlStateLines(this IHtmlHelper htmlHelper, FormComponentModel model)
     {
         var blocks = model.FlatFormControls().OfType<ArrayFormControl>()
-            .Select(array => (Array: array, ReadonlyChildren: array.ArrayItemControlsWithEffectiveReadonly()
-                .Where(entry => entry.EffectiveReadonly)
-                .Select(entry => entry.Control)
-                .ToList()))
-            .Where(entry => entry.ReadonlyChildren.Count > 0)
-            .Select(entry =>
-                $"            if (!this.form.controls.{entry.Array.PropertyName}.disabled) {{\r\n" +
-                $"                this.form.controls.{entry.Array.PropertyName}.controls.forEach(itemGroup => {{\r\n" +
-                String.Concat(entry.ReadonlyChildren.Select(child =>
-                    $"                    itemGroup.get('{child.PropertyName}')?.disable({{ emitEvent: false }});\r\n")) +
+            .Where(array => array.ArrayItemControlsWithEffectiveReadonly().Any())
+            .Select(array =>
+                $"            if (!this.form.controls.{array.PropertyName}.disabled) {{\r\n" +
+                $"                this.form.controls.{array.PropertyName}.controls.forEach((itemGroup, index) => {{\r\n" +
+                $"                    const rowModel = this.{array.PropertyName}RowModel(index);\r\n" +
+                $"                    this.{array.PropertyName}ItemControlStates.forEach(({{ key, controlName, staticVisible, staticReadonly }}) => {{\r\n" +
+                $"                        const control = itemGroup.get(controlName);\r\n" +
+                $"                        if (!control) {{\r\n" +
+                $"                            return;\r\n" +
+                $"                        }}\r\n" +
+                $"                        const disabled = this.isHidden(key, staticVisible, rowModel) || staticReadonly;\r\n" +
+                $"                        if (disabled !== control.disabled) {{\r\n" +
+                $"                            if (disabled) {{\r\n" +
+                $"                                control.disable({{ emitEvent: false }});\r\n" +
+                $"                            }} else {{\r\n" +
+                $"                                control.enable({{ emitEvent: false }});\r\n" +
+                $"                            }}\r\n" +
+                $"                        }}\r\n" +
+                $"                    }});\r\n" +
                 $"                }});\r\n" +
                 $"            }}\r\n");
 

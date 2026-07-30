@@ -26,14 +26,19 @@ public static class AngularSignalsFormViewHtmlHelperExtensions
         var staticClasses = group.ClassNames.Values
             .Where(classNameEntry => classNameEntry.When == ApplyWhen.Always)
             .Aggregate(baseClasses, (current, classNameEntry) => current + $" {classNameEntry.Value}");
+        var labelId = $"{context.MemberName(group, "GroupLabel")}{context.ElementIdSuffix}";
+        var groupAttributes = group.Label.Value.HasContent()
+            ? $" role=\"group\" aria-labelledby=\"{labelId}\""
+            : "";
         var labelLine = group.Label.Value.HasContent()
-            ? $"    <label class=\"entry-field-group-label\"{group.Label.I18NAttribute(context.EnableI18N)}>{group.Label.Value.EscapeHtmlText()}</label>\r\n"
+            ? $"    <label id=\"{labelId}\" class=\"entry-field-group-label\"{group.Label.I18NAttribute(context.EnableI18N)}>{group.Label.Value.EscapeHtmlText()}</label>\r\n"
             : "";
         var hintLine = group.Hint.Value.HasContent()
             ? $"    <span class=\"entry-field-group-hint\"{group.Hint.I18NAttribute(context.EnableI18N)}>{group.Hint.Value.EscapeHtmlText()}</span>\r\n"
             : "";
-        var innerContent = htmlHelper.RenderFormControls(group.FormControls, context).ToString();
-        return htmlHelper.Raw($"<div class=\"{staticClasses}\"{group.ConditionalClassBindings()}>\r\n{labelLine}{innerContent}{hintLine}</div>\r\n");
+        var innerContext = context with { AncestorReadonly = context.AncestorReadonly || group.Readonly };
+        var innerContent = htmlHelper.RenderFormControls(group.FormControls, innerContext).ToString();
+        return htmlHelper.Raw($"<div class=\"{staticClasses}\"{group.ConditionalClassBindings()}{groupAttributes}>\r\n{labelLine}{innerContent}{hintLine}</div>\r\n");
     }
 
     private static IHtmlContent RenderFormButton(this IHtmlHelper htmlHelper, ButtonFormControl button, FormViewRenderContext context)
@@ -90,7 +95,7 @@ public static class AngularSignalsFormViewHtmlHelperExtensions
             $"@if (!{context.IsHiddenCall(field)}) {{\r\n" +
             $"<div {field.FieldClassAttribute()}{field.TooltipAttribute(context.EnableI18N)}>\r\n" +
             field.FieldLabelLine(context) +
-            $"    <input formControlName=\"{field.PropertyName}\"{field.PlaceholderAttribute(context.EnableI18N)}{field.MetadataAttributes()} [readonly]=\"{context.IsDisabledCall(field)}\">\r\n" +
+            $"    <input formControlName=\"{field.PropertyName}\"{field.PlaceholderAttribute(context.EnableI18N)}{field.AriaLabelledByAttribute(context)}{field.MetadataAttributes()} [readonly]=\"{context.IsDisabledCall(field)}\">\r\n" +
             field.HintLine(context.EnableI18N) +
             htmlHelper.RenderValidationErrorsWhenTouched(field, context) +
             $"</div>\r\n" +

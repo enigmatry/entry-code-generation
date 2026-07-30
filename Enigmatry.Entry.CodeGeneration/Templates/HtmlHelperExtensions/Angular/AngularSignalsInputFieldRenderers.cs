@@ -70,7 +70,7 @@ internal static class AngularSignalsInputFieldRenderers
             $"@if (!{context.IsHiddenCall(field)}) {{\r\n" +
             $"<div {field.FieldClassAttribute()}{field.TooltipAttribute(context.EnableI18N)}>\r\n" +
             field.FieldLabelLine(context) +
-            $"    <{editorTagName} formControlName=\"{field.PropertyName}\"{field.PlaceholderAttribute(context.EnableI18N)}></{editorTagName}>\r\n" +
+            $"    <{editorTagName} formControlName=\"{field.PropertyName}\"{field.PlaceholderAttribute(context.EnableI18N)}{field.AriaLabelledByAttribute(context)}></{editorTagName}>\r\n" +
             field.HintLine(context.EnableI18N) +
             htmlHelper.RenderValidationErrorsWhenTouched(field, context) +
             $"</div>\r\n" +
@@ -86,7 +86,7 @@ internal static class AngularSignalsInputFieldRenderers
             $"@if (!{context.IsHiddenCall(field)}) {{\r\n" +
             $"<div class=\"{classes}\"{field.ConditionalClassBindings()}{field.TooltipAttribute(context.EnableI18N)}>\r\n" +
             field.FieldLabelLine(context) +
-            $"    <{field.ControlTypeName} formControlName=\"{field.PropertyName}\"{field.PlaceholderAttribute(context.EnableI18N)}{field.MetadataAttributes()}" +
+            $"    <{field.ControlTypeName} formControlName=\"{field.PropertyName}\"{field.PlaceholderAttribute(context.EnableI18N)}{field.AriaLabelledByAttribute(context)}{field.MetadataAttributes()}" +
             $" [readonly]=\"{context.IsDisabledCall(field)}\"></{field.ControlTypeName}>\r\n" +
             field.HintLine(context.EnableI18N) +
             htmlHelper.RenderValidationErrorsWhenTouched(field, context) +

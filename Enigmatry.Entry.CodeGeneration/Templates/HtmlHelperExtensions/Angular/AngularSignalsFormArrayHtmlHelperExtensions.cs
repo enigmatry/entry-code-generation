@@ -81,11 +81,13 @@ public static class AngularSignalsFormArrayHtmlHelperExtensions
 
         return htmlHelper.Raw(
             $"    protected readonly add{methodName}Item = (): void => {{\r\n" +
+            $"        this.{propertyName}OriginalRows = [...this.{propertyName}OriginalRows, {{}}];\r\n" +
             $"        this.form.controls.{propertyName}.push(this.create{methodName}Item());\r\n" +
             $"        this.form.markAsDirty();\r\n" +
             $"    }};\r\n" +
             $"\r\n" +
             $"    protected readonly remove{methodName}Item = (index: number): void => {{\r\n" +
+            $"        this.{propertyName}OriginalRows = this.{propertyName}OriginalRows.filter((_, originalRowIndex) => originalRowIndex !== index);\r\n" +
             $"        this.form.controls.{propertyName}.removeAt(index);\r\n" +
             $"        this.form.markAsDirty();\r\n" +
             $"    }};\r\n");
@@ -101,18 +103,5 @@ public static class AngularSignalsFormArrayHtmlHelperExtensions
             .Select(array => $"            this.resize{AngularSignalsFormModelExtensions.Capitalize(array.PropertyName)}Array(model.{array.PropertyName}?.length ?? 0);");
 
         return htmlHelper.Raw(String.Concat(lines.Select(line => line + "\r\n")));
-    }
-
-    // Emitted into the onSubmit merge so each array row keeps the unconfigured properties of the
-    // original model row (a plain getRawValue() spread would replace whole rows). Rows are
-    // matched by position: added rows merge with an empty object, removed rows are dropped.
-    public static IHtmlContent ArrayRowMergeProperties(this IHtmlHelper htmlHelper, FormComponentModel model)
-    {
-        var properties = model.FlatFormControls().OfType<ArrayFormControl>()
-            .Select(array =>
-                $", {array.PropertyName}: rawValue.{array.PropertyName}" +
-                $".map((row, index) => ({{ ...(this.model().{array.PropertyName}?.[index] ?? {{}}), ...row }}))");
-
-        return htmlHelper.Raw(String.Concat(properties));
     }
 }

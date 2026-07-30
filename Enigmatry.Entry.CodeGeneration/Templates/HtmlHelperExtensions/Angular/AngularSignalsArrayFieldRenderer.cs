@@ -20,7 +20,9 @@ internal static class AngularSignalsArrayFieldRenderer
             FormGroupAccessor = itemGroupVariable,
             ControlKeyPrefix = $"{propertyName}.",
             MemberNamePrefix = propertyName,
-            ExpressionArgument = $", currentModel().{propertyName}?.[$index]"
+            ExpressionArgument = $", {propertyName}RowModel($index)",
+            AncestorReadonly = context.AncestorReadonly || arrayControl.Readonly || group.Readonly,
+            ElementIdSuffix = "-{{ $index }}"
         };
         var innerControls = htmlHelper.RenderFormControls(group.FormControls, itemContext).ToString();
         // Add/remove follow the array control's disabled state (readonly mode, static readonly,
