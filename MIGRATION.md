@@ -114,7 +114,8 @@ The symbol is added to the generated standalone component's `imports` array and 
 
 The custom component itself must:
 - implement `ControlValueAccessor` (it is bound with `formControlName`),
-- expose a `readonly` input (bound to the generated `isDisabled(...)` helper).
+- expose a `readonly` input (bound to the generated `isDisabled(...)` helper),
+- **forward accessible naming to its internal interactive element.** The generated markup renders a `<label>` with an id and puts `aria-labelledby` on the *host* element; ARIA naming does not cross into a nested `<input>`, `<textarea>` or `contenteditable`, so without forwarding, the control a screen reader focuses stays unnamed. Either re-bind it inside the component (`<input [attr.aria-labelledby]="ariaLabelledby">` with `@Input() ariaLabelledby` / host-attribute injection) or accept the label text as an input and render your own associated label. The same obligation applies to rich-text editor components (`entry-redactor` / `entry-ckeditor`).
 
 ### Wrappers are gone
 
@@ -243,6 +244,8 @@ With `builder.WithReadonlyDisplay()` the component instead renders a plain label
 
 `.WithFormat(...)` on a form control renders the `entryFieldFormat` directive (`[entryFieldFormatDef]="{ name: 'currency', ... }"`) on the input, and `EntryFieldFormatDirective` is imported from `@enigmatry/entry-form`. Make sure your `@enigmatry/entry-form` version ships this directive before migrating forms that use formatters.
 
+**Custom formatters.** The built-in formatters (`Date`, `Currency`, `Decimal`, `Percent`, `Boolean`) are emitted through a signals-side mirror that escapes the values you configured, so quotes and backslashes in a currency code, digits info or locale are safe. Any other `IPropertyFormatter` — including a **subclass of a built-in one** — keeps its own `ToJsObject()` output, which is emitted verbatim apart from HTML-attribute escaping. That output is TypeScript source you author, so it must already be a valid JS object literal with its own string values correctly single-quoted and escaped.
+
 ## i18n
 
 Translation ids are preserved wherever a concept survived the migration — labels, placeholders, hints, tooltips, select option display names, and validation messages keep their ids, so existing translation files keep working. Differences:
@@ -272,8 +275,8 @@ These are validated at generation time where possible — the tool throws a desc
 | `AutocompleteFormControl` inside an array item | Generation error (per-row filter state cannot be generated) |
 | Custom/rich-text control without `.WithImport(...)` | Generation error |
 | A root select property named like an array-item select (`addressesCountry` next to `addresses[].country`) | Generation error (the generated members would collide) |
-| `fieldsHideExpressions` / `fieldsLabelExpressions` for array-item children | Supported with `'arrayProperty.childProperty'` keys; the expression receives the **row item** as its argument |
-| `fieldsPropertyExpressions` / `fieldsDisableExpressions` / `fieldsRequiredExpressions` for array-item children | Not supported (root-level controls only) |
+| `fieldsHideExpressions` / `fieldsLabelExpressions` / `fieldsDisableExpressions` for array-item children | Supported with `'arrayProperty.childProperty'` keys; the expression receives the **row item** as its argument |
+| `fieldsPropertyExpressions` / `fieldsRequiredExpressions` for array-item children | Not supported (root-level controls only) |
 | Validation rule without a `"<ruleName>: <value>"` template option | No generated validator — logged as a warning; the message markup still renders for runtime-attached validators |
 | Overriding fixed select options via an input | Not supported — use dynamic values |
 | `PercentPropertyFormatter.WithMultiplier(...)` in the readonly display | Ignored (plain `percent` pipe) |

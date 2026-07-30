@@ -20,7 +20,10 @@ public static class AngularSignalsControlStateHtmlHelperExtensions
             .Select(entry =>
                 $"        {{ key: '{entry.Control.PropertyName}', staticVisible: {entry.Control.Visible.ToString().ToLower()}, staticReadonly: {entry.EffectiveReadonly.ToString().ToLower()} }},");
 
+        // Same predicate as ArrayItemControlStateLines: an array with no stateful children gets no
+        // table, otherwise the member would be declared and never read (breaks noUnusedLocals).
         var itemTables = model.FlatFormControls().OfType<ArrayFormControl>()
+            .Where(array => array.ArrayItemControlsWithEffectiveReadonly().Any())
             .Select(array =>
                 $"    private readonly {array.PropertyName}ItemControlStates = [\r\n" +
                 String.Concat(array.ArrayItemControlsWithEffectiveReadonly().Select(entry =>
@@ -38,8 +41,10 @@ public static class AngularSignalsControlStateHtmlHelperExtensions
     /// <summary>
     /// Per-row state lines for the control-state effect: array-item controls are re-evaluated per
     /// row (hidden children are disabled so they stop blocking submission, statically readonly
-    /// children are re-disabled after enable() on the FormArray cascaded and wiped them). Skipped
-    /// while the array control itself is disabled — the cascade already covers every child.
+    /// children are re-disabled after enable() on the FormArray cascaded and wiped them). The same
+    /// isHidden/isDisabled calls the row markup makes are reused, so a child's control state and
+    /// its rendered state cannot diverge. Skipped while the array control itself is disabled — the
+    /// cascade already covers every child.
     /// </summary>
     public static IHtmlContent ArrayItemControlStateLines(this IHtmlHelper htmlHelper, FormComponentModel model)
     {
@@ -54,7 +59,7 @@ public static class AngularSignalsControlStateHtmlHelperExtensions
                 $"                        if (!control) {{\r\n" +
                 $"                            return;\r\n" +
                 $"                        }}\r\n" +
-                $"                        const disabled = this.isHidden(key, staticVisible, rowModel) || staticReadonly;\r\n" +
+                $"                        const disabled = this.isHidden(key, staticVisible, rowModel) || this.isDisabled(key, staticReadonly, rowModel);\r\n" +
                 $"                        if (disabled !== control.disabled) {{\r\n" +
                 $"                            if (disabled) {{\r\n" +
                 $"                                control.disable({{ emitEvent: false }});\r\n" +

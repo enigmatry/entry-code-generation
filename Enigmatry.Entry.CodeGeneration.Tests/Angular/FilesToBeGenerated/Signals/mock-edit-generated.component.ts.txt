@@ -353,7 +353,7 @@ export class MockEditGeneratedComponent {
                         if (!control) {
                             return;
                         }
-                        const disabled = this.isHidden(key, staticVisible, rowModel) || staticReadonly;
+                        const disabled = this.isHidden(key, staticVisible, rowModel) || this.isDisabled(key, staticReadonly, rowModel);
                         if (disabled !== control.disabled) {
                             if (disabled) {
                                 control.disable({ emitEvent: false });
