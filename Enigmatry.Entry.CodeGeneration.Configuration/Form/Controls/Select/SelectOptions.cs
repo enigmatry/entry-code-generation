@@ -9,7 +9,7 @@ public class SelectOptions
     public string OptionDisplayKey { get; set; } = String.Empty;
     public SelectOption? EmptyOption { get; set; }
     public string OptionSortKey { get; set; } = String.Empty;
-    public string OptionGroupKey { get; set; } = String.Empty;
+    public string? OptionGroupKey { get; set; }
     public SelectOption? SelectAllOption { get; set; }
     public bool HasDynamicValues { get; set; }
     public bool HasFixedValues => FixedOptions.Any();
@@ -22,7 +22,7 @@ public class SelectOptions
             var groupProperty = OptionGroupKey.HasContent() ? $", groupProperty: '{OptionGroupKey}'" : String.Empty;
             return HasFixedValues
                 ? $"{{ valueProperty: '{nameof(SelectOption.Value).Camelize()}', labelProperty: '{nameof(SelectOption.DisplayName).Camelize()}', sortProperty: '{OptionSortKey.Camelize()}'{groupProperty} }}"
-                : (OptionGroupKey.HasContent() ? $"{{ groupProperty: '{OptionGroupKey}' }}" : "{}");
+                : "{}";
         }
     }
 }

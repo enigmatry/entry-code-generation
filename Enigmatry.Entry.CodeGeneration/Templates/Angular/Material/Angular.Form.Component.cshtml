@@ -185,7 +185,7 @@ import { map, throttleTime } from 'rxjs/operators';
 
         if (select.Options.HasCustomValueAndDisplayKeys)
         {
-            @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = { valueProperty: '@(select.Options.OptionValueKey)', labelProperty: '@(select.Options.OptionDisplayKey)', sortProperty: '@(select.Options.OptionSortKey)', groupProperty: '@(select.Options.OptionGroupKey)' };
+            @:@@Input() @(select.PropertyName)OptionsConfiguration: SelectConfiguration = { valueProperty: '@(select.Options.OptionValueKey)', labelProperty: '@(select.Options.OptionDisplayKey)', sortProperty: '@(select.Options.OptionSortKey)'@Html.Raw(select.Options.OptionGroupKey.HasContent() ? $", groupProperty: '{select.Options.OptionGroupKey}'" : String.Empty) };
         }
         else
         {

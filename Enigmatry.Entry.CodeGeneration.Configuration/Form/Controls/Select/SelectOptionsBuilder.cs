@@ -9,7 +9,7 @@ public class SelectOptionsBuilder
     private string _valueKey = String.Empty;
     private string _displayKey = String.Empty;
     private string _sortKey = String.Empty;
-    private string _groupKey = String.Empty;
+    private string? _groupKey;
     private bool _hasDynamicValues;
     private SelectOption? _emptyOption;
     private SelectOption? _selectAllOption;

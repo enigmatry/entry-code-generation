@@ -30,7 +30,7 @@
 
         if (select.Options.HasCustomValueAndDisplayKeys)
         {
-            @:protected readonly @(select.PropertyName)OptionsConfiguration = input@(Html.Raw("<SelectConfiguration>"))({ valueProperty: '@(select.Options.OptionValueKey)', labelProperty: '@(select.Options.OptionDisplayKey)', sortProperty: '@(select.Options.OptionSortKey)', groupProperty: '@(select.Options.OptionGroupKey)' });
+            @:protected readonly @(select.PropertyName)OptionsConfiguration = input@(Html.Raw("<SelectConfiguration>"))({ valueProperty: '@(select.Options.OptionValueKey)', labelProperty: '@(select.Options.OptionDisplayKey)', sortProperty: '@(select.Options.OptionSortKey)'@Html.Raw(select.Options.OptionGroupKey.HasContent() ? $", groupProperty: '{select.Options.OptionGroupKey}'" : String.Empty) });
         }
         else
         {
