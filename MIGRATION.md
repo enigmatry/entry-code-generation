@@ -115,7 +115,16 @@ The symbol is added to the generated standalone component's `imports` array and 
 The custom component itself must:
 - implement `ControlValueAccessor` (it is bound with `formControlName`),
 - expose a `readonly` input (bound to the generated `isDisabled(...)` helper),
-- **forward accessible naming to its internal interactive element.** The generated markup renders a `<label>` with an id and puts `aria-labelledby` on the *host* element; ARIA naming does not cross into a nested `<input>`, `<textarea>` or `contenteditable`, so without forwarding, the control a screen reader focuses stays unnamed. Either re-bind it inside the component (`<input [attr.aria-labelledby]="ariaLabelledby">` with `@Input() ariaLabelledby` / host-attribute injection) or accept the label text as an input and render your own associated label. The same obligation applies to rich-text editor components (`entry-redactor` / `entry-ckeditor`).
+- **forward accessible naming to its internal interactive element.** The generated markup renders a `<label>` with an id and puts `aria-labelledby` on the *host* element; ARIA naming does not cross into a nested `<input>`, `<textarea>` or `contenteditable`, so without forwarding, the control a screen reader focuses stays unnamed. The generator emits a plain `aria-labelledby` **attribute**, so an `@Input() ariaLabelledby` will not receive it — the input has to be aliased to the attribute name (or the value read off the host):
+
+```typescript
+// alias the input to the attribute the generated markup emits...
+@Input('aria-labelledby') ariaLabelledby?: string;
+// ...or read it off the host element once:
+private readonly ariaLabelledby = inject(ElementRef).nativeElement.getAttribute('aria-labelledby');
+```
+
+then re-bind it on the inner control (`<input [attr.aria-labelledby]="ariaLabelledby">`). Alternatively, accept the label text as an input and render your own associated label. The same obligation applies to rich-text editor components (`entry-redactor` / `entry-ckeditor`).
 
 ### Wrappers are gone
 
