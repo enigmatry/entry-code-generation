@@ -9,13 +9,20 @@ public class SelectOptions
     public string OptionDisplayKey { get; set; } = String.Empty;
     public SelectOption? EmptyOption { get; set; }
     public string OptionSortKey { get; set; } = String.Empty;
+    public string? OptionGroupKey { get; set; }
     public SelectOption? SelectAllOption { get; set; }
     public bool HasDynamicValues { get; set; }
     public bool HasFixedValues => FixedOptions.Any();
     public bool HasCustomValueAndDisplayKeys => OptionValueKey.HasContent() && OptionDisplayKey.HasContent();
 
-    public string DefaultOptionsAsString =>
-        HasFixedValues
-            ? $"{{ valueProperty: '{nameof(SelectOption.Value).Camelize()}', labelProperty: '{nameof(SelectOption.DisplayName).Camelize()}', sortProperty: '{OptionSortKey.Camelize()}' }}"
-            : "{}";
+    public string DefaultOptionsAsString
+    {
+        get
+        {
+            var groupProperty = OptionGroupKey.HasContent() ? $", groupProperty: '{OptionGroupKey}'" : String.Empty;
+            return HasFixedValues
+                ? $"{{ valueProperty: '{nameof(SelectOption.Value).Camelize()}', labelProperty: '{nameof(SelectOption.DisplayName).Camelize()}', sortProperty: '{OptionSortKey.Camelize()}'{groupProperty} }}"
+                : "{}";
+        }
+    }
 }

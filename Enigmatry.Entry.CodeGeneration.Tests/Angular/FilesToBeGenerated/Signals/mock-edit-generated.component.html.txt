@@ -228,8 +228,18 @@
 <mat-form-field class="entry-category-id-field entry-select">
     <mat-label>{{ label('categoryId') }}</mat-label>
     <mat-select formControlName="categoryId" entityType="Category" filter="category_name">
-        @for (option of categoryIdOptions(); track option.value) {
-            <mat-option [value]="option.value">{{option.displayName}}</mat-option>
+        @for (optionGroup of categoryIdOptionGroups(); track optionGroup.group) {
+            @if (optionGroup.group) {
+            <mat-optgroup [label]="optionGroup.group">
+                @for (option of optionGroup.options; track option.value) {
+                <mat-option [value]="option.value">{{option.displayName}}</mat-option>
+                }
+            </mat-optgroup>
+            } @else {
+                @for (option of optionGroup.options; track option.value) {
+                <mat-option [value]="option.value">{{option.displayName}}</mat-option>
+                }
+            }
         }
     </mat-select>
 @if (form.get('categoryId')?.hasError('required')) {

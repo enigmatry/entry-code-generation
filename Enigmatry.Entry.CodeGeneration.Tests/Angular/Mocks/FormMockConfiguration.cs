@@ -105,8 +105,8 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
             .WithLabel("MultiCheckbox")
             .WithOptions(options => options.WithFixedValues(new[]
             {
-                new SelectOption("value_1", "Label 1", "translation_Id_1"),
-                new SelectOption(-9, "Label 3", "translation_Id_3"),
+                new SelectOption("value_1", "Label 1", "translation_Id_1") { Group = new I18NString("group.multi-checkbox-with-string-ids", "Group A") },
+                new SelectOption(-9, "Label 3", "translation_Id_3") { Group = new I18NString("group.multi-checkbox-with-string-ids", "Group A") },
                 new SelectOption(1234567, "Label 4", "translation_Id_4"),
                 new SelectOption((int)EnumMock.Third, "Label 5", "translation_Id_5"),
                 new SelectOption(null, "Label 6", "translation_Id_6")
@@ -121,6 +121,7 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
                 options.WithValueKey("id");
                 options.WithDisplayKey("categoryName");
                 options.WithSortKey("categoryName");
+                options.WithGroupKey("categoryGroup");
             })
             .WithMetadata(
                 new KeyValuePair<string, string>("entityType", "Category"),

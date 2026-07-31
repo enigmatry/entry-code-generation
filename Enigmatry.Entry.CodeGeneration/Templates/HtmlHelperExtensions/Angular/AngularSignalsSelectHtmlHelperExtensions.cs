@@ -27,29 +27,43 @@ public static class AngularSignalsSelectHtmlHelperExtensions
         else
         {
             var options = htmlHelper.JsArray(select.Options.FixedOptions,
-                option => $"{{ {SelectOptionValueExpression(option)}, displayName: {htmlHelper.LocalizeEscaped(option.DisplayName, enableI18N)} }}");
+                option => $"{{ {SelectOptionValueExpression(option)}, displayName: {htmlHelper.LocalizeEscaped(option.DisplayName, enableI18N)}" +
+                          $"{OptionGroupProperty(htmlHelper, option, enableI18N)} }}");
             lines.Add($"    private readonly {MemberName("RawOptions")} = signal({options});");
         }
 
+        // groupProperty is only emitted when grouping is configured, matching the shared
+        // SelectOptions.DefaultOptionsAsString behavior (an always-present key would change the
+        // sortOptions contract for every select).
+        var groupKey = select.Options.OptionGroupKey;
+        var groupProperty = groupKey.HasContent() ? $", groupProperty: '{groupKey!.EscapeTsSingleQuoted()}'" : "";
+
         if (select.Options.HasCustomValueAndDisplayKeys)
         {
-            lines.Add($"    protected readonly {MemberName("OptionsConfiguration")} = input<SelectConfiguration>({{ valueProperty: '{select.Options.OptionValueKey.EscapeTsSingleQuoted()}', labelProperty: '{select.Options.OptionDisplayKey.EscapeTsSingleQuoted()}', sortProperty: '{select.Options.OptionSortKey.EscapeTsSingleQuoted()}' }});");
+            lines.Add($"    protected readonly {MemberName("OptionsConfiguration")} = input<SelectConfiguration>({{ valueProperty: '{select.Options.OptionValueKey.EscapeTsSingleQuoted()}', labelProperty: '{select.Options.OptionDisplayKey.EscapeTsSingleQuoted()}', sortProperty: '{select.Options.OptionSortKey.EscapeTsSingleQuoted()}'{groupProperty} }});");
         }
         else
         {
             // Signals-side mirror of SelectOptions.DefaultOptionsAsString with the consumer-provided
-            // sort key escaped; the shared property stays untouched for the deprecated Formly output.
+            // keys escaped; the shared property stays untouched for the deprecated Formly output.
             var defaultConfiguration = select.Options.HasFixedValues
-                ? $"{{ valueProperty: 'value', labelProperty: 'displayName', sortProperty: '{select.Options.OptionSortKey.Camelize().EscapeTsSingleQuoted()}' }}"
+                ? $"{{ valueProperty: 'value', labelProperty: 'displayName', sortProperty: '{select.Options.OptionSortKey.Camelize().EscapeTsSingleQuoted()}'{groupProperty} }}"
                 : "{}";
             lines.Add($"    protected readonly {MemberName("OptionsConfiguration")} = input<SelectConfiguration>({defaultConfiguration});");
         }
 
+        var sortGroupArgument = groupKey.HasContent() ? ", configuration.groupProperty" : "";
+        var groupMapping = select.RendersOptionGroups() ? ", group: option[configuration.groupProperty ?? 'group']" : "";
         lines.Add($"    protected readonly {MemberName("Options")} = computed(() => {{");
         lines.Add($"        const configuration = this.{MemberName("OptionsConfiguration")}();");
-        lines.Add($"        const options = sortOptions(this.{MemberName("RawOptions")}() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];");
-        lines.Add($"        return options.map(option => ({{ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }}));");
+        lines.Add($"        const options = sortOptions(this.{MemberName("RawOptions")}() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId{sortGroupArgument}) as Record<string, unknown>[];");
+        lines.Add($"        return options.map(option => ({{ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName']{groupMapping} }}));");
         lines.Add($"    }});");
+
+        if (select.RendersOptionGroups())
+        {
+            lines.AddRange(OptionGroupsComputed(MemberName("OptionGroups"), MemberName("Options")));
+        }
 
         if (select is AutocompleteFormControl)
         {
@@ -60,6 +74,45 @@ public static class AngularSignalsSelectHtmlHelperExtensions
 
         return htmlHelper.Raw(String.Join("\r\n", lines) + "\r\n");
     }
+
+    /// <summary>
+    /// Groups an options signal into <c>{ group, options }</c> entries for mat-optgroup rendering,
+    /// preserving the order sortOptions produced. Options without a group value collect under an
+    /// empty group key, which the view renders without an optgroup wrapper.
+    /// </summary>
+    private static IEnumerable<string> OptionGroupsComputed(string groupsMemberName, string optionsMemberName) =>
+    [
+        $"    protected readonly {groupsMemberName} = computed(() => {{",
+        $"        const groups: {{ group: string; options: {{ value: unknown; displayName: unknown }}[] }}[] = [];",
+        $"        this.{optionsMemberName}().forEach(option => {{",
+        $"            const group = String((option as {{ group?: unknown }}).group ?? '');",
+        $"            const existing = groups.find(candidate => candidate.group === group);",
+        $"            if (existing) {{",
+        $"                existing.options.push(option);",
+        $"            }} else {{",
+        $"                groups.push({{ group, options: [option] }});",
+        $"            }}",
+        $"        }});",
+        $"        return groups;",
+        $"    }});"
+    ];
+
+    /// <summary>
+    /// Whether the control renders its options as mat-optgroups: grouping must be configured
+    /// (a group key for dynamic options, or at least one fixed option carrying a group — e.g.
+    /// through [SelectOptionGroup] on an enum member) AND the control must be one whose markup can
+    /// host optgroups. Radio groups and multi-checkboxes still carry the group on each option, but
+    /// have no optgroup equivalent, so no grouping members are generated for them.
+    /// </summary>
+    internal static bool RendersOptionGroups(this SelectControlBase select) =>
+        select is SelectFormControl or MultiSelectFormControl or AutocompleteFormControl
+        && (select.Options.OptionGroupKey.HasContent()
+            || select.Options.FixedOptions.Any(option => option.Group != null && option.Group.Value.HasContent()));
+
+    private static string OptionGroupProperty(IHtmlHelper htmlHelper, SelectOption option, bool enableI18N) =>
+        option.Group != null && option.Group.Value.HasContent()
+            ? $", group: {htmlHelper.LocalizeEscaped(option.Group, enableI18N)}"
+            : "";
 
     // Signals-side mirror of SelectOption.GetValueExpression with string escaping; the shared
     // helper stays untouched because the deprecated Formly templates rely on its exact output.
@@ -117,7 +170,12 @@ public static class AngularSignalsSelectHtmlHelperExtensions
             $"        const filterText = typeof filterValue === 'string' ? filterValue.toLowerCase() : '';\r\n" +
             $"        return this.{autocomplete.PropertyName}Options().filter(option =>\r\n" +
             $"            option.value === filterValue || String(option.displayName).toLowerCase().includes(filterText));\r\n" +
-            $"    }});\r\n");
+            $"    }});\r\n" +
+            // A grouped autocomplete groups the FILTERED options, so optgroups disappear as their
+            // last matching option is filtered out.
+            (autocomplete.RendersOptionGroups()
+                ? String.Join("\r\n", OptionGroupsComputed($"{autocomplete.PropertyName}FilteredOptionGroups", $"{autocomplete.PropertyName}FilteredOptions")) + "\r\n"
+                : ""));
 
         return htmlHelper.Raw("\r\n" + String.Concat(declarations));
     }

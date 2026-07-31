@@ -114,7 +114,7 @@ export class MockEditGeneratedComponent {
         const options = sortOptions(this.mockMultiCheckboxRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];
         return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }));
     });
-    private readonly multiCheckboxWithStringIdsRawOptions = signal([{ value: 'value_1', displayName: $localize `:@@translation_Id_1:Label 1` }, { value: -9, displayName: $localize `:@@translation_Id_3:Label 3` }, { value: 1234567, displayName: $localize `:@@translation_Id_4:Label 4` }, { value: 2, displayName: $localize `:@@translation_Id_5:Label 5` }, { value: null, displayName: $localize `:@@translation_Id_6:Label 6` }]);
+    private readonly multiCheckboxWithStringIdsRawOptions = signal([{ value: 'value_1', displayName: $localize `:@@translation_Id_1:Label 1`, group: $localize `:@@group.multi-checkbox-with-string-ids:Group A` }, { value: -9, displayName: $localize `:@@translation_Id_3:Label 3`, group: $localize `:@@group.multi-checkbox-with-string-ids:Group A` }, { value: 1234567, displayName: $localize `:@@translation_Id_4:Label 4` }, { value: 2, displayName: $localize `:@@translation_Id_5:Label 5` }, { value: null, displayName: $localize `:@@translation_Id_6:Label 6` }]);
     protected readonly multiCheckboxWithStringIdsOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' });
     protected readonly multiCheckboxWithStringIdsOptions = computed(() => {
         const configuration = this.multiCheckboxWithStringIdsOptionsConfiguration();
@@ -123,11 +123,24 @@ export class MockEditGeneratedComponent {
     });
     protected readonly categoryIdCallback = input<Observable<unknown[]> | null>(null);
     private readonly categoryIdRawOptions = toSignal(toObservable(this.categoryIdCallback).pipe(switchMap(callback => callback ?? of([]))), { initialValue: [] });
-    protected readonly categoryIdOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'id', labelProperty: 'categoryName', sortProperty: 'categoryName' });
+    protected readonly categoryIdOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'id', labelProperty: 'categoryName', sortProperty: 'categoryName', groupProperty: 'categoryGroup' });
     protected readonly categoryIdOptions = computed(() => {
         const configuration = this.categoryIdOptionsConfiguration();
-        const options = sortOptions(this.categoryIdRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];
-        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }));
+        const options = sortOptions(this.categoryIdRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId, configuration.groupProperty) as Record<string, unknown>[];
+        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'], group: option[configuration.groupProperty ?? 'group'] }));
+    });
+    protected readonly categoryIdOptionGroups = computed(() => {
+        const groups: { group: string; options: { value: unknown; displayName: unknown }[] }[] = [];
+        this.categoryIdOptions().forEach(option => {
+            const group = String((option as { group?: unknown }).group ?? '');
+            const existing = groups.find(candidate => candidate.group === group);
+            if (existing) {
+                existing.options.push(option);
+            } else {
+                groups.push({ group, options: [option] });
+            }
+        });
+        return groups;
     });
     protected readonly typesCallback = input<Observable<unknown[]> | null>(null);
     private readonly typesRawOptions = toSignal(toObservable(this.typesCallback).pipe(switchMap(callback => callback ?? of([]))), { initialValue: [] });

@@ -6,15 +6,45 @@ namespace Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 
 internal static class AngularSignalsSelectFieldRenderers
 {
+    /// <summary>
+    /// Option markup for a mat-select / mat-autocomplete: a flat @for, or one nested inside
+    /// mat-optgroup elements when the control configures option groups. Options without a group
+    /// value land in a leading/trailing group that renders without an optgroup wrapper.
+    /// </summary>
+    private static string OptionElements(SelectControlBase field, FormViewRenderContext context, string indent, string memberSuffix = "")
+    {
+        var optionsMember = context.MemberName(field, $"{memberSuffix}Options");
+        if (!field.RendersOptionGroups())
+        {
+            return
+                $"{indent}@for (option of {optionsMember}(); track option.value) {{\r\n" +
+                $"{indent}    <mat-option [value]=\"option.value\">{{{{option.displayName}}}}</mat-option>\r\n" +
+                $"{indent}}}\r\n";
+        }
+
+        return
+            $"{indent}@for (optionGroup of {context.MemberName(field, $"{memberSuffix}OptionGroups")}(); track optionGroup.group) {{\r\n" +
+            $"{indent}    @if (optionGroup.group) {{\r\n" +
+            $"{indent}    <mat-optgroup [label]=\"optionGroup.group\">\r\n" +
+            $"{indent}        @for (option of optionGroup.options; track option.value) {{\r\n" +
+            $"{indent}        <mat-option [value]=\"option.value\">{{{{option.displayName}}}}</mat-option>\r\n" +
+            $"{indent}        }}\r\n" +
+            $"{indent}    </mat-optgroup>\r\n" +
+            $"{indent}    }} @else {{\r\n" +
+            $"{indent}        @for (option of optionGroup.options; track option.value) {{\r\n" +
+            $"{indent}        <mat-option [value]=\"option.value\">{{{{option.displayName}}}}</mat-option>\r\n" +
+            $"{indent}        }}\r\n" +
+            $"{indent}    }}\r\n" +
+            $"{indent}}}\r\n";
+    }
+
     internal static IHtmlContent RenderSelectField(this IHtmlHelper htmlHelper, SelectFormControl field, FormViewRenderContext context) =>
         htmlHelper.Raw(
             $"@if (!{context.IsHiddenCall(field)}) {{\r\n" +
             $"<mat-form-field {field.FieldClassAttribute()}{field.AppearanceAttribute()}{field.TooltipAttribute(context.EnableI18N)}>\r\n" +
             $"    <mat-label>{{{{ {context.LabelCall(field)} }}}}</mat-label>\r\n" +
             $"    <mat-select formControlName=\"{field.PropertyName}\"{field.MetadataAttributes()}>\r\n" +
-            $"        @for (option of {context.MemberName(field, "Options")}(); track option.value) {{\r\n" +
-            $"            <mat-option [value]=\"option.value\">{{{{option.displayName}}}}</mat-option>\r\n" +
-            $"        }}\r\n" +
+            OptionElements(field, context, "        ") +
             $"    </mat-select>\r\n" +
             field.HintLine(context.EnableI18N) +
             htmlHelper.RenderValidationErrors(field, context) +
@@ -35,9 +65,7 @@ internal static class AngularSignalsSelectFieldRenderers
             $"    <mat-label>{{{{ {context.LabelCall(field)} }}}}</mat-label>\r\n" +
             $"    <mat-select formControlName=\"{field.PropertyName}\" multiple{field.MetadataAttributes()}>\r\n" +
             selectAllLine +
-            $"        @for (option of {context.MemberName(field, "Options")}(); track option.value) {{\r\n" +
-            $"            <mat-option [value]=\"option.value\">{{{{option.displayName}}}}</mat-option>\r\n" +
-            $"        }}\r\n" +
+            OptionElements(field, context, "        ") +
             $"    </mat-select>\r\n" +
             field.HintLine(context.EnableI18N) +
             htmlHelper.RenderValidationErrors(field, context) +
@@ -83,9 +111,7 @@ internal static class AngularSignalsSelectFieldRenderers
             $"    <mat-autocomplete #{field.PropertyName}Auto=\"matAutocomplete\"\r\n" +
             $"        [autoActiveFirstOption]=\"true\"\r\n" +
             $"        [displayWith]=\"display{AngularSignalsFormModelExtensions.Capitalize(field.PropertyName)}\">\r\n" +
-            $"        @for (option of {context.MemberName(field, "FilteredOptions")}(); track option.value) {{\r\n" +
-            $"            <mat-option [value]=\"option.value\">{{{{option.displayName}}}}</mat-option>\r\n" +
-            $"        }}\r\n" +
+            OptionElements(field, context, "        ", "Filtered") +
             $"    </mat-autocomplete>\r\n" +
             field.HintLine(context.EnableI18N) +
             htmlHelper.RenderValidationErrors(field, context) +

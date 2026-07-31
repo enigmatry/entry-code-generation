@@ -214,6 +214,8 @@ Behavioral notes:
 | Dynamic values (`WithDynamicValues`) | `@Input() <prop>Options: any[]` (array, pushed through an internal `BehaviorSubject`) | `[<prop>Callback]` — an **`Observable<unknown[]>`** input:<br>`<app-g-user-edit [countryCallback]="countries$" />` |
 | Custom value/label keys | `@Input() <prop>OptionsConfiguration: SelectConfiguration` | Unchanged (`input<SelectConfiguration>`) |
 
+**Option groups** (`WithGroupKey(...)`, `[SelectOptionGroup]` on enum members, or `SelectOption.Group`) are supported: `groupProperty` is added to the generated `SelectConfiguration`, passed to `sortOptions(...)`, and each option carries its `group`. Selects, multi-selects and autocompletes render `<mat-optgroup>` wrappers per group (options without a group render bare, in place); an additional `<prop>OptionGroups` (or `<prop>FilteredOptionGroups` for autocomplete) computed is generated for them. Radio groups and multi-checkboxes keep the `group` value on each option but have no optgroup equivalent, so they still render flat.
+
 Selects nested inside array items get members prefixed with the array property: an item-level `country` select inside `addresses` exposes `addressesCountryOptionsConfiguration` (fixed values) — dynamic selects inside array items follow the same `addressesCountryCallback` naming.
 
 ### Outputs
