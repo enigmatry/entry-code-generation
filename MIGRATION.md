@@ -120,8 +120,8 @@ The custom component itself must:
 ```typescript
 // alias the input to the attribute the generated markup emits...
 @Input('aria-labelledby') ariaLabelledby?: string;
-// ...or read it off the host element once:
-private readonly ariaLabelledby = inject(ElementRef).nativeElement.getAttribute('aria-labelledby');
+// ...or read it off the host element once (not private — the template binds it):
+protected readonly ariaLabelledby = inject(ElementRef).nativeElement.getAttribute('aria-labelledby');
 ```
 
 then re-bind it on the inner control (`<input [attr.aria-labelledby]="ariaLabelledby">`). Alternatively, accept the label text as an input and render your own associated label. The same obligation applies to rich-text editor components (`entry-redactor` / `entry-ckeditor`).
@@ -214,7 +214,7 @@ Behavioral notes:
 | Dynamic values (`WithDynamicValues`) | `@Input() <prop>Options: any[]` (array, pushed through an internal `BehaviorSubject`) | `[<prop>Callback]` — an **`Observable<unknown[]>`** input:<br>`<app-g-user-edit [countryCallback]="countries$" />` |
 | Custom value/label keys | `@Input() <prop>OptionsConfiguration: SelectConfiguration` | Unchanged (`input<SelectConfiguration>`) |
 
-**Option groups** (`WithGroupKey(...)`, `[SelectOptionGroup]` on enum members, or `SelectOption.Group`) are supported: `groupProperty` is added to the generated `SelectConfiguration`, passed to `sortOptions(...)`, and each option carries its `group`. Selects, multi-selects and autocompletes render `<mat-optgroup>` wrappers per group (options without a group render bare, in place); an additional `<prop>OptionGroups` (or `<prop>FilteredOptionGroups` for autocomplete) computed is generated for them. Radio groups and multi-checkboxes keep the `group` value on each option but have no optgroup equivalent, so they still render flat.
+**Option groups** (`WithGroupKey(...)`, `[SelectOptionGroup]` on enum members, or `SelectOption.Group`) are supported: `groupProperty` is added to the generated `SelectConfiguration`, passed to `sortOptions(...)`, and each option carries its `group`. Selects, multi-selects and autocompletes render `<mat-optgroup>` wrappers per group (options without a group render bare, in place); an additional `<prop>OptionGroups` (or `<prop>FilteredOptionGroups` for autocomplete) computed is generated for them. Radio groups and multi-checkboxes keep the `group` value on each option but have no optgroup equivalent, so they still render flat. Note one difference from the Formly output: a **dynamic** select configured with `WithGroupKey(...)` but no custom value/display keys receives `{ groupProperty: '<key>' }` in its `SelectConfiguration` on the signals path (the Formly path emits an empty configuration there, so its group lookup never finds the key).
 
 Selects nested inside array items get members prefixed with the array property: an item-level `country` select inside `addresses` exposes `addressesCountryOptionsConfiguration` (fixed values) — dynamic selects inside array items follow the same `addressesCountryCallback` naming.
 

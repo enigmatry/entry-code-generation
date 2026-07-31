@@ -260,8 +260,18 @@
     <mat-label>{{ label('types') }}</mat-label>
     <mat-select formControlName="types" multiple>
         <mat-option (onSelectionChange)="$event.isUserInput && toggleSelectAll(form.get('types'), typesOptions())" i18n="@@select-all-option.select-all">SelectAll</mat-option>
-        @for (option of typesOptions(); track option.value) {
-            <mat-option [value]="option.value">{{option.displayName}}</mat-option>
+        @for (optionGroup of typesOptionGroups(); track optionGroup.group) {
+            @if (optionGroup.group) {
+            <mat-optgroup [label]="optionGroup.group">
+                @for (option of optionGroup.options; track option.value) {
+                <mat-option [value]="option.value">{{option.displayName}}</mat-option>
+                }
+            </mat-optgroup>
+            } @else {
+                @for (option of optionGroup.options; track option.value) {
+                <mat-option [value]="option.value">{{option.displayName}}</mat-option>
+                }
+            }
         }
     </mat-select>
 @if (form.get('types')?.hasError('required')) {
@@ -328,8 +338,18 @@
     <mat-autocomplete #regionAuto="matAutocomplete"
         [autoActiveFirstOption]="true"
         [displayWith]="displayRegion">
-        @for (option of regionFilteredOptions(); track option.value) {
-            <mat-option [value]="option.value">{{option.displayName}}</mat-option>
+        @for (optionGroup of regionFilteredOptionGroups(); track optionGroup.group) {
+            @if (optionGroup.group) {
+            <mat-optgroup [label]="optionGroup.group">
+                @for (option of optionGroup.options; track option.value) {
+                <mat-option [value]="option.value">{{option.displayName}}</mat-option>
+                }
+            </mat-optgroup>
+            } @else {
+                @for (option of optionGroup.options; track option.value) {
+                <mat-option [value]="option.value">{{option.displayName}}</mat-option>
+                }
+            }
         }
     </mat-autocomplete>
 @if (form.get('region')?.hasError('required')) {

@@ -13,9 +13,7 @@ public static class AngularSignalsSelectHtmlHelperExtensions
 {
     public static IHtmlContent SelectInputDeclarations(this IHtmlHelper htmlHelper, SelectControlBase select, bool enableI18N, string memberNamePrefix = "")
     {
-        string MemberName(string suffix) => memberNamePrefix.Length == 0
-            ? $"{select.PropertyName}{suffix}"
-            : $"{memberNamePrefix}{AngularSignalsFormModelExtensions.Capitalize(select.PropertyName)}{suffix}";
+        string MemberName(string suffix) => SelectMemberName(select, memberNamePrefix, suffix);
 
         var lines = new List<string>();
 
@@ -46,9 +44,14 @@ public static class AngularSignalsSelectHtmlHelperExtensions
         {
             // Signals-side mirror of SelectOptions.DefaultOptionsAsString with the consumer-provided
             // keys escaped; the shared property stays untouched for the deprecated Formly output.
+            // Dynamic options carry no value/label/sort keys, but still need groupProperty when
+            // grouping is configured — otherwise the group lookup falls back to 'group' and never
+            // finds the configured key.
             var defaultConfiguration = select.Options.HasFixedValues
                 ? $"{{ valueProperty: 'value', labelProperty: 'displayName', sortProperty: '{select.Options.OptionSortKey.Camelize().EscapeTsSingleQuoted()}'{groupProperty} }}"
-                : "{}";
+                : groupKey.HasContent()
+                    ? $"{{ groupProperty: '{groupKey!.EscapeTsSingleQuoted()}' }}"
+                    : "{}";
             lines.Add($"    protected readonly {MemberName("OptionsConfiguration")} = input<SelectConfiguration>({defaultConfiguration});");
         }
 
@@ -60,7 +63,9 @@ public static class AngularSignalsSelectHtmlHelperExtensions
         lines.Add($"        return options.map(option => ({{ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName']{groupMapping} }}));");
         lines.Add($"    }});");
 
-        if (select.RendersOptionGroups())
+        // An autocomplete groups its FILTERED options instead (see AllAutocompleteFilterDeclarations),
+        // so it gets no grouping member here.
+        if (select.RendersOptionGroups() && select is not AutocompleteFormControl)
         {
             lines.AddRange(OptionGroupsComputed(MemberName("OptionGroups"), MemberName("Options")));
         }
@@ -73,6 +78,51 @@ public static class AngularSignalsSelectHtmlHelperExtensions
         }
 
         return htmlHelper.Raw(String.Join("\r\n", lines) + "\r\n");
+    }
+
+    internal static string SelectMemberName(SelectControlBase select, string memberNamePrefix, string suffix) =>
+        memberNamePrefix.Length == 0
+            ? $"{select.PropertyName}{suffix}"
+            : $"{memberNamePrefix}{AngularSignalsFormModelExtensions.Capitalize(select.PropertyName)}{suffix}";
+
+    /// <summary>
+    /// Every component member this select contributes to the generated class. Kept in step with
+    /// <see cref="SelectInputDeclarations"/> and <see cref="AllAutocompleteFilterDeclarations"/>
+    /// (same conditions, same suffixes) so SignalsFormComponentValidator can reject two controls
+    /// whose members would collide — comparing name prefixes is not enough, because one control's
+    /// prefix plus a suffix can equal another control's full member name.
+    /// </summary>
+    internal static IEnumerable<string> GeneratedMemberNames(this SelectControlBase select, string memberNamePrefix)
+    {
+        string MemberName(string suffix) => SelectMemberName(select, memberNamePrefix, suffix);
+
+        if (select.Options.HasDynamicValues)
+        {
+            yield return MemberName("Callback");
+        }
+
+        yield return MemberName("RawOptions");
+        yield return MemberName("OptionsConfiguration");
+        yield return MemberName("Options");
+
+        if (select.RendersOptionGroups() && select is not AutocompleteFormControl)
+        {
+            yield return MemberName("OptionGroups");
+        }
+
+        if (select is not AutocompleteFormControl)
+        {
+            yield break;
+        }
+
+        yield return $"display{AngularSignalsFormModelExtensions.Capitalize(select.PropertyName)}";
+        yield return MemberName("FilterValue");
+        yield return MemberName("FilteredOptions");
+
+        if (select.RendersOptionGroups())
+        {
+            yield return MemberName("FilteredOptionGroups");
+        }
     }
 
     /// <summary>

@@ -70,7 +70,7 @@ import { map, throttleTime } from 'rxjs/operators';
             get typesOptions(): any[] { return this.typesOptions$.value; }
             set typesOptions(value: any[]) { this.typesOptions$.next(value); }
             @Input() typesOptionsConfiguration: SelectConfiguration = {};
-            @Input() regionOptions: any[] = [{ value: 'EU', displayName: $localize `:@@region.europe:Europe` }, { value: 'NA', displayName: $localize `:@@region.na:North America` }, { value: 'AP', displayName: $localize `:@@region.ap:Asia Pacific` }];
+            @Input() regionOptions: any[] = [{ value: 'EU', displayName: $localize `:@@region.europe:Europe`, group: $localize `:@@region.group.emea:EMEA` }, { value: 'NA', displayName: $localize `:@@region.na:North America`, group: $localize `:@@region.group.americas:Americas` }, { value: 'AP', displayName: $localize `:@@region.ap:Asia Pacific` }];
             @Input() regionOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
 
     _isReadonly: boolean;
@@ -441,9 +441,10 @@ className: `entry-types-field entry-select`,
         label: $localize `:@@test.mock-edit.types.label:Types`,
         placeholder: $localize `:@@test.mock-edit.types.placeholder:Types`,
         description: ``,
-            options: this.typesOptions$.pipe(map(opts => sortOptions(opts, this.typesOptionsConfiguration.valueProperty, this.typesOptionsConfiguration.sortProperty, this._localeId))),
+            options: this.typesOptions$.pipe(map(opts => sortOptions(opts, this.typesOptionsConfiguration.valueProperty, this.typesOptionsConfiguration.sortProperty, this._localeId, this.typesOptionsConfiguration.groupProperty))),
             valueProp: this.typesOptionsConfiguration.valueProperty,
             labelProp: this.typesOptionsConfiguration.labelProperty,
+                groupProp: this.typesOptionsConfiguration.groupProperty,
             multiple: true,
             selectAllOption: $localize `:@@select-all-option.select-all:SelectAll`,
             attributes: {  },

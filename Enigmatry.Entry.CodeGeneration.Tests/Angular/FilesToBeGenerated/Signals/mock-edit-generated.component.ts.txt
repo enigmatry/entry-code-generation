@@ -144,18 +144,31 @@ export class MockEditGeneratedComponent {
     });
     protected readonly typesCallback = input<Observable<unknown[]> | null>(null);
     private readonly typesRawOptions = toSignal(toObservable(this.typesCallback).pipe(switchMap(callback => callback ?? of([]))), { initialValue: [] });
-    protected readonly typesOptionsConfiguration = input<SelectConfiguration>({});
+    protected readonly typesOptionsConfiguration = input<SelectConfiguration>({ groupProperty: 'typeGroup' });
     protected readonly typesOptions = computed(() => {
         const configuration = this.typesOptionsConfiguration();
-        const options = sortOptions(this.typesRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];
-        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }));
+        const options = sortOptions(this.typesRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId, configuration.groupProperty) as Record<string, unknown>[];
+        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'], group: option[configuration.groupProperty ?? 'group'] }));
     });
-    private readonly regionRawOptions = signal([{ value: 'EU', displayName: $localize `:@@region.europe:Europe` }, { value: 'NA', displayName: $localize `:@@region.na:North America` }, { value: 'AP', displayName: $localize `:@@region.ap:Asia Pacific` }]);
+    protected readonly typesOptionGroups = computed(() => {
+        const groups: { group: string; options: { value: unknown; displayName: unknown }[] }[] = [];
+        this.typesOptions().forEach(option => {
+            const group = String((option as { group?: unknown }).group ?? '');
+            const existing = groups.find(candidate => candidate.group === group);
+            if (existing) {
+                existing.options.push(option);
+            } else {
+                groups.push({ group, options: [option] });
+            }
+        });
+        return groups;
+    });
+    private readonly regionRawOptions = signal([{ value: 'EU', displayName: $localize `:@@region.europe:Europe`, group: $localize `:@@region.group.emea:EMEA` }, { value: 'NA', displayName: $localize `:@@region.na:North America`, group: $localize `:@@region.group.americas:Americas` }, { value: 'AP', displayName: $localize `:@@region.ap:Asia Pacific` }]);
     protected readonly regionOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' });
     protected readonly regionOptions = computed(() => {
         const configuration = this.regionOptionsConfiguration();
         const options = sortOptions(this.regionRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];
-        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }));
+        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'], group: option[configuration.groupProperty ?? 'group'] }));
     });
     protected readonly displayRegion = (value: unknown): string =>
         (this.regionOptions().find(option => option.value === value)?.displayName as string) ?? '';
@@ -251,6 +264,19 @@ export class MockEditGeneratedComponent {
         const filterText = typeof filterValue === 'string' ? filterValue.toLowerCase() : '';
         return this.regionOptions().filter(option =>
             option.value === filterValue || String(option.displayName).toLowerCase().includes(filterText));
+    });
+    protected readonly regionFilteredOptionGroups = computed(() => {
+        const groups: { group: string; options: { value: unknown; displayName: unknown }[] }[] = [];
+        this.regionFilteredOptions().forEach(option => {
+            const group = String((option as { group?: unknown }).group ?? '');
+            const existing = groups.find(candidate => candidate.group === group);
+            if (existing) {
+                existing.options.push(option);
+            } else {
+                groups.push({ group, options: [option] });
+            }
+        });
+        return groups;
     });
 
     protected readonly createAddressesItem = (): FormGroup => {

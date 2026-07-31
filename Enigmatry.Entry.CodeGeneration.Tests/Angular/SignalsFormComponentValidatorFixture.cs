@@ -1,5 +1,8 @@
 using Enigmatry.Entry.CodeGeneration.Angular;
+using Enigmatry.Entry.CodeGeneration.Configuration;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form;
+using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 using Enigmatry.Entry.CodeGeneration.Tests.Angular.Mocks;
 using NUnit.Framework;
 using Shouldly;
@@ -78,6 +81,39 @@ internal sealed class SignalsFormComponentValidatorFixture
         exception.Message.ShouldContain("addressesCountry");
         exception.Message.ShouldContain("addresses.country");
         exception.Message.ShouldContain("colliding member names");
+    }
+
+    [Test]
+    public void MemberNameCollidingWithAnotherControlsSuffixedMemberThrows()
+    {
+        var builder = new FormComponentBuilder<FormCollisionMock>();
+        builder.Component().HasName("MockEdit").BelongsToFeature("Test");
+        builder.AutocompleteFormControl(x => x.Region);
+        builder.SelectFormControl(x => x.RegionFiltered);
+
+        var exception = Should.Throw<InvalidOperationException>(() => SignalsFormComponentValidator.Validate(builder.Build()));
+
+        exception.Message.ShouldContain("regionFilteredOptions");
+        exception.Message.ShouldContain("region");
+        exception.Message.ShouldContain("regionFiltered");
+    }
+
+    [Test]
+    public void GroupingMembersAreRegisteredForCollisionChecking()
+    {
+        var builder = new FormComponentBuilder<FormCollisionMock>();
+        builder.Component().HasName("MockEdit").BelongsToFeature("Test");
+        builder.AutocompleteFormControl(x => x.Region)
+            .WithOptions(options => options.WithFixedValues(new[]
+            {
+                new SelectOption("nl", "Netherlands", "country.nl") { Group = new I18NString("group.eu", "Europe") }
+            }));
+        var autocomplete = builder.Build().FormControls.OfType<AutocompleteFormControl>().Single();
+
+        var memberNames = autocomplete.GeneratedMemberNames("").ToList();
+
+        memberNames.ShouldContain("regionFilteredOptionGroups");
+        memberNames.ShouldNotContain("regionOptionGroups");
     }
 
     [Test]

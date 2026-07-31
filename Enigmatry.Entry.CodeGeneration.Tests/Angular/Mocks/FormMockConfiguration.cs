@@ -136,6 +136,7 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
                 options.WithDynamicValues();
                 options.WithSelectAllOption("SelectAll");
                 options.WithSortKey("value");
+                options.WithGroupKey("typeGroup");
             });
 
         formGroup
@@ -160,8 +161,8 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
             .WithLabel("Region")
             .WithOptions(options => options.WithFixedValues(new[]
             {
-                new SelectOption("EU", "Europe", "region.europe"),
-                new SelectOption("NA", "North America", "region.na"),
+                new SelectOption("EU", "Europe", "region.europe") { Group = new I18NString("region.group.emea", "EMEA") },
+                new SelectOption("NA", "North America", "region.na") { Group = new I18NString("region.group.americas", "Americas") },
                 new SelectOption("AP", "Asia Pacific", "region.ap")
             }));
 

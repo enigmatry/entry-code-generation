@@ -14,6 +14,29 @@ namespace Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.Angular;
 /// </summary>
 public static class AngularSignalsArrayRowModelHtmlHelperExtensions
 {
+    /// <summary>
+    /// Every component member this array contributes to the generated class, across the row-model,
+    /// factory, resize, mutation and control-state emitters. Kept in step with those emitters so
+    /// SignalsFormComponentValidator can reject colliding generated members.
+    /// </summary>
+    internal static IEnumerable<string> GeneratedMemberNames(this ArrayFormControl arrayControl)
+    {
+        var propertyName = arrayControl.PropertyName;
+        var methodName = AngularSignalsFormModelExtensions.Capitalize(propertyName);
+
+        yield return $"{propertyName}OriginalRows";
+        yield return $"{propertyName}RowModel";
+        yield return $"create{methodName}Item";
+        yield return $"resize{methodName}Array";
+        yield return $"add{methodName}Item";
+        yield return $"remove{methodName}Item";
+
+        if (arrayControl.ArrayItemControlsWithEffectiveReadonly().Any())
+        {
+            yield return $"{propertyName}ItemControlStates";
+        }
+    }
+
     public static IHtmlContent ArrayOriginalRowsDeclarations(this IHtmlHelper htmlHelper, FormComponentModel model)
     {
         var declarations = model.FlatFormControls().OfType<ArrayFormControl>()

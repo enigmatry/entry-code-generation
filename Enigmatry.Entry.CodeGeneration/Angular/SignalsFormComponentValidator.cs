@@ -18,7 +18,7 @@ public static class SignalsFormComponentValidator
     {
         ValidateArrayControls(model);
         ValidateCustomElementImports(model);
-        ValidateSelectMemberNames(model);
+        ValidateGeneratedMemberNames(model);
         return CollectValidationRuleWarnings(model);
     }
 
@@ -59,26 +59,45 @@ public static class SignalsFormComponentValidator
         }
     }
 
-    // A root select named like an array child select (e.g. 'addressesCountry' next to
-    // 'addresses[].country') would generate duplicate component members and break compilation.
-    private static void ValidateSelectMemberNames(FormComponentModel model)
+    /// <summary>
+    /// Rejects two controls whose generated component members would have the same name — for
+    /// example a root select named like an array child select ('addressesCountry' next to
+    /// 'addresses[].country'), or a control whose name equals another's name plus a generated
+    /// suffix ('regionFiltered' next to the autocomplete 'region', both yielding
+    /// regionFilteredOptions). Every emitted member name is registered, because comparing name
+    /// prefixes cannot catch the second shape.
+    /// </summary>
+    private static void ValidateGeneratedMemberNames(FormComponentModel model)
     {
-        var memberPrefixes = new Dictionary<string, string>(StringComparer.Ordinal);
-        foreach (var entry in model.SelectControlsWithMemberPrefixes())
-        {
-            var isArrayChild = entry.MemberNamePrefix.Length > 0;
-            var memberPrefix = isArrayChild
-                ? entry.MemberNamePrefix + AngularSignalsFormModelExtensions.Capitalize(entry.Select.PropertyName)
-                : entry.Select.PropertyName;
-            var propertyPath = isArrayChild
-                ? $"{entry.MemberNamePrefix}.{entry.Select.PropertyName}"
-                : entry.Select.PropertyName;
+        var memberOwners = new Dictionary<string, string>(StringComparer.Ordinal);
 
-            if (!memberPrefixes.TryAdd(memberPrefix, propertyPath))
+        void Register(string memberName, string propertyPath)
+        {
+            if (!memberOwners.TryAdd(memberName, propertyPath))
             {
                 throw new InvalidOperationException(
-                    $"Select controls '{memberPrefixes[memberPrefix]}' and '{propertyPath}' on component '{model.ComponentInfo.Name}' " +
-                    $"generate colliding member names ('{memberPrefix}Options', ...). Rename one of the properties.");
+                    $"Controls '{memberOwners[memberName]}' and '{propertyPath}' on component '{model.ComponentInfo.Name}' " +
+                    $"generate colliding member names ('{memberName}'). Rename one of the properties.");
+            }
+        }
+
+        foreach (var entry in model.SelectControlsWithMemberPrefixes())
+        {
+            var propertyPath = entry.MemberNamePrefix.Length == 0
+                ? entry.Select.PropertyName
+                : $"{entry.MemberNamePrefix}.{entry.Select.PropertyName}";
+
+            foreach (var memberName in entry.Select.GeneratedMemberNames(entry.MemberNamePrefix))
+            {
+                Register(memberName, propertyPath);
+            }
+        }
+
+        foreach (var array in model.FlatFormControls().OfType<ArrayFormControl>())
+        {
+            foreach (var memberName in array.GeneratedMemberNames())
+            {
+                Register(memberName, array.PropertyName);
             }
         }
     }
