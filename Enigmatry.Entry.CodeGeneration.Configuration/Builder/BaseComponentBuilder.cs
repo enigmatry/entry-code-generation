@@ -10,6 +10,7 @@ public abstract class BaseComponentBuilder<T> : IComponentBuilder<T> where T : I
 {
     protected readonly Type _modelType;
     protected readonly ComponentInfoBuilder _componentInfoBuilder;
+    protected bool? _withSignals;
 
     protected BaseComponentBuilder(Type modelType)
     {

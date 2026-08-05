@@ -18,7 +18,7 @@ description: Best practices for C# unit and integration testing with NUnit and S
 - Mirror the production folder structure under the test project root
 - Test classes are `internal sealed`
 
-## Naming — PascalCase, no underscores
+## Naming — PascalCase, no underscores, contextual
 
 Test method names use **descriptive PascalCase** — no underscores, no prefixes like `Constructor_` or `ToString_`:
 
@@ -32,6 +32,20 @@ WithValidRangeCreatesSection
 // ❌ avoid
 Constructor_WhenEndExceedsMaxLength_ThrowsArgumentOutOfRangeException
 Parse_MissingSectionsLine_ThrowsFormatException
+```
+
+**Contextual naming — no redundant words.** The fixture name already provides the context; never repeat the class under test, its method (when the fixture covers a single one), or filler words in test names. Read the name as a sentence completing "*the class under test*…":
+
+```csharp
+// in SectionValidatorFixture (validator exposes a single Validate method):
+
+// ✅ correct — the fixture supplies the "SectionValidator.Validate" context
+OverlappingRangesThrow
+EmptyInputPasses
+
+// ❌ avoid — repeats the class/method the fixture already names
+SectionValidatorRejectsOverlappingRanges
+ValidateOverlappingRangesThrows
 ```
 
 ## Test structure — AAA without comments
@@ -133,9 +147,11 @@ When changing Razor templates, update the corresponding `.txt` snapshot files. T
 ## What NOT to do
 
 - Do not use underscores in test method names.
+- Do not repeat the class or method under test in test names — the fixture name is the context.
 - Do not add `[TestFixture]` to classes whose names end with `Fixture`.
 - Do not write `// Arrange`, `// Act`, `// Assert` comments.
 - Do not use `Assert.That` — use Shouldly only.
 - Do not leave empty catch blocks.
 - Do not write separate `[Test]` methods for cases that differ only in input values — use `[TestCase]` or `[TestCaseSource]` instead. **Always check for this before writing any new `[Test]` method.**
 - Do not test implementation details — assert on observable behavior and public API output, not on internal state or private method calls.
+- Do not use inline branching — `if (x) return y;` and `foreach (...) statement;` must always use braces.

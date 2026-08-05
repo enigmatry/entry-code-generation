@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
@@ -16,7 +16,7 @@ public class GreaterThenValidationRule<T> : NumbericValidationRule<T>
         new[]
         {
             "type: 'number'",
-            $"{FormlyRuleName}: {RuleAsString} + {Increment}"
+            $"{RuleName}: {RuleAsString} + {Increment}"
         };
 
     public override string FormlyValidationMessage => HasCustomMessage

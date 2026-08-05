@@ -28,4 +28,5 @@ public class AngularCodeGeneratorFixture : AngularCodeGeneratorFixtureBase
         AssertGeneratedFileNames(inMemoryTemplateWriter.FilesToWrite.Select(x => x.Path).ToList());
         AssertGeneratedFileContent(inMemoryTemplateWriter.FilesToWrite);
     }
+
 }

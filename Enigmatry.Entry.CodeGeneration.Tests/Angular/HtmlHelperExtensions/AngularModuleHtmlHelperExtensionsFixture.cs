@@ -29,6 +29,7 @@ public class AngularModuleHtmlHelperExtensionsFixture : CodeGenerationFixtureBas
     private class TestComponent : IComponentModel
     {
         public ComponentInfo ComponentInfo { get; }
+        public bool? WithSignals => null;
 
         public TestComponent(string name)
         {

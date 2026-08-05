@@ -1,4 +1,4 @@
-﻿using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
+using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 using Humanizer;
 using NUnit.Framework;
 using Shouldly;
@@ -17,21 +17,21 @@ public class ValidationConfigurationFixture
             .Count(x => x.PropertyName == nameof(ValidationMockModel.IntField).Camelize()).ShouldBe(3);
         validationConfiguration.ValidationRules
             .Where(x => x.PropertyName == nameof(ValidationMockModel.IntField).Camelize())
-            .Select(x => x.FormlyRuleName)
+            .Select(x => x.GetRuleName())
             .ShouldBe(["required", "min", "max"]);
 
         validationConfiguration.ValidationRules
             .Count(x => x.PropertyName == nameof(ValidationMockModel.DoubleField).Camelize()).ShouldBe(3);
         validationConfiguration.ValidationRules
             .Where(x => x.PropertyName == nameof(ValidationMockModel.DoubleField).Camelize())
-            .Select(x => x.FormlyRuleName)
+            .Select(x => x.GetRuleName())
             .ShouldBe(["required", "min", "max"]);
 
         validationConfiguration.ValidationRules
             .Count(x => x.PropertyName == nameof(ValidationMockModel.StringField).Camelize()).ShouldBe(3);
         validationConfiguration.ValidationRules
             .Where(x => x.PropertyName == nameof(ValidationMockModel.StringField).Camelize())
-            .Select(x => x.FormlyRuleName)
+            .Select(x => x.GetRuleName())
             .ShouldBe(["required", "minLength", "maxLength"]);
     }
 
@@ -56,7 +56,7 @@ public class ValidationConfigurationFixture
 
         var validationRule = validationConfiguration.ValidationRules
             .Where(x => x.PropertyName == propertyName.Camelize())
-            .SingleOrDefault(rule => rule.FormlyRuleName == validationRuleName);
+            .SingleOrDefault(rule => rule.GetRuleName() == validationRuleName);
         validationRule.ShouldNotBeNull();
         validationRule?.CustomMessage.ShouldBe(validationMessage);
         validationRule?.MessageTranslationId.ShouldBe(validationMessageTranslationId);
@@ -71,7 +71,7 @@ public class ValidationConfigurationFixture
             .Select(x => x.PropertyName.Pascalize())
             .ShouldBe([nameof(ValidationMockModel.StringField), nameof(ValidationMockModel.OtherStringField)], ignoreOrder: true);
         validationConfiguration.ValidationRules
-            .Select(x => x.FormlyRuleName)
+            .Select(x => x.GetRuleName())
             .ShouldBe(["pattern", "pattern"], ignoreOrder: true);
         validationConfiguration.ValidationRules
             .Where(x => x.HasCustomMessage)
@@ -85,7 +85,7 @@ public class ValidationConfigurationFixture
                 $"{nameof(ValidationMockModel.OtherStringField)}: validators.pattern.emailAddress"
             ], ignoreOrder: true);
         validationConfiguration.ValidationRules
-            .Select(x => x.FormlyValidationMessage)
+            .Select(x => x.GetValidationMessage())
             .ShouldBe([
                 "${field?.templateOptions?.label}:property-name: is not in valid format",
                 "Invalid email address format"
@@ -107,14 +107,14 @@ public class ValidationConfigurationFixture
             ], ignoreOrder: true);
 
         validationConfiguration.ValidationRules
-            .Select(x => x.FormlyRuleName).Distinct()
+            .Select(x => x.GetRuleName()).Distinct()
             .ShouldBe(["required", "min", "max", "minLength", "maxLength", "pattern"], ignoreOrder: true);
         validationConfiguration.ValidationRules
             .All(x => x.HasMessageTranslationId).ShouldBeTrue();
         validationConfiguration.ValidationRules
             .All(x => x.HasCustomMessage).ShouldBeFalse();
         validationConfiguration.ValidationRules
-            .Select(x => x.FormlyValidationMessage).Distinct()
+            .Select(x => x.GetValidationMessage()).Distinct()
             .ShouldBe([
                 "${field?.templateOptions?.label}:property-name: is required",
                 "${field?.templateOptions?.label}:property-name: value should be more than ${field?.templateOptions?.min}:min-value:",

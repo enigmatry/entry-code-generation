@@ -10,697 +10,459 @@
 // @ts-nocheck
 // @ts-ignore
 // @ts-expect-error
-import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, OnDestroy, Optional, Output, TemplateRef } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { FormlyFieldConfig } from '@ngx-formly/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, LOCALE_ID, model, output, signal, TemplateRef } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NgTemplateOutlet, DatePipe, CurrencyPipe } from '@angular/common';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDatetimepickerModule } from '@mat-datetimepicker/core';
+import { EntryRedactorComponent } from '@enigmatry/entry-redactor';
+import { EntryFileInputComponent } from '@enigmatry/entry-file-input';
 import { IFormMock } from 'src/app/api/api-reference';
-import { IFieldExpressionDictionary, IFieldPropertyExpressionDictionary, SelectConfiguration, ENTRY_FIELD_TYPE_RESOLVER, FieldTypeResolver, sortOptions } from '@enigmatry/entry-form';
-import { BehaviorSubject, of, Subject, Subscription } from 'rxjs';
-import { map, throttleTime } from 'rxjs/operators';
+import { IFieldExpressionDictionary, IFieldPropertyExpressionDictionary, SelectConfiguration, sortOptions, ENTRY_ASYNC_VALIDATOR_RESOLVER, EntryFieldFormatDirective } from '@enigmatry/entry-form';
+import { Observable, of, switchMap } from 'rxjs';
 
+@Component({
+  selector: 'app-g-mock-edit',
+  imports: [ReactiveFormsModule, NgTemplateOutlet, DatePipe, CurrencyPipe, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatRadioModule, MatSelectModule, MatTooltipModule, MatDatetimepickerModule, EntryFieldFormatDirective, EntryRedactorComponent, EntryFileInputComponent],
+  templateUrl: './mock-edit-generated.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class MockEditGeneratedComponent {
+    protected readonly isReadonly = input<boolean>(false);
+    protected readonly model = model<IFormMock>({} as IFormMock);
+    protected readonly saveButtonText = input<string>('Save');
+    protected readonly cancelButtonText = input<string>('Cancel');
+    protected readonly saveButtonDisabled = input<boolean>(false);
+    protected readonly formButtonsTemplate = input<TemplateRef<unknown> | null | undefined>();
 
-    @Component({
-    standalone: false,
-    selector: 'app-g-mock-edit',
-    templateUrl: './mock-edit-generated.component.html'
-    })
-    export class MockEditGeneratedComponent implements OnInit, OnDestroy {
+    protected readonly fieldsHideExpressions = input<IFieldExpressionDictionary<IFormMock> | undefined>();
+    protected readonly fieldsLabelExpressions = input<IFieldPropertyExpressionDictionary<IFormMock> | undefined>();
+    protected readonly fieldsPropertyExpressions = input<IFieldPropertyExpressionDictionary<IFormMock> | undefined>();
+    protected readonly fieldsDisableExpressions = input<IFieldExpressionDictionary<IFormMock> | undefined>();
+    protected readonly fieldsRequiredExpressions = input<IFieldExpressionDictionary<IFormMock> | undefined>();
 
-    @Input() model: IFormMock = {} as IFormMock;
-    @Input() set isReadonly(value: boolean) {
-    this._isReadonly = value;
-    this.fields = this.initializeFields();
-    }
-    get isReadonly() {
-    return this._isReadonly;
-    }
+    private readonly defaultLabels: Record<string, string> = {
+        id: $localize `:@@test.mock-edit.id.label:Id`,
+        name: $localize `:@@test.mock-edit.name.label:Name`,
+        description: $localize `:@@test.mock-edit.description.label:Some Description`,
+        date: $localize `:@@test.mock-edit.date.label:Date`,
+        money: $localize `:@@test.mock-edit.money.label:Money`,
+        amount: $localize `:@@test.mock-edit.amount.label:Amount`,
+        formStatus: $localize `:@@test.mock-edit.form-status.label:Form status`,
+        mockRadio: $localize `:@@test.mock-edit.mock-radio.label:Radio`,
+        mockBoolSelect: $localize `:@@test.mock-edit.mock-bool-select.label:BoolSelect`,
+        mockMultiCheckbox: $localize `:@@test.mock-edit.mock-multi-checkbox.label:MultiCheckbox`,
+        multiCheckboxWithStringIds: $localize `:@@test.mock-edit.multi-checkbox-with-string-ids.label:MultiCheckbox`,
+        categoryId: $localize `:@@test.mock-edit.category-id.label:Category`,
+        types: $localize `:@@test.mock-edit.types.label:Types`,
+        password: $localize `:@@test.mock-edit.password.label:Password`,
+        isActive: $localize `:@@test.mock-edit.is-active.label:Active`,
+        notes: $localize `:@@test.mock-edit.notes.label:Notes`,
+        region: $localize `:@@test.mock-edit.region.label:Region`,
+        fileUpload: $localize `:@@test.mock-edit.file-upload.label:File upload`,
+        dateAndTime: $localize `:@@test.mock-edit.date-and-time.label:Date and time`,
+        email1: $localize `:@@test.mock-edit.email1.label:Email 1`,
+        email2: $localize `:@@test.mock-edit.email2.label:Email 2`,
+        'addresses.id': $localize `:@@test.mock-edit.id.label:Id`,
+        'addresses.city': $localize `:@@test.mock-edit.city.label:City`,
+        'addresses.country': $localize `:@@test.mock-edit.country.label:Country`,
+        'addresses.street': $localize `:@@test.mock-edit.street.label:Street`,
+        'addresses.houseNumber': $localize `:@@test.mock-edit.house-number.label:House number`,
+        'addresses.verified': $localize `:@@test.mock-edit.verified.label:Verified`,
+    };
 
-    @Input() saveButtonText: string = 'Save';
-    @Input() cancelButtonText: string = 'Cancel';
-    @Input() saveButtonDisabled: boolean = false;
-    @Input() formButtonsTemplate: TemplateRef<any> | null | undefined;
+    // Array-item children pass the current row as arrayItemModel so label expressions evaluate per row.
+    protected readonly label = (propertyName: string, arrayItemModel?: unknown): string => {
+        const labelExpression = this.fieldsLabelExpressions()?.[propertyName];
+        return labelExpression ? String(labelExpression((arrayItemModel ?? this.currentModel()) as IFormMock)) : this.defaultLabels[propertyName] ?? '';
+    };
 
-    @Input() fieldsHideExpressions: IFieldExpressionDictionary<IFormMock> | undefined = undefined;
-    @Input() fieldsDisableExpressions: IFieldExpressionDictionary<IFormMock> | undefined = undefined;
-    @Input() fieldsRequiredExpressions: IFieldExpressionDictionary<IFormMock> | undefined = undefined;
-    @Input() fieldsPropertyExpressions: IFieldPropertyExpressionDictionary<IFormMock> | undefined = undefined;
-    @Input() fieldsLabelExpressions: IFieldPropertyExpressionDictionary<IFormMock> | undefined = undefined;
-
-    @Output() save = new EventEmitter<IFormMock>();
-    @Output() cancel = new EventEmitter<void>();
-    @Output() buttonClick = new EventEmitter<string>();
-
-            @Input() formStatusOptions: any[] = [{ value: null, displayName: $localize `:@@empty-option.none:None` }, { value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
-            @Input() formStatusOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: 'displayName' };
-            @Input() mockRadioOptions: any[] = [{ value: 0, displayName: `First` }, { value: 1, displayName: `Second` }, { value: 2, displayName: `Third` }];
-            @Input() mockRadioOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
-            @Input() mockBoolSelectOptions: any[] = [{ value: true, displayName: $localize `:@@true-label:This is true` }, { value: false, displayName: $localize `:@@false-label:This is false` }];
-            @Input() mockBoolSelectOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
-            @Input() mockMultiCheckboxOptions: any[] = [{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }];
-            @Input() mockMultiCheckboxOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
-            @Input() multiCheckboxWithStringIdsOptions: any[] = [{ value: 'value_1', displayName: $localize `:@@translation_Id_1:Label 1` }, { value: -9, displayName: $localize `:@@translation_Id_3:Label 3` }, { value: 1234567, displayName: $localize `:@@translation_Id_4:Label 4` }, { value: 2, displayName: $localize `:@@translation_Id_5:Label 5` }, { value: null, displayName: $localize `:@@translation_Id_6:Label 6` }];
-            @Input() multiCheckboxWithStringIdsOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
-            private categoryIdOptions$ = new BehaviorSubject<any[]>([]);
-            @Input()
-            get categoryIdOptions(): any[] { return this.categoryIdOptions$.value; }
-            set categoryIdOptions(value: any[]) { this.categoryIdOptions$.next(value); }
-            @Input() categoryIdOptionsConfiguration: SelectConfiguration = { valueProperty: 'id', labelProperty: 'categoryName', sortProperty: 'categoryName' };
-            private typesOptions$ = new BehaviorSubject<any[]>([]);
-            @Input()
-            get typesOptions(): any[] { return this.typesOptions$.value; }
-            set typesOptions(value: any[]) { this.typesOptions$.next(value); }
-            @Input() typesOptionsConfiguration: SelectConfiguration = {};
-
-    _isReadonly: boolean;
-    form = new FormGroup({});
-    fields: FormlyFieldConfig[] = [];
-    private _submitClicks = new Subject<void>();
-    private _submitClicksSubscription: Subscription;
-
-    constructor(
-    @Inject(LOCALE_ID) private _localeId: string,
-    @Optional() @Inject(ENTRY_FIELD_TYPE_RESOLVER) private _fieldTypeResolver: FieldTypeResolver) { }
-
-    ngOnInit(): void {
-    this.fields = this.initializeFields();
-    this._submitClicksSubscription = this._submitClicks
-    .pipe(throttleTime(500))
-    .subscribe(() => this.save.emit(this.model));
-    }
-
-    ngOnDestroy(): void {
-    this._submitClicksSubscription.unsubscribe();
-    }
-
-    onSubmit() {
-    if (this.form.valid) {
-    this._submitClicks.next();
-    }
-    }
-
-    resolveFieldType = (type: string, isControlReadonly: boolean): string =>
-    this._fieldTypeResolver ? this._fieldTypeResolver(type, this.isReadonly || isControlReadonly) : type;
-
-    initializeFields(): FormlyFieldConfig[] {
-    return [
-            { key: 'id' },
-        {
-        key: 'resetFormBtn',
-        type: this.resolveFieldType('button', false),
-        focus: false,
-className: `entry-reset-form-btn-field entry-button primary-button`,
-        hideExpression: this.fieldsHideExpressions?.['resetFormBtn'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['resetFormBtn'] ? this.fieldsDisableExpressions['resetFormBtn'](model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['resetFormBtn'] ? this.fieldsRequiredExpressions['resetFormBtn'](model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['resetFormBtn'] ? this.fieldsLabelExpressions['resetFormBtn'](model) : ``),
-        'model.resetFormBtn': (model) => (this.fieldsPropertyExpressions?.['resetFormBtn'] ? this.fieldsPropertyExpressions['resetFormBtn'](model) : model.resetFormBtn),
-        },
-        templateOptions: {
-        label: ``,
-        placeholder: ``,
-        description: ``,
-            text: $localize `:@@test.mock-edit.reset-form-btn.text:Reset`,
-            onClick: ($event: any) => this.buttonClick.emit('resetFormBtn'),
-            attributes: {  },
-        hidden: !true,
-        },
-        },
-        {
-        type: this.resolveFieldType('group-type', false),
-fieldGroupClassName: `entry-field-group ${this.applyOptionally('group-wrapper-readonly', this.isReadonly)}`,
-            wrappers: ['group-wrapper'],
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.group-name.label:Group name`,
-        placeholder: $localize `:@@test.mock-edit.group-name.placeholder:Group name`,
-        disabled: this.isReadonly || false,
-        description: ``
-        },
-        fieldGroup:[
-        {
-        key: 'name',
-        type: this.resolveFieldType('input', false),
-        focus: true,
-className: `entry-name-field entry-input`,
-defaultValue: 'DEFAULT NAME',
-        hideExpression: this.fieldsHideExpressions?.['name'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['name'] ? this.fieldsDisableExpressions['name'](model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['name'] ? this.fieldsRequiredExpressions['name'](model) : true),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['name'] ? this.fieldsLabelExpressions['name'](model) : $localize `:@@test.mock-edit.name.label:Name`),
-        'model.name': (model) => (this.fieldsPropertyExpressions?.['name'] ? this.fieldsPropertyExpressions['name'](model) : model.name),
-        },
-            wrappers: ['form-field', 'tooltip'],
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.name.label:Name`,
-        placeholder: $localize `:@@test.mock-edit.name.placeholder:Some / Name`,
-        description: ``,
-appearance: 'outline',
-floatLabel: 'always',
-            attributes: { autocomplete: 'off' },
-        hidden: !true,
-            tooltipText: $localize `:@@test.mock-edit.name.tooltip:Tooltip text`,
-            required: true,
-maxLength: 50,
-pattern: /[A-Z]/,
-
-            typeFormatDef: undefined
-        },
-            validation: {
-            messages: {
-required: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`,
-maxLength: (err, field) => $localize `:@@CUSTOM_VALIDATION_MESSAGE_TRANSLATION_ID:CUSTOM_VALIDATION_MESSAGE`
+    private readonly formStatusRawOptions = signal([{ value: null, displayName: $localize `:@@empty-option.none:None` }, { value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }]);
+    protected readonly formStatusOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'value', labelProperty: 'displayName', sortProperty: 'displayName' });
+    protected readonly formStatusOptions = computed(() => {
+        const configuration = this.formStatusOptionsConfiguration();
+        const options = sortOptions(this.formStatusRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];
+        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }));
+    });
+    private readonly mockRadioRawOptions = signal([{ value: 0, displayName: `First` }, { value: 1, displayName: `Second` }, { value: 2, displayName: `Third` }]);
+    protected readonly mockRadioOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' });
+    protected readonly mockRadioOptions = computed(() => {
+        const configuration = this.mockRadioOptionsConfiguration();
+        const options = sortOptions(this.mockRadioRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];
+        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }));
+    });
+    private readonly mockBoolSelectRawOptions = signal([{ value: true, displayName: $localize `:@@true-label:This is true` }, { value: false, displayName: $localize `:@@false-label:This is false` }]);
+    protected readonly mockBoolSelectOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' });
+    protected readonly mockBoolSelectOptions = computed(() => {
+        const configuration = this.mockBoolSelectOptionsConfiguration();
+        const options = sortOptions(this.mockBoolSelectRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];
+        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }));
+    });
+    private readonly mockMultiCheckboxRawOptions = signal([{ value: 0, displayName: $localize `:@@enum.enum-mock.first:First` }, { value: 1, displayName: $localize `:@@enum.enum-mock.second:Second` }, { value: 2, displayName: $localize `:@@enum.enum-mock.third:Third` }]);
+    protected readonly mockMultiCheckboxOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' });
+    protected readonly mockMultiCheckboxOptions = computed(() => {
+        const configuration = this.mockMultiCheckboxOptionsConfiguration();
+        const options = sortOptions(this.mockMultiCheckboxRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];
+        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }));
+    });
+    private readonly multiCheckboxWithStringIdsRawOptions = signal([{ value: 'value_1', displayName: $localize `:@@translation_Id_1:Label 1`, group: $localize `:@@group.multi-checkbox-with-string-ids:Group A` }, { value: -9, displayName: $localize `:@@translation_Id_3:Label 3`, group: $localize `:@@group.multi-checkbox-with-string-ids:Group A` }, { value: 1234567, displayName: $localize `:@@translation_Id_4:Label 4` }, { value: 2, displayName: $localize `:@@translation_Id_5:Label 5` }, { value: null, displayName: $localize `:@@translation_Id_6:Label 6` }]);
+    protected readonly multiCheckboxWithStringIdsOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' });
+    protected readonly multiCheckboxWithStringIdsOptions = computed(() => {
+        const configuration = this.multiCheckboxWithStringIdsOptionsConfiguration();
+        const options = sortOptions(this.multiCheckboxWithStringIdsRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];
+        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }));
+    });
+    protected readonly categoryIdCallback = input<Observable<unknown[]> | null>(null);
+    private readonly categoryIdRawOptions = toSignal(toObservable(this.categoryIdCallback).pipe(switchMap(callback => callback ?? of([]))), { initialValue: [] });
+    protected readonly categoryIdOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'id', labelProperty: 'categoryName', sortProperty: 'categoryName', groupProperty: 'categoryGroup' });
+    protected readonly categoryIdOptions = computed(() => {
+        const configuration = this.categoryIdOptionsConfiguration();
+        const options = sortOptions(this.categoryIdRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId, configuration.groupProperty) as Record<string, unknown>[];
+        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'], group: option[configuration.groupProperty ?? 'group'] }));
+    });
+    protected readonly categoryIdOptionGroups = computed(() => {
+        const groups: { group: string; options: { value: unknown; displayName: unknown }[] }[] = [];
+        this.categoryIdOptions().forEach(option => {
+            const group = String((option as { group?: unknown }).group ?? '');
+            const existing = groups.find(candidate => candidate.group === group);
+            if (existing) {
+                existing.options.push(option);
+            } else {
+                groups.push({ group, options: [option] });
             }
-            },
-asyncValidators: { validation: [ 'uniqueName', 'isEnsured' ] },
-modelOptions: { updateOn: 'blur' },
-        },
-        {
-        key: 'description',
-        type: this.resolveFieldType('redactor', false),
-        focus: false,
-className: `entry-description-field entry-redactor`,
-        hideExpression: this.fieldsHideExpressions?.['description'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['description'] ? this.fieldsDisableExpressions['description'](model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['description'] ? this.fieldsRequiredExpressions['description'](model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['description'] ? this.fieldsLabelExpressions['description'](model) : $localize `:@@test.mock-edit.description.label:Some Description`),
-        'model.description': (model) => (this.fieldsPropertyExpressions?.['description'] ? this.fieldsPropertyExpressions['description'](model) : model.description),
-        },
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.description.label:Some Description`,
-        placeholder: $localize `:@@test.mock-edit.description.placeholder:Some Description`,
-        description: ``,
-            attributes: {  },
-        hidden: !true,
-            typeFormatDef: undefined
-        },
-        },
-        {
-        key: 'date',
-        type: this.resolveFieldType('datepicker', true),
-        focus: false,
-className: `entry-date-field entry-datepicker`,
-        hideExpression: this.fieldsHideExpressions?.['date'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['date'] ? this.fieldsDisableExpressions['date'](model) : true)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['date'] ? this.fieldsRequiredExpressions['date'](model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['date'] ? this.fieldsLabelExpressions['date'](model) : $localize `:@@test.mock-edit.date.label:Date`),
-        'model.date': (model) => (this.fieldsPropertyExpressions?.['date'] ? this.fieldsPropertyExpressions['date'](model) : model.date),
-        },
-            wrappers: ['tooltip', 'form-field'],
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.date.label:Date`,
-        placeholder: $localize `:@@test.mock-edit.date.placeholder:Date`,
-        description: ``,
-            attributes: {  },
-        hidden: !true,
-            typeFormatDef: { name: 'date' }
-        },
-modelOptions: { updateOn: 'blur' },
-        },
-        {
-        key: 'money',
-        type: this.resolveFieldType('input', false),
-        focus: false,
-className: `entry-money-field entry-input`,
-        hideExpression: this.fieldsHideExpressions?.['money'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['money'] ? this.fieldsDisableExpressions['money'](model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['money'] ? this.fieldsRequiredExpressions['money'](model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['money'] ? this.fieldsLabelExpressions['money'](model) : $localize `:@@test.mock-edit.money.label:Money`),
-        'model.money': (model) => (this.fieldsPropertyExpressions?.['money'] ? this.fieldsPropertyExpressions['money'](model) : model.money),
-        },
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.money.label:Money`,
-        placeholder: $localize `:@@test.mock-edit.money.placeholder:Money`,
-        description: ``,
-            attributes: {  },
-        hidden: !true,
-            type: 'number',
-max: 999.99 - 0.1,
-
-            typeFormatDef: { name: 'number' }
-        },
-        },
-        {
-        key: 'amount',
-        type: this.resolveFieldType('input', false),
-        focus: false,
-className: `entry-amount-field entry-input`,
-        hideExpression: this.fieldsHideExpressions?.['amount'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['amount'] ? this.fieldsDisableExpressions['amount'](model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['amount'] ? this.fieldsRequiredExpressions['amount'](model) : true),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['amount'] ? this.fieldsLabelExpressions['amount'](model) : $localize `:@@test.mock-edit.amount.label:Amount`),
-        'model.amount': (model) => (this.fieldsPropertyExpressions?.['amount'] ? this.fieldsPropertyExpressions['amount'](model) : model.amount),
-        },
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.amount.label:Amount`,
-        placeholder: $localize `:@@test.mock-edit.amount.placeholder:Amount`,
-        description: $localize `:@@test.mock-edit.amount.hint:Don't panic if it is 0`,
-            attributes: {  },
-        hidden: !true,
-            required: true,
-type: 'number',
-min: 0 + 1,
-max: 100,
-
-            typeFormatDef: undefined
-        },
-            validation: {
-            messages: {
-min: (err, field) => $localize `:@@test.mock-edit.amount.min:CUSTOM_VALIDATION_MESSAGE`,
-max: (err, field) => $localize `:@@test.mock-edit.amount.max:CUSTOM_VALIDATION_MESSAGE`
+        });
+        return groups;
+    });
+    protected readonly typesCallback = input<Observable<unknown[]> | null>(null);
+    private readonly typesRawOptions = toSignal(toObservable(this.typesCallback).pipe(switchMap(callback => callback ?? of([]))), { initialValue: [] });
+    protected readonly typesOptionsConfiguration = input<SelectConfiguration>({ groupProperty: 'typeGroup' });
+    protected readonly typesOptions = computed(() => {
+        const configuration = this.typesOptionsConfiguration();
+        const options = sortOptions(this.typesRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId, configuration.groupProperty) as Record<string, unknown>[];
+        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'], group: option[configuration.groupProperty ?? 'group'] }));
+    });
+    protected readonly typesOptionGroups = computed(() => {
+        const groups: { group: string; options: { value: unknown; displayName: unknown }[] }[] = [];
+        this.typesOptions().forEach(option => {
+            const group = String((option as { group?: unknown }).group ?? '');
+            const existing = groups.find(candidate => candidate.group === group);
+            if (existing) {
+                existing.options.push(option);
+            } else {
+                groups.push({ group, options: [option] });
             }
-            },
-        },
-        {
-        key: 'formStatus',
-        type: this.resolveFieldType('select', false),
-        focus: false,
-className: `entry-form-status-field entry-select`,
-        hideExpression: this.fieldsHideExpressions?.['formStatus'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['formStatus'] ? this.fieldsDisableExpressions['formStatus'](model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['formStatus'] ? this.fieldsRequiredExpressions['formStatus'](model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['formStatus'] ? this.fieldsLabelExpressions['formStatus'](model) : $localize `:@@test.mock-edit.form-status.label:Form status`),
-        'model.formStatus': (model) => (this.fieldsPropertyExpressions?.['formStatus'] ? this.fieldsPropertyExpressions['formStatus'](model) : model.formStatus),
-        },
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.form-status.label:Form status`,
-        placeholder: $localize `:@@test.mock-edit.form-status.placeholder:Form status`,
-        description: ``,
-            options: of(this.formStatusOptions).pipe(map(opts => sortOptions(opts, this.formStatusOptionsConfiguration.valueProperty, this.formStatusOptionsConfiguration.sortProperty, this._localeId))),
-            valueProp: this.formStatusOptionsConfiguration.valueProperty,
-            labelProp: this.formStatusOptionsConfiguration.labelProperty,
-            attributes: {  },
-        hidden: !true,
-            typeFormatDef: undefined
-        },
-        },
-        {
-        key: 'mockRadio',
-        type: this.resolveFieldType('radio', false),
-        focus: false,
-className: `entry-mock-radio-field entry-radio`,
-        hideExpression: this.fieldsHideExpressions?.['mockRadio'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['mockRadio'] ? this.fieldsDisableExpressions['mockRadio'](model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['mockRadio'] ? this.fieldsRequiredExpressions['mockRadio'](model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['mockRadio'] ? this.fieldsLabelExpressions['mockRadio'](model) : $localize `:@@test.mock-edit.mock-radio.label:Radio`),
-        'model.mockRadio': (model) => (this.fieldsPropertyExpressions?.['mockRadio'] ? this.fieldsPropertyExpressions['mockRadio'](model) : model.mockRadio),
-        },
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.mock-radio.label:Radio`,
-        placeholder: $localize `:@@test.mock-edit.mock-radio.placeholder:Radio`,
-        description: ``,
-            options: of(this.mockRadioOptions).pipe(map(opts => sortOptions(opts, this.mockRadioOptionsConfiguration.valueProperty, this.mockRadioOptionsConfiguration.sortProperty, this._localeId))),
-            valueProp: this.mockRadioOptionsConfiguration.valueProperty,
-            labelProp: this.mockRadioOptionsConfiguration.labelProperty,
-            attributes: {  },
-        hidden: !true,
-            typeFormatDef: undefined
-        },
-        },
-        {
-        key: 'mockBoolSelect',
-        type: this.resolveFieldType('select', false),
-        focus: false,
-className: `entry-mock-bool-select-field entry-select`,
-        hideExpression: this.fieldsHideExpressions?.['mockBoolSelect'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['mockBoolSelect'] ? this.fieldsDisableExpressions['mockBoolSelect'](model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['mockBoolSelect'] ? this.fieldsRequiredExpressions['mockBoolSelect'](model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['mockBoolSelect'] ? this.fieldsLabelExpressions['mockBoolSelect'](model) : $localize `:@@test.mock-edit.mock-bool-select.label:BoolSelect`),
-        'model.mockBoolSelect': (model) => (this.fieldsPropertyExpressions?.['mockBoolSelect'] ? this.fieldsPropertyExpressions['mockBoolSelect'](model) : model.mockBoolSelect),
-        },
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.mock-bool-select.label:BoolSelect`,
-        placeholder: $localize `:@@test.mock-edit.mock-bool-select.placeholder:BoolSelect`,
-        description: ``,
-            options: of(this.mockBoolSelectOptions).pipe(map(opts => sortOptions(opts, this.mockBoolSelectOptionsConfiguration.valueProperty, this.mockBoolSelectOptionsConfiguration.sortProperty, this._localeId))),
-            valueProp: this.mockBoolSelectOptionsConfiguration.valueProperty,
-            labelProp: this.mockBoolSelectOptionsConfiguration.labelProperty,
-            attributes: {  },
-        hidden: !true,
-            typeFormatDef: { name: 'boolean' }
-        },
-        },
-        {
-        key: 'mockMultiCheckbox',
-        type: this.resolveFieldType('multicheckbox', false),
-        focus: false,
-className: `entry-mock-multi-checkbox-field entry-multicheckbox`,
-        hideExpression: this.fieldsHideExpressions?.['mockMultiCheckbox'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['mockMultiCheckbox'] ? this.fieldsDisableExpressions['mockMultiCheckbox'](model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['mockMultiCheckbox'] ? this.fieldsRequiredExpressions['mockMultiCheckbox'](model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['mockMultiCheckbox'] ? this.fieldsLabelExpressions['mockMultiCheckbox'](model) : $localize `:@@test.mock-edit.mock-multi-checkbox.label:MultiCheckbox`),
-        'model.mockMultiCheckbox': (model) => (this.fieldsPropertyExpressions?.['mockMultiCheckbox'] ? this.fieldsPropertyExpressions['mockMultiCheckbox'](model) : model.mockMultiCheckbox),
-        },
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.mock-multi-checkbox.label:MultiCheckbox`,
-        placeholder: $localize `:@@test.mock-edit.mock-multi-checkbox.placeholder:MultiCheckbox`,
-        description: ``,
-            type: 'array',
-            options: of(this.mockMultiCheckboxOptions).pipe(map(opts => sortOptions(opts, this.mockMultiCheckboxOptionsConfiguration.valueProperty, this.mockMultiCheckboxOptionsConfiguration.sortProperty, this._localeId))),
-            valueProp: this.mockMultiCheckboxOptionsConfiguration.valueProperty,
-            labelProp: this.mockMultiCheckboxOptionsConfiguration.labelProperty,
-            attributes: {  },
-        hidden: !true,
-            typeFormatDef: undefined
-        },
-        },
-        {
-        key: 'multiCheckboxWithStringIds',
-        type: this.resolveFieldType('multicheckbox', false),
-        focus: false,
-className: `entry-multi-checkbox-with-string-ids-field entry-multicheckbox`,
-        hideExpression: this.fieldsHideExpressions?.['multiCheckboxWithStringIds'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['multiCheckboxWithStringIds'] ? this.fieldsDisableExpressions['multiCheckboxWithStringIds'](model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['multiCheckboxWithStringIds'] ? this.fieldsRequiredExpressions['multiCheckboxWithStringIds'](model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['multiCheckboxWithStringIds'] ? this.fieldsLabelExpressions['multiCheckboxWithStringIds'](model) : $localize `:@@test.mock-edit.multi-checkbox-with-string-ids.label:MultiCheckbox`),
-        'model.multiCheckboxWithStringIds': (model) => (this.fieldsPropertyExpressions?.['multiCheckboxWithStringIds'] ? this.fieldsPropertyExpressions['multiCheckboxWithStringIds'](model) : model.multiCheckboxWithStringIds),
-        },
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.multi-checkbox-with-string-ids.label:MultiCheckbox`,
-        placeholder: $localize `:@@test.mock-edit.multi-checkbox-with-string-ids.placeholder:MultiCheckbox`,
-        description: ``,
-            type: 'array',
-            options: of(this.multiCheckboxWithStringIdsOptions).pipe(map(opts => sortOptions(opts, this.multiCheckboxWithStringIdsOptionsConfiguration.valueProperty, this.multiCheckboxWithStringIdsOptionsConfiguration.sortProperty, this._localeId))),
-            valueProp: this.multiCheckboxWithStringIdsOptionsConfiguration.valueProperty,
-            labelProp: this.multiCheckboxWithStringIdsOptionsConfiguration.labelProperty,
-            attributes: {  },
-        hidden: !true,
-            typeFormatDef: undefined
-        },
-        },
-        {
-        key: 'categoryId',
-        type: this.resolveFieldType('select', false),
-        focus: false,
-className: `entry-category-id-field entry-select`,
-        hideExpression: this.fieldsHideExpressions?.['categoryId'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['categoryId'] ? this.fieldsDisableExpressions['categoryId'](model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['categoryId'] ? this.fieldsRequiredExpressions['categoryId'](model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['categoryId'] ? this.fieldsLabelExpressions['categoryId'](model) : $localize `:@@test.mock-edit.category-id.label:Category`),
-        'model.categoryId': (model) => (this.fieldsPropertyExpressions?.['categoryId'] ? this.fieldsPropertyExpressions['categoryId'](model) : model.categoryId),
-        },
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.category-id.label:Category`,
-        placeholder: $localize `:@@test.mock-edit.category-id.placeholder:Category`,
-        description: ``,
-            options: this.categoryIdOptions$.pipe(map(opts => sortOptions(opts, this.categoryIdOptionsConfiguration.valueProperty, this.categoryIdOptionsConfiguration.sortProperty, this._localeId))),
-            valueProp: this.categoryIdOptionsConfiguration.valueProperty,
-            labelProp: this.categoryIdOptionsConfiguration.labelProperty,
-            attributes: {  },
-        hidden: !true,
-metadata: { entityType: 'Category', filter: 'category_name' },
-            typeFormatDef: undefined
-        },
-        },
-        {
-        key: 'types',
-        type: this.resolveFieldType('select', false),
-        focus: false,
-className: `entry-types-field entry-select`,
-        hideExpression: this.fieldsHideExpressions?.['types'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['types'] ? this.fieldsDisableExpressions['types'](model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['types'] ? this.fieldsRequiredExpressions['types'](model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['types'] ? this.fieldsLabelExpressions['types'](model) : $localize `:@@test.mock-edit.types.label:Types`),
-        'model.types': (model) => (this.fieldsPropertyExpressions?.['types'] ? this.fieldsPropertyExpressions['types'](model) : model.types),
-        },
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.types.label:Types`,
-        placeholder: $localize `:@@test.mock-edit.types.placeholder:Types`,
-        description: ``,
-            options: this.typesOptions$.pipe(map(opts => sortOptions(opts, this.typesOptionsConfiguration.valueProperty, this.typesOptionsConfiguration.sortProperty, this._localeId))),
-            valueProp: this.typesOptionsConfiguration.valueProperty,
-            labelProp: this.typesOptionsConfiguration.labelProperty,
-            multiple: true,
-            selectAllOption: $localize `:@@select-all-option.select-all:SelectAll`,
-            attributes: {  },
-        hidden: !true,
-            typeFormatDef: undefined
-        },
-        },
-        {
-        key: 'password',
-        type: this.resolveFieldType('input', false),
-        focus: false,
-className: `entry-password-field entry-input`,
-        hideExpression: this.fieldsHideExpressions?.['password'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['password'] ? this.fieldsDisableExpressions['password'](model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['password'] ? this.fieldsRequiredExpressions['password'](model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['password'] ? this.fieldsLabelExpressions['password'](model) : $localize `:@@test.mock-edit.password.label:Password`),
-        'model.password': (model) => (this.fieldsPropertyExpressions?.['password'] ? this.fieldsPropertyExpressions['password'](model) : model.password),
-        },
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.password.label:Password`,
-        placeholder: $localize `:@@test.mock-edit.password.placeholder:Password`,
-        description: ``,
-            type: 'password',
-            attributes: {  },
-        hidden: !true,
-            typeFormatDef: undefined
-        },
-        },
-        {
-        key: 'isActive',
-        type: this.resolveFieldType('checkbox', false),
-        focus: false,
-className: `entry-is-active-field entry-checkbox`,
-defaultValue: true,
-        hideExpression: this.fieldsHideExpressions?.['isActive'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['isActive'] ? this.fieldsDisableExpressions['isActive'](model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['isActive'] ? this.fieldsRequiredExpressions['isActive'](model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['isActive'] ? this.fieldsLabelExpressions['isActive'](model) : $localize `:@@test.mock-edit.is-active.label:Active`),
-        'model.isActive': (model) => (this.fieldsPropertyExpressions?.['isActive'] ? this.fieldsPropertyExpressions['isActive'](model) : model.isActive),
-        },
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.is-active.label:Active`,
-        placeholder: $localize `:@@test.mock-edit.is-active.placeholder:Active`,
-        description: ``,
-            attributes: {  },
-        hidden: !true,
-            typeFormatDef: { name: 'boolean' }
-        },
-        },
-        {
-        key: 'addresses',
-        type: this.resolveFieldType('array-field', false),
-        focus: false,
-className: `entry-addresses-field entry-array-field`,
-        hideExpression: this.fieldsHideExpressions?.['addresses'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['addresses'] ? this.fieldsDisableExpressions['addresses'](model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['addresses'] ? this.fieldsRequiredExpressions['addresses'](model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['addresses'] ? this.fieldsLabelExpressions['addresses'](model) : $localize `:@@test.mock-edit.addresses.label:Addresses`),
-        'model.addresses': (model) => (this.fieldsPropertyExpressions?.['addresses'] ? this.fieldsPropertyExpressions['addresses'](model) : model.addresses),
-        },
-            wrappers: ['array-wrapper'],
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.addresses.label:Addresses`,
-        placeholder: $localize `:@@test.mock-edit.addresses.placeholder:Addresses`,
-        description: ``,
-            attributes: {  },
-        hidden: !true,
-            typeFormatDef: undefined
-        },
-            fieldArray:
-        {
-        type: this.resolveFieldType('', false),
-fieldGroupClassName: `entry-field-group`,
-            wrappers: ['group-wrapper'],
-        templateOptions: {
-        label: ``,
-        placeholder: ``,
-        disabled: this.isReadonly || false,
-        description: ``
-        },
-        fieldGroup:[
-            { key: 'id' },
-        {
-        key: 'city',
-        type: this.resolveFieldType('input', false),
-        focus: false,
-className: `entry-city-field entry-input`,
-defaultValue: 'Amsterdam',
-        hideExpression: this.fieldsHideExpressions?.['city'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['city'] ? this.fieldsDisableExpressions['city'](model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['city'] ? this.fieldsRequiredExpressions['city'](model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['city'] ? this.fieldsLabelExpressions['city'](model) : $localize `:@@test.mock-edit.city.label:City`),
-        'model.city': (model) => (this.fieldsPropertyExpressions?.['city'] ? this.fieldsPropertyExpressions['city'](model) : model.city),
-        },
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.city.label:City`,
-        placeholder: $localize `:@@test.mock-edit.city.placeholder:City`,
-        description: ``,
-            attributes: {  },
-        hidden: !true,
-            typeFormatDef: undefined
-        },
-        },
-        {
-        key: 'street',
-        type: this.resolveFieldType('input', false),
-        focus: false,
-className: `entry-street-field entry-input`,
-        hideExpression: this.fieldsHideExpressions?.['street'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['street'] ? this.fieldsDisableExpressions['street'](model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['street'] ? this.fieldsRequiredExpressions['street'](model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['street'] ? this.fieldsLabelExpressions['street'](model) : $localize `:@@test.mock-edit.street.label:Street`),
-        'model.street': (model) => (this.fieldsPropertyExpressions?.['street'] ? this.fieldsPropertyExpressions['street'](model) : model.street),
-        },
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.street.label:Street`,
-        placeholder: $localize `:@@test.mock-edit.street.placeholder:Street`,
-        description: ``,
-            attributes: {  },
-        hidden: !true,
-            typeFormatDef: undefined
-        },
-        },
-        {
-        key: 'houseNumber',
-        type: this.resolveFieldType('input', false),
-        focus: false,
-className: `entry-house-number-field entry-input`,
-        hideExpression: this.fieldsHideExpressions?.['houseNumber'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['houseNumber'] ? this.fieldsDisableExpressions['houseNumber'](model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['houseNumber'] ? this.fieldsRequiredExpressions['houseNumber'](model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['houseNumber'] ? this.fieldsLabelExpressions['houseNumber'](model) : $localize `:@@test.mock-edit.house-number.label:House number`),
-        'model.houseNumber': (model) => (this.fieldsPropertyExpressions?.['houseNumber'] ? this.fieldsPropertyExpressions['houseNumber'](model) : model.houseNumber),
-        },
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.house-number.label:House number`,
-        placeholder: $localize `:@@test.mock-edit.house-number.placeholder:House number`,
-        description: ``,
-            attributes: {  },
-        hidden: !true,
-            typeFormatDef: undefined
-        },
-        },
-        {
-        key: 'verified',
-        type: this.resolveFieldType('checkbox', true),
-        focus: false,
-className: `entry-verified-field entry-checkbox`,
-        hideExpression: this.fieldsHideExpressions?.['verified'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['verified'] ? this.fieldsDisableExpressions['verified'](model) : true)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['verified'] ? this.fieldsRequiredExpressions['verified'](model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['verified'] ? this.fieldsLabelExpressions['verified'](model) : $localize `:@@test.mock-edit.verified.label:Verified`),
-        'model.verified': (model) => (this.fieldsPropertyExpressions?.['verified'] ? this.fieldsPropertyExpressions['verified'](model) : model.verified),
-        },
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.verified.label:Verified`,
-        placeholder: $localize `:@@test.mock-edit.verified.placeholder:Verified`,
-        description: ``,
-            attributes: {  },
-        hidden: !true,
-            typeFormatDef: { name: 'boolean' }
-        },
-        },
-        ]
-        },
-        },
-        {
-        key: 'dateAndTime',
-        type: this.resolveFieldType('datetimepicker', false),
-        focus: false,
-className: `entry-date-and-time-field entry-datetimepicker`,
-        hideExpression: this.fieldsHideExpressions?.['dateAndTime'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['dateAndTime'] ? this.fieldsDisableExpressions['dateAndTime'](model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['dateAndTime'] ? this.fieldsRequiredExpressions['dateAndTime'](model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['dateAndTime'] ? this.fieldsLabelExpressions['dateAndTime'](model) : $localize `:@@test.mock-edit.date-and-time.label:Date and time`),
-        'model.dateAndTime': (model) => (this.fieldsPropertyExpressions?.['dateAndTime'] ? this.fieldsPropertyExpressions['dateAndTime'](model) : model.dateAndTime),
-        },
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.date-and-time.label:Date and time`,
-        placeholder: $localize `:@@test.mock-edit.date-and-time.placeholder:Date and time`,
-        description: ``,
-            attributes: {  },
-        hidden: !true,
-            typeFormatDef: { name: 'date' }
-        },
-modelOptions: { updateOn: 'blur' },
-        },
-        ]
-        },
-        {
-        key: 'email1',
-        type: this.resolveFieldType('input', false),
-        focus: false,
-className: `entry-email1-field entry-input`,
-        hideExpression: this.fieldsHideExpressions?.['email1'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['email1'] ? this.fieldsDisableExpressions['email1'](model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['email1'] ? this.fieldsRequiredExpressions['email1'](model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['email1'] ? this.fieldsLabelExpressions['email1'](model) : $localize `:@@test.mock-edit.email1.label:Email 1`),
-        'model.email1': (model) => (this.fieldsPropertyExpressions?.['email1'] ? this.fieldsPropertyExpressions['email1'](model) : model.email1),
-        },
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.email1.label:Email 1`,
-        placeholder: $localize `:@@test.mock-edit.email1.placeholder:Email 1`,
-        description: ``,
-            attributes: {  },
-        hidden: !true,
-            pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
-maxLength: 50,
+        });
+        return groups;
+    });
+    private readonly regionRawOptions = signal([{ value: 'EU', displayName: $localize `:@@region.europe:Europe`, group: $localize `:@@region.group.emea:EMEA` }, { value: 'NA', displayName: $localize `:@@region.na:North America`, group: $localize `:@@region.group.americas:Americas` }, { value: 'AP', displayName: $localize `:@@region.ap:Asia Pacific` }]);
+    protected readonly regionOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' });
+    protected readonly regionOptions = computed(() => {
+        const configuration = this.regionOptionsConfiguration();
+        const options = sortOptions(this.regionRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];
+        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'], group: option[configuration.groupProperty ?? 'group'] }));
+    });
+    protected readonly displayRegion = (value: unknown): string =>
+        (this.regionOptions().find(option => option.value === value)?.displayName as string) ?? '';
+    private readonly addressesCountryRawOptions = signal([{ value: 'NL', displayName: $localize `:@@country.nl:Netherlands` }, { value: 'RS', displayName: $localize `:@@country.rs:Serbia` }]);
+    protected readonly addressesCountryOptionsConfiguration = input<SelectConfiguration>({ valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' });
+    protected readonly addressesCountryOptions = computed(() => {
+        const configuration = this.addressesCountryOptionsConfiguration();
+        const options = sortOptions(this.addressesCountryRawOptions() as Record<string, unknown>[], configuration.valueProperty ?? 'value', configuration.sortProperty ?? '', this.localeId) as Record<string, unknown>[];
+        return options.map(option => ({ value: option[configuration.valueProperty ?? 'value'], displayName: option[configuration.labelProperty ?? 'displayName'] }));
+    });
 
-            typeFormatDef: undefined
-        },
-            validation: {
-            messages: {
-pattern: (err, field) => $localize `:@@test.mock-edit.email1.pattern:CUSTOM_VALIDATION_MESSAGE`
-            }
-            },
-        },
-        {
-        key: 'email2',
-        type: this.resolveFieldType('input', false),
-        focus: false,
-className: `entry-email2-field entry-input`,
-        hideExpression: this.fieldsHideExpressions?.['email2'] ?? false,
-        expressionProperties: {
-        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['email2'] ? this.fieldsDisableExpressions['email2'](model) : false)),
-        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['email2'] ? this.fieldsRequiredExpressions['email2'](model) : false),
-        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['email2'] ? this.fieldsLabelExpressions['email2'](model) : $localize `:@@test.mock-edit.email2.label:Email 2`),
-        'model.email2': (model) => (this.fieldsPropertyExpressions?.['email2'] ? this.fieldsPropertyExpressions['email2'](model) : model.email2),
-        },
-        templateOptions: {
-        label: $localize `:@@test.mock-edit.email2.label:Email 2`,
-        placeholder: $localize `:@@test.mock-edit.email2.placeholder:Email 2`,
-        description: ``,
-            attributes: {  },
-        hidden: !true,
-            pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
-maxLength: 50,
+    protected readonly save = output<IFormMock>();
+    protected readonly cancel = output<void>();
+    protected readonly buttonClick = output<string>();
 
-            typeFormatDef: undefined
-        },
-            validation: {
-            messages: {
-pattern: (err, field) => $localize `:@@validators.pattern.emailAddress:Invalid email address format`
-            }
-            },
-        },
+    private readonly localeId = inject<string>(LOCALE_ID);
+    private readonly asyncValidatorResolver = inject(ENTRY_ASYNC_VALIDATOR_RESOLVER, { optional: true });
+
+    protected readonly form = new FormGroup({
+        id: new FormControl<string | null>(null),
+        name: new FormControl<string | null>('DEFAULT NAME', { validators: [Validators.required, Validators.maxLength(50), Validators.pattern(/[A-Z]/)], asyncValidators: this.asyncValidatorResolver ? [this.asyncValidatorResolver('uniqueName'), this.asyncValidatorResolver('isEnsured')] : [], updateOn: 'blur' }),
+        description: new FormControl<string | null>(null),
+        date: new FormControl({ value: null, disabled: true }, { updateOn: 'blur' }),
+        money: new FormControl<number | null>(null, { validators: [Validators.max(999.99 - 0.1)] }),
+        amount: new FormControl<number | null>(null, { validators: [Validators.required, Validators.min(0 + 1), Validators.max(100)] }),
+        formStatus: new FormControl(null),
+        mockRadio: new FormControl(null),
+        mockBoolSelect: new FormControl(null),
+        mockMultiCheckbox: new FormControl<unknown[] | null>(null),
+        multiCheckboxWithStringIds: new FormControl<unknown[] | null>(null),
+        categoryId: new FormControl(null),
+        types: new FormControl<unknown[] | null>(null),
+        password: new FormControl<string | null>(null),
+        isActive: new FormControl<boolean>(true),
+        notes: new FormControl<string | null>(null),
+        region: new FormControl(null),
+        fileUpload: new FormControl(null),
+        addresses: new FormArray<FormGroup>([]),
+        dateAndTime: new FormControl(null, { updateOn: 'blur' }),
+        email1: new FormControl<string | null>(null, { validators: [Validators.pattern(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/), Validators.maxLength(50)] }),
+        email2: new FormControl<string | null>(null, { validators: [Validators.pattern(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/), Validators.maxLength(50)] }),
+    });
+
+    private readonly formValue = toSignal(this.form.valueChanges, { initialValue: null });
+    // Live view of the model: the model input merged with the current (raw) form value, so
+    // hide/disable/required/label/property expressions react to user edits, matching Formly.
+    private readonly currentModel = computed<IFormMock>(() => {
+        this.formValue();
+        return { ...this.model(), ...this.form.getRawValue() } as IFormMock;
+    });
+
+    private readonly controlStates = [
+        { key: 'id', staticVisible: false, staticReadonly: false },
+        { key: 'name', staticVisible: true, staticReadonly: false },
+        { key: 'description', staticVisible: true, staticReadonly: false },
+        { key: 'date', staticVisible: true, staticReadonly: true },
+        { key: 'money', staticVisible: true, staticReadonly: false },
+        { key: 'amount', staticVisible: true, staticReadonly: false },
+        { key: 'formStatus', staticVisible: true, staticReadonly: false },
+        { key: 'mockRadio', staticVisible: true, staticReadonly: false },
+        { key: 'mockBoolSelect', staticVisible: true, staticReadonly: false },
+        { key: 'mockMultiCheckbox', staticVisible: true, staticReadonly: false },
+        { key: 'multiCheckboxWithStringIds', staticVisible: true, staticReadonly: false },
+        { key: 'categoryId', staticVisible: true, staticReadonly: false },
+        { key: 'types', staticVisible: true, staticReadonly: false },
+        { key: 'password', staticVisible: true, staticReadonly: false },
+        { key: 'isActive', staticVisible: true, staticReadonly: false },
+        { key: 'notes', staticVisible: true, staticReadonly: false },
+        { key: 'region', staticVisible: true, staticReadonly: false },
+        { key: 'fileUpload', staticVisible: true, staticReadonly: false },
+        { key: 'addresses', staticVisible: true, staticReadonly: false },
+        { key: 'dateAndTime', staticVisible: true, staticReadonly: false },
+        { key: 'email1', staticVisible: true, staticReadonly: false },
+        { key: 'email2', staticVisible: true, staticReadonly: false },
     ];
+    private readonly addressesItemControlStates = [
+        { key: 'addresses.id', controlName: 'id', staticVisible: false, staticReadonly: false },
+        { key: 'addresses.city', controlName: 'city', staticVisible: true, staticReadonly: false },
+        { key: 'addresses.country', controlName: 'country', staticVisible: true, staticReadonly: false },
+        { key: 'addresses.street', controlName: 'street', staticVisible: true, staticReadonly: false },
+        { key: 'addresses.houseNumber', controlName: 'houseNumber', staticVisible: true, staticReadonly: false },
+        { key: 'addresses.verified', controlName: 'verified', staticVisible: true, staticReadonly: true },
+    ];
+
+    private addressesOriginalRows: object[] = [];
+    protected readonly addressesRowModel = (index: number): unknown =>
+        ({ ...(this.addressesOriginalRows[index] ?? {}), ...(this.currentModel().addresses?.[index] ?? {}) });
+
+
+    private readonly regionFilterValue = toSignal(this.form.controls.region.valueChanges, { initialValue: null });
+    protected readonly regionFilteredOptions = computed(() => {
+        const filterValue = this.regionFilterValue();
+        const filterText = typeof filterValue === 'string' ? filterValue.toLowerCase() : '';
+        return this.regionOptions().filter(option =>
+            option.value === filterValue || String(option.displayName).toLowerCase().includes(filterText));
+    });
+    protected readonly regionFilteredOptionGroups = computed(() => {
+        const groups: { group: string; options: { value: unknown; displayName: unknown }[] }[] = [];
+        this.regionFilteredOptions().forEach(option => {
+            const group = String((option as { group?: unknown }).group ?? '');
+            const existing = groups.find(candidate => candidate.group === group);
+            if (existing) {
+                existing.options.push(option);
+            } else {
+                groups.push({ group, options: [option] });
+            }
+        });
+        return groups;
+    });
+
+    protected readonly createAddressesItem = (): FormGroup => {
+        const itemGroup = new FormGroup({
+            id: new FormControl<string | null>(null),
+            city: new FormControl<string | null>('Amsterdam'),
+            country: new FormControl('NL'),
+            street: new FormControl<string | null>(null),
+            houseNumber: new FormControl<string | null>(null),
+            verified: new FormControl<boolean>({ value: false, disabled: true }),
+        });
+        itemGroup.get('verified')?.disable({ emitEvent: false });
+        return itemGroup;
+    };
+
+    private readonly resizeAddressesArray = (length: number): void => {
+        const formArray = this.form.get('addresses') as FormArray<FormGroup>;
+        while (formArray.length > length) {
+            formArray.removeAt(formArray.length - 1, { emitEvent: false });
+        }
+        while (formArray.length < length) {
+            const item = this.createAddressesItem();
+            if (formArray.disabled) {
+                item.disable({ emitEvent: false });
+            }
+            formArray.push(item, { emitEvent: false });
+        }
+    };
+
+    protected readonly addAddressesItem = (): void => {
+        this.addressesOriginalRows = [...this.addressesOriginalRows, {}];
+        this.form.controls.addresses.push(this.createAddressesItem());
+        this.form.markAsDirty();
+    };
+
+    protected readonly removeAddressesItem = (index: number): void => {
+        this.addressesOriginalRows = this.addressesOriginalRows.filter((_, originalRowIndex) => originalRowIndex !== index);
+        this.form.controls.addresses.removeAt(index);
+        this.form.markAsDirty();
+    };
+
+    constructor() {
+        effect(() => {
+            const model = this.model();
+            this.addressesOriginalRows = [...(model.addresses ?? [])];
+            this.resizeAddressesArray(model.addresses?.length ?? 0);
+            this.form.patchValue(model as unknown as typeof this.form.value, { emitEvent: false });
+        });
+        effect(() => {
+            const propertyExpressions = this.fieldsPropertyExpressions();
+            if (!propertyExpressions) {
+                return;
+            }
+            const model = this.currentModel();
+            // setValue emits so currentModel recomputes and dependent (chained) expressions rerun;
+            // the equality guard is what terminates that loop (Object.is, so a NaN result is
+            // treated as stable instead of looping forever).
+            Object.entries(propertyExpressions).forEach(([propertyName, expression]) => {
+                const control = this.form.get(propertyName);
+                const value = expression(model);
+                if (control && !Object.is(control.value, value)) {
+                    control.setValue(value);
+                }
+            });
+        });
+        effect(() => {
+            const model = this.currentModel();
+            const requiredExpressions = this.fieldsRequiredExpressions();
+            if (!requiredExpressions) {
+                return;
+            }
+            Object.entries(requiredExpressions).forEach(([propertyName, isRequired]) => {
+                const control = this.form.get(propertyName);
+                if (!control) {
+                    return;
+                }
+                if (isRequired(model)) {
+                    control.addValidators(Validators.required);
+                } else {
+                    control.removeValidators(Validators.required);
+                }
+                control.updateValueAndValidity({ emitEvent: false });
+            });
+        });
+        // Single source of truth for enabled/disabled state: readonly mode, static readonly
+        // (including group readonly), disable expressions, and hidden state (a hidden control is
+        // disabled so it stops contributing to form validity, mirroring Formly's hidden fields).
+        effect(() => {
+            const model = this.currentModel();
+            const readonly = this.isReadonly();
+            const hideExpressions = this.fieldsHideExpressions();
+            const disableExpressions = this.fieldsDisableExpressions();
+            this.controlStates.forEach(({ key, staticVisible, staticReadonly }) => {
+                const control = this.form.get(key);
+                if (!control) {
+                    return;
+                }
+                const hidden = !staticVisible || (hideExpressions?.[key]?.(model) ?? false);
+                const disabled = readonly || hidden || staticReadonly || (disableExpressions?.[key]?.(model) ?? false);
+                if (disabled !== control.disabled) {
+                    if (disabled) {
+                        control.disable({ emitEvent: false });
+                    } else {
+                        control.enable({ emitEvent: false });
+                    }
+                }
+            });
+            if (!this.form.controls.addresses.disabled) {
+                this.form.controls.addresses.controls.forEach((itemGroup, index) => {
+                    const rowModel = this.addressesRowModel(index);
+                    this.addressesItemControlStates.forEach(({ key, controlName, staticVisible, staticReadonly }) => {
+                        const control = itemGroup.get(controlName);
+                        if (!control) {
+                            return;
+                        }
+                        const disabled = this.isHidden(key, staticVisible, rowModel) || this.isDisabled(key, staticReadonly, rowModel);
+                        if (disabled !== control.disabled) {
+                            if (disabled) {
+                                control.disable({ emitEvent: false });
+                            } else {
+                                control.enable({ emitEvent: false });
+                            }
+                        }
+                    });
+                });
+            }
+        });
     }
 
-    private applyOptionally<T>(value: T, apply: boolean): T | undefined {
-    return apply ? value : undefined;
-    }
+    private lastSubmitTime = 0;
 
-    }
+    protected readonly onSubmit = (event: Event): void => {
+        event.preventDefault();
+        if (!this.form.valid) {
+            this.form.markAllAsTouched();
+            return;
+        }
+        if (Date.now() - this.lastSubmitTime < 500) {
+            return;
+        }
+        this.lastSubmitTime = Date.now();
+        const rawValue = this.form.getRawValue();
+        const mergedModel = { ...this.model(), ...rawValue, addresses: rawValue.addresses.map((row, index) => ({ ...(this.addressesOriginalRows[index] ?? {}), ...row })) } as IFormMock;
+        this.model.set(mergedModel);
+        this.save.emit(mergedModel);
+    };
+
+    // Array-item children pass the current row as arrayItemModel so their expressions evaluate
+    // per row (Formly parity: a nested field's expression received the nested model).
+    protected readonly isHidden = (propertyName: string, staticVisible: boolean, arrayItemModel?: unknown): boolean => {
+        if (!staticVisible) {
+            return true;
+        }
+
+        return this.fieldsHideExpressions()?.[propertyName]?.((arrayItemModel ?? this.currentModel()) as IFormMock) ?? false;
+    };
+
+    protected readonly isDisabled = (propertyName: string, staticReadonly: boolean, arrayItemModel?: unknown): boolean => {
+        return this.isReadonly() || staticReadonly
+            || (this.fieldsDisableExpressions()?.[propertyName]?.((arrayItemModel ?? this.currentModel()) as IFormMock) ?? false);
+    };
+
+    protected readonly isOptionSelected = (control: AbstractControl | null, value: unknown): boolean =>
+        ((control?.value as unknown[] | null) ?? []).includes(value);
+
+    protected readonly toggleOption = (control: AbstractControl | null, value: unknown, checked: boolean): void => {
+        const currentValues = (control?.value as unknown[] | null) ?? [];
+        control?.setValue(checked ? [...currentValues, value] : currentValues.filter(item => item !== value));
+        control?.markAsDirty();
+    };
+
+    protected readonly toggleSelectAll = (control: AbstractControl | null, options: { value: unknown; displayName: unknown }[]): void => {
+        const values = options.map(option => option.value);
+        const selectedValues = ((control?.value as unknown[] | null) ?? []).filter(value => values.includes(value));
+        control?.setValue(selectedValues.length === values.length ? [] : values);
+        control?.markAsDirty();
+    };
+
+    protected readonly readonlyValue = (control: AbstractControl | null): string =>
+        String(control?.value ?? '');
+
+    protected readonly readonlyBooleanValue = (control: AbstractControl | null): string =>
+        control?.value ? $localize`:@@entry.readonly.boolean.yes:Yes` : $localize`:@@entry.readonly.boolean.no:No`;
+
+    protected readonly selectedDisplayName = (value: unknown, options: { value: unknown; displayName: unknown }[]): string =>
+        Array.isArray(value)
+            ? value.map(item => options.find(option => option.value === item)?.displayName ?? item).join(', ')
+            : String(options.find(option => option.value === value)?.displayName ?? value ?? '');
+}

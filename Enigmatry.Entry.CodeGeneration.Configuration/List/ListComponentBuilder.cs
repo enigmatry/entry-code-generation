@@ -80,6 +80,16 @@ public class ListComponentBuilder<T> : BaseComponentBuilder<ListComponentModel>
     /// <returns>An instance of <see cref="RowInfoBuilder"/> to further configure the row options.</returns>
     public RowInfoBuilder Row() { return _rowInfoBuilder; }
 
+    /// <summary>
+    /// Override the global signals setting for this specific component.
+    /// When set, this takes precedence over CodeGeneratorOptions.WithSignals.
+    /// </summary>
+    public ListComponentBuilder<T> WithSignals(bool enabled = true)
+    {
+        _withSignals = enabled;
+        return this;
+    }
+
     public override ListComponentModel Build()
     {
         var componentInfo = _componentInfoBuilder.Build();
@@ -88,7 +98,8 @@ public class ListComponentBuilder<T> : BaseComponentBuilder<ListComponentModel>
         return new ListComponentModel(componentInfo, columns)
         {
             Row = _rowInfoBuilder.Build(componentInfo),
-            Pagination = _paginationInfoBuilder.Build()
+            Pagination = _paginationInfoBuilder.Build(),
+            WithSignals = _withSignals
         };
     }
 

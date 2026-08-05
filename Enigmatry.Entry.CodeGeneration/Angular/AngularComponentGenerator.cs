@@ -29,7 +29,16 @@ public class AngularComponentGenerator : IComponentGenerator
     {
         var componentDirectory = Path.Combine(outputDir, component.AngularComponentDirectory());
 
-        foreach (var templateInfo in _angularSettings.GetComponentTemplates(options.WithSignals))
+        var useSignals = component.WithSignals ?? options.WithSignals;
+        if (useSignals && component is FormComponentModel formComponent)
+        {
+            foreach (var warning in SignalsFormComponentValidator.Validate(formComponent))
+            {
+                _logger.LogWarning("{ValidationWarning}", warning);
+            }
+        }
+
+        foreach (var templateInfo in _angularSettings.GetComponentTemplates(useSignals))
         {
             var templatePath = templateInfo.TemplatePath.FormatWith(GetTemplateNameFor(component));
 

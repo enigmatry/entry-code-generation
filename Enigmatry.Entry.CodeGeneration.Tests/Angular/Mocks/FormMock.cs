@@ -22,13 +22,7 @@ public class FormMock
     public IEnumerable<string> MultiCheckboxWithStringIds { get; set; } = Enumerable.Empty<string>();
     public IEnumerable<FormAddressMock> Addresses { get; set; } = Enumerable.Empty<FormAddressMock>();
     public DateTimeOffset DateAndTime { get; set; }
-}
-
-public class FormAddressMock
-{
-    public Guid Id { get; set; }
-    public string Street { get; set; } = String.Empty;
-    public string HouseNumber { get; set; } = String.Empty;
-    public string City { get; set; } = String.Empty;
-    public bool Verified { get; set; }
+    public string Notes { get; set; } = String.Empty;
+    public string Region { get; set; } = String.Empty;
+    public string FileUpload { get; set; } = String.Empty;
 }

@@ -1,6 +1,6 @@
-﻿namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+namespace Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 
 public class AutocompleteFormControl : SelectControlBase
 {
-    public override string FormlyType => FormlyTypes.Autocomplete;
+    public override string ControlType => ControlTypes.Autocomplete;
 }

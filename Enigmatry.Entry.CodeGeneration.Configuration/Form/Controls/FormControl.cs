@@ -1,4 +1,4 @@
-﻿using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Validators;
+using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls.Validators;
 using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
 using Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
 using Humanizer;
@@ -9,6 +9,7 @@ public abstract class FormControl
 {
     public ComponentInfo ComponentInfo { get; set; } = null!;
     public string PropertyName { get; set; } = String.Empty;
+    public System.Type? PropertyType { get; set; }
     public I18NString Label { get; set; } = I18NString.Empty;
     public I18NString Placeholder { get; set; } = I18NString.Empty;
     public I18NString Hint { get; set; } = I18NString.Empty;
@@ -23,11 +24,19 @@ public abstract class FormControl
     public IList<IFormlyValidationRule> ValidationRules { get; private set; } = new List<IFormlyValidationRule>();
     public IEnumerable<CustomValidator> Validators { get; set; } = new List<CustomValidator>();
     public FormControlWrappers Wrappers { get; set; } = FormControlWrappers.Default;
-    public abstract string FormlyType { get; }
+    public abstract string ControlType { get; }
+
+    /// <summary>
+    /// Deprecated: use <see cref="ControlType"/> instead. Deliberately not marked [Obsolete]:
+    /// the deprecated non-signals (Formly) templates reference it and the runtime-compiled Razor
+    /// engine treats the obsolete warning as a compile error.
+    /// </summary>
+    public string FormlyType => ControlType;
     public IPropertyFormatter? Formatter { get; set; }
     public bool Ignore { get; set; }
     public ValueUpdateTrigger? ValueUpdateTrigger { get; set; }
     public IEnumerable<KeyValuePair<string, string>> Metadata { get; set; } = new List<KeyValuePair<string, string>>();
+    public FormControlImport? Import { get; set; }
 
     public virtual void ApplyValidationConfiguration(IEnumerable<IFormlyValidationRule> validationRules)
     {
@@ -42,14 +51,14 @@ public abstract class FormControl
                 $"{ComponentInfo.Feature.Name.Kebaberize()}" +
                 $".{ComponentInfo.Name.Kebaberize()}" +
                 $".{PropertyName.Kebaberize()}" +
-                $".{validationRule.FormlyRuleName.Kebaberize()}"
+                $".{validationRule.GetRuleName().Kebaberize()}"
             );
         }
     }
 
     public string StackedClasses()
     {
-        var classNameValue = $"entry-{PropertyName.Kebaberize()}-field entry-{FormlyType.Kebaberize()}";
+        var classNameValue = $"entry-{PropertyName.Kebaberize()}-field entry-{ControlType.Kebaberize()}";
 
         foreach (var className in ClassNames.Values)
         {

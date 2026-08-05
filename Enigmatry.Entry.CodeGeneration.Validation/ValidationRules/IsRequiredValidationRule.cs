@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Enigmatry.Entry.CodeGeneration.Validation.ValidationRules;
@@ -12,7 +12,7 @@ public class IsRequiredValidationRule : ValidationRule<bool>
     public override string FormlyRuleName => "required";
 
     public override string[] FormlyTemplateOptions =>
-        new[] { $"{FormlyRuleName}: {Rule.ToString().ToLowerInvariant()}" };
+        new[] { $"{RuleName}: {Rule.ToString().ToLowerInvariant()}" };
 
     public override string FormlyValidationMessage => HasCustomMessage
         ? CustomMessage

@@ -1,6 +1,7 @@
 ﻿using Enigmatry.Entry.CodeGeneration.Configuration;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
+using Enigmatry.Entry.CodeGeneration.Configuration.Formatters;
 
 namespace Enigmatry.Entry.CodeGeneration.Tests.Angular.Mocks;
 
@@ -13,6 +14,8 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
             .HasName("MockEdit")
             .BelongsToFeature("Test")
             .OrderBy(OrderByType.Configuration);
+
+        builder.WithReadonlyDisplay();
             
         builder
             .FormControl(x => x.Id)
@@ -47,6 +50,7 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
         formGroup
             .RichTextInputFormControl(x => x.Description)
             .WithEditor(RichTextEditor.Redactor)
+            .WithImport("EntryRedactorComponent", "@enigmatry/entry-redactor")
             .WithLabel("Some Description");
 
         formGroup
@@ -59,7 +63,8 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
         formGroup
             .FormControl(x => x.Money)
             .WithLabel("Money")
-            .WithPlaceholder("Money");
+            .WithPlaceholder("Money")
+            .WithFormat(new CurrencyPropertyFormatter());
 
         formGroup
             .FormControl(x => x.Amount)
@@ -131,6 +136,7 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
                 options.WithDynamicValues();
                 options.WithSelectAllOption("SelectAll");
                 options.WithSortKey("value");
+                options.WithGroupKey("typeGroup");
             });
 
         formGroup
@@ -146,6 +152,27 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
             .WithDefaultValue(true);
 
         formGroup
+            .TextareaFormControl(x => x.Notes)
+            .WithLabel("Notes")
+            .WithRows(4);
+
+        formGroup
+            .AutocompleteFormControl(x => x.Region)
+            .WithLabel("Region")
+            .WithOptions(options => options.WithFixedValues(new[]
+            {
+                new SelectOption("EU", "Europe", "region.europe") { Group = new I18NString("region.group.emea", "EMEA") },
+                new SelectOption("NA", "North America", "region.na") { Group = new I18NString("region.group.americas", "Americas") },
+                new SelectOption("AP", "Asia Pacific", "region.ap")
+            }));
+
+        formGroup
+            .CustomFormControl(x => x.FileUpload)
+            .WithCustomControlType("entry-file-input")
+            .WithImport("EntryFileInputComponent", "@enigmatry/entry-file-input")
+            .WithLabel("File upload");
+
+        formGroup
             .ArrayFormControl(x => x.Addresses)
             .WithCustomControlType("array-field")
             .WithCustomWrapper("array-wrapper")
@@ -159,6 +186,15 @@ public class FormMockConfiguration : IFormComponentConfiguration<FormMock>
                     config
                         .InputFormControl(x => x.City)
                         .WithDefaultValue("Amsterdam");
+                    config
+                        .SelectFormControl(x => x.Country)
+                        .WithLabel("Country")
+                        .WithDefaultValue("NL")
+                        .WithOptions(options => options.WithFixedValues(new[]
+                        {
+                            new SelectOption("NL", "Netherlands", "country.nl"),
+                            new SelectOption("RS", "Serbia", "country.rs")
+                        }));
                     config
                         .InputFormControl(x => x.Street);
                     config

@@ -32,6 +32,7 @@ public abstract class BaseControlBuilder<TControl, TBuilder> : IControlBuilder
     protected bool _ignore;
     protected ValueUpdateTrigger? _valueUpdateTrigger;
     protected IEnumerable<KeyValuePair<string, string>> _metadata = new List<KeyValuePair<string, string>>();
+    protected FormControlImport? _import;
 
     protected BaseControlBuilder(PropertyInfo propertyInfo) : this(propertyInfo.Name)
     {
@@ -78,6 +79,19 @@ public abstract class BaseControlBuilder<TControl, TBuilder> : IControlBuilder
     public TBuilder WithLabel(string label)
     {
         _label = label;
+        return (TBuilder)this;
+    }
+
+    /// <summary>
+    /// Registers the Angular import (symbol and module path) that provides this control's component.
+    /// The generated standalone signals component adds it to its imports array. Ignored by the
+    /// deprecated non-signals templates.
+    /// </summary>
+    /// <param name="symbol">The exported symbol, e.g. "EntryFileInputComponent".</param>
+    /// <param name="importPath">The module path, e.g. "@enigmatry/entry-file-input".</param>
+    public TBuilder WithImport(string symbol, string importPath)
+    {
+        _import = new FormControlImport(symbol, importPath);
         return (TBuilder)this;
     }
 
@@ -222,6 +236,11 @@ public abstract class BaseControlBuilder<TControl, TBuilder> : IControlBuilder
     /// </summary>
     /// <param name="wrapperName">Wrapper name to be matched on client side</param>
     /// <returns></returns>
+    /// <remarks>
+    /// Formly-only: the signals templates ignore wrappers. Migrate: 'form-field' is automatic
+    /// (mat-form-field), 'tooltip' is covered by <see cref="WithTooltipText"/>, and custom
+    /// composition is covered by a custom control with <see cref="WithImport"/>.
+    /// </remarks>
     public TBuilder WithCustomWrapper(string wrapperName)
     {
         return WithCustomWrappers(wrapperName);
@@ -232,6 +251,11 @@ public abstract class BaseControlBuilder<TControl, TBuilder> : IControlBuilder
     /// </summary>
     /// <param name="wrappersNames">Wrappers names to be matched on client side</param>
     /// <returns></returns>
+    /// <remarks>
+    /// Formly-only: the signals templates ignore wrappers. Migrate: 'form-field' is automatic
+    /// (mat-form-field), 'tooltip' is covered by <see cref="WithTooltipText"/>, and custom
+    /// composition is covered by a custom control with <see cref="WithImport"/>.
+    /// </remarks>
     public TBuilder WithCustomWrappers(params string[] wrappersNames)
     {
         _customWrappers.AddRange(wrappersNames);
@@ -322,6 +346,7 @@ public abstract class BaseControlBuilder<TControl, TBuilder> : IControlBuilder
 
         control.ComponentInfo = componentInfo;
         control.PropertyName = _propertyName;
+        control.PropertyType = PropertyInfo?.PropertyType;
         control.Label = new I18NString(labelTranslationId, label);
         control.Placeholder = new I18NString(placeholderTranslationId, placeholder);
         control.Hint = new I18NString(hintTranslationId, _hint);
@@ -338,6 +363,7 @@ public abstract class BaseControlBuilder<TControl, TBuilder> : IControlBuilder
         control.Ignore = _ignore;
         control.ValueUpdateTrigger = _valueUpdateTrigger ?? control.ValueUpdateTrigger;
         control.Metadata = _metadata;
+        control.Import = _import;
 
         return control;
     }

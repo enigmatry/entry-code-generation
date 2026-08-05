@@ -70,6 +70,8 @@ import { map, throttleTime } from 'rxjs/operators';
             get typesOptions(): any[] { return this.typesOptions$.value; }
             set typesOptions(value: any[]) { this.typesOptions$.next(value); }
             @Input() typesOptionsConfiguration: SelectConfiguration = {};
+            @Input() regionOptions: any[] = [{ value: 'EU', displayName: $localize `:@@region.europe:Europe`, group: $localize `:@@region.group.emea:EMEA` }, { value: 'NA', displayName: $localize `:@@region.na:North America`, group: $localize `:@@region.group.americas:Americas` }, { value: 'AP', displayName: $localize `:@@region.ap:Asia Pacific` }];
+            @Input() regionOptionsConfiguration: SelectConfiguration = { valueProperty: 'value', labelProperty: 'displayName', sortProperty: '' };
 
     _isReadonly: boolean;
     form = new FormGroup({});
@@ -240,7 +242,7 @@ className: `entry-money-field entry-input`,
             type: 'number',
 max: 999.99 - 0.1,
 
-            typeFormatDef: { name: 'number' }
+            typeFormatDef: { name: 'currency' }
         },
         },
         {
@@ -439,9 +441,10 @@ className: `entry-types-field entry-select`,
         label: $localize `:@@test.mock-edit.types.label:Types`,
         placeholder: $localize `:@@test.mock-edit.types.placeholder:Types`,
         description: ``,
-            options: this.typesOptions$.pipe(map(opts => sortOptions(opts, this.typesOptionsConfiguration.valueProperty, this.typesOptionsConfiguration.sortProperty, this._localeId))),
+            options: this.typesOptions$.pipe(map(opts => sortOptions(opts, this.typesOptionsConfiguration.valueProperty, this.typesOptionsConfiguration.sortProperty, this._localeId, this.typesOptionsConfiguration.groupProperty))),
             valueProp: this.typesOptionsConfiguration.valueProperty,
             labelProp: this.typesOptionsConfiguration.labelProperty,
+                groupProp: this.typesOptionsConfiguration.groupProperty,
             multiple: true,
             selectAllOption: $localize `:@@select-all-option.select-all:SelectAll`,
             attributes: {  },
@@ -491,6 +494,77 @@ defaultValue: true,
             attributes: {  },
         hidden: !true,
             typeFormatDef: { name: 'boolean' }
+        },
+        },
+        {
+        key: 'notes',
+        type: this.resolveFieldType('textarea', false),
+        focus: false,
+className: `entry-notes-field entry-textarea`,
+        hideExpression: this.fieldsHideExpressions?.['notes'] ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['notes'] ? this.fieldsDisableExpressions['notes'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['notes'] ? this.fieldsRequiredExpressions['notes'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['notes'] ? this.fieldsLabelExpressions['notes'](model) : $localize `:@@test.mock-edit.notes.label:Notes`),
+        'model.notes': (model) => (this.fieldsPropertyExpressions?.['notes'] ? this.fieldsPropertyExpressions['notes'](model) : model.notes),
+        },
+        templateOptions: {
+        label: $localize `:@@test.mock-edit.notes.label:Notes`,
+        placeholder: $localize `:@@test.mock-edit.notes.placeholder:Notes`,
+        description: ``,
+            rows: 4,
+            cols: 0,
+            autosize: false,
+            autosizeMinRows: 0,
+            autosizeMaxRows: 0,
+            attributes: {  },
+        hidden: !true,
+            typeFormatDef: undefined
+        },
+        },
+        {
+        key: 'region',
+        type: this.resolveFieldType('autocomplete', false),
+        focus: false,
+className: `entry-region-field entry-autocomplete`,
+        hideExpression: this.fieldsHideExpressions?.['region'] ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['region'] ? this.fieldsDisableExpressions['region'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['region'] ? this.fieldsRequiredExpressions['region'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['region'] ? this.fieldsLabelExpressions['region'](model) : $localize `:@@test.mock-edit.region.label:Region`),
+        'model.region': (model) => (this.fieldsPropertyExpressions?.['region'] ? this.fieldsPropertyExpressions['region'](model) : model.region),
+        },
+        templateOptions: {
+        label: $localize `:@@test.mock-edit.region.label:Region`,
+        placeholder: $localize `:@@test.mock-edit.region.placeholder:Region`,
+        description: ``,
+            options: of(this.regionOptions).pipe(map(opts => sortOptions(opts, this.regionOptionsConfiguration.valueProperty, this.regionOptionsConfiguration.sortProperty, this._localeId))),
+            valueProp: this.regionOptionsConfiguration.valueProperty,
+            labelProp: this.regionOptionsConfiguration.labelProperty,
+            attributes: {  },
+        hidden: !true,
+            typeFormatDef: undefined
+        },
+        },
+        {
+        key: 'fileUpload',
+        type: this.resolveFieldType('entry-file-input', false),
+        focus: false,
+className: `entry-file-upload-field entry-entry-file-input`,
+        hideExpression: this.fieldsHideExpressions?.['fileUpload'] ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['fileUpload'] ? this.fieldsDisableExpressions['fileUpload'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['fileUpload'] ? this.fieldsRequiredExpressions['fileUpload'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['fileUpload'] ? this.fieldsLabelExpressions['fileUpload'](model) : $localize `:@@test.mock-edit.file-upload.label:File upload`),
+        'model.fileUpload': (model) => (this.fieldsPropertyExpressions?.['fileUpload'] ? this.fieldsPropertyExpressions['fileUpload'](model) : model.fileUpload),
+        },
+        templateOptions: {
+        label: $localize `:@@test.mock-edit.file-upload.label:File upload`,
+        placeholder: $localize `:@@test.mock-edit.file-upload.placeholder:File upload`,
+        description: ``,
+            attributes: {  },
+        hidden: !true,
+            typeFormatDef: undefined
         },
         },
         {
@@ -544,6 +618,31 @@ defaultValue: 'Amsterdam',
         label: $localize `:@@test.mock-edit.city.label:City`,
         placeholder: $localize `:@@test.mock-edit.city.placeholder:City`,
         description: ``,
+            attributes: {  },
+        hidden: !true,
+            typeFormatDef: undefined
+        },
+        },
+        {
+        key: 'country',
+        type: this.resolveFieldType('select', false),
+        focus: false,
+className: `entry-country-field entry-select`,
+defaultValue: 'NL',
+        hideExpression: this.fieldsHideExpressions?.['country'] ?? false,
+        expressionProperties: {
+        'templateOptions.disabled': (model) => (this.isReadonly || (this.fieldsDisableExpressions?.['country'] ? this.fieldsDisableExpressions['country'](model) : false)),
+        'templateOptions.required': (model) => (this.fieldsRequiredExpressions?.['country'] ? this.fieldsRequiredExpressions['country'](model) : false),
+        'templateOptions.label': (model) => (this.fieldsLabelExpressions?.['country'] ? this.fieldsLabelExpressions['country'](model) : $localize `:@@test.mock-edit.country.label:Country`),
+        'model.country': (model) => (this.fieldsPropertyExpressions?.['country'] ? this.fieldsPropertyExpressions['country'](model) : model.country),
+        },
+        templateOptions: {
+        label: $localize `:@@test.mock-edit.country.label:Country`,
+        placeholder: $localize `:@@test.mock-edit.country.placeholder:Country`,
+        description: ``,
+            options: of(this.countryOptions).pipe(map(opts => sortOptions(opts, this.countryOptionsConfiguration.valueProperty, this.countryOptionsConfiguration.sortProperty, this._localeId))),
+            valueProp: this.countryOptionsConfiguration.valueProperty,
+            labelProp: this.countryOptionsConfiguration.labelProperty,
             attributes: {  },
         hidden: !true,
             typeFormatDef: undefined
