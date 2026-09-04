@@ -8,6 +8,7 @@ Short, easy to understand, explanation of the tool ...
 
 * [Intro](#intro)
 * [Glossary](#glossary)
+* [Version compatibility](#version-compatibility)
 * [Setup](#setup)
   * [Configure Enigmatry npm feed authentication (temp)](#configure-enigmatry-npm-feed-authentication-temp)
   * [Install codegen tool](#install-codegen-tool)
@@ -37,6 +38,18 @@ Short, easy to understand, explanation of the tool ...
 | codegen tool | Enigmatry Entry Code Generator dotnet tool used to generate client side components |
 | List | Table component that supports: multiple rows, headers, sorting, paging, sow selection, context menu, etc. |
 | Form | Form component that supports: TODO |
+
+## Version compatibility
+
+The codegen major version tracks the Angular major version it generates for. Pick the codegen major that matches the Angular major of the consuming application.
+
+| codegen | Angular | Branch |
+|-|-|-|
+| 22.x | 22 | `master` |
+| 21.x | 21 | `release/21` |
+| 20.x | 20 | `release/20` |
+
+Earlier majors follow the same rule. `@enigmatry/entry-components` and `@enigmatry/entry-form` use the same scheme, so their major must match the Angular major as well — generated code imports from both, and their peer dependencies pin `@angular/core` to a single major.
 
 ## Setup
 

@@ -7,7 +7,7 @@
 @using Enigmatry.Entry.CodeGeneration.Templates.HtmlHelperExtensions.TypeScript
 @model Enigmatry.Entry.CodeGeneration.Configuration.Form.FormComponentModel;
 @inject CodeGeneratorOptions Options;
-import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, OnDestroy, Optional, Output, TemplateRef } from '@@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, OnDestroy, Optional, Output, TemplateRef } from '@@angular/core';
 import { FormGroup } from '@@angular/forms';
 import { FormlyFieldConfig } from '@@ngx-formly/core';
 import { I@(Model.ComponentInfo.ModelType) } from '@Options.ApiClientTsImportPath';
@@ -213,10 +213,13 @@ import { map, throttleTime } from 'rxjs/operators';
     }
 }
 
+@* Angular v22 made OnPush the default for an undefined changeDetection. Default is the same enum
+   value as v22's Eager but also exists in v17-v21, which this deprecated output still supports. *@
     @@Component({
     standalone: false,
     selector: '@Model.AngularComponentSelector(Options.GeneratedComponentPrefix)',
-    templateUrl: './@(Model.AngularComponentFileName()).html'
+    templateUrl: './@(Model.AngularComponentFileName()).html',
+    changeDetection: ChangeDetectionStrategy.Default
     })
     export class @Model.AngularComponentName() implements OnInit, OnDestroy {
 

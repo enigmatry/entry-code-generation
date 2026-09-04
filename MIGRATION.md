@@ -26,11 +26,18 @@ The Formly templates remain in the tool but are **frozen and deprecated**: they 
 |---|---|---|
 | Angular version | v17+ | v22+ |
 | Form engine | `@ngx-formly/core` + `FormlyFieldConfig[]` built at runtime | Plain reactive forms: a typed `FormGroup` and Material markup generated at build time |
-| Component style | `standalone: false` classes declared in a generated `*-generated.module.ts` | Standalone components, `ChangeDetectionStrategy.OnPush`; **no module files are generated** |
+| Component style | `standalone: false` classes declared in a generated `*-generated.module.ts` | Standalone components, **no module files are generated** |
+| Change detection | `ChangeDetectionStrategy.Default` (check-always), stated explicitly so v22's new default does not silently change behavior | `ChangeDetectionStrategy.OnPush` |
 | Inputs/outputs | `@Input()` / `@Output()` | `input()` / `model()` / `output()` signals |
 | Runtime dependencies | `@ngx-formly/*`, `@enigmatry/entry-form` (field types, wrappers, `ENTRY_FIELD_TYPE_RESOLVER`) | Angular Material, `@enigmatry/entry-form` (expression dictionary types, `sortOptions`, `SelectConfiguration`, `ENTRY_ASYNC_VALIDATOR_RESOLVER`, `EntryFieldFormatDirective`) |
 | Validation messages | Formly global message registry, resolved at runtime | Generated `<mat-error>` blocks with messages resolved at generation time |
 | Custom field types | Registered in the app's Formly type registry by name | Rendered as a custom element; the providing component is imported via `.WithImport(...)` |
+
+### Change detection on Angular v22
+
+Angular v22 changed the meaning of an omitted `changeDetection`: a component that does not set it is now `OnPush` rather than check-always. The deprecated Formly form template therefore declares `changeDetection: ChangeDetectionStrategy.Default` explicitly, so upgrading a consuming app to v22 does not silently move its generated forms onto `OnPush`.
+
+`Default` is deprecated in v22 in favour of the new `Eager`, and the two are the same enum value. `Eager` does not exist before v22, so the Formly output keeps using `Default` to stay compilable on the v17–v21 range it supports. Do not "modernise" it to `Eager` — that would drop support for those versions. The signals output is unaffected: it has always declared `OnPush`.
 
 ## Prerequisites
 
