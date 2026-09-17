@@ -32,8 +32,8 @@ public class AngularFormlyValidationHtmlHelperExtensionsFixture : CodeGeneration
     [TestCase(nameof(FormMock.Name), ExpectedResult = "required: true,maxLength: 50,pattern: /[A-Z]/,")]
     [TestCase(nameof(FormMock.Money), ExpectedResult = "type: 'number',max: 999.99 - 0.1,")]
     [TestCase(nameof(FormMock.Amount), ExpectedResult = "required: true,type: 'number',min: 0 + 1,max: 100,")]
-    [TestCase(nameof(FormMock.Email1), ExpectedResult = "pattern: /^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$/,maxLength: 50,")]
-    [TestCase(nameof(FormMock.Email2), ExpectedResult = "pattern: /^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$/,maxLength: 50,")]
+    [TestCase(nameof(FormMock.Email1), ExpectedResult = @"pattern: '^\\w+([\\-+.\']\\w+)*@\\w+([\\-.]\\w+)*\\.\\w+([\\-.]\\w+)*$',maxLength: 50,")]
+    [TestCase(nameof(FormMock.Email2), ExpectedResult = @"pattern: '^\\w+([\\-+.\']\\w+)*@\\w+([\\-.]\\w+)*\\.\\w+([\\-.]\\w+)*$',maxLength: 50,")]
     public string AddValidationTemplateOptions(string propertyName)
     {
         var formControl = _formComponent.FormControlsOfType<FormControl>().Single(x => x.PropertyName == propertyName.Camelize());

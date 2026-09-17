@@ -8,7 +8,7 @@ public class EmailAddressValidationRule : PatternValidationRule
 {
     public EmailAddressValidationRule(PropertyInfo propertyInfo, LambdaExpression expression)
         : base(
-            new Regex(@"/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/"),
+            new Regex(@"^\w+([\-+.']\w+)*@\w+([\-.]\w+)*\.\w+([\-.]\w+)*$"),
             propertyInfo,
             expression,
             "Invalid email address format",

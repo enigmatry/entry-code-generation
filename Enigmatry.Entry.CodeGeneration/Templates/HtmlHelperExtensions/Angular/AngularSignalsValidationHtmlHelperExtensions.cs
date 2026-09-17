@@ -27,7 +27,7 @@ public static class AngularSignalsValidationHtmlHelperExtensions
                     var value = valueOption[(rule.GetRuleName().Length + 2)..];
                     if (rule.GetRuleName() == "pattern")
                     {
-                        value = AsRegexOrStringLiteral(value);
+                        value = value.AsTypeScriptLiteral();
                     }
 
                     validators.Add($"Validators.{rule.GetRuleName()}({value})");
@@ -47,11 +47,6 @@ public static class AngularSignalsValidationHtmlHelperExtensions
     private static string? RuleValueTemplateOption(this IFormlyValidationRule validationRule) =>
         validationRule.GetTemplateOptions()
             .FirstOrDefault(templateOption => templateOption.StartsWith($"{validationRule.GetRuleName()}: ", StringComparison.Ordinal));
-
-    // A slash-delimited pattern passes through as a regex literal; anything else (the plain text of
-    // a .NET Regex) must become a quoted string or the generated TypeScript would not compile.
-    private static string AsRegexOrStringLiteral(string pattern) =>
-        Regex.IsMatch(pattern, "^/.*/[a-z]*$") ? pattern : $"'{pattern.EscapeTsSingleQuoted()}'";
 
     // Errors rendered outside a mat-form-field have no ErrorStateMatcher gating their visibility,
     // so they are shown only once the control was touched (onSubmit marks all controls touched
