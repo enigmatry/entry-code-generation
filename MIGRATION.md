@@ -113,7 +113,7 @@ builder.RichTextInputFormControl(x => x.Description)
 The symbol is added to the generated standalone component's `imports` array and an `import { ... } from '<package>'` statement is emitted. **Generation fails with a descriptive error** if a custom/rich-text control has no import configured — with Formly, the type registry resolved this at runtime; with standalone components it must be known at generation time.
 
 The custom component itself must:
-- implement `ControlValueAccessor` (it is bound with `formControlName`),
+- be a form control that `formControlName` can bind: either a [`FormValueControl`](https://angular.dev/guide/forms/signals/custom-controls) (a `value` model and no `NG_VALUE_ACCESSOR`; reactive forms drive it natively from Angular 22.1) or a `ControlValueAccessor`, never both — Angular takes the accessor path whenever `NG_VALUE_ACCESSOR` is provided, and the `value` model is then never written. The Building Blocks 22.x file input and date-time picker are `FormValueControl`s. Angular composes no validator directives for a `FormValueControl`; generated forms put their validators on the `FormControl`, so they are unaffected, but a validator attribute such as `required` added through `WithMetadata(...)` is ignored,
 - expose a `readonly` input (bound to the generated `isDisabled(...)` helper),
 - **forward accessible naming to its internal interactive element.** The generated markup renders a `<label>` with an id and puts `aria-labelledby` on the *host* element; ARIA naming does not cross into a nested `<input>`, `<textarea>` or `contenteditable`, so without forwarding, the control a screen reader focuses stays unnamed. The generator emits a plain `aria-labelledby` **attribute**, so an `@Input() ariaLabelledby` will not receive it — the input has to be aliased to the attribute name (or the value read off the host):
 
@@ -324,5 +324,5 @@ These are validated at generation time where possible — the tool throws a desc
 | Angular compile error: *"Component X is standalone, and cannot be declared in an NgModule"* | A still-generated feature module declares a migrated component — migrate the whole feature and stop using its generated module. |
 | Dynamic select renders no options | The binding is now `[<prop>Callback]` and expects an `Observable<unknown[]>`, not an array. |
 | Async validator never runs | `ENTRY_ASYNC_VALIDATOR_RESOLVER` is not provided; the component skips async validators when the token is absent. |
-| Custom control ignores readonly mode | The custom component must expose a `readonly` input; the disabled state also propagates through its `ControlValueAccessor`. |
+| Custom control ignores readonly mode | The custom component must expose a `readonly` input; the disabled state also propagates, through a `FormValueControl`'s `disabled` input or a `ControlValueAccessor`'s `setDisabledState`. |
 | Formatter directive not applied / unknown attribute `entryFieldFormat` | Update `@enigmatry/entry-form` to a version that ships `EntryFieldFormatDirective`. |
