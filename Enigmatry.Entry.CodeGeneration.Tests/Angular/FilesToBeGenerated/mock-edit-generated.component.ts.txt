@@ -10,7 +10,7 @@
 // @ts-nocheck
 // @ts-ignore
 // @ts-expect-error
-import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, OnDestroy, Optional, Output, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, OnDestroy, Optional, Output, TemplateRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { IFormMock } from 'src/app/api/api-reference';
@@ -22,7 +22,8 @@ import { map, throttleTime } from 'rxjs/operators';
     @Component({
     standalone: false,
     selector: 'app-g-mock-edit',
-    templateUrl: './mock-edit-generated.component.html'
+    templateUrl: './mock-edit-generated.component.html',
+    changeDetection: ChangeDetectionStrategy.Default
     })
     export class MockEditGeneratedComponent implements OnInit, OnDestroy {
 
