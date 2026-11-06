@@ -83,7 +83,7 @@ public class InitialPropertyValidationBuilderExtensionsFixtures
         _validationConfiguration.ValidationRules.Single().MessageTranslationId
             .ShouldBe("validators.pattern.emailAddress");
         _validationConfiguration.ValidationRules.Single().GetTemplateOptions()
-            .ShouldBe([@"pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/"]);
+            .ShouldBe([@"pattern: ^\w+([\-+.']\w+)*@\w+([\-.]\w+)*\.\w+([\-.]\w+)*$"]);
         _validationConfiguration.ValidationRules.Single().GetValidationMessage()
             .ShouldBe("Invalid email address format");
     }

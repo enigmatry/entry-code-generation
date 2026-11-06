@@ -756,7 +756,7 @@ className: `entry-email1-field entry-input`,
         description: ``,
             attributes: {  },
         hidden: !true,
-            pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+            pattern: '^\\w+([\\-+.\']\\w+)*@\\w+([\\-.]\\w+)*\\.\\w+([\\-.]\\w+)*$',
 maxLength: 50,
 
             typeFormatDef: undefined
@@ -785,7 +785,7 @@ className: `entry-email2-field entry-input`,
         description: ``,
             attributes: {  },
         hidden: !true,
-            pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+            pattern: '^\\w+([\\-+.\']\\w+)*@\\w+([\\-.]\\w+)*\\.\\w+([\\-.]\\w+)*$',
 maxLength: 50,
 
             typeFormatDef: undefined

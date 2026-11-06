@@ -208,8 +208,8 @@ export class MockEditGeneratedComponent {
         fileUpload: new FormControl(null),
         addresses: new FormArray<FormGroup>([]),
         dateAndTime: new FormControl(null, { updateOn: 'blur' }),
-        email1: new FormControl<string | null>(null, { validators: [Validators.pattern(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/), Validators.maxLength(50)] }),
-        email2: new FormControl<string | null>(null, { validators: [Validators.pattern(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/), Validators.maxLength(50)] }),
+        email1: new FormControl<string | null>(null, { validators: [Validators.pattern('^\\w+([\\-+.\']\\w+)*@\\w+([\\-.]\\w+)*\\.\\w+([\\-.]\\w+)*$'), Validators.maxLength(50)] }),
+        email2: new FormControl<string | null>(null, { validators: [Validators.pattern('^\\w+([\\-+.\']\\w+)*@\\w+([\\-.]\\w+)*\\.\\w+([\\-.]\\w+)*$'), Validators.maxLength(50)] }),
     });
 
     private readonly formValue = toSignal(this.form.valueChanges, { initialValue: null });

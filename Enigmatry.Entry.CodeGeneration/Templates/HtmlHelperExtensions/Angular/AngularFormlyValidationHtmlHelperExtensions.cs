@@ -14,9 +14,17 @@ public static class AngularFormlyValidationHtmlHelperExtensions
     public static IHtmlContent AddValidationTemplateOptions(this IHtmlHelper html, FormControl control)
     {
         var templateOptions = control.ValidationRules
-            .SelectMany(x => x.GetTemplateOptions())
+            .SelectMany(rule => rule.GetTemplateOptions().Select(rule.RenderTemplateOption))
             .Distinct();
         return html.Raw($"{String.Join(",\r\n", templateOptions)},\r\n");
+    }
+
+    private static string RenderTemplateOption(this IFormlyValidationRule validationRule, string templateOption)
+    {
+        var prefix = $"{validationRule.GetRuleName()}: ";
+        return validationRule.GetRuleName() == "pattern" && templateOption.StartsWith(prefix, StringComparison.Ordinal)
+            ? $"{prefix}{templateOption[prefix.Length..].AsTypeScriptLiteral()}"
+            : templateOption;
     }
 
     public static IHtmlContent AddAsyncValidators(this IHtmlHelper html, FormControl control) =>
