@@ -2,7 +2,9 @@
 
 ## Intro
 
-Short, easy to understand, explanation of the tool ...
+The Entry code generator (`entry-codegen`) is a dotnet tool that generates Angular list and form components from C# configuration. You describe a table or a form once, in a fluent builder next to your domain model; the tool scans that assembly and renders the Angular TypeScript and HTML through Razor templates, as ordinary readable source in your repository. The generated components use [@enigmatry/entry-components and @enigmatry/entry-form](https://github.com/enigmatry/entry-angular-building-blocks). The predictable layers are generated, so engineers and coding agents can spend their time on the part that is specific to the business.
+
+The generator is one of the three parts of Entry, the open-source foundation described at https://www.enigmatry.com/en/entry/; the [Entry blueprint](https://github.com/enigmatry/entry-blueprint) shows it wired into a complete application.
 
 ## Index
 
@@ -106,3 +108,12 @@ TODO: explain `IFormComponentConfiguration` builder
 ## FAQ
 
 ## Examples
+
+## About Enigmatry
+
+Entry is the open-source foundation Enigmatry builds client systems on. Enigmatry is a software company from Rotterdam, founded in 2006, with teams in Belgrade and Novi Sad.
+
+* How we use Entry for clients: https://www.enigmatry.com/en/entry/
+* How we build, with agents under checks: https://www.enigmatry.com/en/how-we-build/
+
+Apache-2.0 © Enigmatry
