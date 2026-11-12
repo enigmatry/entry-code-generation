@@ -74,7 +74,7 @@
 @if (!isHidden('money', true)) {
 <mat-form-field class="entry-money-field entry-input">
     <mat-label>{{ label('money') }}</mat-label>
-    <input matInput formControlName="money" type="number" placeholder="Money" i18n-placeholder="@@test.mock-edit.money.placeholder" entryFieldFormat [entryFieldFormatDef]="{ name: 'currency' }" [readonly]="isDisabled('money', false)">
+    <input matInput formControlName="money" type="text" inputmode="decimal" placeholder="Money" i18n-placeholder="@@test.mock-edit.money.placeholder" entryFieldFormat [entryFieldFormatDefinition]="{ name: 'currency' }" [readonly]="isDisabled('money', false)">
 @if (form.get('money')?.hasError('max')) {
     <mat-error i18n="@@test.mock-edit.money.max">Money value should be less than 999.89</mat-error>
 }@if (form.get('money')?.hasError('required')) {

@@ -40,7 +40,7 @@ The Formly templates remain in the tool but are **frozen and deprecated**: they 
    - `IFieldExpressionDictionary<T>`, `IFieldPropertyExpressionDictionary<T>` (also used by the Formly output),
    - `SelectConfiguration`, `sortOptions`,
    - `ENTRY_ASYNC_VALIDATOR_RESOLVER` (injection token; only needed when controls use `.WithValidators(...)`),
-   - `EntryFieldFormatDirective` (only needed when controls use `.WithFormat(...)`).
+   - `EntryFieldFormatDirective` (needed by any form with a formatted control: `.WithFormat(...)`, and every `decimal`, `double`, `float`, date or `bool` property through its default format).
 4. The codegen tool version that ships the signals templates (the version this document ships with, or newer).
 5. `@ngx-formly/*` packages can be removed from the application **after** the last Formly-generated component is gone. Do not remove them while any component still generates through the deprecated templates.
 
@@ -253,7 +253,9 @@ With `builder.WithReadonlyDisplay()` the component instead renders a plain label
 
 ## Formatting
 
-`.WithFormat(...)` on a form control renders the `entryFieldFormat` directive (`[entryFieldFormatDef]="{ name: 'currency', ... }"`) on the input, and `EntryFieldFormatDirective` is imported from `@enigmatry/entry-form`. Make sure your `@enigmatry/entry-form` version ships this directive before migrating forms that use formatters.
+`.WithFormat(...)` on a form control renders the `entryFieldFormat` directive (`[entryFieldFormatDefinition]="{ name: 'currency', ... }"`) on the input, and `EntryFieldFormatDirective` is imported from `@enigmatry/entry-form`. Make sure your `@enigmatry/entry-form` version ships this directive before migrating forms that use formatters.
+
+**Numeric inputs with a number, currency or percent format render as `type="text" inputmode="decimal"`**, because a `type="number"` input cannot display formatted text such as `€ 1,234.50`. That covers every `decimal`, `double` and `float` property, which gets a number format by default. The directive shows the formatted value in the app's `LOCALE_ID` while the field is not focused and a plain number while it is, and parses typed text back to a number, rejecting text that is not a valid number in that locale with the `entryFieldFormat` validation error. The inputs lose the browser's number spinner. Numeric inputs without a number, currency or percent format keep `type="number"`; that includes integer properties with their default formatting. The definition the directive receives decides: a formatter subclass whose `ToJsObject()` emits another name is treated as custom and keeps `type="number"`.
 
 **Custom formatters.** The built-in formatters (`Date`, `Currency`, `Decimal`, `Percent`, `Boolean`) are emitted through a signals-side mirror that escapes the values you configured, so quotes and backslashes in a currency code, digits info or locale are safe. Any other `IPropertyFormatter` — including a **subclass of a built-in one** — keeps its own `ToJsObject()` output, which is emitted verbatim apart from HTML-attribute escaping. That output is TypeScript source you author, so it must already be a valid JS object literal with its own string values correctly single-quoted and escaped.
 

@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Enigmatry.Entry.CodeGeneration.Configuration;
 using Enigmatry.Entry.CodeGeneration.Configuration.Form.Controls;
 using Humanizer;
@@ -70,8 +71,16 @@ internal static class AngularSignalsFieldAttributeExtensions
     // by AngularSignalsImportsHtmlHelperExtensions when any control carries a formatter.
     internal static string FormatAttribute(this FormControl field) =>
         field.Formatter != null && field.Formatter.JsFormatterName.HasContent()
-            ? $" entryFieldFormat [entryFieldFormatDef]=\"{field.Formatter.SignalsFormatterJsObject().EscapeHtmlAttributeValue()}\""
+            ? $" entryFieldFormat [entryFieldFormatDefinition]=\"{field.Formatter.SignalsFormatterJsObject().EscapeHtmlAttributeValue()}\""
             : "";
+
+    // A number input rejects formatted text such as "1,234.50", so the directive can only format it in a text input.
+    // The emitted definition decides, not JsFormatterName: a subclass may emit its own name, which the directive treats as custom.
+    internal static bool ShowsFormattedNumber(this FormControl field) =>
+        field.Type == null
+        && field.Formatter != null
+        && field.Formatter.JsFormatterName.HasContent()
+        && Regex.IsMatch(field.Formatter.SignalsFormatterJsObject(), @"\bname\s*:\s*['""](number|currency|percent)['""]");
 
     internal static string I18NAttribute(this I18NString text, bool enableI18N) =>
         enableI18N && text.Key.HasContent() && text.Value.HasContent()

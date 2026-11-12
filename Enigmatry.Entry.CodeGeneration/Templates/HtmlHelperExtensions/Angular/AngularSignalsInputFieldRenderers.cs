@@ -10,7 +10,9 @@ internal static class AngularSignalsInputFieldRenderers
 {
     internal static IHtmlContent RenderInputField(this IHtmlHelper htmlHelper, InputControlBase field, FormViewRenderContext context)
     {
-        var inputType = field.Type ?? (field.IsNumeric() ? "number" : "text");
+        var showsFormattedNumber = field.ShowsFormattedNumber();
+        var inputType = field.Type ?? (field.IsNumeric() && !showsFormattedNumber ? "number" : "text");
+        var inputModeAttribute = showsFormattedNumber ? " inputmode=\"decimal\"" : "";
         var floatLabelAttribute = field.FloatLabel.HasValue
             ? $" floatLabel=\"{field.FloatLabel!.Value.ToString().ToLower()}\""
             : "";
@@ -22,7 +24,7 @@ internal static class AngularSignalsInputFieldRenderers
             $"@if (!{context.IsHiddenCall(field)}) {{\r\n" +
             $"<mat-form-field {field.FieldClassAttribute()}{field.AppearanceAttribute()}{floatLabelAttribute}{field.TooltipAttribute(context.EnableI18N)}>\r\n" +
             $"    <mat-label>{{{{ {context.LabelCall(field)} }}}}</mat-label>\r\n" +
-            $"    <input matInput formControlName=\"{field.PropertyName}\" type=\"{inputType}\"{field.PlaceholderAttribute(context.EnableI18N)}{autocompleteAttribute}{autofocusAttribute}{field.FormatAttribute()}{field.MetadataAttributes()} [readonly]=\"{context.IsDisabledCall(field)}\">\r\n" +
+            $"    <input matInput formControlName=\"{field.PropertyName}\" type=\"{inputType}\"{inputModeAttribute}{field.PlaceholderAttribute(context.EnableI18N)}{autocompleteAttribute}{autofocusAttribute}{field.FormatAttribute()}{field.MetadataAttributes()} [readonly]=\"{context.IsDisabledCall(field)}\">\r\n" +
             field.HintLine(context.EnableI18N) +
             htmlHelper.RenderValidationErrors(field, context) +
             $"</mat-form-field>\r\n" +
