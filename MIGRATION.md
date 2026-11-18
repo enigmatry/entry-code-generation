@@ -39,7 +39,7 @@ The Formly templates remain in the tool but are **frozen and deprecated**: they 
 3. **`@enigmatry/entry-form`** at a version that exports:
    - `IFieldExpressionDictionary<T>`, `IFieldPropertyExpressionDictionary<T>` (also used by the Formly output),
    - `SelectConfiguration`, `sortOptions`,
-   - `ENTRY_ASYNC_VALIDATOR_RESOLVER` (injection token; only needed when controls use `.WithValidators(...)`),
+   - `ENTRY_ASYNC_VALIDATOR_RESOLVER` (injection token; only needed when controls use `.WithValidators(...)`), and `provideEntryAsyncValidators` if you register the validators with it as shown under [Validation](#validation),
    - `EntryFieldFormatDirective` (needed by any form with a formatted control: `.WithFormat(...)`, and every `decimal`, `double`, `float`, date or `bool` property through its default format).
 4. The codegen tool version that ships the signals templates (the version this document ships with, or newer).
 5. `@ngx-formly/*` packages can be removed from the application **after** the last Formly-generated component is gone. Do not remove them while any component still generates through the deprecated templates.
@@ -226,13 +226,15 @@ Selects nested inside array items get members prefixed with the array property: 
 
 - Rules configured through the validation builder (`IsRequired`, `MaxLength`, `GreaterThan`, patterns, ...) become real `Validators.*` on the generated `FormControl`s, and matching `<mat-error>` blocks are generated with the message text **resolved at generation time** (the Formly `${field?.templateOptions?...}` runtime interpolations are gone).
 - Formly's global validation-message registry is not used. If your app configured global messages there, per-rule custom messages (`WithMessage(...)`) are the replacement.
-- **Named validators** (`.WithValidators("UniqueName")`) become *async validators* resolved through dependency injection. Provide the resolver once in your app:
+- **Named validators** (`.WithValidators("UniqueName")`) become *async validators* resolved through dependency injection. Provide them once in your app with `provideEntryAsyncValidators`:
 
   ```typescript
-  import { ENTRY_ASYNC_VALIDATOR_RESOLVER } from '@enigmatry/entry-form';
+  import { provideEntryAsyncValidators } from '@enigmatry/entry-form';
 
-  { provide: ENTRY_ASYNC_VALIDATOR_RESOLVER, useValue: (name: string) => myAsyncValidators[name] }
+  providers: [provideEntryAsyncValidators({ uniqueName: myUniqueNameValidator })]
   ```
+
+  The map's keys are the camelized names the generated forms request: `.WithValidators("UniqueName")` requests `uniqueName`. A name missing from the map is skipped, with a warning in development mode; a resolver you provide through `ENTRY_ASYNC_VALIDATOR_RESOLVER` directly must instead return a validator for every name, because returning `undefined` makes the generated form throw while it builds the control.
 
   The token is injected optionally: if it is not provided, named validators are skipped. A default error line (`<name> validation failed`, id `validators.<kebab-name>`) is generated for each named validator.
 - `fieldsRequiredExpressions` toggles `Validators.required` at runtime; a default "is required" error line is generated for every field that lacks a static required rule so the message has somewhere to appear.
@@ -304,7 +306,7 @@ These are validated at generation time where possible — the tool throws a desc
    - replace wrapper usage per the table above;
    - add `.WithReadonlyDisplay()` to forms that relied on `ENTRY_FIELD_TYPE_RESOLVER`;
    - optionally adopt the new names (`ControlTypes`, `RuleName`, ...).
-4. Provide `ENTRY_ASYNC_VALIDATOR_RESOLVER` if any control uses `.WithValidators(...)`.
+4. Provide the named async validators with `provideEntryAsyncValidators(...)` if any control uses `.WithValidators(...)`.
 5. Pick a feature, add `builder.WithSignals()` to its components, regenerate, and:
    - stop importing the feature's `*-generated.module.ts`; import the generated standalone components directly;
    - change dynamic select bindings from `[xOptions]="array"` to `[xCallback]="observable$"`;
@@ -322,9 +324,9 @@ These are validated at generation time where possible — the tool throws a desc
 | Generation fails: *"renders a custom element, but no import is configured"* | Add `.WithImport("<Symbol>", "<package>")` to the named control. |
 | Generation fails: *"Nested arrays are not supported"* / *"Autocomplete controls are not supported inside array items"* | Restructure the form — see [limitations](#known-limitations-of-the-signals-templates). |
 | Generation fails: *"generate colliding member names"* | A root select is named like an array-item select (`addressesCountry` vs `addresses[].country`) — rename one of the properties. |
-| Generation warns: *"no Angular validator is generated"* | The rule's template options carry no `"<ruleName>: <value>"` entry — attach the validator at runtime via `.WithValidators(...)` + `ENTRY_ASYNC_VALIDATOR_RESOLVER`, or add the template option. |
+| Generation warns: *"no Angular validator is generated"* | The rule's template options carry no `"<ruleName>: <value>"` entry — attach the validator at runtime via `.WithValidators(...)` + `provideEntryAsyncValidators(...)`, or add the template option. |
 | Angular compile error: *"Component X is standalone, and cannot be declared in an NgModule"* | A still-generated feature module declares a migrated component — migrate the whole feature and stop using its generated module. |
 | Dynamic select renders no options | The binding is now `[<prop>Callback]` and expects an `Observable<unknown[]>`, not an array. |
-| Async validator never runs | `ENTRY_ASYNC_VALIDATOR_RESOLVER` is not provided; the component skips async validators when the token is absent. |
+| Async validator never runs | `ENTRY_ASYNC_VALIDATOR_RESOLVER` is not provided (the component skips async validators when the token is absent), or the validator's camelized name is missing from the `provideEntryAsyncValidators` map (a development-mode console warning names it). |
 | Custom control ignores readonly mode | The custom component must expose a `readonly` input; the disabled state also propagates, through a `FormValueControl`'s `disabled` input or a `ControlValueAccessor`'s `setDisabledState`. |
 | Formatter directive not applied / unknown attribute `entryFieldFormat` | Update `@enigmatry/entry-form` to a version that ships `EntryFieldFormatDirective`. |
