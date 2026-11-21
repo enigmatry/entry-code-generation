@@ -5,8 +5,8 @@
         <Company>Enigmatry</Company>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageIcon>icon-192x192.png</PackageIcon>
-        <PackageProjectUrl>https://github.com/enigmatry/entry-code-generation</PackageProjectUrl>
-        <PackageTags>Enigmatry;Entry</PackageTags>
+        <PackageProjectUrl>https://www.enigmatry.com/en/entry/</PackageProjectUrl>
+        <PackageTags>Enigmatry;Entry;dotnet;codegen;angular</PackageTags>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <RepositoryUrl>https://github.com/enigmatry/entry-code-generation</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
