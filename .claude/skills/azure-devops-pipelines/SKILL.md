@@ -23,7 +23,7 @@ variables:
   artifactName: 'enigmatry-entry-code-generation'
   buildConfiguration: 'Release'
   projectNamePrefix: Enigmatry.Entry.CodeGeneration
-  dotnetVersion: '10.0.x'
+  dotnetVersion: '11.0.x'
   NUGET_PACKAGES: $(Pipeline.Workspace)/.nuget/packages
 ```
 
